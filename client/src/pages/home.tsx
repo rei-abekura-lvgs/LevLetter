@@ -20,6 +20,7 @@ function generateSampleCards(): CardWithRelations[] {
     weeklyPoints: 500,
     totalPointsReceived: 0,
     lastWeeklyPointsReset: null,
+    password: null,
     cognitoSub: null,
     googleId: null,
     createdAt: new Date()
@@ -35,6 +36,7 @@ function generateSampleCards(): CardWithRelations[] {
     weeklyPoints: 500,
     totalPointsReceived: 0,
     lastWeeklyPointsReset: null,
+    password: null,
     cognitoSub: null,
     googleId: null,
     createdAt: new Date()
@@ -78,35 +80,45 @@ export default function Home({ user }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
+  const [useFixedSampleData, setUseFixedSampleData] = useState(true); // 開発用にサンプルデータを強制的に使用
 
   console.log("Home: ユーザー情報", user);
+  
+  // 開発用に固定サンプルデータを使用
+  const sampleCards = generateSampleCards();
+  console.log("生成したサンプルカード:", sampleCards);
   
   const { data: cards, isLoading, error, refetch } = useQuery<CardWithRelations[]>({
     queryKey: ["/api/cards", { limit: page * ITEMS_PER_PAGE, sort: sortOrder }],
     queryFn: async () => {
       console.log("カード取得開始 - パラメータ:", { limit: page * ITEMS_PER_PAGE });
+      
+      // 開発用に固定サンプルデータを使用する場合はAPIリクエストをスキップ
+      if (useFixedSampleData) {
+        console.log("開発用にサンプルデータを強制的に使用します");
+        return sampleCards;
+      }
+      
       try {
-        // 修正: 認証トークンの確認と詳細なエラーロギングを追加
         console.log("認証トークン状態:", localStorage.getItem("levletter-auth-token") ? "存在します" : "存在しません");
         
         const data = await getCards({ limit: page * ITEMS_PER_PAGE });
         console.log("カード取得成功:", data);
         
-        // デモ用に空配列の場合はサンプルデータを使用
         if (Array.isArray(data) && data.length === 0) {
           console.log("カードがないため、サンプルデータを使用します");
-          return generateSampleCards();
+          return sampleCards;
         }
         
         return data;
       } catch (err) {
         console.error("カード取得エラー:", err);
-        // エラー時にもサンプルデータを使用（開発用）
         console.log("エラーのため、サンプルデータを使用します");
-        return generateSampleCards();
+        return sampleCards;
       }
     },
-    retry: 1 // リトライ回数を1回に制限
+    retry: 0, // リトライをオフに設定
+    staleTime: Infinity // キャッシュを永続化（開発用）
   });
 
   // 並び替え処理
