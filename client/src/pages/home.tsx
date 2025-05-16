@@ -101,25 +101,40 @@ export default function Home({ user }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
   const [cards, setCards] = useState<CardWithRelations[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   // サンプルデータを読み込み
   useEffect(() => {
     console.log("ホーム画面初期化 - ユーザー:", user);
     
-    // 少し遅延させてデータ読み込みをシミュレート
-    const timer = setTimeout(() => {
-      try {
-        const sampleData = generateSampleCards(user?.id || 999);
-        console.log("サンプルカード生成:", sampleData.length + "件");
-        setCards(sampleData);
-      } catch (err) {
-        console.error("サンプルデータエラー:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 300);
+    // ユーザーオブジェクトの検証
+    if (!user || !user.id) {
+      console.error("有効なユーザー情報がありません", user);
+      setLoadError("ユーザー情報が取得できませんでした。再ログインをお試しください。");
+      setIsLoading(false);
+      return;
+    }
     
-    return () => clearTimeout(timer);
+    console.log("カードデータ生成開始 - ユーザーID:", user.id);
+    
+    // 即時実行（遅延なし）
+    try {
+      // ユーザーIDが数値型であることを確保
+      const userId = typeof user.id === 'string' ? parseInt(user.id, 10) : user.id;
+      if (isNaN(userId)) {
+        throw new Error(`無効なユーザーID: ${user.id}`);
+      }
+      
+      const sampleData = generateSampleCards(userId);
+      console.log("サンプルカード生成成功:", sampleData.length + "件", sampleData);
+      setCards(sampleData);
+      setLoadError(null);
+    } catch (err) {
+      console.error("サンプルデータエラー:", err);
+      setLoadError(`データ読み込みエラー: ${err instanceof Error ? err.message : '未知のエラー'}`);
+    } finally {
+      setIsLoading(false);
+    }
   }, [user]);
 
   // カードの並び替え
@@ -138,12 +153,29 @@ export default function Home({ user }: HomeProps) {
 
   // データ更新ハンドラ
   const refreshCards = () => {
+    console.log("カードデータ更新を実行します - ユーザーID:", user?.id);
     setIsLoading(true);
-    setTimeout(() => {
-      const refreshedCards = generateSampleCards(user?.id || 999);
+    setLoadError(null);
+    
+    try {
+      // ユーザーIDが確実に存在することを確認
+      if (!user || !user.id) {
+        throw new Error("ユーザー情報が見つかりません");
+      }
+      
+      // ユーザーIDが数値型であることを確保
+      const userId = typeof user.id === 'string' ? parseInt(user.id, 10) : user.id;
+      
+      // サンプルデータ生成（即時実行）
+      const refreshedCards = generateSampleCards(userId);
+      console.log("新しいカードデータを生成しました:", refreshedCards.length + "件");
       setCards(refreshedCards);
+    } catch (err) {
+      console.error("カード更新エラー:", err);
+      setLoadError(`データ更新エラー: ${err instanceof Error ? err.message : '不明なエラー'}`);
+    } finally {
       setIsLoading(false);
-    }, 300);
+    }
   };
 
   // デバッグ情報
@@ -200,6 +232,20 @@ export default function Home({ user }: HomeProps) {
             <div className="text-center py-10">
               <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
               <p className="text-gray-600">読み込み中...</p>
+            </div>
+          ) : loadError ? (
+            // エラー表示
+            <div className="bg-red-50 text-red-800 p-8 rounded-lg text-center border border-red-200">
+              <p className="mb-4 font-medium">エラーが発生しました</p>
+              <p className="text-sm">{loadError}</p>
+              <Button 
+                variant="outline" 
+                className="mt-4 bg-white"
+                onClick={refreshCards}
+              >
+                <RotateCcw className="h-4 w-4 mr-1" />
+                再試行
+              </Button>
             </div>
           ) : sortedCards.length === 0 ? (
             // データなし

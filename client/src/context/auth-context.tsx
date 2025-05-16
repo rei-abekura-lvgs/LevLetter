@@ -1,20 +1,24 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import { User } from "@shared/schema";
-import { getAuthenticatedUser } from "@/lib/auth";
+import { getAuthenticatedUser, getAuthToken } from "@/lib/auth";
 
 // デフォルト値を提供して、コンテキストが初期化されていない場合のエラーを防ぐ
 const defaultAuthContext = {
   user: null as User | null,
   loading: false,
+  isAuthenticated: false,
   setUser: () => {},
-  fetchUser: async () => {}
+  fetchUser: async () => {},
+  logout: () => {}
 };
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isAuthenticated: boolean;
   setUser: (user: User | null) => void;
-  fetchUser: () => Promise<void>;
+  fetchUser: () => Promise<User | null>;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
@@ -26,30 +30,89 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [retryCounter, setRetryCounter] = useState(0);
 
-  const fetchUser = async () => {
+  // ユーザーデータを取得する関数
+  const fetchUser = useCallback(async (): Promise<User | null> => {
+    console.log("認証情報取得を開始...");
     setLoading(true);
+    
+    // 認証トークンの存在確認
+    const token = getAuthToken();
+    if (!token) {
+      console.log("認証トークンがありません");
+      setLoading(false);
+      return null;
+    }
+
     try {
+      console.log("APIからユーザー情報を取得中...");
       const userData = await getAuthenticatedUser();
-      setUser(userData);
+      
+      if (userData) {
+        console.log("ユーザー情報取得成功:", userData.name, "(ID:", userData.id, ")");
+        setUser(userData);
+        return userData;
+      } else {
+        console.warn("APIからのレスポンスが空です");
+        setUser(null);
+        return null;
+      }
     } catch (error) {
       console.error("ユーザー情報の取得に失敗しました:", error);
       setUser(null);
+      return null;
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchUser();
   }, []);
 
+  // ログアウト関数
+  const logout = useCallback(() => {
+    setUser(null);
+    localStorage.removeItem('levletter-auth-token');
+    window.location.href = "/login";
+  }, []);
+
+  // 初回とリトライの認証処理
+  useEffect(() => {
+    const initAuth = async () => {
+      const result = await fetchUser();
+      
+      // 認証に失敗した場合でトークンが存在する場合、数回リトライ
+      if (!result && getAuthToken() && retryCounter < 3) {
+        console.log(`認証リトライ (${retryCounter + 1}/3)...`);
+        setTimeout(() => {
+          setRetryCounter(prev => prev + 1);
+        }, 1000);
+      }
+    };
+
+    initAuth();
+  }, [fetchUser, retryCounter]);
+
+  // 認証状態の判定
+  const isAuthenticated = !!user;
+
+  // コンテキスト値
   const value = {
     user,
     loading,
+    isAuthenticated,
     setUser,
-    fetchUser
+    fetchUser,
+    logout
   };
+
+  // デバッグ用ログ
+  useEffect(() => {
+    console.log("認証状態変更:", { 
+      isAuthenticated, 
+      userId: user?.id,
+      userName: user?.name,
+      loading 
+    });
+  }, [isAuthenticated, user, loading]);
 
   return (
     <AuthContext.Provider value={value}>
@@ -60,5 +123,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuthはAuthProviderの中で使用する必要があります");
+  }
   return context;
 }
