@@ -18,23 +18,38 @@ const JWT_EXPIRES_IN = "7d";
 // 認証ミドルウェア
 const authenticate = async (req: Request, res: Response, next: Function) => {
   try {
+    console.log("認証処理開始 - パス:", req.path);
     const authHeader = req.headers.authorization;
+    console.log("認証ヘッダー:", authHeader ? "存在します" : "存在しません");
+    
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      console.log("認証失敗: Bearer トークンがありません");
       return res.status(401).json({ message: "認証が必要です" });
     }
 
     const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: number };
+    console.log("トークン検証中...");
     
-    const user = await storage.getUser(decoded.userId);
-    if (!user) {
-      return res.status(401).json({ message: "無効なユーザーです" });
-    }
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET) as { userId: number };
+      console.log("トークン検証成功 - ユーザーID:", decoded.userId);
+      
+      const user = await storage.getUser(decoded.userId);
+      if (!user) {
+        console.log("ユーザーが見つかりません:", decoded.userId);
+        return res.status(401).json({ message: "無効なユーザーです" });
+      }
 
-    // リクエストにユーザー情報を追加
-    (req as any).user = user;
-    next();
+      console.log("認証成功:", user.id, user.email);
+      // リクエストにユーザー情報を追加
+      (req as any).user = user;
+      next();
+    } catch (jwtError) {
+      console.error("JWT検証エラー:", jwtError);
+      return res.status(401).json({ message: "無効なトークンです" });
+    }
   } catch (err) {
+    console.error("認証全般エラー:", err);
     return res.status(401).json({ message: "認証に失敗しました" });
   }
 };
