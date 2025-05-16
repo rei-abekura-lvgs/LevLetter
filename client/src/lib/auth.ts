@@ -9,22 +9,14 @@ interface AuthResponse {
 export const TOKEN_KEY = "levletter-auth-token";
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
-  const response = await apiRequest("/api/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  });
-
-  const data = await response.json();
-  
-  if (response.ok) {
+  try {
+    const data = await apiRequest<AuthResponse>("POST", "/api/auth/login", { email, password });
     localStorage.setItem(TOKEN_KEY, data.token);
     return data;
+  } catch (error: any) {
+    console.error("ログインエラー:", error);
+    throw new Error(error.message || "ログインに失敗しました");
   }
-  
-  throw new Error(data.message || "ログインに失敗しました");
 }
 
 export async function register(formData: {
@@ -33,22 +25,14 @@ export async function register(formData: {
   name: string;
   department: string;
 }): Promise<AuthResponse> {
-  const response = await apiRequest("/api/auth/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  });
-
-  const data = await response.json();
-  
-  if (response.ok) {
+  try {
+    const data = await apiRequest<AuthResponse>("POST", "/api/auth/register", formData);
     localStorage.setItem(TOKEN_KEY, data.token);
     return data;
+  } catch (error: any) {
+    console.error("登録エラー:", error);
+    throw new Error(error.message || "登録に失敗しました");
   }
-  
-  throw new Error(data.message || "登録に失敗しました");
 }
 
 export async function getAuthenticatedUser(): Promise<User | null> {
@@ -59,23 +43,19 @@ export async function getAuthenticatedUser(): Promise<User | null> {
       return null;
     }
     
-    const response = await apiRequest("/api/auth/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    
-    if (!response.ok) {
-      if (response.status === 401) {
+    // 修正: 新しいAPIリクエスト関数を使用
+    try {
+      const data = await apiRequest<{user: User}>("GET", "/api/auth/me");
+      console.log("認証ユーザー情報取得成功:", data);
+      // /api/auth/me エンドポイントはuser属性を含むことがある
+      return data.user || data as unknown as User;
+    } catch (error: any) {
+      console.error("ユーザー認証エラー:", error);
+      if (error.message && error.message.includes("401")) {
         logout();
-        return null;
       }
-      throw new Error("認証に失敗しました");
+      return null;
     }
-    
-    const data = await response.json();
-    // /api/auth/me エンドポイントはuser属性を含まないオブジェクトを直接返す
-    return data.user || data;
   } catch (error) {
     console.error("ユーザー情報の取得に失敗しました:", error);
     return null;

@@ -1,40 +1,29 @@
 import { apiRequest } from "./queryClient";
-import { CardFormRequest, LikeFormRequest, ProfileUpdateRequest } from "@shared/schema";
+import { 
+  CardFormRequest, LikeFormRequest, ProfileUpdateRequest,
+  CardWithRelations, Card, Like, User
+} from "@shared/schema";
 import { getAuthToken } from "./auth";
 
 // ユーザー関連
 export async function getUsers() {
-  const token = getAuthToken();
-  if (!token) throw new Error("認証が必要です");
-  
-  const res = await fetch("/api/users", {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-  
-  if (!res.ok) {
-    throw new Error("ユーザー情報の取得に失敗しました");
+  try {
+    const data = await apiRequest<User[]>("GET", "/api/users");
+    return data;
+  } catch (error) {
+    console.error("ユーザー一覧取得エラー:", error);
+    throw error;
   }
-  
-  return res.json();
 }
 
 export async function getUser(id: number) {
-  const token = getAuthToken();
-  if (!token) throw new Error("認証が必要です");
-  
-  const res = await fetch(`/api/users/${id}`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-  
-  if (!res.ok) {
-    throw new Error("ユーザー情報の取得に失敗しました");
+  try {
+    const data = await apiRequest<User>("GET", `/api/users/${id}`);
+    return data;
+  } catch (error) {
+    console.error(`ユーザー(ID:${id})取得エラー:`, error);
+    throw error;
   }
-  
-  return res.json();
 }
 
 export async function updateProfile(id: number, data: ProfileUpdateRequest) {
@@ -83,12 +72,9 @@ export async function getCards(options: {
   senderId?: number;
   recipientId?: number;
 } = {}) {
-  const token = getAuthToken();
-  if (!token) throw new Error("認証が必要です");
-  
   console.log("getCards呼び出し - オプション:", options);
-  console.log("認証トークン:", token ? "トークンあり" : "トークンなし");
   
+  // クエリパラメータの構築
   const queryParams = new URLSearchParams();
   if (options.limit) queryParams.append("limit", options.limit.toString());
   if (options.offset) queryParams.append("offset", options.offset.toString());
@@ -96,23 +82,9 @@ export async function getCards(options: {
   if (options.recipientId) queryParams.append("recipientId", options.recipientId.toString());
   
   const url = `/api/cards${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-  console.log("カード取得リクエストURL:", url);
   
   try {
-    const res = await fetch(url, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-    
-    console.log("カード取得レスポンス:", res.status, res.statusText);
-    
-    if (!res.ok) {
-      console.error("カード取得エラー:", res.status, res.statusText);
-      throw new Error(`カード情報の取得に失敗しました: ${res.status} ${res.statusText}`);
-    }
-    
-    const data = await res.json();
+    const data = await apiRequest<CardWithRelations[]>("GET", url);
     console.log("取得したカードデータ:", data);
     return data;
   } catch (error) {
@@ -122,26 +94,19 @@ export async function getCards(options: {
 }
 
 export async function getCard(id: number) {
-  const token = getAuthToken();
-  if (!token) throw new Error("認証が必要です");
-  
-  const res = await fetch(`/api/cards/${id}`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-  
-  if (!res.ok) {
-    throw new Error("カード情報の取得に失敗しました");
+  try {
+    const data = await apiRequest<CardWithRelations>("GET", `/api/cards/${id}`);
+    return data;
+  } catch (error) {
+    console.error("カード詳細取得エラー:", error);
+    throw error;
   }
-  
-  return res.json();
 }
 
 export async function createCard(data: CardFormRequest) {
   console.log("カード作成リクエスト:", data);
   try {
-    const result = await apiRequest("POST", "/api/cards", data);
+    const result = await apiRequest<Card>("POST", "/api/cards", data);
     console.log("カード作成成功:", result);
     return result;
   } catch (error) {
@@ -152,5 +117,12 @@ export async function createCard(data: CardFormRequest) {
 
 // いいね関連
 export async function createLike(data: LikeFormRequest) {
-  return apiRequest("POST", "/api/likes", data);
+  try {
+    const result = await apiRequest<Like>("POST", "/api/likes", data);
+    console.log("いいね作成成功:", result);
+    return result;
+  } catch (error) {
+    console.error("いいね作成失敗:", error);
+    throw error;
+  }
 }
