@@ -630,6 +630,8 @@ export class MemStorage implements IStorage {
   }
 }
 
+// PostgreSQLデータベースを使用するストレージへ切り替え
 import { DatabaseStorage } from "./database-storage";
 
-export const storage = new MemStorage();
+// データベースストレージを使用（永続的ストレージ）
+export const storage = new DatabaseStorage();
