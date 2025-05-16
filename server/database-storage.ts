@@ -294,10 +294,25 @@ export class DatabaseStorage implements IStorage {
         
         const totalPoints = cardLikes.reduce((sum, like) => sum + like.points, 0);
         
+        // 追加の受信者がいる場合はそのユーザー情報も取得
+        let additionalRecipientUsers = null;
+        if (card.additionalRecipients && card.additionalRecipients.length > 0) {
+          additionalRecipientUsers = await Promise.all(
+            card.additionalRecipients.map(async (userId) => {
+              const [user] = await db
+                .select()
+                .from(users)
+                .where(eq(users.id, userId));
+              return user;
+            })
+          );
+        }
+
         return {
           ...card,
           sender: sender!,
           recipient: recipient!,
+          additionalRecipientUsers,
           likes: cardLikes,
           totalPoints
         };
@@ -351,10 +366,25 @@ export class DatabaseStorage implements IStorage {
     
     const totalPoints = cardLikes.reduce((sum, like) => sum + like.points, 0);
     
+    // 追加の受信者がいる場合はそのユーザー情報も取得
+    let additionalRecipientUsers = null;
+    if (card.additionalRecipients && card.additionalRecipients.length > 0) {
+      additionalRecipientUsers = await Promise.all(
+        card.additionalRecipients.map(async (userId) => {
+          const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, userId));
+          return user;
+        })
+      );
+    }
+
     return {
       ...card,
       sender: sender!,
       recipient: recipient!,
+      additionalRecipientUsers,
       likes: cardLikes,
       totalPoints
     };

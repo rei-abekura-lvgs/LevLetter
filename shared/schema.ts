@@ -26,6 +26,7 @@ export const cards = pgTable("cards", {
   recipientId: integer("recipient_id").notNull().references(() => users.id), // 主要な受信者
   recipientType: text("recipient_type").notNull().default("user"), // "user" or "team"
   message: text("message").notNull(),
+  points: integer("points").notNull().default(0), // 送信ポイント（0-140）
   createdAt: timestamp("created_at").defaultNow().notNull(),
   public: boolean("public").notNull().default(true),
   // 複数の受信者を保存するためのJSON形式のリスト (ID のみ)
