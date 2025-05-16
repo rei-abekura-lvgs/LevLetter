@@ -108,9 +108,9 @@ function AppRoutes() {
   return (
     <MainLayout>
       <Switch>
-        <Route path="/" component={() => <Home user={user} />} />
         <Route path="/my-cards" component={() => <MyCards user={user} />} />
         <Route path="/profile" component={() => <Profile user={user} />} />
+        <Route path="/" exact component={() => <Home user={user} />} />
         <Route component={NotFound} />
       </Switch>
     </MainLayout>
