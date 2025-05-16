@@ -69,17 +69,17 @@ export const getQueryFn = <T>(options: {
 }) => {
   return async (path: string): Promise<T | null> => {
     try {
-      const response = await apiRequest(path);
+      return await apiRequest<T>("GET", path);
+    } catch (error) {
+      console.error(`Error fetching ${path}:`, error);
       
-      if (response.status === 401 && options.on401 === "returnNull") {
+      // 認証エラー時の処理
+      if (error instanceof Error && 
+          error.message.includes("401") && 
+          options.on401 === "returnNull") {
         return null;
       }
       
-      await throwIfResNotOk(response);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error(`Error fetching ${path}:`, error);
       throw error;
     }
   };

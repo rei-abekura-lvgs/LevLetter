@@ -27,42 +27,35 @@ export async function getUser(id: number) {
 }
 
 export async function updateProfile(id: number, data: ProfileUpdateRequest) {
-  return apiRequest("PATCH", `/api/users/${id}`, data);
+  try {
+    const result = await apiRequest<User>("PATCH", `/api/users/${id}`, data);
+    console.log("プロフィール更新成功:", result);
+    return result;
+  } catch (error) {
+    console.error("プロフィール更新エラー:", error);
+    throw error;
+  }
 }
 
 // チーム関連
 export async function getTeams() {
-  const token = getAuthToken();
-  if (!token) throw new Error("認証が必要です");
-  
-  const res = await fetch("/api/teams", {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-  
-  if (!res.ok) {
-    throw new Error("チーム情報の取得に失敗しました");
+  try {
+    const data = await apiRequest<any[]>("GET", "/api/teams");
+    return data;
+  } catch (error) {
+    console.error("チーム一覧取得エラー:", error);
+    throw error;
   }
-  
-  return res.json();
 }
 
 export async function getTeam(id: number) {
-  const token = getAuthToken();
-  if (!token) throw new Error("認証が必要です");
-  
-  const res = await fetch(`/api/teams/${id}`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-  
-  if (!res.ok) {
-    throw new Error("チーム情報の取得に失敗しました");
+  try {
+    const data = await apiRequest<any>("GET", `/api/teams/${id}`);
+    return data;
+  } catch (error) {
+    console.error(`チーム(ID:${id})取得エラー:`, error);
+    throw error;
   }
-  
-  return res.json();
 }
 
 // カード関連
