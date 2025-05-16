@@ -260,6 +260,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         recipientId: recipientId,
         recipientType: data.recipientType,
         message: data.message,
+        points: data.points || 0, // ポイント情報を明示的に保存
         public: true, // MVPでは全て公開
         additionalRecipients: data.additionalRecipients || null
       });

@@ -105,7 +105,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                 <Heart 
                   className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
                 />
-                <span>{card.totalPoints || 0}</span>
+                <span>{card.likes.length}</span>
               </Button>
             </DialogTrigger>
             <DialogContent>
