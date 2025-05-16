@@ -80,45 +80,59 @@ export default function Home({ user }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
-  const [useFixedSampleData, setUseFixedSampleData] = useState(true); // 開発用にサンプルデータを強制的に使用
+  const [useFixedSampleData, setUseFixedSampleData] = useState(true); // サンプルデータを強制的に使用
+  const [showDebugInfo, setShowDebugInfo] = useState(true); // デバッグ情報表示
 
   console.log("Home: ユーザー情報", user);
   
-  // 開発用に固定サンプルデータを使用
+  // シンプルカードの定義（デバッグ用）
+  const SimpleCard = ({ card }: { card: CardWithRelations }) => (
+    <div className="bg-white rounded-lg shadow p-4 mb-4 border-l-4 border-blue-500">
+      <div className="flex justify-between mb-2">
+        <div className="font-medium">送信者: {card.sender.name}</div>
+        <div className="text-sm text-gray-500">ID: {card.id}</div>
+      </div>
+      <div className="mb-2">宛先: {card.recipientType === "user" ? (card.recipient as User).name : "チーム"}</div>
+      <div className="border-t border-gray-100 pt-2 text-sm">{card.message.substring(0, 100)}...</div>
+    </div>
+  );
+  
+  // サンプルデータの生成
   const sampleCards = generateSampleCards();
   console.log("生成したサンプルカード:", sampleCards);
   
+  // カードデータの取得
   const { data: cards, isLoading, error, refetch } = useQuery<CardWithRelations[]>({
     queryKey: ["/api/cards", { limit: page * ITEMS_PER_PAGE, sort: sortOrder }],
     queryFn: async () => {
       console.log("カード取得開始 - パラメータ:", { limit: page * ITEMS_PER_PAGE });
       
-      // 開発用に固定サンプルデータを使用する場合はAPIリクエストをスキップ
+      // 開発モードでサンプルデータを使用
       if (useFixedSampleData) {
-        console.log("開発用にサンプルデータを強制的に使用します");
+        console.log("開発用にサンプルデータを使用");
         return sampleCards;
       }
       
       try {
-        console.log("認証トークン状態:", localStorage.getItem("levletter-auth-token") ? "存在します" : "存在しません");
+        console.log("認証トークン:", localStorage.getItem("levletter-auth-token") ? "あり" : "なし");
         
         const data = await getCards({ limit: page * ITEMS_PER_PAGE });
         console.log("カード取得成功:", data);
         
         if (Array.isArray(data) && data.length === 0) {
-          console.log("カードがないため、サンプルデータを使用します");
+          console.log("データなし、サンプル使用");
           return sampleCards;
         }
         
         return data;
       } catch (err) {
         console.error("カード取得エラー:", err);
-        console.log("エラーのため、サンプルデータを使用します");
+        console.log("エラー発生、サンプル使用");
         return sampleCards;
       }
     },
-    retry: 0, // リトライをオフに設定
-    staleTime: Infinity // キャッシュを永続化（開発用）
+    retry: 1,
+    refetchOnWindowFocus: false
   });
 
   // 並び替え処理
@@ -194,7 +208,7 @@ export default function Home({ user }: HomeProps) {
             // カード表示
             <>
               {sortedCards.map(card => (
-                <CardItem key={card.id} card={card} currentUser={user} />
+                <SimpleCard key={`simple-${card.id}`} card={card} />
               ))}
               
               {/* もっと見るボタン */}
