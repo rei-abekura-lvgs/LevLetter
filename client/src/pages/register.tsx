@@ -36,7 +36,15 @@ export default function Register() {
   async function onSubmit(data: RegisterFormValues) {
     setIsLoading(true);
     try {
+      // 確認用のパスワードを除外
       const { confirmPassword, ...registerData } = data;
+      
+      // 部署名が空の場合はデフォルト値を設定
+      if (!registerData.department) {
+        registerData.department = "未設定";
+      }
+      
+      console.log("送信データ:", registerData); // デバッグ用
       const response = await registerUser(registerData);
       setUser(response.user);
       setLocation("/");
