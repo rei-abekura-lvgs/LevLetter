@@ -1,0 +1,144 @@
+import { pgTable, text, serial, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
+
+// ユーザーテーブル
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  name: text("name").notNull(),
+  displayName: text("display_name"),
+  department: text("department"),
+  avatarColor: text("avatar_color").notNull().default("primary-500"),
+  weeklyPoints: integer("weekly_points").notNull().default(500),
+  totalPointsReceived: integer("total_points_received").notNull().default(0),
+  lastWeeklyPointsReset: timestamp("last_weekly_points_reset"),
+  password: text("password"),
+  cognitoSub: text("cognito_sub").unique(),
+  googleId: text("google_id").unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// サンクスカードテーブル
+export const cards = pgTable("cards", {
+  id: serial("id").primaryKey(),
+  senderId: integer("sender_id").notNull().references(() => users.id),
+  recipientId: integer("recipient_id").notNull().references(() => users.id),
+  recipientType: text("recipient_type").notNull().default("user"), // "user" or "team"
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  public: boolean("public").notNull().default(true)
+});
+
+// いいねテーブル
+export const likes = pgTable("likes", {
+  id: serial("id").primaryKey(),
+  cardId: integer("card_id").notNull().references(() => cards.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  points: integer("points").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// チームテーブル
+export const teams = pgTable("teams", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// チームメンバーシップテーブル
+export const teamMembers = pgTable("team_members", {
+  id: serial("id").primaryKey(),
+  teamId: integer("team_id").notNull().references(() => teams.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  isLeader: boolean("is_leader").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// Zodスキーマ
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  lastWeeklyPointsReset: true,
+  createdAt: true
+});
+
+export const insertCardSchema = createInsertSchema(cards).omit({
+  id: true,
+  createdAt: true
+});
+
+export const insertLikeSchema = createInsertSchema(likes).omit({
+  id: true,
+  createdAt: true
+});
+
+export const insertTeamSchema = createInsertSchema(teams).omit({
+  id: true,
+  createdAt: true
+});
+
+export const insertTeamMemberSchema = createInsertSchema(teamMembers).omit({
+  id: true,
+  createdAt: true
+});
+
+// カスタムスキーマ
+export const loginSchema = z.object({
+  email: z.string().email({ message: "有効なメールアドレスを入力してください" }),
+  password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" })
+});
+
+export const registerSchema = insertUserSchema.pick({
+  email: true,
+  name: true,
+  password: true,
+  department: true
+}).extend({
+  password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" }),
+  confirmPassword: z.string()
+}).refine(data => data.password === data.confirmPassword, {
+  message: "パスワードが一致しません",
+  path: ["confirmPassword"]
+});
+
+export const cardFormSchema = z.object({
+  recipientId: z.number().or(z.string()),
+  recipientType: z.enum(["user", "team"]),
+  message: z.string().min(1, { message: "メッセージを入力してください" }).max(140, { message: "メッセージは140文字以内で入力してください" })
+});
+
+export const likeFormSchema = z.object({
+  cardId: z.number(),
+  points: z.number().min(0).max(100)
+});
+
+export const profileUpdateSchema = z.object({
+  displayName: z.string().min(1, { message: "表示名を入力してください" })
+});
+
+// 型定義
+export type User = typeof users.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
+export type Card = typeof cards.$inferSelect;
+export type InsertCard = z.infer<typeof insertCardSchema>;
+export type Like = typeof likes.$inferSelect;
+export type InsertLike = z.infer<typeof insertLikeSchema>;
+export type Team = typeof teams.$inferSelect;
+export type InsertTeam = z.infer<typeof insertTeamSchema>;
+export type TeamMember = typeof teamMembers.$inferSelect;
+export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
+
+// カスタム型
+export type CardWithRelations = Card & {
+  sender: User;
+  recipient: User | Team;
+  likes: Array<Like & { user: User }>;
+  totalPoints: number;
+};
+
+export type LoginRequest = z.infer<typeof loginSchema>;
+export type RegisterRequest = z.infer<typeof registerSchema>;
+export type ProfileUpdateRequest = z.infer<typeof profileUpdateSchema>;
+export type CardFormRequest = z.infer<typeof cardFormSchema>;
+export type LikeFormRequest = z.infer<typeof likeFormSchema>;
