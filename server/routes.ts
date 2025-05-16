@@ -96,6 +96,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         department: data.department
       });
 
+      // 新規アカウント作成時のメール送信
+      try {
+        // メール送信ユーティリティをインポート
+        const { sendEmail, getWelcomeEmailTemplate } = await import('./services/email');
+        
+        // アプリのベースURL
+        const baseUrl = process.env.BASE_URL || `https://${req.headers.host}`;
+        const loginLink = `${baseUrl}/login`;
+        
+        // メールテンプレート取得
+        const { html, text } = getWelcomeEmailTemplate(
+          user.name, 
+          loginLink
+        );
+        
+        // メール送信
+        await sendEmail({
+          to: user.email,
+          subject: 'LevLetterへようこそ',
+          htmlContent: html,
+          textContent: text
+        });
+        
+        console.log(`ウェルカムメール送信: ${user.email}`);
+      } catch (emailError) {
+        // メール送信エラーは致命的ではないのでログだけ
+        console.error('ウェルカムメール送信エラー:', emailError);
+      }
+
       // パスワードを除外
       const { password, ...userWithoutPassword } = user;
 
@@ -298,6 +327,124 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching card:", error);
       return res.status(500).json({ message: "カード情報の取得に失敗しました" });
+    }
+  });
+
+  // パスワードリセット関連のエンドポイント
+  // パスワードリセットリクエスト
+  app.post("/api/auth/password-reset-request", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "メールアドレスは必須です" });
+      }
+      
+      // メールアドレスでユーザーを検索
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        // セキュリティ上の理由から、ユーザーが存在しない場合も成功を返す
+        return res.json({ 
+          success: true,
+          message: "パスワードリセット用のメールを送信しました"
+        });
+      }
+      
+      try {
+        // トークン生成ユーティリティとメール送信ユーティリティをインポート
+        const { generatePasswordResetToken } = await import('./services/token');
+        const { sendEmail, getPasswordResetEmailTemplate } = await import('./services/email');
+        
+        // リセットトークン生成
+        const resetToken = generatePasswordResetToken(user.id, user.email);
+        
+        // アプリのベースURL
+        const baseUrl = process.env.BASE_URL || `https://${req.headers.host}`;
+        const resetLink = `${baseUrl}/reset-password?token=${resetToken}`;
+        
+        // メールテンプレート取得
+        const { html, text } = getPasswordResetEmailTemplate(
+          user.name, 
+          resetLink
+        );
+        
+        // メール送信
+        await sendEmail({
+          to: user.email,
+          subject: 'パスワードリセットのお知らせ',
+          htmlContent: html,
+          textContent: text
+        });
+        
+        console.log(`パスワードリセットメール送信: ${user.email}`);
+      } catch (emailError) {
+        // メール送信エラーはログだけ
+        console.error('パスワードリセットメール送信エラー:', emailError);
+      }
+      
+      // セキュリティ上の理由から、常に成功を返す
+      return res.json({ 
+        success: true,
+        message: "パスワードリセット用のメールを送信しました"
+      });
+    } catch (error) {
+      console.error('パスワードリセットリクエストエラー:', error);
+      return res.status(500).json({ message: "内部サーバーエラー" });
+    }
+  });
+  
+  // パスワードリセット実行
+  app.post("/api/auth/password-reset", async (req, res) => {
+    try {
+      const { token, newPassword } = req.body;
+      
+      if (!token || !newPassword) {
+        return res.status(400).json({ 
+          message: "トークンと新しいパスワードは必須です" 
+        });
+      }
+      
+      // 最低限のパスワード検証
+      if (newPassword.length < 6) {
+        return res.status(400).json({ 
+          message: "パスワードは6文字以上である必要があります" 
+        });
+      }
+      
+      // トークン検証ユーティリティをインポート
+      const { verifyPasswordResetToken } = await import('./services/token');
+      
+      // トークン検証
+      const { valid, userId, email, error } = verifyPasswordResetToken(token);
+      
+      if (!valid || !userId || !email) {
+        return res.status(400).json({ 
+          message: error || "無効なトークンです" 
+        });
+      }
+      
+      // ユーザー検証
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "ユーザーが見つかりません" });
+      }
+      
+      if (user.email !== email) {
+        return res.status(400).json({ message: "トークンが無効です" });
+      }
+      
+      // パスワード更新
+      await storage.updateUser(userId, {
+        password: newPassword  // hashPasswordはstorageクラス内で処理される前提
+      });
+      
+      return res.json({ 
+        success: true,
+        message: "パスワードがリセットされました。ログインしてください。" 
+      });
+    } catch (error) {
+      console.error('パスワードリセットエラー:', error);
+      return res.status(500).json({ message: "内部サーバーエラー" });
     }
   });
 
