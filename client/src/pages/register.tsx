@@ -11,8 +11,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-// バリデーションルールを使用
-const extendedRegisterSchema = registerSchema;
+// バリデーションルールを拡張
+const extendedRegisterSchema = registerSchema.extend({
+  // フロント側でのみ検証するフィールド - APIには送信しない
+  confirmPassword: z.string().min(6, { message: "パスワードは6文字以上で入力してください" })
+}).refine(data => data.password === data.confirmPassword, {
+  message: "パスワードが一致しません",
+  path: ["confirmPassword"]
+});
 
 type RegisterFormValues = z.infer<typeof extendedRegisterSchema>;
 
