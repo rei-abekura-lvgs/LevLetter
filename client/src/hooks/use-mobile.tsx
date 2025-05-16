@@ -1,21 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkIfMobile = () => {
+    // 初期状態を設定
+    const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
-    // 初期チェック
-    checkIfMobile();
-
-    // リサイズイベントのリスナーを追加
-    window.addEventListener('resize', checkIfMobile);
-
+    
+    // コンポーネントマウント時に実行
+    checkIsMobile();
+    
+    // リサイズイベントに対応
+    window.addEventListener("resize", checkIsMobile);
+    
     // クリーンアップ
-    return () => window.removeEventListener('resize', checkIfMobile);
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
   }, []);
 
   return isMobile;

@@ -1,66 +1,70 @@
 import { QueryClient } from "@tanstack/react-query";
 import { getAuthToken } from "./auth";
 
-// APIレスポンスをチェックする関数
+// APIリクエスト時のエラーハンドリング用ヘルパー関数
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
-    let errorText = "";
-    try {
-      const errorResponse = await res.json();
-      errorText = errorResponse.message || errorResponse.error || res.statusText;
-    } catch (e) {
-      errorText = res.statusText;
+    const contentType = res.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || `Error: ${res.status} ${res.statusText}`);
+    } else {
+      const errorText = await res.text();
+      throw new Error(errorText || `Error: ${res.status} ${res.statusText}`);
     }
-    throw new Error(errorText);
   }
 }
 
-// API呼び出しのための基本的な関数
+// API リクエスト関数
 export async function apiRequest(
-  input: RequestInfo | URL,
+  path: string,
   init?: RequestInit,
 ): Promise<Response> {
   const token = getAuthToken();
+  
   const headers = new Headers(init?.headers);
-
-  if (token && !headers.has("Authorization")) {
+  if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
-
-  return fetch(input, {
+  headers.set("Content-Type", headers.get("Content-Type") || "application/json");
+  
+  const response = await fetch(path, {
     ...init,
     headers,
   });
+  
+  return response;
 }
 
-// QueryKeyの型と401エラーの処理方法
-type UnauthorizedBehavior = "returnNull" | "throw";
-export const getQueryFn: <T>(options: {
-  on401: UnauthorizedBehavior;
-}) => (path: string) => Promise<T> = ({ on401 }) => {
-  return async (path: string) => {
-    const res = await apiRequest(path);
-    
-    // 401エラーの場合
-    if (res.status === 401) {
-      if (on401 === "returnNull") {
-        return null as unknown as T;
-      } else {
-        throw new Error("認証が必要です");
+// クエリ関数ファクトリー
+export const getQueryFn = <T>(options: {
+  on401: "returnNull" | "throw";
+}) => {
+  return async (path: string): Promise<T | null> => {
+    try {
+      const response = await apiRequest(path);
+      
+      if (response.status === 401 && options.on401 === "returnNull") {
+        return null;
       }
+      
+      await throwIfResNotOk(response);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(`Error fetching ${path}:`, error);
+      throw error;
     }
-
-    await throwIfResNotOk(res);
-    return res.json();
   };
 };
 
-// QueryClientの設定
+// TanStack Query クライアントの設定
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60, // 1分
-      queryFn: getQueryFn<unknown>({ on401: "throw" }),
+      refetchOnWindowFocus: false,
+      retry: false,
+      queryFn: (context) => getQueryFn<unknown>({ on401: "throw" })(context.queryKey[0] as string),
     },
   },
 });

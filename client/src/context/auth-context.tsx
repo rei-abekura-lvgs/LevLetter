@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useState, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { User } from "@shared/schema";
 import { getAuthenticatedUser } from "@/lib/auth";
 
@@ -9,7 +9,7 @@ interface AuthContextType {
   fetchUser: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -19,32 +19,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUser = useCallback(async () => {
+  const fetchUser = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const user = await getAuthenticatedUser();
-      setUser(user);
+      const userData = await getAuthenticatedUser();
+      setUser(userData);
     } catch (error) {
-      console.error("認証エラー:", error);
+      console.error("ユーザー情報の取得に失敗しました:", error);
       setUser(null);
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  const value = {
-    user,
-    loading,
-    setUser,
-    fetchUser,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ user, loading, setUser, fetchUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
