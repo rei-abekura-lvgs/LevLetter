@@ -120,8 +120,10 @@ export default function Home({ user }: HomeProps) {
   const filteredCards = activeTab === "all" 
     ? cards 
     : activeTab === "received" 
-      ? cards.filter(card => card.recipientId === user.id)
-      : cards.filter(card => card.senderId === user.id);
+      ? cards.filter(card => card.recipientId === user.id || (card.additionalRecipients && card.additionalRecipients.includes(user.id)))
+      : activeTab === "sent"
+        ? cards.filter(card => card.senderId === user.id)
+        : cards.filter(card => card.likes.some(like => like.user.id === user.id));
 
   const sortedCards = [...filteredCards].sort((a, b) => {
     if (sortOrder === "newest") {
@@ -197,10 +199,11 @@ export default function Home({ user }: HomeProps) {
 
         {/* タブ切り替え */}
         <Tabs defaultValue="all" className="mb-6" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="all">全て</TabsTrigger>
-            <TabsTrigger value="received">受け取ったカード</TabsTrigger>
-            <TabsTrigger value="sent">送ったカード</TabsTrigger>
+            <TabsTrigger value="received">受け取った</TabsTrigger>
+            <TabsTrigger value="sent">送った</TabsTrigger>
+            <TabsTrigger value="liked">いいねした</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-4">
@@ -212,6 +215,10 @@ export default function Home({ user }: HomeProps) {
           </TabsContent>
           
           <TabsContent value="sent" className="mt-4">
+            {renderCardList()}
+          </TabsContent>
+          
+          <TabsContent value="liked" className="mt-4">
             {renderCardList()}
           </TabsContent>
         </Tabs>

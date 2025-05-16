@@ -55,23 +55,40 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
       {/* カード内容 */}
       <div className="mb-4">
         <div className="text-sm text-gray-600 mb-1">
-          <div className="font-medium">
-            {/* メイン受信者 */}
-            <span>{recipientName}</span>
+          <div className="font-medium flex justify-between items-center">
+            <div>
+              {/* メイン受信者 */}
+              <span>{recipientName}</span>
+              
+              {/* 追加の受信者がいれば表示 */}
+              {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 && (
+                <>
+                  <span>、</span>
+                  {card.additionalRecipientUsers.map((user, index) => (
+                    <span key={user.id}>
+                      {user.displayName || user.name}
+                      {index < card.additionalRecipientUsers!.length - 1 ? "、" : ""}
+                    </span>
+                  ))}
+                </>
+              )}
+              <span> さんへ</span>
+            </div>
             
-            {/* 追加の受信者がいれば表示 */}
-            {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 && (
-              <>
-                <span>、</span>
-                {card.additionalRecipientUsers.map((user, index) => (
-                  <span key={user.id}>
-                    {user.displayName || user.name}
-                    {index < card.additionalRecipientUsers!.length - 1 ? "、" : ""}
-                  </span>
-                ))}
-              </>
+            {/* ポイント表示 */}
+            {card.points > 0 && (
+              <div className="bg-primary-50 text-primary-700 px-2 py-1 rounded-md text-xs font-bold flex items-center">
+                {/* 複数の受信者がいる場合は按分されたポイントを表示 */}
+                {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
+                  <>
+                    <span>{Math.floor(card.points / (1 + card.additionalRecipientUsers.length))} PT</span>
+                    <span className="text-xs text-gray-500 ml-1">/ 人</span>
+                  </>
+                ) : (
+                  <span>{card.points} PT</span>
+                )}
+              </div>
             )}
-            <span> さんへ</span>
           </div>
         </div>
         <p className="whitespace-pre-line">{card.message}</p>
