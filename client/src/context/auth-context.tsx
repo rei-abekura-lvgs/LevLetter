@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
-import { User } from "@shared/schema";
+import React, { createContext, useState, useContext, useCallback, ReactNode } from "react";
 import { getAuthenticatedUser } from "@/lib/auth";
+import { User } from "@shared/schema";
 
 interface AuthContextType {
   user: User | null;
@@ -9,12 +9,7 @@ interface AuthContextType {
   fetchUser: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true,
-  setUser: () => {},
-  fetchUser: async () => {},
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -45,5 +40,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 }
 
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }

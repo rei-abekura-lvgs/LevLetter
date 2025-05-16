@@ -11,7 +11,7 @@ import MyCards from "@/pages/my-cards";
 import Profile from "@/pages/profile";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
-import { useAuth } from "@/context/auth-context";
+import { AuthProvider, useAuth } from "@/context/auth-context";
 import { useEffect } from "react";
 
 function Router() {
@@ -64,12 +64,14 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </AuthProvider>
   );
 }
 

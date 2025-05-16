@@ -1,5 +1,5 @@
-import { User } from "@shared/schema";
 import { apiRequest } from "./queryClient";
+import { User } from "@shared/schema";
 
 interface AuthResponse {
   user: User;
@@ -9,61 +9,77 @@ interface AuthResponse {
 export const TOKEN_KEY = "levletter-auth-token";
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
-  const res = await apiRequest("POST", "/api/auth/login", { email, password });
-  const data = await res.json();
-  
-  // トークンをローカルストレージに保存
+  const response = await apiRequest("/api/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "ログインに失敗しました");
+  }
+
+  const data = await response.json();
   localStorage.setItem(TOKEN_KEY, data.token);
-  
   return data;
 }
 
 export async function register(formData: {
-  email: string;
   name: string;
+  email: string;
   password: string;
-  confirmPassword: string;
-  department?: string;
 }): Promise<AuthResponse> {
-  const res = await apiRequest("POST", "/api/auth/register", formData);
-  const data = await res.json();
-  
-  // トークンをローカルストレージに保存
+  const response = await apiRequest("/api/auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "アカウント登録に失敗しました");
+  }
+
+  const data = await response.json();
   localStorage.setItem(TOKEN_KEY, data.token);
-  
   return data;
 }
 
 export async function getAuthenticatedUser(): Promise<User | null> {
+  const token = getAuthToken();
+  if (!token) return null;
+
   try {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (!token) return null;
-    
-    const res = await fetch("/api/auth/me", {
+    const response = await apiRequest("/api/auth/me", {
+      method: "GET",
       headers: {
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      credentials: "include"
     });
-    
-    if (!res.ok) {
-      if (res.status === 401) {
-        localStorage.removeItem(TOKEN_KEY);
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        logout();
         return null;
       }
-      throw new Error("認証エラー");
+      const error = await response.json();
+      throw new Error(error.message || "認証情報の取得に失敗しました");
     }
-    
-    return await res.json();
+
+    return await response.json();
   } catch (error) {
-    console.error("認証情報の取得に失敗しました:", error);
+    console.error("認証エラー:", error);
     return null;
   }
 }
 
 export function logout(): void {
   localStorage.removeItem(TOKEN_KEY);
-  window.location.href = "/login";
 }
 
 export function getAuthToken(): string | null {

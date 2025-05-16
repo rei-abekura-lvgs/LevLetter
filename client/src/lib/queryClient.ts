@@ -1,75 +1,66 @@
-import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { getAuthToken } from "./auth";
 
+// APIレスポンスをチェックする関数
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
-    const text = (await res.text()) || res.statusText;
-    throw new Error(`${res.status}: ${text}`);
+    let errorText = "";
+    try {
+      const errorResponse = await res.json();
+      errorText = errorResponse.message || errorResponse.error || res.statusText;
+    } catch (e) {
+      errorText = res.statusText;
+    }
+    throw new Error(errorText);
   }
 }
 
+// API呼び出しのための基本的な関数
 export async function apiRequest(
-  method: string,
-  url: string,
-  data?: unknown | undefined,
+  input: RequestInfo | URL,
+  init?: RequestInit,
 ): Promise<Response> {
   const token = getAuthToken();
-  const headers: Record<string, string> = {
-    ...(data ? { "Content-Type": "application/json" } : {}),
-  };
-  
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-  
-  const res = await fetch(url, {
-    method,
-    headers,
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
-  });
+  const headers = new Headers(init?.headers);
 
-  await throwIfResNotOk(res);
-  return res;
+  if (token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  return fetch(input, {
+    ...init,
+    headers,
+  });
 }
 
+// QueryKeyの型と401エラーの処理方法
 type UnauthorizedBehavior = "returnNull" | "throw";
 export const getQueryFn: <T>(options: {
   on401: UnauthorizedBehavior;
-}) => QueryFunction<T> =
-  ({ on401: unauthorizedBehavior }) =>
-  async ({ queryKey }) => {
-    const token = getAuthToken();
+}) => (path: string) => Promise<T> = ({ on401 }) => {
+  return async (path: string) => {
+    const res = await apiRequest(path);
     
-    const headers: Record<string, string> = {};
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-    
-    const res = await fetch(queryKey[0] as string, {
-      headers,
-      credentials: "include",
-    });
-
-    if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      return null;
+    // 401エラーの場合
+    if (res.status === 401) {
+      if (on401 === "returnNull") {
+        return null as unknown as T;
+      } else {
+        throw new Error("認証が必要です");
+      }
     }
 
     await throwIfResNotOk(res);
-    return await res.json();
+    return res.json();
   };
+};
 
+// QueryClientの設定
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      queryFn: getQueryFn({ on401: "throw" }),
-      refetchInterval: false,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
-    },
-    mutations: {
-      retry: false,
+      staleTime: 1000 * 60, // 1分
+      queryFn: getQueryFn<unknown>({ on401: "throw" }),
     },
   },
 });
