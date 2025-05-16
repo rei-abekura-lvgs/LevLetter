@@ -1,8 +1,8 @@
-import { User } from "../../../shared/schema";
+import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
 import { Home, Send, User as UserIcon, LogOut } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { logout } from "../../lib/auth";
+import { cn } from "@/lib/utils";
+import { logout } from "@/lib/auth";
 
 interface SidebarProps {
   user: User | null;

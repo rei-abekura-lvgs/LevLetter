@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
-import { useAuth } from "../../context/auth-context";
+import { useAuth } from "@/context/auth-context";
 import Sidebar from "./sidebar";
 import MobileNav from "./mobile-nav";
-import { useIsMobile } from "../../hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MainLayoutProps {
   children: ReactNode;
