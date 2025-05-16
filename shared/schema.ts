@@ -132,6 +132,7 @@ export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
 export type CardWithRelations = Card & {
   sender: User;
   recipient: User | Team;
+  additionalRecipientUsers?: User[]; // 追加の受信者
   likes: Array<Like & { user: User }>;
   totalPoints: number;
 };

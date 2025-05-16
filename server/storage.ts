@@ -472,6 +472,14 @@ export class MemStorage implements IStorage {
           recipient = await this.getUser(card.recipientId);
         }
 
+        // 追加の受信者情報がある場合、それらを取得
+        let additionalRecipientUsers: User[] = [];
+        if (card.additionalRecipients && card.additionalRecipients.length > 0) {
+          additionalRecipientUsers = await Promise.all(
+            card.additionalRecipients.map(id => this.getUser(id))
+          ).then(users => users.filter(Boolean) as User[]);
+        }
+
         const likes = await this.getLikesForCard(card.id);
         const totalPoints = likes.reduce((sum, like) => sum + like.points, 0);
 
@@ -479,6 +487,7 @@ export class MemStorage implements IStorage {
           ...card,
           sender: sender!,
           recipient: recipient!,
+          additionalRecipientUsers,
           likes,
           totalPoints
         };
@@ -506,10 +515,19 @@ export class MemStorage implements IStorage {
     const likes = await this.getLikesForCard(card.id);
     const totalPoints = likes.reduce((sum, like) => sum + like.points, 0);
 
+    // 追加の受信者情報がある場合、それらを取得
+    let additionalRecipientUsers: User[] = [];
+    if (card.additionalRecipients && card.additionalRecipients.length > 0) {
+      additionalRecipientUsers = await Promise.all(
+        card.additionalRecipients.map(id => this.getUser(id))
+      ).then(users => users.filter(Boolean) as User[]);
+    }
+
     return {
       ...card,
       sender: sender!,
       recipient: recipient!,
+      additionalRecipientUsers,
       likes,
       totalPoints
     };
@@ -526,6 +544,7 @@ export class MemStorage implements IStorage {
       recipientType: insertCard.recipientType || "user",
       message: insertCard.message,
       public: insertCard.public !== undefined ? insertCard.public : true,
+      additionalRecipients: insertCard.additionalRecipients || null,
       createdAt: now
     };
 

@@ -55,7 +55,24 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
       {/* カード内容 */}
       <div className="mb-4">
         <div className="text-sm text-gray-600 mb-1">
-          <span className="font-medium">{recipientName}</span> さんへ
+          <div className="font-medium">
+            {/* メイン受信者 */}
+            <span>{recipientName}</span>
+            
+            {/* 追加の受信者がいれば表示 */}
+            {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 && (
+              <>
+                <span>、</span>
+                {card.additionalRecipientUsers.map((user, index) => (
+                  <span key={user.id}>
+                    {user.displayName || user.name}
+                    {index < card.additionalRecipientUsers!.length - 1 ? "、" : ""}
+                  </span>
+                ))}
+              </>
+            )}
+            <span> さんへ</span>
+          </div>
         </div>
         <p className="whitespace-pre-line">{card.message}</p>
       </div>
