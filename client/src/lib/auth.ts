@@ -74,7 +74,8 @@ export async function getAuthenticatedUser(): Promise<User | null> {
     }
     
     const data = await response.json();
-    return data.user;
+    // /api/auth/me エンドポイントはuser属性を含まないオブジェクトを直接返す
+    return data.user || data;
   } catch (error) {
     console.error("ユーザー情報の取得に失敗しました:", error);
     return null;

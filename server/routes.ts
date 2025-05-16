@@ -133,7 +133,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/auth/me", authenticate, async (req, res) => {
     const user = (req as any).user;
     const { password, ...userWithoutPassword } = user;
-    return res.json(userWithoutPassword);
+    // レスポンス形式を登録・ログインエンドポイントと統一
+    return res.json({ user: userWithoutPassword });
   });
 
   // ユーザー関連エンドポイント
