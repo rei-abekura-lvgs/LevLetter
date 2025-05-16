@@ -43,11 +43,11 @@ export default function Login() {
         description: "LevLetterへようこそ！",
       });
       
-      // 画面遷移（少し遅延を入れてトーストを表示する時間を確保）
-      setTimeout(() => {
-        console.log("ホーム画面へ遷移します");
-        setLocation("/");
-      }, 500);
+      // 画面遷移のために十分な遅延を設定
+      console.log("ホーム画面への遷移準備中...");
+      
+      // すぐにlocation.hrefで直接ページ遷移を行う（SPA内のルーティングをバイパス）
+      window.location.href = "/";
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
