@@ -17,59 +17,53 @@ import { useEffect, useState } from "react";
 function AppRoutes() {
   const { user, loading, isAuthenticated, fetchUser } = useAuth();
   const [location, setLocation] = useLocation();
-  const [directHomeActivated, setDirectHomeActivated] = useState(false);
   
-  // 初期認証処理
+  // 初期認証処理とナビゲーション制御
   useEffect(() => {
-    console.log("アプリの初期化 - 現在のパス:", location);
-    
-    // ユーザー情報の取得を試行
-    fetchUser().then(userData => {
-      if (userData) {
-        console.log("認証成功", userData.name);
+    // 認証情報を取得
+    const checkAuth = async () => {
+      try {
+        console.log("認証情報を確認中...");
+        const userData = await fetchUser();
         
-        // ホームページにいて認証済みの場合、Homeコンポーネントの強制表示を検討
-        if (location === '/' && !directHomeActivated) {
-          console.log("ホームページ表示条件を満たしています - 直接表示の準備");
-          setTimeout(() => {
-            setDirectHomeActivated(true);
-          }, 100);
+        // 認証済みの場合
+        if (userData) {
+          console.log("認証成功:", userData.name);
+          
+          // 認証済みユーザーがログインページにアクセスした場合はホームへリダイレクト
+          if (location === '/login' || location === '/register') {
+            console.log("認証済みユーザーをホームへリダイレクト");
+            setLocation('/');
+          }
+        } 
+        // 未認証の場合
+        else {
+          console.log("未認証状態");
+          // 保護されたルートへのアクセスを制限
+          const authRoutes = ['/login', '/register'];
+          if (!authRoutes.includes(location)) {
+            console.log("未認証ユーザーをログインページへリダイレクト");
+            setLocation('/login');
+          }
         }
-      } else {
-        console.log("認証されていないか、情報の取得に失敗しました");
+      } catch (err) {
+        console.error("認証確認中にエラー:", err);
       }
-    }).catch(err => {
-      console.error("認証処理中にエラーが発生しました:", err);
-    });
-  }, [fetchUser, location]);
+    };
+    
+    // 認証状態が変更されたら再確認
+    checkAuth();
+  }, [fetchUser, location, setLocation]);
   
-  // デバッグログ - 状態変更の追跡
+  // デバッグ用ログ
   useEffect(() => {
-    console.log("アプリ状態更新:", { 
+    console.log("アプリ状態:", { 
       認証済み: isAuthenticated, 
       ユーザー: user ? user.name : '未ログイン', 
-      ID: user?.id,
       読込中: loading,
-      現在のパス: location,
-      直接表示: directHomeActivated
+      現在のパス: location
     });
-  }, [isAuthenticated, user, loading, location, directHomeActivated]);
-
-  // ページアクセス制御
-  useEffect(() => {
-    // 認証済みで保護されたルートにアクセス可能
-    if (isAuthenticated && user) {
-      console.log("認証済みユーザー:", user.name, "- アクセス許可");
-    } 
-    // 認証情報の読み込みが完了し、認証されていない場合のリダイレクト
-    else if (!loading && !isAuthenticated) {
-      const authRoutes = ['/login', '/register'];
-      if (!authRoutes.includes(location)) {
-        console.log("未認証状態でのアクセス制限 - ログインへリダイレクト");
-        setLocation("/login");
-      }
-    }
-  }, [isAuthenticated, loading, location, setLocation, user]);
+  }, [isAuthenticated, user, loading, location]);
 
   // ローディング表示
   if (loading) {
@@ -81,40 +75,42 @@ function AppRoutes() {
     );
   }
 
-  // 特殊条件: 認証済みだが画面遷移が正常に動作しない場合の直接レンダリング
-  if (user && location === '/' && directHomeActivated) {
-    console.log("直接ホーム画面表示モードを実行");
+  // 認証状態に基づいたルーティング
+  if (isAuthenticated && user) {
+    // 認証済み状態のルーティング
     return (
       <MainLayout>
-        <Home user={user} />
+        <Switch>
+          <Route path="/my-cards">
+            <MyCards user={user} />
+          </Route>
+          <Route path="/profile">
+            <Profile user={user} />
+          </Route>
+          <Route path="/">
+            <Home user={user} />
+          </Route>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
       </MainLayout>
     );
-  }
-
-  // 未認証状態 - 認証関連ページのみアクセス可能
-  if (!isAuthenticated) {
+  } else {
+    // 未認証状態のルーティング
     return (
       <AuthLayout>
         <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route component={Login} />
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route>
+            <Login />
+          </Route>
         </Switch>
       </AuthLayout>
     );
   }
-
-  // 認証済み状態 - 通常のルーティング
-  return (
-    <MainLayout>
-      <Switch>
-        <Route path="/my-cards" component={() => <MyCards user={user} />} />
-        <Route path="/profile" component={() => <Profile user={user} />} />
-        <Route path="/" exact component={() => <Home user={user} />} />
-        <Route component={NotFound} />
-      </Switch>
-    </MainLayout>
-  );
 }
 
 function App() {
