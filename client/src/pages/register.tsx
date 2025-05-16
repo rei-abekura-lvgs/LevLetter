@@ -60,11 +60,22 @@ export default function Register() {
       });
     } catch (error) {
       console.error("登録エラー:", error);
-      toast({
-        title: "登録エラー",
-        description: error instanceof Error ? error.message : "登録に失敗しました。もう一度お試しください。",
-        variant: "destructive",
-      });
+      // エラーの詳細情報を表示
+      if (error instanceof Response) {
+        const errorText = await error.text();
+        console.error("サーバーエラー詳細:", errorText);
+        toast({
+          title: "登録エラー",
+          description: `サーバーエラー: ${errorText}`,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "登録エラー",
+          description: error instanceof Error ? error.message : "登録に失敗しました。もう一度お試しください。",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsLoading(false);
     }

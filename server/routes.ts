@@ -64,6 +64,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 認証関連エンドポイント
   app.post("/api/auth/register", async (req, res) => {
     try {
+      console.log("受信したリクエスト:", JSON.stringify(req.body));
+      
       const data = registerSchema.parse(req.body);
       
       // メールアドレスの重複チェック
@@ -71,7 +73,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (existingUser) {
         return res.status(400).json({ message: "このメールアドレスは既に登録されています" });
       }
-
+      
       const user = await storage.createUser({
         email: data.email,
         name: data.name,
@@ -87,6 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       return res.status(201).json({ user: userWithoutPassword, token });
     } catch (error) {
+      console.error("登録エラー:", error);
       return handleZodError(error, res);
     }
   });
