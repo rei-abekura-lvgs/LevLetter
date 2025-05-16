@@ -19,7 +19,13 @@ export default function Home({ user }: HomeProps) {
 
   const { data: cards, isLoading, error, refetch } = useQuery<CardWithRelations[]>({
     queryKey: ["/api/cards", { limit: page * ITEMS_PER_PAGE, sort: sortOrder }],
-    queryFn: () => getCards({ limit: page * ITEMS_PER_PAGE })
+    queryFn: () => getCards({ 
+      limit: page * ITEMS_PER_PAGE,
+      // クエリパラメータを追加（今後のソート機能のため）
+      // offset: 0, 
+      // senderId: undefined,
+      // recipientId: undefined
+    })
   });
 
   // 並び替え処理
