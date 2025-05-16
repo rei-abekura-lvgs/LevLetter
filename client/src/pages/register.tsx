@@ -11,15 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-// 追加のバリデーションルールを設定
-const extendedRegisterSchema = z.object({
-  ...registerSchema.shape,
-  password: z.string().min(8, "パスワードは8文字以上である必要があります"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "パスワードが一致しません",
-  path: ["confirmPassword"],
-});
+// バリデーションルールを使用
+const extendedRegisterSchema = registerSchema;
 
 type RegisterFormValues = z.infer<typeof extendedRegisterSchema>;
 

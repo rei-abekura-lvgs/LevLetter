@@ -1,243 +1,196 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cardFormSchema } from "@shared/schema";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
+import { useQuery } from "@tanstack/react-query";
+import { cardFormSchema, User, Team } from "@shared/schema";
+import { useAuth } from "@/context/auth-context";
+import { createCard, getUsers, getTeams } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getUsers, getTeams, createCard } from "@/lib/api";
-import { User, Team } from "@shared/schema";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
-import { CheckIcon, SearchIcon, SendIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export default function CardForm() {
+  const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [recipientType, setRecipientType] = useState<"user" | "team">("user");
-  const [selectedRecipient, setSelectedRecipient] = useState<{ id: number; name: string; type: "user" | "team" } | null>(null);
+  const [isPublic, setIsPublic] = useState(true);
+
+  // ユーザーと部署の情報を取得
+  const { data: users } = useQuery<User[]>({
+    queryKey: ["/api/users"],
+    queryFn: getUsers
+  });
+
+  const { data: teams } = useQuery<Team[]>({
+    queryKey: ["/api/teams"],
+    queryFn: getTeams
+  });
 
   const form = useForm({
     resolver: zodResolver(cardFormSchema),
     defaultValues: {
-      recipientId: 0,
-      recipientType: "user" as const,
+      recipientId: "",
+      recipientType: "user",
       message: ""
     }
   });
 
-  // ユーザー一覧を取得
-  const { data: users } = useQuery({
-    queryKey: ["/api/users"],
-    queryFn: () => getUsers()
-  });
+  const handleRecipientTypeChange = (value: string) => {
+    setRecipientType(value as "user" | "team");
+    form.setValue("recipientType", value as "user" | "team");
+    form.setValue("recipientId", ""); // タイプが変わったらリセット
+  };
 
-  // チーム一覧を取得
-  const { data: teams } = useQuery({
-    queryKey: ["/api/teams"],
-    queryFn: () => getTeams()
-  });
-
-  // 送信先候補を作成
-  const recipients = [
-    ...(users?.map((user: User) => ({
-      id: user.id,
-      name: user.displayName || user.name,
-      type: "user" as const
-    })) || []),
-    ...(teams?.map((team: Team) => ({
-      id: team.id,
-      name: team.name,
-      type: "team" as const
-    })) || [])
-  ];
-
-  // フィルタリングされた候補
-  const filteredRecipients = recipients.filter(
-    (recipient) => recipient.name.toLowerCase().includes(search.toLowerCase())
-  );
-
-  // 送信ミューテーション
-  const createCardMutation = useMutation({
-    mutationFn: createCard,
-    onSuccess: () => {
-      // キャッシュを更新
-      queryClient.invalidateQueries({
-        queryKey: ["/api/cards"]
+  const onSubmit = async (data: z.infer<typeof cardFormSchema>) => {
+    if (!user) return;
+    
+    setIsSubmitting(true);
+    try {
+      await createCard({
+        ...data,
+        recipientId: Number(data.recipientId),
+        public: isPublic
+      });
+      
+      toast({
+        title: "カードを送信しました！",
+        description: "サンクスカードが送信されました。"
       });
       
       // フォームをリセット
       form.reset({
-        recipientId: 0,
-        recipientType: "user",
+        recipientId: "",
+        recipientType: recipientType,
         message: ""
       });
-      setSelectedRecipient(null);
       
-      // 成功通知
+      // カードリストを更新
+      queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
+    } catch (error) {
+      console.error("カード作成エラー:", error);
       toast({
-        title: "送信完了",
-        description: "サンクスカードを送信しました。",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "エラー",
-        description: `カードの送信に失敗しました: ${error instanceof Error ? error.message : "不明なエラー"}`,
+        title: "エラーが発生しました",
+        description: error instanceof Error ? error.message : "操作に失敗しました",
         variant: "destructive"
       });
+    } finally {
+      setIsSubmitting(false);
     }
-  });
-
-  // 選択された受信者が変更されたら、フォームの値も更新
-  useEffect(() => {
-    if (selectedRecipient) {
-      form.setValue("recipientId", selectedRecipient.id);
-      form.setValue("recipientType", selectedRecipient.type);
-    }
-  }, [selectedRecipient, form]);
-
-  const onSubmit = (data: { recipientId: number | string; recipientType: "user" | "team"; message: string }) => {
-    if (!selectedRecipient) {
-      toast({
-        title: "入力エラー",
-        description: "送信先を選択してください。",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    createCardMutation.mutate(data);
   };
 
-  const messageLength = form.watch("message")?.length || 0;
-
   return (
-    <div className="mb-8 bg-white rounded-lg shadow overflow-hidden">
-      <div className="p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">サンクスカードを送る</h2>
+    <div className="bg-white rounded-lg shadow p-4 mb-6">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <h2 className="text-lg font-semibold mb-4">サンクスカードを送る</h2>
         
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="recipientId"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>送信先</FormLabel>
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          aria-expanded={open}
-                          className="justify-between w-full text-left font-normal"
-                        >
-                          {selectedRecipient ? selectedRecipient.name : "名前やチーム名で検索..."}
-                          <SearchIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="p-0 w-full min-w-[300px]">
-                      <Command>
-                        <CommandInput
-                          placeholder="名前やチームを検索..."
-                          className="h-9"
-                          value={search}
-                          onValueChange={setSearch}
-                        />
-                        <CommandList>
-                          <CommandEmpty>見つかりませんでした</CommandEmpty>
-                          <CommandGroup>
-                            {filteredRecipients.map((recipient) => (
-                              <CommandItem
-                                key={`${recipient.type}-${recipient.id}`}
-                                value={`${recipient.type}-${recipient.id}-${recipient.name}`}
-                                onSelect={() => {
-                                  setSelectedRecipient(recipient);
-                                  setRecipientType(recipient.type);
-                                  setOpen(false);
-                                }}
-                              >
-                                <span className={cn(
-                                  "mr-2 h-4 w-4 text-xs",
-                                  recipient.type === "team" ? "text-blue-500" : "text-green-500"
-                                )}>
-                                  {recipient.type === "team" ? "チーム" : "個人"}
-                                </span>
-                                {recipient.name}
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    selectedRecipient?.id === recipient.id && selectedRecipient?.type === recipient.type
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>メッセージ</FormLabel>
-                  <div className="relative">
-                    <FormControl>
-                      <Textarea
-                        placeholder="感謝のメッセージを入力（140文字以内）..."
-                        className="min-h-[80px] resize-none pr-16"
-                        {...field}
-                        maxLength={140}
-                      />
-                    </FormControl>
-                    <div className="absolute bottom-2 right-2 text-xs text-gray-500">
-                      {messageLength}/140
-                    </div>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex justify-end">
-              <Button 
-                type="submit" 
-                disabled={createCardMutation.isPending}
-                className="bg-primary-600 hover:bg-primary-700"
+        {/* 受信者タイプの選択 */}
+        <div className="mb-4">
+          <Tabs defaultValue="user" onValueChange={handleRecipientTypeChange}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="user">ユーザー</TabsTrigger>
+              <TabsTrigger value="team">チーム</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="user" className="mt-4">
+              <Select 
+                onValueChange={(value) => form.setValue("recipientId", value)} 
+                value={form.watch("recipientId") as string}
               >
-                <SendIcon className="mr-2 h-4 w-4" />
-                送信する
-                {createCardMutation.isPending && (
-                  <span className="ml-2">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  </span>
-                )}
-              </Button>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="ユーザーを選択" />
+                </SelectTrigger>
+                <SelectContent>
+                  {users?.filter(u => u.id !== user?.id).map((user: User) => (
+                    <SelectItem key={user.id} value={user.id.toString()}>
+                      {user.displayName || user.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </TabsContent>
+            
+            <TabsContent value="team" className="mt-4">
+              <Select 
+                onValueChange={(value) => form.setValue("recipientId", value)}
+                value={form.watch("recipientId") as string}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="チームを選択" />
+                </SelectTrigger>
+                <SelectContent>
+                  {teams?.map((team: Team) => (
+                    <SelectItem key={team.id} value={team.id.toString()}>
+                      {team.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </TabsContent>
+          </Tabs>
+          
+          {form.formState.errors.recipientId && (
+            <p className="text-red-500 text-sm mt-1">
+              {form.formState.errors.recipientId.message as string}
+            </p>
+          )}
+        </div>
+        
+        {/* メッセージ入力 */}
+        <div className="mb-4">
+          <Textarea
+            placeholder="感謝のメッセージを書きましょう..."
+            className="resize-none h-24"
+            {...form.register("message")}
+          />
+          {form.formState.errors.message && (
+            <p className="text-red-500 text-sm mt-1">
+              {form.formState.errors.message.message as string}
+            </p>
+          )}
+          <div className="text-xs text-gray-500 mt-1 flex justify-between items-center">
+            <div>
+              最大140文字まで
             </div>
-          </form>
-        </Form>
-      </div>
+            <div>
+              {form.watch("message")?.length || 0}/140
+            </div>
+          </div>
+        </div>
+        
+        {/* 公開設定 */}
+        <div className="flex items-center space-x-2 mb-4">
+          <Switch
+            id="public-mode"
+            checked={isPublic}
+            onCheckedChange={setIsPublic}
+          />
+          <Label htmlFor="public-mode">全社に公開する</Label>
+        </div>
+        
+        {/* 送信ボタン */}
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <span className="flex items-center">
+              <span className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+              送信中...
+            </span>
+          ) : (
+            "カードを送信"
+          )}
+        </Button>
+      </form>
     </div>
   );
 }

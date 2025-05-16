@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 import { likeFormSchema } from "@shared/schema";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import { HeartIcon } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/context/auth-context";
 import { createLike } from "@/lib/api";
+import { apiRequest } from "@/lib/queryClient";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { DialogTitle, DialogDescription, DialogHeader, DialogFooter } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { Heart } from "lucide-react";
 
 interface LikeFormProps {
   cardId: number;
@@ -17,112 +19,132 @@ interface LikeFormProps {
   hasLiked: boolean;
 }
 
+type LikeFormValues = z.infer<typeof likeFormSchema>;
+
 export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
+  const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [points, setPoints] = useState(50);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm({
+  const form = useForm<LikeFormValues>({
     resolver: zodResolver(likeFormSchema),
     defaultValues: {
       cardId,
-      points: 50
-    }
-  });
-
-  const createLikeMutation = useMutation({
-    mutationFn: createLike,
-    onSuccess: () => {
-      // キャッシュを更新
-      queryClient.invalidateQueries({
-        queryKey: ["/api/cards"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["/api/auth/me"]
-      });
-      
-      // 成功通知
-      toast({
-        title: "いいね完了",
-        description: `${points}ポイントのいいねを送りました。`,
-      });
-      
-      // フォームを閉じる
-      onClose();
+      points: hasLiked ? 0 : 10,
     },
-    onError: (error) => {
-      toast({
-        title: "エラー",
-        description: `いいねの送信に失敗しました: ${error instanceof Error ? error.message : "不明なエラー"}`,
-        variant: "destructive"
-      });
-    }
   });
 
-  const onSubmit = (data: { cardId: number; points: number }) => {
-    if (hasLiked) {
+  async function onSubmit(data: LikeFormValues) {
+    if (!user) return;
+
+    setIsSubmitting(true);
+    try {
+      if (hasLiked) {
+        // いいねを取り消す場合
+        await apiRequest(`/api/likes?cardId=${cardId}&userId=${user.id}`, {
+          method: "DELETE",
+        });
+        toast({
+          title: "いいねを取り消しました",
+          description: "いいねとポイントを取り消しました",
+        });
+      } else {
+        // 新しくいいねする場合
+        await createLike({
+          cardId: data.cardId,
+          points: data.points,
+        });
+        toast({
+          title: "いいねしました！",
+          description: `${data.points}ポイントを送りました！`,
+        });
+      }
+
+      // キャッシュを更新
+      queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
+      onClose();
+    } catch (error) {
+      console.error("いいねエラー:", error);
       toast({
-        title: "エラー",
-        description: "このカードにはすでにいいねしています。",
-        variant: "destructive"
+        title: "エラーが発生しました",
+        description: error instanceof Error ? error.message : "操作に失敗しました",
+        variant: "destructive",
       });
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    createLikeMutation.mutate(data);
-  };
+  }
 
   return (
-    <div className="mt-4 p-3 bg-gray-50 rounded-md">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-          <FormField
-            control={form.control}
-            name="points"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex items-center justify-between mb-1">
-                  <Label htmlFor="points" className="text-sm font-medium text-gray-700">ポイントを選択</Label>
-                  <span className="text-sm font-medium text-accent-500">{points} ポイント</span>
-                </div>
-                <FormControl>
-                  <Slider
-                    id="points"
-                    min={0}
-                    max={100}
-                    step={1}
-                    value={[points]}
-                    onValueChange={(value) => {
-                      setPoints(value[0]);
-                      field.onChange(value[0]);
-                    }}
-                    className="[&_[role=slider]]:bg-accent-500"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <DialogHeader>
+        <DialogTitle>
+          {hasLiked ? "いいねを取り消す" : "いいねする"}
+        </DialogTitle>
+        <DialogDescription>
+          {hasLiked
+            ? "このカードへのいいねとポイントを取り消します。"
+            : "このカードにいいねしてポイントを贈りましょう！"}
+        </DialogDescription>
+      </DialogHeader>
 
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              disabled={createLikeMutation.isPending || hasLiked}
-              className="text-white bg-accent-500 hover:bg-pink-600"
-            >
-              <HeartIcon className="mr-1 h-4 w-4 fill-current" />
-              いいねを送る
-              {createLikeMutation.isPending && (
-                <span className="ml-2">
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                </span>
-              )}
-            </Button>
+      {!hasLiked && (
+        <div className="py-6">
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">
+                ポイント: {form.watch("points")}
+              </label>
+              <Slider
+                className="mt-2"
+                defaultValue={[10]}
+                max={Math.min(100, user?.weeklyPoints || 100)}
+                min={0}
+                step={5}
+                onValueChange={(value) => form.setValue("points", value[0])}
+              />
+            </div>
+
+            <div className="text-sm text-gray-500">
+              残りポイント: {user?.weeklyPoints || 0} ポイント
+            </div>
           </div>
-        </form>
-      </Form>
-    </div>
+        </div>
+      )}
+
+      <DialogFooter>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onClose}
+          disabled={isSubmitting}
+        >
+          キャンセル
+        </Button>
+        <Button
+          type="submit"
+          disabled={isSubmitting || (user?.weeklyPoints === 0 && !hasLiked)}
+          className={hasLiked ? "bg-red-500 hover:bg-red-600" : ""}
+        >
+          {isSubmitting ? (
+            <span className="flex items-center">
+              <span className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+              処理中...
+            </span>
+          ) : hasLiked ? (
+            <span className="flex items-center">
+              <Heart className="mr-2 h-4 w-4" />
+              いいねを取り消す
+            </span>
+          ) : (
+            <span className="flex items-center">
+              <Heart className="mr-2 h-4 w-4" />
+              いいねする
+            </span>
+          )}
+        </Button>
+      </DialogFooter>
+    </form>
   );
 }
