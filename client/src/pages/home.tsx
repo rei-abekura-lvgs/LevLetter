@@ -102,16 +102,19 @@ export default function Home({ user }: HomeProps) {
   } = useQuery<CardWithRelations[]>({
     queryKey: ["/api/cards"],
     queryFn: () => getCards({}),
-    enabled: !!user?.id
+    enabled: !!user?.id,
+    refetchOnWindowFocus: true,
+    staleTime: 10000 // 10秒間はキャッシュを使用
   });
 
   // データの読み込み確認のログ
   useEffect(() => {
-    if (cards.length > 0) {
+    console.log("カード取得データ状態:", { カード数: cards?.length || 0, ロード中: isLoading, エラー: !!error });
+    if (cards && cards.length > 0) {
       console.log("カード取得レスポンス:", 200, "OK");
       console.log("取得したカードデータ:", cards);
     }
-  }, [cards]);
+  }, [cards, isLoading, error]);
 
   // カードのフィルタリングとソート
   const filteredCards = activeTab === "all" 

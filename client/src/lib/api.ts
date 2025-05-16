@@ -139,7 +139,15 @@ export async function getCard(id: number) {
 }
 
 export async function createCard(data: CardFormRequest) {
-  return apiRequest("POST", "/api/cards", data);
+  console.log("カード作成リクエスト:", data);
+  try {
+    const result = await apiRequest("POST", "/api/cards", data);
+    console.log("カード作成成功:", result);
+    return result;
+  } catch (error) {
+    console.error("カード作成失敗:", error);
+    throw error;
+  }
 }
 
 // いいね関連

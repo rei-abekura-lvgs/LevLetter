@@ -16,24 +16,51 @@ async function throwIfResNotOk(res: Response) {
 }
 
 // API リクエスト関数
-export async function apiRequest(
+export async function apiRequest<T>(
+  method: string,
   path: string,
-  init?: RequestInit,
-): Promise<Response> {
+  data?: any
+): Promise<T> {
   const token = getAuthToken();
   
-  const headers = new Headers(init?.headers);
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
-  headers.set("Content-Type", headers.get("Content-Type") || "application/json");
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    "Authorization": token ? `Bearer ${token}` : ""
+  };
   
-  const response = await fetch(path, {
-    ...init,
+  const config: RequestInit = {
+    method,
     headers,
-  });
+    body: data ? JSON.stringify(data) : undefined
+  };
   
-  return response;
+  console.log(`API ${method} リクエスト:`, path, data ? "データあり" : "データなし");
+  
+  try {
+    const response = await fetch(path, config);
+    
+    if (!response.ok) {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Error: ${response.status} ${response.statusText}`);
+      } else {
+        const errorText = await response.text();
+        throw new Error(errorText || `Error: ${response.status} ${response.statusText}`);
+      }
+    }
+    
+    // 204 No Content の場合は空のオブジェクトを返す
+    if (response.status === 204) {
+      return {} as T;
+    }
+    
+    const data = await response.json();
+    return data as T;
+  } catch (error) {
+    console.error(`API ${method} エラー:`, path, error);
+    throw error;
+  }
 }
 
 // クエリ関数ファクトリー

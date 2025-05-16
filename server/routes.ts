@@ -244,21 +244,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/cards", authenticate, async (req, res) => {
     try {
       const currentUser = (req as any).user;
+      console.log("カード作成リクエスト:", JSON.stringify(req.body));
       const data = cardFormSchema.parse(req.body);
 
+      // リクエストデータのログ
+      console.log("カード作成処理 - ユーザー:", currentUser.id, currentUser.name);
+      console.log("カード作成処理 - 宛先:", data.recipientId, "タイプ:", data.recipientType);
+      
+      const recipientId = typeof data.recipientId === "string" 
+        ? parseInt(data.recipientId) 
+        : data.recipientId;
+      
       const newCard = await storage.createCard({
         senderId: currentUser.id,
-        recipientId: typeof data.recipientId === "string" 
-          ? parseInt(data.recipientId) 
-          : data.recipientId,
+        recipientId: recipientId,
         recipientType: data.recipientType,
         message: data.message,
         public: true // MVPでは全て公開
       });
-
-      const cardWithRelations = await storage.getCard(newCard.id);
-      return res.status(201).json(cardWithRelations);
+      
+      console.log("カード作成成功:", newCard.id);
+      
+      try {
+        const cardWithRelations = await storage.getCard(newCard.id);
+        console.log("カード関連情報取得成功:", cardWithRelations ? "データあり" : "データなし");
+        return res.status(201).json(cardWithRelations);
+      } catch (getCardError) {
+        console.error("カード関連情報取得エラー:", getCardError);
+        // 作成したカード情報だけでも返す
+        return res.status(201).json(newCard);
+      }
     } catch (error) {
+      console.error("カード作成エラー:", error);
       return handleZodError(error, res);
     }
   });
