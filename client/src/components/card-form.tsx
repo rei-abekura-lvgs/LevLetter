@@ -129,15 +129,18 @@ export default function CardForm({ onSent }: CardFormProps) {
     
     setIsSubmitting(true);
     try {
-      // 各受信者に対してカードを送信
-      for (const recipient of selectedRecipients) {
-        await createCard({
-          recipientId: recipient.id,
-          recipientType: "user",
-          message: data.message,
-          public: true // すべて公開に設定
-        });
-      }
+      // 最初の受信者をメイン受信者とし、残りを追加受信者として扱う
+      const mainRecipient = selectedRecipients[0];
+      const additionalRecipientIds = selectedRecipients.slice(1).map(r => r.id);
+      
+      // 単一のカードを作成し、複数の宛先を含める
+      await createCard({
+        recipientId: mainRecipient.id,
+        recipientType: "user",
+        message: data.message,
+        public: true, // すべて公開に設定
+        additionalRecipients: additionalRecipientIds.length > 0 ? additionalRecipientIds : undefined
+      });
       
       toast({
         title: "カードを送信しました！",

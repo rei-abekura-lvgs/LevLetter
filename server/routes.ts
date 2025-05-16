@@ -260,7 +260,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         recipientId: recipientId,
         recipientType: data.recipientType,
         message: data.message,
-        public: true // MVPでは全て公開
+        public: true, // MVPでは全て公開
+        additionalRecipients: data.additionalRecipients || null
       });
       
       console.log("カード作成成功:", newCard.id);

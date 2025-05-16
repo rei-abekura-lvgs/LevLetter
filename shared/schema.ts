@@ -23,11 +23,13 @@ export const users = pgTable("users", {
 export const cards = pgTable("cards", {
   id: serial("id").primaryKey(),
   senderId: integer("sender_id").notNull().references(() => users.id),
-  recipientId: integer("recipient_id").notNull().references(() => users.id),
+  recipientId: integer("recipient_id").notNull().references(() => users.id), // 主要な受信者
   recipientType: text("recipient_type").notNull().default("user"), // "user" or "team"
   message: text("message").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  public: boolean("public").notNull().default(true)
+  public: boolean("public").notNull().default(true),
+  // 複数の受信者を保存するためのJSON形式のリスト (ID のみ)
+  additionalRecipients: jsonb("additional_recipients").$type<number[]>()
 });
 
 // いいねテーブル
@@ -101,7 +103,8 @@ export const registerSchema = insertUserSchema.pick({
 export const cardFormSchema = z.object({
   recipientId: z.number().or(z.string()),
   recipientType: z.enum(["user", "team"]),
-  message: z.string().min(1, { message: "メッセージを入力してください" }).max(140, { message: "メッセージは140文字以内で入力してください" })
+  message: z.string().min(1, { message: "メッセージを入力してください" }).max(140, { message: "メッセージは140文字以内で入力してください" }),
+  additionalRecipients: z.array(z.number()).optional()
 });
 
 export const likeFormSchema = z.object({
