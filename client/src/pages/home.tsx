@@ -17,15 +17,21 @@ export default function Home({ user }: HomeProps) {
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
 
+  console.log("Home: ユーザー情報", user);
+  
   const { data: cards, isLoading, error, refetch } = useQuery<CardWithRelations[]>({
     queryKey: ["/api/cards", { limit: page * ITEMS_PER_PAGE, sort: sortOrder }],
-    queryFn: () => getCards({ 
-      limit: page * ITEMS_PER_PAGE,
-      // クエリパラメータを追加（今後のソート機能のため）
-      // offset: 0, 
-      // senderId: undefined,
-      // recipientId: undefined
-    })
+    queryFn: async () => {
+      console.log("カード取得開始 - パラメータ:", { limit: page * ITEMS_PER_PAGE });
+      try {
+        const data = await getCards({ limit: page * ITEMS_PER_PAGE });
+        console.log("カード取得成功:", data);
+        return data;
+      } catch (err) {
+        console.error("カード取得エラー:", err);
+        throw err;
+      }
+    }
   });
 
   // 並び替え処理
