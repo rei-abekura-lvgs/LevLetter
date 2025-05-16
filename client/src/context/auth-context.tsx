@@ -1,6 +1,6 @@
-import React, { createContext, useState, useContext, useCallback, ReactNode } from "react";
-import { getAuthenticatedUser } from "@/lib/auth";
+import { createContext, useContext, ReactNode, useState, useCallback } from "react";
 import { User } from "@shared/schema";
+import { getAuthenticatedUser } from "@/lib/auth";
 
 interface AuthContextType {
   user: User | null;
@@ -22,8 +22,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const fetchUser = useCallback(async () => {
     try {
       setLoading(true);
-      const userData = await getAuthenticatedUser();
-      setUser(userData);
+      const user = await getAuthenticatedUser();
+      setUser(user);
     } catch (error) {
       console.error("認証エラー:", error);
       setUser(null);
@@ -32,11 +32,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, loading, setUser, fetchUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = {
+    user,
+    loading,
+    setUser,
+    fetchUser,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

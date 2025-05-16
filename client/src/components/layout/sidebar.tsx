@@ -1,6 +1,8 @@
-import { Link, useLocation } from "wouter";
 import { User } from "@shared/schema";
+import { Link, useLocation } from "wouter";
+import { Home, Send, User as UserIcon, LogOut } from "lucide-react";
 import { logout } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 
 interface SidebarProps {
   user: User | null;
@@ -9,62 +11,61 @@ interface SidebarProps {
 export default function Sidebar({ user }: SidebarProps) {
   const [location] = useLocation();
 
+  const handleLogout = () => {
+    logout();
+    window.location.href = "/login";
+  };
+
+  const NavItem = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
+    const isActive = location === href;
+    return (
+      <Link href={href}>
+        <a className={cn(
+          "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
+          isActive 
+            ? "bg-primary text-primary-foreground" 
+            : "hover:bg-muted"
+        )}>
+          <Icon className="h-5 w-5" />
+          <span>{label}</span>
+        </a>
+      </Link>
+    );
+  };
+
   return (
-    <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-      <div className="flex flex-col flex-grow bg-white shadow-lg overflow-y-auto">
-        {/* ロゴとナビゲーション */}
-        <div className="flex items-center justify-center h-16 px-4 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-primary-600">LevLetter</h1>
-        </div>
-        
-        {/* メニュー項目 */}
-        <div className="flex-grow flex flex-col mt-5">
-          <nav className="flex-1 px-2 space-y-1">
-            <Link href="/">
-              <a className={`flex items-center px-4 py-3 text-sm font-medium rounded-md ${location === "/" ? "bg-primary-50 text-primary-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"} group`}>
-                <i className="ri-home-line text-xl mr-3"></i>
-                <span>タイムライン</span>
-              </a>
-            </Link>
-            <Link href="/my-cards">
-              <a className={`flex items-center px-4 py-3 text-sm font-medium rounded-md ${location === "/my-cards" ? "bg-primary-50 text-primary-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"} group`}>
-                <i className="ri-mail-line text-xl mr-3"></i>
-                <span>マイカード</span>
-              </a>
-            </Link>
-            <Link href="/profile">
-              <a className={`flex items-center px-4 py-3 text-sm font-medium rounded-md ${location === "/profile" ? "bg-primary-50 text-primary-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"} group`}>
-                <i className="ri-user-line text-xl mr-3"></i>
-                <span>プロフィール</span>
-              </a>
-            </Link>
-          </nav>
-        </div>
-        
-        {/* ユーザーインフォ */}
-        {user && (
-          <div className="flex items-center px-4 py-4 border-t border-gray-200">
-            <div className="flex-shrink-0">
-              <div className={`h-10 w-10 rounded-full bg-${user.avatarColor} flex items-center justify-center text-white font-medium`}>
-                {user.name.split(/\s+/).map(part => part.charAt(0).toUpperCase()).slice(0, 2).join('')}
-              </div>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-700">{user.displayName || user.name}</p>
-              <div className="flex items-center text-xs text-gray-500">
-                <i className="ri-coin-line mr-1"></i>
-                <span>残り：{user.weeklyPoints}/500</span>
-              </div>
-            </div>
-            <button 
-              onClick={() => logout()}
-              className="ml-auto flex items-center justify-center h-8 w-8 rounded-full text-gray-400 hover:text-gray-500"
-            >
-              <i className="ri-logout-box-r-line"></i>
-            </button>
-          </div>
-        )}
+    <div className="w-64 border-r flex flex-col h-screen">
+      <div className="p-4 border-b">
+        <h1 className="text-2xl font-bold text-primary">LevLetter</h1>
+        <p className="text-sm text-muted-foreground">感謝の気持ちを伝えよう</p>
       </div>
+      
+      <nav className="flex-1 p-4 space-y-2">
+        <NavItem href="/" icon={Home} label="ホーム" />
+        <NavItem href="/my-cards" icon={Send} label="マイカード" />
+        <NavItem href="/profile" icon={UserIcon} label="プロフィール" />
+      </nav>
+      
+      {user && (
+        <div className="p-4 border-t">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+              {user.displayName?.[0] || user.name[0]}
+            </div>
+            <div>
+              <p className="font-medium">{user.displayName || user.name}</p>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
+            </div>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 px-3 py-2 rounded-md text-red-500 hover:bg-red-50 transition-colors"
+          >
+            <LogOut className="h-5 w-5" />
+            <span>ログアウト</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

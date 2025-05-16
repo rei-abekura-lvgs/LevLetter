@@ -1,5 +1,5 @@
+import { User } from "../../shared/schema";
 import { apiRequest } from "./queryClient";
-import { User } from "@shared/schema";
 
 interface AuthResponse {
   user: User;
@@ -17,20 +17,20 @@ export async function login(email: string, password: string): Promise<AuthRespon
     body: JSON.stringify({ email, password }),
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "ログインに失敗しました");
-  }
-
   const data = await response.json();
-  localStorage.setItem(TOKEN_KEY, data.token);
-  return data;
+  
+  if (response.ok) {
+    localStorage.setItem(TOKEN_KEY, data.token);
+    return data;
+  }
+  
+  throw new Error(data.message || "ログインに失敗しました");
 }
 
 export async function register(formData: {
-  name: string;
   email: string;
   password: string;
+  name: string;
 }): Promise<AuthResponse> {
   const response = await apiRequest("/api/auth/register", {
     method: "POST",
@@ -40,40 +40,42 @@ export async function register(formData: {
     body: JSON.stringify(formData),
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "アカウント登録に失敗しました");
-  }
-
   const data = await response.json();
-  localStorage.setItem(TOKEN_KEY, data.token);
-  return data;
+  
+  if (response.ok) {
+    localStorage.setItem(TOKEN_KEY, data.token);
+    return data;
+  }
+  
+  throw new Error(data.message || "登録に失敗しました");
 }
 
 export async function getAuthenticatedUser(): Promise<User | null> {
-  const token = getAuthToken();
-  if (!token) return null;
-
   try {
+    const token = getAuthToken();
+    
+    if (!token) {
+      return null;
+    }
+    
     const response = await apiRequest("/api/auth/me", {
-      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-
+    
     if (!response.ok) {
       if (response.status === 401) {
         logout();
         return null;
       }
-      const error = await response.json();
-      throw new Error(error.message || "認証情報の取得に失敗しました");
+      throw new Error("認証に失敗しました");
     }
-
-    return await response.json();
+    
+    const data = await response.json();
+    return data.user;
   } catch (error) {
-    console.error("認証エラー:", error);
+    console.error("ユーザー情報の取得に失敗しました:", error);
     return null;
   }
 }
