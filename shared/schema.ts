@@ -95,11 +95,7 @@ export const registerSchema = insertUserSchema.pick({
   password: true,
   department: true
 }).extend({
-  password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" }),
-  confirmPassword: z.string()
-}).refine(data => data.password === data.confirmPassword, {
-  message: "パスワードが一致しません",
-  path: ["confirmPassword"]
+  password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" })
 });
 
 export const cardFormSchema = z.object({
