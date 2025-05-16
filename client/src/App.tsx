@@ -11,20 +11,12 @@ import MyCards from "@/pages/my-cards";
 import Profile from "@/pages/profile";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
-import { AuthProvider, useAuth, AuthContext } from "@/context/auth-context";
-import { useEffect, useContext } from "react";
+import { AuthProvider, useAuth } from "@/context/auth-context";
+import { useEffect } from "react";
 
-function Router() {
-  const context = useContext(AuthContext);
+function AppRoutes() {
+  const { user, loading, fetchUser } = useAuth();
   const [location, setLocation] = useLocation();
-
-  // コンテキストがnullの場合は早期リターン
-  if (!context) {
-    console.error("AuthContextが見つかりません");
-    return null;
-  }
-
-  const { user, loading, fetchUser } = context;
 
   useEffect(() => {
     fetchUser();
@@ -73,12 +65,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
+      <TooltipProvider>
+        <AuthProvider>
           <Toaster />
-          <Router />
-        </TooltipProvider>
-      </AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

@@ -2,6 +2,14 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { User } from "@shared/schema";
 import { getAuthenticatedUser } from "@/lib/auth";
 
+// デフォルト値を提供して、コンテキストが初期化されていない場合のエラーを防ぐ
+const defaultAuthContext = {
+  user: null as User | null,
+  loading: false,
+  setUser: () => {},
+  fetchUser: async () => {}
+};
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -9,7 +17,7 @@ interface AuthContextType {
   fetchUser: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -36,8 +44,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     fetchUser();
   }, []);
 
+  const value = {
+    user,
+    loading,
+    setUser,
+    fetchUser
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, setUser, fetchUser }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
@@ -45,8 +60,5 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
   return context;
 }
