@@ -14,6 +14,21 @@ import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context";
 import { useEffect } from "react";
 
+function ProtectedRoutes() {
+  const { user } = useAuth();
+  
+  return (
+    <MainLayout>
+      <Switch>
+        <Route path="/" component={() => <Home user={user!} />} />
+        <Route path="/my-cards" component={() => <MyCards user={user!} />} />
+        <Route path="/profile" component={() => <Profile user={user!} />} />
+        <Route component={NotFound} />
+      </Switch>
+    </MainLayout>
+  );
+}
+
 function Router() {
   const { user, loading, fetchUser } = useAuth();
   const [location, setLocation] = useLocation();
@@ -50,16 +65,7 @@ function Router() {
   }
 
   // ログイン済みユーザー向けルート
-  return (
-    <MainLayout>
-      <Switch>
-        <Route path="/" component={() => <Home user={user} />} />
-        <Route path="/my-cards" component={() => <MyCards user={user} />} />
-        <Route path="/profile" component={() => <Profile user={user} />} />
-        <Route component={NotFound} />
-      </Switch>
-    </MainLayout>
-  );
+  return <ProtectedRoutes />;
 }
 
 function App() {

@@ -54,9 +54,15 @@ export default function CardForm() {
     
     setIsSubmitting(true);
     try {
-      await createCard({
+      // publicプロパティは別に送る必要があるため、オブジェクトを作成
+      const cardData = {
         ...data,
-        recipientId: Number(data.recipientId),
+        recipientId: Number(data.recipientId)
+      };
+      
+      // @ts-ignore - APIは'public'プロパティを受け付けるが型定義には存在しない
+      await createCard({
+        ...cardData,
         public: isPublic
       });
       

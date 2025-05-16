@@ -29,6 +29,7 @@ export default function Register() {
       email: "",
       password: "",
       confirmPassword: "",
+      department: "",
     },
   });
 
@@ -111,6 +112,18 @@ export default function Register() {
           />
           {form.formState.errors.confirmPassword && (
             <p className="text-sm text-red-500">{form.formState.errors.confirmPassword.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="department">部署名</Label>
+          <Input
+            id="department"
+            placeholder="開発部"
+            {...form.register("department")}
+          />
+          {form.formState.errors.department && (
+            <p className="text-sm text-red-500">{form.formState.errors.department.message}</p>
           )}
         </div>
 
