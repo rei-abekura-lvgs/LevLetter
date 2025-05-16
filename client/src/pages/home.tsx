@@ -1,20 +1,39 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getCards } from "@/lib/api";
+import { useState, useEffect } from "react";
 import { CardWithRelations, User } from "@shared/schema";
 import CardForm from "@/components/card-form";
-import CardItem from "@/components/card-item";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { RotateCcw } from "lucide-react";
 
-// サンプルデータを生成する関数
-function generateSampleCards(): CardWithRelations[] {
-  const sender: User = {
-    id: 1,
-    email: "tanaka@example.com",
-    name: "田中 一郎",
-    displayName: "田中 一郎",
+// シンプルなカードコンポーネント（デバッグ用）
+const SimpleCard = ({ card }: { card: CardWithRelations }) => (
+  <div className="bg-white rounded-lg shadow p-4 mb-4 border border-gray-200">
+    <div className="flex justify-between mb-2">
+      <div className="font-medium text-blue-700">送信者: {card.sender.name}</div>
+      <div className="text-xs text-gray-500">ID: {card.id}</div>
+    </div>
+    <div className="mb-2 text-sm">宛先: {card.recipientType === "user" 
+      ? (card.recipient as User).name 
+      : "チーム"}</div>
+    <div className="border-t border-gray-100 pt-2 text-sm">{card.message.substring(0, 100)}...</div>
+    <div className="mt-2 text-xs text-gray-500">いいね: {card.totalPoints || 0}件</div>
+  </div>
+);
+
+// 開発用のサンプルカードデータを生成
+function generateSampleCards(userId: number): CardWithRelations[] {
+  // 送信者（現在のユーザー）
+  const currentUser: User = {
+    id: userId,
+    email: "current@example.com",
+    name: "現在のユーザー",
+    displayName: "自分",
     department: "開発部",
     avatarColor: "blue-500",
     weeklyPoints: 500,
@@ -25,14 +44,15 @@ function generateSampleCards(): CardWithRelations[] {
     googleId: null,
     createdAt: new Date()
   };
-  
-  const recipient: User = {
-    id: 2,
-    email: "yamada@example.com",
-    name: "山田 花子",
-    displayName: "山田 花子",
-    department: "マーケティング部",
-    avatarColor: "pink-500",
+
+  // 受信者
+  const recipient1: User = {
+    id: 100,
+    email: "colleague1@example.com",
+    name: "同僚 一郎",
+    displayName: "同僚1",
+    department: "営業部",
+    avatarColor: "green-500",
     weeklyPoints: 500,
     totalPointsReceived: 0,
     lastWeeklyPointsReset: null,
@@ -42,32 +62,33 @@ function generateSampleCards(): CardWithRelations[] {
     createdAt: new Date()
   };
   
+  // サンプルカードデータ
   return [
     {
       id: 1,
-      createdAt: new Date(),
-      senderId: sender.id,
-      recipientId: recipient.id,
+      senderId: recipient1.id,
+      recipientId: currentUser.id,
       recipientType: "user",
-      message: "先日のプレゼンテーション、とても素晴らしかったです！チーム全体のモチベーションが上がりました。ありがとうございます！",
+      message: "先日のプロジェクト会議での的確な意見提供に感謝します。あなたのおかげでチーム全体の方向性が明確になりました。",
       public: true,
-      sender,
-      recipient,
+      createdAt: new Date("2025-05-15T10:30:00"),
+      sender: recipient1,
+      recipient: currentUser,
       likes: [],
-      totalPoints: 0
+      totalPoints: 5
     },
     {
       id: 2,
-      createdAt: new Date(Date.now() - 86400000), // 1日前
-      senderId: recipient.id,
-      recipientId: sender.id,
+      senderId: currentUser.id,
+      recipientId: recipient1.id,
       recipientType: "user",
-      message: "難しい問題を素早く解決してくれて助かりました。いつも頼りになります！",
+      message: "先週の緊急トラブル対応、本当にありがとう！あなたの迅速な対応がなければ、顧客を失っていたかもしれません。今後とも協力してがんばりましょう。",
       public: true,
-      sender: recipient,
-      recipient: sender,
+      createdAt: new Date("2025-05-14T16:45:00"),
+      sender: currentUser,
+      recipient: recipient1,
       likes: [],
-      totalPoints: 0
+      totalPoints: 3
     }
   ];
 }
@@ -78,88 +99,74 @@ interface HomeProps {
 
 export default function Home({ user }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
-  const [page, setPage] = useState(1);
-  const ITEMS_PER_PAGE = 10;
-  const [useFixedSampleData, setUseFixedSampleData] = useState(true); // サンプルデータを強制的に使用
-  const [showDebugInfo, setShowDebugInfo] = useState(true); // デバッグ情報表示
+  const [cards, setCards] = useState<CardWithRelations[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log("Home: ユーザー情報", user);
-  
-  // シンプルカードの定義（デバッグ用）
-  const SimpleCard = ({ card }: { card: CardWithRelations }) => (
-    <div className="bg-white rounded-lg shadow p-4 mb-4 border-l-4 border-blue-500">
-      <div className="flex justify-between mb-2">
-        <div className="font-medium">送信者: {card.sender.name}</div>
-        <div className="text-sm text-gray-500">ID: {card.id}</div>
-      </div>
-      <div className="mb-2">宛先: {card.recipientType === "user" ? (card.recipient as User).name : "チーム"}</div>
-      <div className="border-t border-gray-100 pt-2 text-sm">{card.message.substring(0, 100)}...</div>
-    </div>
-  );
-  
-  // サンプルデータの生成
-  const sampleCards = generateSampleCards();
-  console.log("生成したサンプルカード:", sampleCards);
-  
-  // カードデータの取得
-  const { data: cards, isLoading, error, refetch } = useQuery<CardWithRelations[]>({
-    queryKey: ["/api/cards", { limit: page * ITEMS_PER_PAGE, sort: sortOrder }],
-    queryFn: async () => {
-      console.log("カード取得開始 - パラメータ:", { limit: page * ITEMS_PER_PAGE });
-      
-      // 開発モードでサンプルデータを使用
-      if (useFixedSampleData) {
-        console.log("開発用にサンプルデータを使用");
-        return sampleCards;
-      }
-      
+  // サンプルデータを読み込み
+  useEffect(() => {
+    console.log("ホーム画面初期化 - ユーザー:", user);
+    
+    // 少し遅延させてデータ読み込みをシミュレート
+    const timer = setTimeout(() => {
       try {
-        console.log("認証トークン:", localStorage.getItem("levletter-auth-token") ? "あり" : "なし");
-        
-        const data = await getCards({ limit: page * ITEMS_PER_PAGE });
-        console.log("カード取得成功:", data);
-        
-        if (Array.isArray(data) && data.length === 0) {
-          console.log("データなし、サンプル使用");
-          return sampleCards;
-        }
-        
-        return data;
+        const sampleData = generateSampleCards(user?.id || 999);
+        console.log("サンプルカード生成:", sampleData.length + "件");
+        setCards(sampleData);
       } catch (err) {
-        console.error("カード取得エラー:", err);
-        console.log("エラー発生、サンプル使用");
-        return sampleCards;
+        console.error("サンプルデータエラー:", err);
+      } finally {
+        setIsLoading(false);
       }
-    },
-    retry: 1,
-    refetchOnWindowFocus: false
-  });
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [user]);
 
-  // 並び替え処理
-  const sortedCards = cards ? [...cards].sort((a, b) => {
+  // カードの並び替え
+  const sortedCards = [...cards].sort((a, b) => {
     if (sortOrder === "newest") {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     } else {
-      return b.totalPoints - a.totalPoints;
+      return (b.totalPoints || 0) - (a.totalPoints || 0);
     }
-  }) : [];
+  });
 
+  // 並び替え変更ハンドラ
   const handleSortChange = (value: string) => {
     setSortOrder(value as "newest" | "popular");
   };
 
-  const loadMore = () => {
-    setPage(prevPage => prevPage + 1);
+  // データ更新ハンドラ
+  const refreshCards = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const refreshedCards = generateSampleCards(user?.id || 999);
+      setCards(refreshedCards);
+      setIsLoading(false);
+    }, 300);
   };
+
+  // デバッグ情報
+  const renderDebugInfo = () => (
+    <div className="bg-yellow-50 p-3 mb-4 rounded text-sm border border-yellow-200">
+      <p className="font-medium text-yellow-800 mb-1">デバッグ情報</p>
+      <p>ユーザー: {user ? `${user.name} (ID: ${user.id})` : "未ログイン"}</p>
+      <p>カード数: {cards.length}件</p>
+      <p>表示モード: {sortOrder === "newest" ? "新しい順" : "人気順"}</p>
+    </div>
+  );
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 md:pb-6">
+      {/* デバッグ情報 */}
+      {renderDebugInfo()}
+      
       {/* カード送信フォーム */}
       <CardForm />
       
       {/* タイムライン */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="mt-6">
+        <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800">全社タイムライン</h2>
           
           <div className="flex items-center gap-2">
@@ -175,13 +182,13 @@ export default function Home({ user }: HomeProps) {
             </Select>
             
             <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => refetch()}
-              title="更新"
+              variant="outline"
+              size="sm"
+              onClick={refreshCards}
+              className="ml-2"
             >
-              <RotateCcw className="h-4 w-4" />
+              <RotateCcw className="h-4 w-4 mr-1" />
+              更新
             </Button>
           </div>
         </div>
@@ -190,13 +197,9 @@ export default function Home({ user }: HomeProps) {
         <div className="space-y-4">
           {isLoading ? (
             // ローディング状態
-            Array.from({ length: 3 }).map((_, index) => (
-              <div key={`skeleton-${index}`} className="bg-white rounded-lg shadow animate-pulse h-40 mb-4"></div>
-            ))
-          ) : error ? (
-            // エラー状態
-            <div className="bg-red-50 text-red-600 p-4 rounded-md">
-              データの読み込みに失敗しました。もう一度お試しください。
+            <div className="text-center py-10">
+              <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+              <p className="text-gray-600">読み込み中...</p>
             </div>
           ) : sortedCards.length === 0 ? (
             // データなし
@@ -205,25 +208,12 @@ export default function Home({ user }: HomeProps) {
               <p>最初のサンクスカードを送ってみましょう！</p>
             </div>
           ) : (
-            // カード表示
-            <>
+            // カード表示（シンプル版）
+            <div className="space-y-4">
               {sortedCards.map(card => (
-                <SimpleCard key={`simple-${card.id}`} card={card} />
+                <SimpleCard key={`card-${card.id}`} card={card} />
               ))}
-              
-              {/* もっと見るボタン */}
-              {cards && cards.length >= page * ITEMS_PER_PAGE && (
-                <div className="flex justify-center pt-4">
-                  <Button
-                    variant="outline"
-                    onClick={loadMore}
-                    className="text-gray-700"
-                  >
-                    もっと見る
-                  </Button>
-                </div>
-              )}
-            </>
+            </div>
           )}
         </div>
       </div>
