@@ -105,6 +105,7 @@ export const cardFormSchema = z.object({
   recipientId: z.number().or(z.string()),
   recipientType: z.enum(["user", "team"]),
   message: z.string().min(1, { message: "メッセージを入力してください" }).max(140, { message: "メッセージは140文字以内で入力してください" }),
+  points: z.number().min(0).max(140).default(0),
   additionalRecipients: z.array(z.number()).optional()
 });
 

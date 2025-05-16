@@ -78,7 +78,8 @@ export default function CardForm({ onSent }: CardFormProps) {
     defaultValues: {
       recipientId: "",
       recipientType: "user",
-      message: ""
+      message: "",
+      points: 0
     }
   });
 
@@ -138,6 +139,7 @@ export default function CardForm({ onSent }: CardFormProps) {
         recipientId: mainRecipient.id,
         recipientType: "user",
         message: data.message,
+        points: data.points, // ポイントを追加
         public: true, // すべて公開に設定
         additionalRecipients: additionalRecipientIds.length > 0 ? additionalRecipientIds : undefined
       });
@@ -359,6 +361,33 @@ export default function CardForm({ onSent }: CardFormProps) {
                 {form.watch("message")?.length || 0}/140
               </div>
             </div>
+          </div>
+          
+          {/* ポイント入力 */}
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-sm font-medium">ポイント付与</h3>
+              <span className="text-lg font-bold text-primary">
+                {form.watch("points")} PT
+              </span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="140"
+              step="5"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              {...form.register("points", { valueAsNumber: true })}
+            />
+            <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <span>0 PT</span>
+              <span>140 PT</span>
+            </div>
+            {form.formState.errors.points && (
+              <p className="text-red-500 text-xs mt-1">
+                {form.formState.errors.points.message as string}
+              </p>
+            )}
           </div>
         </CardContent>
         
