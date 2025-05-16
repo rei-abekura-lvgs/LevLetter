@@ -543,6 +543,7 @@ export class MemStorage implements IStorage {
       recipientId: insertCard.recipientId,
       recipientType: insertCard.recipientType || "user",
       message: insertCard.message,
+      points: insertCard.points || 0, // ポイントを保存
       public: insertCard.public !== undefined ? insertCard.public : true,
       additionalRecipients: insertCard.additionalRecipients || null,
       createdAt: now

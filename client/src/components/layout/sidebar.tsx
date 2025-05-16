@@ -36,18 +36,10 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <div className="w-64 border-r bg-white min-h-screen p-4 flex flex-col">
-      <div className="py-6">
-        <h1 className="text-2xl font-bold text-primary text-center">LevLetter</h1>
-      </div>
-
-      <div className="flex-1 space-y-2 py-4">
-        <NavItem href="/" icon={Home} label="ホーム" />
-      </div>
-
       {user && (
-        <div className="border-t pt-4 mt-auto">
+        <div className="flex-1 flex flex-col">
           {/* ユーザー情報カード */}
-          <div className="p-4 bg-gray-50 rounded-lg mb-4">
+          <div className="bg-gray-50 rounded-lg p-4 mb-4">
             <div className="flex items-center gap-3 mb-3">
               <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
                 {user.displayName?.[0] || user.name[0]}
@@ -57,53 +49,55 @@ export default function Sidebar({ user }: SidebarProps) {
                 <p className="text-sm text-muted-foreground">{user.department || "所属なし"}</p>
               </div>
             </div>
+          </div>
+          
+          {/* ポイント情報 */}
+          <div className="space-y-4">
+            {/* 今週の付与可能ポイント */}
+            <div className="bg-white p-3 rounded-md border">
+              <div className="flex justify-between items-center mb-1">
+                <div className="flex items-center text-sm font-medium">
+                  <Gift className="h-4 w-4 mr-2 text-primary" />
+                  今週の付与可能ポイント
+                </div>
+                <span className="text-lg font-bold text-primary">{user.weeklyPoints} PT</span>
+              </div>
+              <Progress value={(user.weeklyPoints / 500) * 100} className="h-2" />
+              <p className="text-xs text-gray-500 mt-1">毎週500ポイントが付与されます</p>
+            </div>
             
-            {/* ポイント情報 */}
-            <div className="space-y-4 mt-4">
-              {/* 今週の付与可能ポイント */}
-              <div className="bg-white p-3 rounded-md border">
-                <div className="flex justify-between items-center mb-1">
-                  <div className="flex items-center text-sm font-medium">
-                    <Gift className="h-4 w-4 mr-2 text-primary" />
-                    今週の付与可能ポイント
-                  </div>
-                  <span className="text-lg font-bold text-primary">{user.weeklyPoints} PT</span>
+            {/* 累計獲得ポイント */}
+            <div className="bg-white p-3 rounded-md border">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center text-sm font-medium">
+                  <Award className="h-4 w-4 mr-2 text-amber-500" />
+                  累計獲得ポイント
                 </div>
-                <Progress value={(user.weeklyPoints / 500) * 100} className="h-2" />
-                <p className="text-xs text-gray-500 mt-1">毎週500ポイントが付与されます</p>
+                <span className="text-lg font-bold text-amber-500">{user.totalPointsReceived} PT</span>
               </div>
-              
-              {/* 累計獲得ポイント */}
-              <div className="bg-white p-3 rounded-md border">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center text-sm font-medium">
-                    <Award className="h-4 w-4 mr-2 text-amber-500" />
-                    累計獲得ポイント
-                  </div>
-                  <span className="text-lg font-bold text-amber-500">{user.totalPointsReceived} PT</span>
+            </div>
+            
+            {/* ポイントランキング */}
+            <div className="bg-white p-3 rounded-md border">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center text-sm font-medium">
+                  <TrendingUp className="h-4 w-4 mr-2 text-blue-500" />
+                  ポイントランキング
                 </div>
-              </div>
-              
-              {/* ポイントランキング */}
-              <div className="bg-white p-3 rounded-md border">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center text-sm font-medium">
-                    <TrendingUp className="h-4 w-4 mr-2 text-blue-500" />
-                    ポイントランキング
-                  </div>
-                  <span className="text-sm px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">--位</span>
-                </div>
+                <span className="text-sm px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">--位</span>
               </div>
             </div>
           </div>
           
-          <button
-            onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-4 py-3 rounded-md text-red-500 hover:bg-red-50 transition-colors"
-          >
-            <LogOut className="h-5 w-5" />
-            <span>ログアウト</span>
-          </button>
+          <div className="mt-auto pt-4">
+            <button
+              onClick={handleLogout}
+              className="flex w-full items-center gap-3 px-4 py-3 rounded-md text-red-500 hover:bg-red-50 transition-colors"
+            >
+              <LogOut className="h-5 w-5" />
+              <span>ログアウト</span>
+            </button>
+          </div>
         </div>
       )}
     </div>

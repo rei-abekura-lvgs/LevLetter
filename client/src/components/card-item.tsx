@@ -76,19 +76,17 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
             </div>
             
             {/* ポイント表示 */}
-            {card.points > 0 && (
-              <div className="bg-primary-50 text-primary-700 px-2 py-1 rounded-md text-xs font-bold flex items-center">
-                {/* 複数の受信者がいる場合は按分されたポイントを表示 */}
-                {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
-                  <>
-                    <span>{Math.floor(card.points / (1 + card.additionalRecipientUsers.length))} PT</span>
-                    <span className="text-xs text-gray-500 ml-1">/ 人</span>
-                  </>
-                ) : (
-                  <span>{card.points} PT</span>
-                )}
-              </div>
-            )}
+            <div className={`px-2 py-1 rounded-md text-xs font-bold flex items-center ${card.points > 0 ? 'bg-primary-50 text-primary-700' : 'bg-gray-100 text-gray-500'}`}>
+              {/* 複数の受信者がいる場合は按分されたポイントを表示 */}
+              {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
+                <>
+                  <span>{Math.floor((card.points || 0) / (1 + card.additionalRecipientUsers.length))} PT</span>
+                  <span className="text-xs text-gray-500 ml-1">/ 人</span>
+                </>
+              ) : (
+                <span>{card.points || 0} PT</span>
+              )}
+            </div>
           </div>
         </div>
         <p className="whitespace-pre-line">{card.message}</p>
