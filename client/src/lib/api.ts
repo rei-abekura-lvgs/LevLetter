@@ -86,6 +86,9 @@ export async function getCards(options: {
   const token = getAuthToken();
   if (!token) throw new Error("認証が必要です");
   
+  console.log("getCards呼び出し - オプション:", options);
+  console.log("認証トークン:", token ? "トークンあり" : "トークンなし");
+  
   const queryParams = new URLSearchParams();
   if (options.limit) queryParams.append("limit", options.limit.toString());
   if (options.offset) queryParams.append("offset", options.offset.toString());
@@ -93,17 +96,29 @@ export async function getCards(options: {
   if (options.recipientId) queryParams.append("recipientId", options.recipientId.toString());
   
   const url = `/api/cards${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-  const res = await fetch(url, {
-    headers: {
-      "Authorization": `Bearer ${token}`
+  console.log("カード取得リクエストURL:", url);
+  
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    
+    console.log("カード取得レスポンス:", res.status, res.statusText);
+    
+    if (!res.ok) {
+      console.error("カード取得エラー:", res.status, res.statusText);
+      throw new Error(`カード情報の取得に失敗しました: ${res.status} ${res.statusText}`);
     }
-  });
-  
-  if (!res.ok) {
-    throw new Error("カード情報の取得に失敗しました");
+    
+    const data = await res.json();
+    console.log("取得したカードデータ:", data);
+    return data;
+  } catch (error) {
+    console.error("カード取得例外:", error);
+    throw error;
   }
-  
-  return res.json();
 }
 
 export async function getCard(id: number) {
