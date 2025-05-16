@@ -25,7 +25,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserIcon, Send, X, Search, UserPlus, Filter } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function CardForm() {
+interface CardFormProps {
+  onSent?: () => void;
+}
+
+export default function CardForm({ onSent }: CardFormProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -148,6 +152,11 @@ export default function CardForm() {
       
       // カードリストを更新
       queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
+      
+      // 送信完了コールバックがあれば呼び出す
+      if (onSent) {
+        onSent();
+      }
     } catch (error) {
       console.error("カード作成エラー:", error);
       toast({

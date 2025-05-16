@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CardWithRelations, User } from "@shared/schema";
-import CardForm from "@/components/card-form";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -10,13 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, Clock, Heart, MessageSquare, RotateCcw, User as UserIcon } from "lucide-react";
+import { 
+  Calendar, Clock, Heart, MessageSquare, RotateCcw, 
+  User as UserIcon, Send, Plus 
+} from "lucide-react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { getCards } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import CardForm from "@/components/card-form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // カードコンポーネント
 const CardItem = ({ card }: { card: CardWithRelations }) => {
@@ -40,7 +45,7 @@ const CardItem = ({ card }: { card: CardWithRelations }) => {
       <CardHeader className="bg-gray-50 p-4 pb-2">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Avatar className={`bg-${card.sender.avatarColor || 'blue-500'} h-8 w-8`}>
+            <Avatar className="h-8 w-8" style={{ backgroundColor: `var(--${card.sender.avatarColor || 'blue-500'})` }}>
               <AvatarFallback>{getInitials(card.sender.name)}</AvatarFallback>
             </Avatar>
             <div>
@@ -85,6 +90,8 @@ interface HomeProps {
 
 export default function Home({ user }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
+  const [isCardFormOpen, setIsCardFormOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("all");
 
   // APIからカードデータを取得
   const {
@@ -106,8 +113,14 @@ export default function Home({ user }: HomeProps) {
     }
   }, [cards]);
 
-  // カードの並び替え
-  const sortedCards = [...cards].sort((a, b) => {
+  // カードのフィルタリングとソート
+  const filteredCards = activeTab === "all" 
+    ? cards 
+    : activeTab === "received" 
+      ? cards.filter(card => card.recipientId === user.id)
+      : cards.filter(card => card.senderId === user.id);
+
+  const sortedCards = [...filteredCards].sort((a, b) => {
     if (sortOrder === "newest") {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     } else {
@@ -127,17 +140,34 @@ export default function Home({ user }: HomeProps) {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 md:pb-6">
-      {/* カード送信フォーム */}
-      <CardForm />
+      {/* 固定カード送信ボタン */}
+      <div className="fixed right-6 bottom-6 z-10">
+        <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
+          <DialogTrigger asChild>
+            <Button size="lg" className="rounded-full h-14 w-14 shadow-lg">
+              <Plus size={24} />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
+            </DialogHeader>
+            <CardForm onSent={() => {
+              setIsCardFormOpen(false);
+              refetch();
+            }} />
+          </DialogContent>
+        </Dialog>
+      </div>
       
       {/* タイムライン */}
-      <div className="mt-6">
+      <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">全社タイムライン</h2>
+          <h2 className="text-lg font-semibold text-gray-800">カードタイムライン</h2>
           
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
-              {cards.length}件のカード
+              {filteredCards.length}件のカード
             </Badge>
             <Select defaultValue="newest" onValueChange={handleSortChange}>
               <SelectTrigger className="w-[120px] h-8 text-sm">
@@ -161,45 +191,81 @@ export default function Home({ user }: HomeProps) {
             </Button>
           </div>
         </div>
-        
-        {/* カードリスト */}
-        <div className="space-y-4">
-          {isLoading ? (
-            // ローディング状態
-            <div className="text-center py-10">
-              <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-              <p className="text-gray-600">読み込み中...</p>
-            </div>
-          ) : error ? (
-            // エラー表示
-            <div className="bg-red-50 text-red-800 p-8 rounded-lg text-center border border-red-200">
-              <p className="mb-4 font-medium">エラーが発生しました</p>
-              <p className="text-sm">{(error as Error)?.message || "データの取得に失敗しました"}</p>
-              <Button 
-                variant="outline" 
-                className="mt-4 bg-white"
-                onClick={refreshCards}
-              >
-                <RotateCcw className="h-4 w-4 mr-1" />
-                再試行
-              </Button>
-            </div>
-          ) : sortedCards.length === 0 ? (
-            // データなし
-            <div className="bg-gray-50 text-gray-600 p-8 rounded-lg text-center">
-              <p className="mb-4">カードがまだありません。</p>
-              <p>最初のサンクスカードを送ってみましょう！</p>
-            </div>
-          ) : (
-            // カード表示
-            <div className="space-y-4">
-              {sortedCards.map(card => (
-                <CardItem key={`card-${card.id}`} card={card} />
-              ))}
-            </div>
-          )}
-        </div>
+
+        {/* タブ切り替え */}
+        <Tabs defaultValue="all" className="mb-6" onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="all">全て</TabsTrigger>
+            <TabsTrigger value="received">受け取ったカード</TabsTrigger>
+            <TabsTrigger value="sent">送ったカード</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="all" className="mt-4">
+            {renderCardList()}
+          </TabsContent>
+          
+          <TabsContent value="received" className="mt-4">
+            {renderCardList()}
+          </TabsContent>
+          
+          <TabsContent value="sent" className="mt-4">
+            {renderCardList()}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
+
+  // カードリスト表示関数
+  function renderCardList() {
+    if (isLoading) {
+      return (
+        <div className="text-center py-10">
+          <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-600">読み込み中...</p>
+        </div>
+      );
+    }
+    
+    if (error) {
+      return (
+        <div className="bg-red-50 text-red-800 p-8 rounded-lg text-center border border-red-200">
+          <p className="mb-4 font-medium">エラーが発生しました</p>
+          <p className="text-sm">{(error as Error)?.message || "データの取得に失敗しました"}</p>
+          <Button 
+            variant="outline" 
+            className="mt-4 bg-white"
+            onClick={refreshCards}
+          >
+            <RotateCcw className="h-4 w-4 mr-1" />
+            再試行
+          </Button>
+        </div>
+      );
+    }
+    
+    if (sortedCards.length === 0) {
+      return (
+        <div className="bg-gray-50 text-gray-600 p-8 rounded-lg text-center">
+          <p className="mb-4">表示するカードがありません。</p>
+          <Button 
+            onClick={() => setIsCardFormOpen(true)}
+            variant="outline"
+            className="mt-2"
+          >
+            <Send className="h-4 w-4 mr-2" />
+            新しいカードを送る
+          </Button>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="space-y-4">
+        {sortedCards.map(card => (
+          <CardItem key={`card-${card.id}`} card={card} />
+        ))}
+      </div>
+    );
+  }
 }
