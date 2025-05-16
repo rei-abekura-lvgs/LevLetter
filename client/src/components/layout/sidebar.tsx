@@ -19,8 +19,7 @@ export default function Sidebar({ user }: SidebarProps) {
   const NavItem = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
     const isActive = location === href;
     return (
-      <Link href={href}>
-        <a
+      <Link href={href}
           className={cn(
             "flex items-center gap-3 px-4 py-3 rounded-md transition-colors",
             isActive
@@ -30,7 +29,6 @@ export default function Sidebar({ user }: SidebarProps) {
         >
           <Icon className="h-5 w-5" />
           <span>{label}</span>
-        </a>
       </Link>
     );
   };
