@@ -31,6 +31,7 @@ export async function register(formData: {
   email: string;
   password: string;
   name: string;
+  department: string;
 }): Promise<AuthResponse> {
   const response = await apiRequest("/api/auth/register", {
     method: "POST",
