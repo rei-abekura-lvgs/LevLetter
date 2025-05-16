@@ -30,13 +30,24 @@ export default function Login() {
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true);
     try {
+      console.log("ログイン試行:", data.email);
       const response = await login(data.email, data.password);
+      console.log("ログイン成功:", response);
+      
+      // ユーザーコンテキストを更新
       setUser(response.user);
-      setLocation("/");
+      
+      // 成功メッセージを表示
       toast({
         title: "ログイン成功",
         description: "LevLetterへようこそ！",
       });
+      
+      // 画面遷移（少し遅延を入れてトーストを表示する時間を確保）
+      setTimeout(() => {
+        console.log("ホーム画面へ遷移します");
+        setLocation("/");
+      }, 500);
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({

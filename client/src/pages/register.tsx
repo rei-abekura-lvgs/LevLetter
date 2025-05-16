@@ -52,12 +52,22 @@ export default function Register() {
       
       console.log("送信データ:", registerData); // デバッグ用
       const response = await registerUser(registerData);
+      
+      console.log("登録成功レスポンス:", response);
+      
+      // ユーザーコンテキストを更新
       setUser(response.user);
-      setLocation("/");
+      
+      // 成功メッセージを表示
       toast({
         title: "登録成功",
         description: "LevLetterへようこそ！",
       });
+      
+      // 画面遷移（少し遅延を入れてトーストを表示する時間を確保）
+      setTimeout(() => {
+        setLocation("/");
+      }, 500);
     } catch (error) {
       console.error("登録エラー:", error);
       // エラーの詳細情報を表示
