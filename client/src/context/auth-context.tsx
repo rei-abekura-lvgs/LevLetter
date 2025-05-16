@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import { User } from "@shared/schema";
 import { getAuthenticatedUser, getAuthToken } from "@/lib/auth";
+import { useLocation } from "wouter";
 
 // デフォルト値を提供して、コンテキストが初期化されていない場合のエラーを防ぐ
 const defaultAuthContext = {
@@ -31,6 +32,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [retryCounter, setRetryCounter] = useState(0);
+  const [, setLocation] = useLocation();
 
   // ユーザーデータを取得する関数
   const fetchUser = useCallback(async (): Promise<User | null> => {
@@ -71,8 +73,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = useCallback(() => {
     setUser(null);
     localStorage.removeItem('levletter-auth-token');
-    window.location.href = "/login";
-  }, []);
+    setLocation("/login");
+  }, [setLocation]);
 
   // 初回とリトライの認証処理
   useEffect(() => {

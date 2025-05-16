@@ -43,11 +43,11 @@ export default function Login() {
         description: "LevLetterへようこそ！",
       });
       
-      // 画面遷移のために十分な遅延を設定
+      // 画面遷移の準備
       console.log("ホーム画面への遷移準備中...");
       
-      // すぐにlocation.hrefで直接ページ遷移を行う（SPA内のルーティングをバイパス）
-      window.location.href = "/";
+      // SPAルーティングを使用して画面遷移
+      setLocation("/");
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({

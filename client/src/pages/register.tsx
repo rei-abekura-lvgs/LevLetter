@@ -64,9 +64,9 @@ export default function Register() {
         description: "LevLetterへようこそ！",
       });
       
-      // 画面遷移のために直接locationを使用
+      // SPAルーティングを使用して画面遷移
       console.log("ホーム画面への遷移を実行します");
-      window.location.href = "/";
+      setLocation("/");
     } catch (error) {
       console.error("登録エラー:", error);
       // エラーの詳細情報を表示
