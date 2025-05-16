@@ -21,6 +21,17 @@ function AppRoutes() {
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
+  
+  // ログイン状態に基づいてリダイレクトを処理するためのuseEffect
+  useEffect(() => {
+    // ユーザーがロードされた後、かつユーザーが存在しない場合
+    if (!loading && !user) {
+      // 現在のロケーションが認証ページでなければ、ログインページにリダイレクト
+      if (location !== "/login" && location !== "/register") {
+        setLocation("/login");
+      }
+    }
+  }, [loading, user, location, setLocation]);
 
   // ユーザーがロード中の場合はローディング表示
   if (loading) {
@@ -33,10 +44,6 @@ function AppRoutes() {
 
   // ログインしていない場合、認証ページに限定
   if (!user) {
-    // 現在の場所が認証ページでなければ、ログインページへリダイレクト
-    if (location !== "/login" && location !== "/register") {
-      setLocation("/login");
-    }
 
     return (
       <AuthLayout>
