@@ -355,10 +355,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "無効または期限切れのトークンです" });
       }
       
-      const { id } = verificationResult.payload;
+      // verificationResultから直接userIdを取得
+      const { userId } = verificationResult;
       
       // ユーザー存在確認
-      const user = await storage.getUser(id);
+      const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "ユーザーが見つかりません" });
       }
