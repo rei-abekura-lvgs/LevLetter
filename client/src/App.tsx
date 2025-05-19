@@ -33,7 +33,7 @@ function AppRoutes() {
           console.log("認証成功:", userData.name);
           
           // 認証済みユーザーがログインページにアクセスした場合はホームへリダイレクト
-          if (location === '/login' || location === '/register') {
+          if (location === '/login' || location === '/register' || location === '/forgot-password' || location === '/reset-password') {
             console.log("認証済みユーザーをホームへリダイレクト");
             setLocation('/');
           }
@@ -53,9 +53,11 @@ function AppRoutes() {
       }
     };
     
-    // 認証状態が変更されたら再確認
-    checkAuth();
-  }, [fetchUser, location, setLocation]);
+    // 認証状態が変わった時だけリダイレクトをチェック
+    if (!loading) {
+      checkAuth();
+    }
+  }, [fetchUser, isAuthenticated, loading, location, setLocation]);
   
   // デバッグ用ログ
   useEffect(() => {
@@ -92,8 +94,8 @@ function AppRoutes() {
           <Route path="/">
             <Home user={user} />
           </Route>
-          <Route>
-            <NotFound />
+          <Route path="*">
+            <Home user={user} />
           </Route>
         </Switch>
       </MainLayout>
@@ -112,7 +114,7 @@ function AppRoutes() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          <Route>
+          <Route path="*">
             <Login />
           </Route>
         </Switch>
