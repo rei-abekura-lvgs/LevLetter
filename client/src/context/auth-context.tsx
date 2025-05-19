@@ -78,20 +78,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // 初回とリトライの認証処理
   useEffect(() => {
+    let isMounted = true;
+    
     const initAuth = async () => {
+      // すでにユーザーが取得できている場合は再取得しない
+      if (user) return;
+      
       const result = await fetchUser();
+      
+      // コンポーネントがアンマウントされていたら状態更新しない
+      if (!isMounted) return;
       
       // 認証に失敗した場合でトークンが存在する場合、数回リトライ
       if (!result && getAuthToken() && retryCounter < 3) {
         console.log(`認証リトライ (${retryCounter + 1}/3)...`);
         setTimeout(() => {
-          setRetryCounter(prev => prev + 1);
+          if (isMounted) {
+            setRetryCounter(prev => prev + 1);
+          }
         }, 1000);
       }
     };
 
     initAuth();
-  }, [fetchUser, retryCounter]);
+    
+    // クリーンアップ関数
+    return () => {
+      isMounted = false;
+    };
+  }, [retryCounter, user]);
 
   // 認証状態の判定
   const isAuthenticated = !!user;
