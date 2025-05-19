@@ -1,10 +1,11 @@
 import {
-  users, teams, cards, likes, teamMembers,
+  users, teams, cards, likes, teamMembers, departments,
   type User, type InsertUser,
   type Card, type InsertCard,
   type Like, type InsertLike,
   type Team, type InsertTeam,
   type TeamMember, type InsertTeamMember,
+  type Department, type InsertDepartment,
   type CardWithRelations
 } from "@shared/schema";
 import * as crypto from "crypto";
@@ -80,12 +81,14 @@ export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private teams: Map<number, Team>;
   private teamMembers: Map<number, TeamMember>;
+  private departments: Map<number, Department>;
   private cards: Map<number, Card>;
   private likes: Map<number, Like>;
   
   private userIdCounter: number;
   private teamIdCounter: number;
   private teamMemberIdCounter: number;
+  private departmentIdCounter: number;
   private cardIdCounter: number;
   private likeIdCounter: number;
 
@@ -93,12 +96,14 @@ export class MemStorage implements IStorage {
     this.users = new Map();
     this.teams = new Map();
     this.teamMembers = new Map();
+    this.departments = new Map();
     this.cards = new Map();
     this.likes = new Map();
 
     this.userIdCounter = 1;
     this.teamIdCounter = 1;
     this.teamMemberIdCounter = 1;
+    this.departmentIdCounter = 1;
     this.cardIdCounter = 1;
     this.likeIdCounter = 1;
 
