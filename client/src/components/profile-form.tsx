@@ -166,7 +166,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                         <SelectContent>
                           <SelectGroup>
                             <SelectLabel>部署一覧</SelectLabel>
-                            <SelectItem value="">未設定</SelectItem>
+                            <SelectItem value="未設定">未設定</SelectItem>
                             {departments.map((dept) => (
                               <SelectItem key={dept.id} value={dept.name}>
                                 {dept.name}
