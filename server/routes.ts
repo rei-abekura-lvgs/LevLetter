@@ -2,6 +2,7 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import jwt from "jsonwebtoken";
+import * as crypto from "crypto";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import {
@@ -386,8 +387,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("パスワードリセット - ユーザー情報:", { id: user.id, email: user.email });
       
-      // パスワードのハッシュ化
-      const hashedPassword = hashPassword(password);
+      // パスワードのハッシュ化 - シンプルなハッシュ化処理を直接記述
+      const hashedPassword = require('crypto').createHash('sha256').update(password).digest('hex');
       
       // ユーザー更新
       try {
