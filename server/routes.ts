@@ -321,6 +321,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         
         console.log("パスワードリセットメール送信成功:", user.email);
+        console.log("送信されたリセットメール内容:", {
+          to: user.email,
+          subject: "【LevLetter】パスワードリセットのご案内",
+          userName: userName,
+          resetLink: resetToken_forDisplay.substring(0, 20) + "...",
+          htmlPreview: html.substring(0, 100) + "..."
+        });
       } catch (emailError) {
         console.error("パスワードリセットメール送信エラー:", emailError);
         return res.status(500).json({ message: "メールの送信に失敗しました" });
