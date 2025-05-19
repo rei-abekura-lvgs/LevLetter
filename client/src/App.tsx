@@ -11,6 +11,7 @@ import MyCards from "@/pages/my-cards";
 import Profile from "@/pages/profile";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
+import Departments from "@/pages/departments";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context";
@@ -88,6 +89,9 @@ function AppRoutes() {
           </Route>
           <Route path="/profile">
             <Profile user={user} />
+          </Route>
+          <Route path="/departments">
+            <Departments />
           </Route>
           <Route path="/">
             <Home user={user} />

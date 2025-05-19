@@ -1,6 +1,6 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
-import { Home, Award, Gift, Star, TrendingUp, LogOut } from "lucide-react";
+import { Home, Award, Gift, Star, TrendingUp, LogOut, Building2, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
 import { Progress } from "@/components/ui/progress";
@@ -49,6 +49,13 @@ export default function Sidebar({ user }: SidebarProps) {
                 <p className="text-sm text-muted-foreground">{user.department || "所属なし"}</p>
               </div>
             </div>
+          </div>
+          
+          {/* ナビゲーションメニュー */}
+          <div className="mb-6 space-y-1">
+            <NavItem href="/" icon={Home} label="ホーム" />
+            <NavItem href="/my-cards" icon={FileText} label="マイカード" />
+            <NavItem href="/departments" icon={Building2} label="部署管理" />
           </div>
           
           {/* ポイント情報 */}
