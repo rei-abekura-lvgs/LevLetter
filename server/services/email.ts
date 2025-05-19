@@ -85,13 +85,27 @@ export function getPasswordResetEmailTemplate({
         <h2 style="color: #4f46e5; margin-top: 0;">パスワードリセットのお知らせ</h2>
         <p>こんにちは、${userName} さん</p>
         <p>あなたのアカウントのパスワードリセットリクエストを受け付けました。</p>
-        <p>パスワードリセット画面を開き、以下のリセットコードを入力してください：</p>
-        <p style="margin: 30px 0; padding: 15px; background-color: #f0f0f0; border-radius: 4px; font-family: monospace; word-break: break-all;">
+        <p>以下のボタンをクリックしてパスワードリセット画面に移動してください：</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="https://${process.env.REPLIT_DOMAINS?.split(',')[0]}/reset-password/${resetLink}" 
+             style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+            パスワードをリセットする
+          </a>
+        </div>
+        
+        <p>または、以下のリセットコードをコピーして直接入力することもできます：</p>
+        <p style="margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 4px; font-family: monospace; word-break: break-all;">
           ${resetLink}
         </p>
-        <p>1. アプリを開き、パスワードリセット画面にアクセスしてください</p>
-        <p>2. 上記のコードをコピーして入力してください</p>
-        <p>3. 新しいパスワードを設定してください</p>
+        
+        <p><strong>手順：</strong></p>
+        <ol>
+          <li>上記のボタンをクリックするか、アプリを開いてパスワードリセット画面にアクセス</li>
+          <li>ボタンが機能しない場合は、コードをコピーして入力</li>
+          <li>新しいパスワードを設定</li>
+        </ol>
+        
         <p>このコードは24時間有効です。リクエストしていない場合は、このメールを無視してください。</p>
         <p>何かご不明な点がございましたら、システム管理者にお問い合わせください。</p>
         <p>よろしくお願いいたします。<br>LevLetter管理チーム</p>
@@ -105,13 +119,16 @@ export function getPasswordResetEmailTemplate({
 
 あなたのアカウントのパスワードリセットリクエストを受け付けました。
 
-パスワードリセット画面を開き、以下のリセットコードを入力してください：
+以下のURLにアクセスしてパスワードをリセットしてください：
+https://${process.env.REPLIT_DOMAINS?.split(',')[0]}/reset-password/${resetLink}
 
+または、以下のリセットコードをコピーして直接入力することもできます：
 ${resetLink}
 
-1. アプリを開き、パスワードリセット画面にアクセスしてください
-2. 上記のコードをコピーして入力してください
-3. 新しいパスワードを設定してください
+手順：
+1. 上記のURLにアクセスするか、アプリを開いてパスワードリセット画面にアクセス
+2. URLが機能しない場合は、コードをコピーして入力
+3. 新しいパスワードを設定
 
 このコードは24時間有効です。リクエストしていない場合は、このメールを無視してください。
 何かご不明な点がございましたら、システム管理者にお問い合わせください。
