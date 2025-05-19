@@ -472,20 +472,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("部署一括作成処理 - ユーザー:", currentUser.id, currentUser.name);
       console.log("部署一括作成処理 - 件数:", departments.length);
 
-      // 全ての部署を登録
+      // 全ての部署を登録（重複チェック付き）
       const results = [];
+      const existingDepartments = await storage.getDepartments();
+      const existingNames = new Set(existingDepartments.map(d => d.name.toLowerCase()));
+      
+      let successCount = 0;
+      let skipCount = 0;
+      let errorCount = 0;
+      
       for (const dept of departments) {
         if (!dept.name || dept.name.trim() === '') {
+          skipCount++;
           continue; // 名前が空の部署はスキップ
         }
         
-        const newDepartment = await storage.createDepartment({
-          name: dept.name.trim(),
-          description: dept.description || null
-        });
+        const trimmedName = dept.name.trim();
         
-        results.push(newDepartment);
+        // 既に存在する部署名はスキップ
+        if (existingNames.has(trimmedName.toLowerCase())) {
+          console.log(`部署「${trimmedName}」は既に存在するためスキップします`);
+          skipCount++;
+          continue;
+        }
+        
+        try {
+          const newDepartment = await storage.createDepartment({
+            name: trimmedName,
+            description: dept.description || null
+          });
+          
+          results.push(newDepartment);
+          existingNames.add(trimmedName.toLowerCase()); // 新しく追加した部署名も重複チェック対象に追加
+          successCount++;
+        } catch (err) {
+          console.error(`部署「${trimmedName}」の作成に失敗しました:`, err);
+          errorCount++;
+        }
       }
+      
+      console.log(`部署一括作成結果: 成功=${successCount}, スキップ=${skipCount}, エラー=${errorCount}`);
 
       console.log("部署一括作成成功:", results.length, "件");
       return res.status(201).json({ 
