@@ -46,8 +46,11 @@ export default function Login() {
       // 画面遷移の準備
       console.log("ホーム画面への遷移準備中...");
       
-      // SPAルーティングを使用して画面遷移
-      setLocation("/");
+      // 少し遅延させてからページ遷移する（ステート更新が完了するのを待つ）
+      setTimeout(() => {
+        // SPAルーティングを使用して画面遷移
+        setLocation("/");
+      }, 300);
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
@@ -55,7 +58,6 @@ export default function Login() {
         description: error instanceof Error ? error.message : "ログインに失敗しました。もう一度お試しください。",
         variant: "destructive",
       });
-    } finally {
       setIsLoading(false);
     }
   }
