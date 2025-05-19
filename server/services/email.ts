@@ -88,7 +88,7 @@ export function getPasswordResetEmailTemplate({
         <p>以下のボタンをクリックしてパスワードリセット画面に移動してください：</p>
         
         <div style="text-align: center; margin: 30px 0;">
-          <a href="/reset-password/${resetLink}" 
+          <a href="${resetLink}" 
              style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
             パスワードをリセットする
           </a>
@@ -96,7 +96,7 @@ export function getPasswordResetEmailTemplate({
         
         <p>または、以下のリセットコードをコピーして直接入力することもできます：</p>
         <p style="margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 4px; font-family: monospace; word-break: break-all;">
-          ${resetLink}
+          ${resetLink.split('/').pop()}
         </p>
         
         <p><strong>手順：</strong></p>
@@ -120,10 +120,10 @@ export function getPasswordResetEmailTemplate({
 あなたのアカウントのパスワードリセットリクエストを受け付けました。
 
 以下のURLにアクセスしてパスワードをリセットしてください：
-/reset-password/${resetLink}
+${resetLink}
 
 または、以下のリセットコードをコピーして直接入力することもできます：
-${resetLink}
+${resetLink.split('/').pop()}
 
 手順：
 1. 上記のURLにアクセスするか、アプリを開いてパスワードリセット画面にアクセス
