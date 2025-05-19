@@ -26,7 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Trash2, Edit, Plus } from "lucide-react";
+import { Trash2, Edit, Plus, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -42,7 +42,6 @@ import {
 import { apiRequest } from "@/lib/queryClient";
 import type { Department } from "@shared/schema";
 import { useAuth } from "@/context/auth-context";
-import { Loader2 } from "lucide-react";
 
 const departmentSchema = z.object({
   name: z.string().min(1, { message: "部署名は必須です" }),
@@ -153,7 +152,7 @@ function DepartmentForm({ department, onClose }: DepartmentFormProps) {
 }
 
 export default function DepartmentsPage() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>(undefined);
@@ -164,7 +163,7 @@ export default function DepartmentsPage() {
     data: departments = [],
     isLoading: isDepartmentsLoading,
     error,
-  } = useQuery({
+  } = useQuery<Department[]>({
     queryKey: ["/api/departments"],
     enabled: isAuthenticated,
   });
@@ -212,7 +211,7 @@ export default function DepartmentsPage() {
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -257,7 +256,7 @@ export default function DepartmentsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {departments.map((department) => (
+                {departments.map((department: Department) => (
                   <TableRow key={department.id}>
                     <TableCell className="font-medium">{department.name}</TableCell>
                     <TableCell>{department.description || "-"}</TableCell>
