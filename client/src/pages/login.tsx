@@ -15,7 +15,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const { setUser } = useAuth();
+  const { fetchUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,8 +34,8 @@ export default function Login() {
       const response = await login(data.email, data.password);
       console.log("ログイン成功:", response);
       
-      // ユーザーコンテキストを更新
-      setUser(response.user);
+      // 認証コンテキストを更新（ユーザー情報を再取得）
+      await fetchUser();
       
       // 成功メッセージを表示
       toast({

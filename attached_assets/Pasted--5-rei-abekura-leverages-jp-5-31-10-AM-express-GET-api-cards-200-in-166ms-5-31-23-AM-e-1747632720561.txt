@@ -1,0 +1,36 @@
+証成功: 5 rei.abekura@leverages.jp
+5:31:10 AM [express] GET /api/cards 200 in 166ms :: []
+5:31:23 AM [express] GET /api/departments 304 in 160ms :: [{"id":43,"name":"HRテック事業部","description":…
+ユーザー登録リクエスト: {"email":"111@leverages.jp","name":"111","password":"111@leverages.jp","department":"システム本部"}
+ユーザー登録成功: 8 111@leverages.jp
+メール送信試行 - 宛先: 111@leverages.jp, 件名: 【LevLetter】アカウント作成完了のお知らせ
+メール送信エラー: MessageRejected: Email address is not verified. The following identities failed the check in region AP-NORTHEAST-1: 111@leverages.jp
+    at de_MessageRejectedRes (/home/runner/workspace/node_modules/@aws-sdk/client-ses/dist-cjs/index.js:3178:21)
+    at de_CommandError (/home/runner/workspace/node_modules/@aws-sdk/client-ses/dist-cjs/index.js:2913:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/runner/workspace/node_modules/@smithy/middleware-serde/dist-cjs/index.js:36:20
+    at async /home/runner/workspace/node_modules/@smithy/core/dist-cjs/index.js:193:18
+    at async /home/runner/workspace/node_modules/@smithy/middleware-retry/dist-cjs/index.js:320:38
+    at async /home/runner/workspace/node_modules/@aws-sdk/middleware-logger/dist-cjs/index.js:33:22
+    at async sendEmail (/home/runner/workspace/server/services/email.ts:57:22)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:104:9) {
+  '$fault': 'client',
+  '$metadata': {
+    httpStatusCode: 400,
+    requestId: '8047550b-a2d0-46a1-b0c0-87d122c96c3c',
+    extendedRequestId: undefined,
+    cfId: undefined,
+    attempts: 1,
+    totalRetryDelay: 0
+  },
+  Error: {
+    Type: 'Sender',
+    Code: 'MessageRejected',
+    Message: 'Email address is not verified. The following identities failed the check in region AP-NORTHEAST-1: 111@leverages.jp',
+    message: 'Email address is not verified. The following identities failed the check in region AP-NORTHEAST-1: 111@leverages.jp'
+  },
+  RequestId: '8047550b-a2d0-46a1-b0c0-87d122c96c3c',
+  xmlns: 'http://ses.amazonaws.com/doc/2010-12-01/'
+}
+新規アカウント作成メール送信成功: 111@leverages.jp
+5:31:49 AM [express] POST /api/auth/register 201 in 803ms :: {"message":"ユーザーを作成しました","user":{"id":8…

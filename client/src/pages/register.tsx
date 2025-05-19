@@ -34,7 +34,7 @@ type RegisterFormValues = z.infer<typeof extendedRegisterSchema>;
 
 export default function Register() {
   const [, setLocation] = useLocation();
-  const { setUser } = useAuth();
+  const { fetchUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [departments, setDepartments] = useState<{id: number, name: string}[]>([]);
@@ -85,8 +85,8 @@ export default function Register() {
       
       console.log("登録成功レスポンス:", response);
       
-      // ユーザーコンテキストを更新
-      setUser(response.user);
+      // ユーザーコンテキストを更新（ユーザー情報を再取得）
+      await fetchUser();
       
       // 成功メッセージを表示
       toast({
