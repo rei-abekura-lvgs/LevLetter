@@ -1,10 +1,11 @@
 import {
-  users, teams, cards, likes, teamMembers,
+  users, teams, cards, likes, teamMembers, departments,
   type User, type InsertUser,
   type Card, type InsertCard,
   type Like, type InsertLike,
   type Team, type InsertTeam,
   type TeamMember, type InsertTeamMember,
+  type Department, type InsertDepartment,
   type CardWithRelations
 } from "@shared/schema";
 import { db } from "./db";
@@ -227,6 +228,54 @@ export class DatabaseStorage implements IStorage {
           eq(teamMembers.userId, userId)
         )
       );
+  }
+
+  // 部署管理機能
+  async getDepartments(): Promise<Department[]> {
+    return await db.select().from(departments).orderBy(asc(departments.name));
+  }
+
+  async getDepartment(id: number): Promise<Department | undefined> {
+    const [department] = await db
+      .select()
+      .from(departments)
+      .where(eq(departments.id, id));
+    
+    return department;
+  }
+
+  async createDepartment(insertDepartment: InsertDepartment): Promise<Department> {
+    const [department] = await db
+      .insert(departments)
+      .values(insertDepartment)
+      .returning();
+    
+    return department;
+  }
+
+  async updateDepartment(id: number, updates: Partial<Department>): Promise<Department> {
+    const [department] = await db
+      .update(departments)
+      .set(updates)
+      .where(eq(departments.id, id))
+      .returning();
+    
+    if (!department) {
+      throw new Error(`部署が見つかりません: ${id}`);
+    }
+    
+    return department;
+  }
+
+  async deleteDepartment(id: number): Promise<void> {
+    const result = await db
+      .delete(departments)
+      .where(eq(departments.id, id))
+      .returning({ id: departments.id });
+    
+    if (result.length === 0) {
+      throw new Error(`部署が見つかりません: ${id}`);
+    }
   }
 
   // カード関連
