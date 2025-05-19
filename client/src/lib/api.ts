@@ -119,3 +119,14 @@ export async function createLike(data: LikeFormRequest) {
     throw error;
   }
 }
+
+// 部署関連
+export async function getDepartments() {
+  try {
+    const data = await apiRequest("GET", "/api/departments");
+    return data;
+  } catch (error) {
+    console.error("部署一覧取得エラー:", error);
+    throw error;
+  }
+}

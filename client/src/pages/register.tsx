@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useLocation } from "wouter";
 import { z } from "zod";
 import { registerSchema } from "@shared/schema";
 import { register as registerUser } from "@/lib/auth";
+import { getDepartments } from "@/lib/api";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // バリデーションルールを拡張
 const extendedRegisterSchema = registerSchema.extend({
@@ -27,6 +37,26 @@ export default function Register() {
   const { setUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [departments, setDepartments] = useState<{id: number, name: string}[]>([]);
+
+  useEffect(() => {
+    // 部署一覧を取得
+    const fetchDepartments = async () => {
+      try {
+        const data = await getDepartments();
+        setDepartments(data);
+      } catch (error) {
+        console.error("部署一覧取得エラー:", error);
+        toast({
+          title: "エラー",
+          description: "部署情報の取得に失敗しました",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchDepartments();
+  }, [toast]);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(extendedRegisterSchema),
@@ -150,12 +180,25 @@ export default function Register() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="department">部署名</Label>
-          <Input
-            id="department"
-            placeholder="開発部"
-            {...form.register("department")}
-          />
+          <Label htmlFor="department">部署</Label>
+          <Select 
+            onValueChange={(value) => form.setValue("department", value)}
+            defaultValue={form.getValues("department")}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="部署を選択してください" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>部署一覧</SelectLabel>
+                {departments.map((dept) => (
+                  <SelectItem key={dept.id} value={dept.name}>
+                    {dept.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
           {form.formState.errors.department && (
             <p className="text-sm text-red-500">{form.formState.errors.department.message}</p>
           )}

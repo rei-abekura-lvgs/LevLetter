@@ -1,0 +1,156 @@
+auth-context.tsx:86 認証リトライ (1/3)...
+queryClient.ts:40 
+ GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+queryClient.ts:61 API GET エラー: /api/auth/me Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth.ts:53 ユーザー認証エラー: Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth-context.tsx:59 APIからのレスポンスが空です
+auth-context.tsx:86 認証リトライ (1/3)...
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: false}
+auth-context.tsx:39 認証情報取得を開始...
+auth-context.tsx:51 APIからユーザー情報を取得中...
+queryClient.ts:37 API GET リクエスト: /api/auth/me データなし
+App.tsx:62 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: true}
+auth-context.tsx:39 認証情報取得を開始...
+auth-context.tsx:51 APIからユーザー情報を取得中...
+queryClient.ts:37 API GET リクエスト: /api/auth/me データなし
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: true}
+queryClient.ts:40 
+ GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+queryClient.ts:61 API GET エラー: /api/auth/me Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth.ts:53 ユーザー認証エラー: Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth-context.tsx:59 APIからのレスポンスが空です
+auth-context.tsx:86 認証リトライ (2/3)...
+App.tsx:62 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: false}
+queryClient.ts:40 
+ GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+queryClient.ts:61 API GET エラー: /api/auth/me Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth.ts:53 ユーザー認証エラー: Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth-context.tsx:59 APIからのレスポンスが空です
+auth-context.tsx:86 認証リトライ (2/3)...
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: false}
+auth-context.tsx:39 認証情報取得を開始...
+auth-context.tsx:51 APIからユーザー情報を取得中...
+queryClient.ts:37 API GET リクエスト: /api/auth/me データなし
+App.tsx:62 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: true}
+auth-context.tsx:39 認証情報取得を開始...
+auth-context.tsx:51 APIからユーザー情報を取得中...
+queryClient.ts:37 API GET リクエスト: /api/auth/me データなし
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: true}
+queryClient.ts:40 
+ GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+queryClient.ts:61 API GET エラー: /api/auth/me Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth.ts:53 ユーザー認証エラー: Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth-context.tsx:59 APIからのレスポンスが空です
+
+auth-context.tsx:86 認証リトライ (3/3)...
+App.tsx:62 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: false}
+queryClient.ts:40 
+ GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+queryClient.ts:61 API GET エラー: /api/auth/me Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth.ts:53 ユーザー認証エラー: Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth-context.tsx:59 APIからのレスポンスが空です
+auth-context.tsx:86 認証リトライ (3/3)...
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: false}
+auth-context.tsx:39 認証情報取得を開始...
+auth-context.tsx:51 APIからユーザー情報を取得中...
+queryClient.ts:37 API GET リクエスト: /api/auth/me データなし
+App.tsx:62 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: true}
+queryClient.ts:40 
+ GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+auth-context.tsx:39 認証情報取得を開始...
+auth-context.tsx:51 APIからユーザー情報を取得中...
+queryClient.ts:37 API GET リクエスト: /api/auth/me データなし
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: true}
+queryClient.ts:61 API GET エラー: /api/auth/me Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth.ts:53 ユーザー認証エラー: Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth-context.tsx:59 APIからのレスポンスが空です
+App.tsx:62 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: false}
+queryClient.ts:40 
+ GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+queryClient.ts:61 API GET エラー: /api/auth/me Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth.ts:53 ユーザー認証エラー: Error: 無効なトークンです
+    at apiRequest (queryClient.ts:46:15)
+    at async getAuthenticatedUser (auth.ts:48:20)
+    at async auth-context.tsx:52:24
+    at async initAuth (auth-context.tsx:82:22)
+auth-context.tsx:59 APIからのレスポンスが空です
+auth-context.tsx:111 認証状態変更: 
+{isAuthenticated: false, userId: undefined, userName: undefined, loading: false}
+﻿
+
