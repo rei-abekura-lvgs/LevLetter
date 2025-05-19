@@ -82,11 +82,14 @@ export function getPasswordResetEmailTemplate(
         <h2 style="color: #4f46e5; margin-top: 0;">パスワードリセットのお知らせ</h2>
         <p>こんにちは、${userName} さん</p>
         <p>あなたのアカウントのパスワードリセットリクエストを受け付けました。</p>
-        <p>以下のリンクをクリックして、新しいパスワードを設定してください：</p>
-        <p style="margin: 30px 0;">
-          <a href="${resetLink}" style="background-color: #4f46e5; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">パスワードをリセット</a>
+        <p>パスワードリセット画面を開き、以下のリセットコードを入力してください：</p>
+        <p style="margin: 30px 0; padding: 15px; background-color: #f0f0f0; border-radius: 4px; font-family: monospace; word-break: break-all;">
+          ${resetLink}
         </p>
-        <p>このリンクは24時間有効です。リクエストしていない場合は、このメールを無視してください。</p>
+        <p>1. アプリを開き、パスワードリセット画面にアクセスしてください</p>
+        <p>2. 上記のコードをコピーして入力してください</p>
+        <p>3. 新しいパスワードを設定してください</p>
+        <p>このコードは24時間有効です。リクエストしていない場合は、このメールを無視してください。</p>
         <p>何かご不明な点がございましたら、システム管理者にお問い合わせください。</p>
         <p>よろしくお願いいたします。<br>LevLetter管理チーム</p>
       </div>
@@ -98,11 +101,16 @@ export function getPasswordResetEmailTemplate(
 こんにちは、${userName} さん
 
 あなたのアカウントのパスワードリセットリクエストを受け付けました。
-以下のリンクをクリックして、新しいパスワードを設定してください：
+
+パスワードリセット画面を開き、以下のリセットコードを入力してください：
 
 ${resetLink}
 
-このリンクは24時間有効です。リクエストしていない場合は、このメールを無視してください。
+1. アプリを開き、パスワードリセット画面にアクセスしてください
+2. 上記のコードをコピーして入力してください
+3. 新しいパスワードを設定してください
+
+このコードは24時間有効です。リクエストしていない場合は、このメールを無視してください。
 何かご不明な点がございましたら、システム管理者にお問い合わせください。
 
 よろしくお願いいたします。

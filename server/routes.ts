@@ -299,11 +299,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // リセットメール送信
       try {
         // 環境変数からドメインを取得する（存在しない場合はホストヘッダーを使用）
-        // 固定のドメインを使用
-        const domain = '39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev';
-        const protocol = 'https'; // Replitでは常にHTTPSを使用
-        
-        const resetUrl = `${protocol}://${domain}/reset-password/${resetToken}`;
+        // 相対URLを使用する（メールクライアントではフルURLが必要だが、表示用にシンプルなURLを使用）
+        const resetUrl = `/reset-password/${resetToken}`;
+        const userReadableToken = resetToken.substring(0, 20) + '...'; // 短縮版を表示用に保持
         console.log("生成したリセットURL:", resetUrl);
         
         const { html, text } = getPasswordResetEmailTemplate({

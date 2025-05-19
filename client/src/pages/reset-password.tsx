@@ -14,6 +14,7 @@ import { Link } from "wouter";
 
 // パスワードリセットフォームのスキーマ
 const resetPasswordSchema = z.object({
+  token: z.string().optional(),
   password: z
     .string()
     .min(6, { message: "パスワードは6文字以上で入力してください" }),
@@ -64,6 +65,7 @@ export default function ResetPassword() {
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
+      token: "",
       password: "",
       confirmPassword: ""
     }
@@ -71,8 +73,11 @@ export default function ResetPassword() {
 
   // フォーム送信ハンドラ
   async function onSubmit(data: ResetPasswordFormValues) {
-    if (!token) {
-      setError("リセットトークンが見つかりません。URLをご確認ください。");
+    // トークン入力欄から値を取得、もしくはURLから自動取得したトークンを使用
+    const tokenToUse = data.token && data.token.trim() ? data.token.trim() : token;
+    
+    if (!tokenToUse) {
+      setError("リセットトークンが見つかりません。メールに記載されたコードを入力してください。");
       return;
     }
     
@@ -81,7 +86,7 @@ export default function ResetPassword() {
       setError(null);
       
       await apiRequest("POST", "/api/auth/password-reset", {
-        token,
+        token: tokenToUse,
         newPassword: data.password
       });
       
