@@ -10,263 +10,198 @@ import {
   cardFormSchema,
   likeFormSchema,
   profileUpdateSchema,
-  insertDepartmentSchema
+  insertDepartmentSchema,
 } from "@shared/schema";
+import { sendEmail, getPasswordResetEmailTemplate, getWelcomeEmailTemplate } from "./services/email";
+import { generatePasswordResetToken, verifyPasswordResetToken, generateRandomPassword } from "./services/token";
 
-const JWT_SECRET = process.env.JWT_SECRET || "levletter-development-secret";
-const JWT_EXPIRES_IN = "7d";
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // 認証ミドルウェア
 const authenticate = async (req: Request, res: Response, next: Function) => {
+  console.log("認証処理開始 - パス:", req.path);
+  
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    console.log("認証ヘッダーがありません");
+    return res.status(401).json({ message: "認証が必要です" });
+  }
+  
+  console.log("認証ヘッダー: 存在します");
+  const token = authHeader.split(" ")[1];
+  
+  if (!token) {
+    console.log("トークンが見つかりません");
+    return res.status(401).json({ message: "有効なトークンが必要です" });
+  }
+  
   try {
-    console.log("認証処理開始 - パス:", req.path);
-    const authHeader = req.headers.authorization;
-    console.log("認証ヘッダー:", authHeader ? "存在します" : "存在しません");
-    
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      console.log("認証失敗: Bearer トークンがありません");
-      return res.status(401).json({ message: "認証が必要です" });
-    }
-
-    const token = authHeader.split(" ")[1];
     console.log("トークン検証中...");
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
+    const user = await storage.getUser(decoded.id);
     
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { userId: number };
-      console.log("トークン検証成功 - ユーザーID:", decoded.userId);
-      
-      const user = await storage.getUser(decoded.userId);
-      if (!user) {
-        console.log("ユーザーが見つかりません:", decoded.userId);
-        return res.status(401).json({ message: "無効なユーザーです" });
-      }
-
-      console.log("認証成功:", user.id, user.email);
-      // リクエストにユーザー情報を追加
-      (req as any).user = user;
-      next();
-    } catch (jwtError) {
-      console.error("JWT検証エラー:", jwtError);
-      return res.status(401).json({ message: "無効なトークンです" });
+    if (!user) {
+      console.log("ユーザーが見つかりません:", decoded.id);
+      return res.status(401).json({ message: "無効なユーザーです" });
     }
-  } catch (err) {
-    console.error("認証全般エラー:", err);
-    return res.status(401).json({ message: "認証に失敗しました" });
+    
+    console.log("トークン検証成功 - ユーザーID:", user.id);
+    (req as any).user = user;
+    console.log("認証成功:", user.id, user.email);
+    next();
+  } catch (error) {
+    console.log("トークン検証エラー:", error);
+    return res.status(401).json({ message: "無効なトークンです" });
   }
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  const httpServer = createServer(app);
-
-  // APIルート設定
-  app.use("/api", (req, res, next) => {
-    next();
-  });
-
-  // エラーハンドリングヘルパー
+  // Zodバリデーションエラーのフォーマッター
   const handleZodError = (error: unknown, res: Response) => {
     if (error instanceof ZodError) {
-      const validationError = fromZodError(error);
-      return res.status(400).json({ 
-        message: "入力エラー", 
-        errors: validationError.details 
+      const formattedError = fromZodError(error);
+      return res.status(400).json({
+        message: "入力データが不正です",
+        errors: formattedError.details
       });
     }
-
-    console.error("API Error:", error);
-    return res.status(500).json({ message: "内部サーバーエラー" });
+    return res.status(500).json({ message: "予期せぬエラーが発生しました" });
   };
 
-  // 認証関連エンドポイント
+  // 認証API
   app.post("/api/auth/register", async (req, res) => {
     try {
-      console.log("受信したリクエスト:", JSON.stringify(req.body));
-      
+      console.log("ユーザー登録リクエスト:", JSON.stringify(req.body));
       const data = registerSchema.parse(req.body);
       
       // メールアドレスの重複チェック
       const existingUser = await storage.getUserByEmail(data.email);
       if (existingUser) {
-        return res.status(400).json({ message: "このメールアドレスは既に登録されています" });
+        return res.status(400).json({ message: "このメールアドレスは既に使用されています" });
       }
       
-      const user = await storage.createUser({
-        email: data.email,
-        name: data.name,
-        password: data.password,
-        department: data.department
+      // ユーザー作成
+      const newUser = await storage.createUser({
+        ...data,
+        displayName: data.displayName || null,
+        department: data.department || null,
+        weeklyPoints: 30,
+        totalPointsReceived: 0,
+        lastWeeklyPointsReset: new Date(),
+        cognitoSub: null,
+        googleId: null,
       });
-
-      // 新規アカウント作成時のメール送信
+      
+      console.log("ユーザー登録成功:", newUser.id, newUser.email);
+      
+      // 新規アカウント作成メール送信
       try {
-        // メール送信ユーティリティをインポート
-        const { sendEmail, getWelcomeEmailTemplate } = await import('./services/email');
+        const { html, text } = getWelcomeEmailTemplate({
+          userName: newUser.name,
+          email: newUser.email
+        });
         
-        // アプリのベースURL
-        const baseUrl = process.env.BASE_URL || `https://${req.headers.host}`;
-        const loginLink = `${baseUrl}/login`;
-        
-        // メールテンプレート取得
-        const { html, text } = getWelcomeEmailTemplate(
-          user.name, 
-          loginLink
-        );
-        
-        // メール送信
         await sendEmail({
-          to: user.email,
-          subject: 'LevLetterへようこそ',
+          to: newUser.email,
+          subject: "【LevLetter】アカウント作成完了のお知らせ",
           htmlContent: html,
           textContent: text
         });
         
-        console.log(`ウェルカムメール送信: ${user.email}`);
+        console.log("新規アカウント作成メール送信成功:", newUser.email);
       } catch (emailError) {
-        // メール送信エラーは致命的ではないのでログだけ
-        console.error('ウェルカムメール送信エラー:', emailError);
+        console.error("新規アカウント作成メール送信エラー:", emailError);
+        // メール送信エラーはユーザー作成自体の失敗とはしない
       }
-
-      // パスワードを除外
-      const { password, ...userWithoutPassword } = user;
-
-      // JWTトークンを生成
-      const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-
-      return res.status(201).json({ user: userWithoutPassword, token });
+      
+      // トークン生成とレスポンス
+      const token = jwt.sign({ id: newUser.id }, JWT_SECRET, { expiresIn: "7d" });
+      return res.status(201).json({
+        message: "ユーザーを作成しました",
+        user: newUser,
+        token
+      });
     } catch (error) {
-      console.error("登録エラー:", error);
-      return handleZodError(error, res);
+      if (error instanceof ZodError) {
+        return handleZodError(error, res);
+      }
+      console.error("ユーザー登録エラー:", error);
+      return res.status(500).json({ message: "ユーザーの作成に失敗しました" });
     }
   });
 
   app.post("/api/auth/login", async (req, res) => {
     try {
+      console.log("ログインリクエスト:", JSON.stringify(req.body));
       const data = loginSchema.parse(req.body);
       
       const user = await storage.authenticateUser(data.email, data.password);
       if (!user) {
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
-
-      // パスワードを除外
-      const { password, ...userWithoutPassword } = user;
-
-      // JWTトークンを生成
-      const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-
-      return res.json({ user: userWithoutPassword, token });
+      
+      const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
+      console.log("ログイン成功:", user.id, user.email);
+      return res.json({
+        message: "ログインに成功しました",
+        user,
+        token
+      });
     } catch (error) {
-      return handleZodError(error, res);
+      if (error instanceof ZodError) {
+        return handleZodError(error, res);
+      }
+      console.error("ログインエラー:", error);
+      return res.status(500).json({ message: "ログイン処理に失敗しました" });
     }
   });
 
   app.get("/api/auth/me", authenticate, async (req, res) => {
-    const user = (req as any).user;
-    const { password, ...userWithoutPassword } = user;
-    // レスポンス形式を登録・ログインエンドポイントと統一
-    return res.json({ user: userWithoutPassword });
-  });
-
-  // ユーザー関連エンドポイント
-  app.get("/api/users", authenticate, async (req, res) => {
     try {
-      const users = await storage.getUsers();
-      // パスワードフィールドを除外
-      const sanitizedUsers = users.map(user => {
-        const { password, ...userWithoutPassword } = user;
-        return userWithoutPassword;
-      });
-      return res.json(sanitizedUsers);
+      const user = (req as any).user;
+      return res.json({ user });
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("ユーザー情報取得エラー:", error);
       return res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
     }
   });
 
-  app.get("/api/users/:id", authenticate, async (req, res) => {
-    try {
-      const userId = parseInt(req.params.id);
-      if (isNaN(userId)) {
-        return res.status(400).json({ message: "無効なユーザーIDです" });
-      }
-
-      const user = await storage.getUser(userId);
-      if (!user) {
-        return res.status(404).json({ message: "ユーザーが見つかりません" });
-      }
-
-      const { password, ...userWithoutPassword } = user;
-      return res.json(userWithoutPassword);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      return res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
-    }
-  });
-
-  app.patch("/api/users/:id", authenticate, async (req, res) => {
-    try {
-      const userId = parseInt(req.params.id);
-      if (isNaN(userId)) {
-        return res.status(400).json({ message: "無効なユーザーIDです" });
-      }
-
-      const currentUser = (req as any).user;
-      if (currentUser.id !== userId) {
-        return res.status(403).json({ message: "自分のプロフィールのみ更新できます" });
-      }
-
-      const data = profileUpdateSchema.parse(req.body);
-      const updatedUser = await storage.updateUser(userId, data);
-      const { password, ...userWithoutPassword } = updatedUser;
-
-      return res.json(userWithoutPassword);
-    } catch (error) {
-      return handleZodError(error, res);
-    }
-  });
-
-  // チーム関連エンドポイント
-  app.get("/api/teams", authenticate, async (req, res) => {
-    try {
-      const teams = await storage.getTeams();
-      return res.json(teams);
-    } catch (error) {
-      console.error("Error fetching teams:", error);
-      return res.status(500).json({ message: "チーム情報の取得に失敗しました" });
-    }
-  });
-
-  app.get("/api/teams/:id", authenticate, async (req, res) => {
-    try {
-      const teamId = parseInt(req.params.id);
-      if (isNaN(teamId)) {
-        return res.status(400).json({ message: "無効なチームIDです" });
-      }
-
-      const team = await storage.getTeamWithMembers(teamId);
-      if (!team) {
-        return res.status(404).json({ message: "チームが見つかりません" });
-      }
-
-      return res.json(team);
-    } catch (error) {
-      console.error("Error fetching team:", error);
-      return res.status(500).json({ message: "チーム情報の取得に失敗しました" });
-    }
-  });
-
-  // カード関連エンドポイント
+  // カードAPI
   app.get("/api/cards", authenticate, async (req, res) => {
     try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
-      const offset = req.query.offset ? parseInt(req.query.offset as string) : undefined;
-      const senderId = req.query.senderId ? parseInt(req.query.senderId as string) : undefined;
-      const recipientId = req.query.recipientId ? parseInt(req.query.recipientId as string) : undefined;
-
-      const cards = await storage.getCards({ limit, offset, senderId, recipientId });
+      const { senderId, recipientId, limit = 100, offset = 0 } = req.query;
+      
+      const options: any = {
+        limit: Number(limit),
+        offset: Number(offset)
+      };
+      
+      if (senderId) {
+        options.senderId = Number(senderId);
+      }
+      
+      if (recipientId) {
+        options.recipientId = Number(recipientId);
+      }
+      
+      const cards = await storage.getCards(options);
       return res.json(cards);
     } catch (error) {
       console.error("Error fetching cards:", error);
+      return res.status(500).json({ message: "カード情報の取得に失敗しました" });
+    }
+  });
+
+  app.get("/api/cards/:id", authenticate, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const card = await storage.getCard(id);
+      if (!card) {
+        return res.status(404).json({ message: "カードが見つかりません" });
+      }
+      return res.json(card);
+    } catch (error) {
+      console.error("Error fetching card:", error);
       return res.status(500).json({ message: "カード情報の取得に失敗しました" });
     }
   });
@@ -276,226 +211,229 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const currentUser = (req as any).user;
       console.log("カード作成リクエスト:", JSON.stringify(req.body));
       const data = cardFormSchema.parse(req.body);
-
-      // リクエストデータのログ
-      console.log("カード作成処理 - ユーザー:", currentUser.id, currentUser.name);
-      console.log("カード作成処理 - 宛先:", data.recipientId, "タイプ:", data.recipientType);
       
-      const recipientId = typeof data.recipientId === "string" 
-        ? parseInt(data.recipientId) 
-        : data.recipientId;
-      
+      // カード作成
       const newCard = await storage.createCard({
         senderId: currentUser.id,
-        recipientId: recipientId,
+        recipientId: data.recipientId,
         recipientType: data.recipientType,
         message: data.message,
-        points: data.points || 0, // ポイント情報を明示的に保存
-        public: true, // MVPでは全て公開
+        points: data.points || 0,
+        public: true,
         additionalRecipients: data.additionalRecipients || null
       });
       
       console.log("カード作成成功:", newCard.id);
-      
-      try {
-        const cardWithRelations = await storage.getCard(newCard.id);
-        console.log("カード関連情報取得成功:", cardWithRelations ? "データあり" : "データなし");
-        return res.status(201).json(cardWithRelations);
-      } catch (getCardError) {
-        console.error("カード関連情報取得エラー:", getCardError);
-        // 作成したカード情報だけでも返す
-        return res.status(201).json(newCard);
-      }
+      return res.status(201).json(newCard);
     } catch (error) {
+      if (error instanceof ZodError) {
+        return handleZodError(error, res);
+      }
       console.error("カード作成エラー:", error);
-      return handleZodError(error, res);
+      return res.status(500).json({ message: "カードの作成に失敗しました" });
     }
   });
 
-  app.get("/api/cards/:id", authenticate, async (req, res) => {
+  // いいねAPI
+  app.get("/api/cards/:cardId/likes", authenticate, async (req, res) => {
     try {
-      const cardId = parseInt(req.params.id);
-      if (isNaN(cardId)) {
-        return res.status(400).json({ message: "無効なカードIDです" });
-      }
-
-      const card = await storage.getCard(cardId);
-      if (!card) {
-        return res.status(404).json({ message: "カードが見つかりません" });
-      }
-
-      return res.json(card);
+      const cardId = parseInt(req.params.cardId);
+      const likes = await storage.getLikesForCard(cardId);
+      return res.json(likes);
     } catch (error) {
-      console.error("Error fetching card:", error);
-      return res.status(500).json({ message: "カード情報の取得に失敗しました" });
+      console.error("Error fetching likes:", error);
+      return res.status(500).json({ message: "いいね情報の取得に失敗しました" });
     }
   });
 
-  // パスワードリセット関連のエンドポイント
-  // パスワードリセットリクエスト
+  app.post("/api/likes", authenticate, async (req, res) => {
+    try {
+      const currentUser = (req as any).user;
+      console.log("いいね作成リクエスト:", JSON.stringify(req.body));
+      const data = likeFormSchema.parse(req.body);
+      
+      // いいねの重複チェック
+      const existingLike = await storage.getLike(data.cardId, currentUser.id);
+      if (existingLike) {
+        return res.status(400).json({ message: "既にいいねしています" });
+      }
+      
+      // いいね作成
+      const newLike = await storage.createLike({
+        userId: currentUser.id,
+        cardId: data.cardId,
+        points: data.points || 0
+      });
+      
+      console.log("いいね作成成功:", newLike.id);
+      return res.status(201).json(newLike);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return handleZodError(error, res);
+      }
+      console.error("いいね作成エラー:", error);
+      return res.status(500).json({ message: "いいねの作成に失敗しました" });
+    }
+  });
+
+  // パスワードリセットAPI
   app.post("/api/auth/password-reset-request", async (req, res) => {
     try {
+      console.log("パスワードリセットリクエスト:", JSON.stringify(req.body));
       const { email } = req.body;
       
       if (!email) {
-        return res.status(400).json({ message: "メールアドレスは必須です" });
+        return res.status(400).json({ message: "メールアドレスを入力してください" });
       }
       
-      // メールアドレスでユーザーを検索
+      // ユーザー検索
       const user = await storage.getUserByEmail(email);
       if (!user) {
-        // セキュリティ上の理由から、ユーザーが存在しない場合も成功を返す
-        return res.json({ 
-          success: true,
-          message: "パスワードリセット用のメールを送信しました"
-        });
+        // セキュリティ上、ユーザーが存在しなくても成功レスポンスを返す
+        return res.json({ message: "パスワードリセット手順をメールで送信しました" });
       }
       
+      // リセットトークン生成
+      const resetToken = generatePasswordResetToken(user.id, user.email);
+      
+      // リセットメール送信
       try {
-        // トークン生成ユーティリティとメール送信ユーティリティをインポート
-        const { generatePasswordResetToken } = await import('./services/token');
-        const { sendEmail, getPasswordResetEmailTemplate } = await import('./services/email');
+        const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
         
-        // リセットトークン生成
-        const resetToken = generatePasswordResetToken(user.id, user.email);
+        const { html, text } = getPasswordResetEmailTemplate({
+          userName: user.name,
+          resetUrl
+        });
         
-        // アプリのベースURL
-        const baseUrl = process.env.BASE_URL || `https://${req.headers.host}`;
-        const resetLink = `${baseUrl}/reset-password?token=${resetToken}`;
-        
-        // メールテンプレート取得
-        const { html, text } = getPasswordResetEmailTemplate(
-          user.name, 
-          resetLink
-        );
-        
-        // メール送信
         await sendEmail({
           to: user.email,
-          subject: 'パスワードリセットのお知らせ',
+          subject: "【LevLetter】パスワードリセットのご案内",
           htmlContent: html,
           textContent: text
         });
         
-        console.log(`パスワードリセットメール送信: ${user.email}`);
+        console.log("パスワードリセットメール送信成功:", user.email);
       } catch (emailError) {
-        // メール送信エラーはログだけ
-        console.error('パスワードリセットメール送信エラー:', emailError);
+        console.error("パスワードリセットメール送信エラー:", emailError);
+        return res.status(500).json({ message: "メールの送信に失敗しました" });
       }
       
-      // セキュリティ上の理由から、常に成功を返す
-      return res.json({ 
-        success: true,
-        message: "パスワードリセット用のメールを送信しました"
-      });
+      return res.json({ message: "パスワードリセット手順をメールで送信しました" });
     } catch (error) {
-      console.error('パスワードリセットリクエストエラー:', error);
-      return res.status(500).json({ message: "内部サーバーエラー" });
+      console.error("パスワードリセットリクエストエラー:", error);
+      return res.status(500).json({ message: "パスワードリセット処理に失敗しました" });
     }
   });
-  
-  // パスワードリセット実行
+
   app.post("/api/auth/password-reset", async (req, res) => {
     try {
-      const { token, newPassword } = req.body;
+      console.log("パスワードリセット実行:", JSON.stringify({ token: "非表示", hasPassword: !!req.body.password }));
+      const { token, password } = req.body;
       
-      if (!token || !newPassword) {
-        return res.status(400).json({ 
-          message: "トークンと新しいパスワードは必須です" 
-        });
+      if (!token) {
+        return res.status(400).json({ message: "リセットトークンが必要です" });
       }
-      
-      // 最低限のパスワード検証
-      if (newPassword.length < 6) {
-        return res.status(400).json({ 
-          message: "パスワードは6文字以上である必要があります" 
-        });
-      }
-      
-      // トークン検証ユーティリティをインポート
-      const { verifyPasswordResetToken } = await import('./services/token');
       
       // トークン検証
-      const { valid, userId, email, error } = verifyPasswordResetToken(token);
-      
-      if (!valid || !userId || !email) {
-        return res.status(400).json({ 
-          message: error || "無効なトークンです" 
-        });
+      const verificationResult = verifyPasswordResetToken(token);
+      if (!verificationResult.valid) {
+        return res.status(400).json({ message: "無効または期限切れのトークンです" });
       }
       
-      // ユーザー検証
-      const user = await storage.getUser(userId);
+      const { id } = verificationResult.payload;
+      
+      // ユーザー存在確認
+      const user = await storage.getUser(id);
       if (!user) {
         return res.status(404).json({ message: "ユーザーが見つかりません" });
       }
       
-      if (user.email !== email) {
-        return res.status(400).json({ message: "トークンが無効です" });
+      // 新しいパスワードを設定または自動生成
+      let newPassword = password;
+      let isAutoGenerated = false;
+      
+      if (!newPassword) {
+        newPassword = generateRandomPassword();
+        isAutoGenerated = true;
       }
       
-      // パスワード更新
-      await storage.updateUser(userId, {
-        password: newPassword  // hashPasswordはstorageクラス内で処理される前提
-      });
+      // ユーザー更新
+      await storage.updateUser(user.id, { password: newPassword });
       
-      return res.json({ 
-        success: true,
-        message: "パスワードがリセットされました。ログインしてください。" 
+      console.log("パスワードリセット成功:", user.id, user.email, isAutoGenerated ? "自動生成" : "手動設定");
+      
+      return res.json({
+        message: "パスワードがリセットされました",
+        password: isAutoGenerated ? newPassword : undefined,
+        isAutoGenerated
       });
     } catch (error) {
-      console.error('パスワードリセットエラー:', error);
-      return res.status(500).json({ message: "内部サーバーエラー" });
+      console.error("パスワードリセット実行エラー:", error);
+      return res.status(500).json({ message: "パスワードのリセットに失敗しました" });
     }
   });
 
-  // いいね関連エンドポイント
-  app.post("/api/likes", authenticate, async (req, res) => {
+  // プロフィール更新API
+  app.put("/api/users/:id/profile", authenticate, async (req, res) => {
     try {
       const currentUser = (req as any).user;
-      const data = likeFormSchema.parse(req.body);
-
-      // 自分のカードにはいいねできない
-      const card = await storage.getCard(data.cardId);
-      if (!card) {
-        return res.status(404).json({ message: "カードが見つかりません" });
+      const userId = parseInt(req.params.id);
+      
+      // 自分自身のプロフィールのみ更新可能
+      if (currentUser.id !== userId) {
+        return res.status(403).json({ message: "自分以外のプロフィールは更新できません" });
       }
-
-      if (card.sender.id === currentUser.id) {
-        return res.status(400).json({ message: "自分のカードにはいいねできません" });
-      }
-
-      // すでにいいねしているか確認
-      const existingLike = await storage.getLike(data.cardId, currentUser.id);
-      if (existingLike) {
-        return res.status(400).json({ message: "このカードにはすでにいいねしています" });
-      }
-
-      // ポイント残高の確認
-      if (currentUser.weeklyPoints < data.points) {
-        return res.status(400).json({ message: "ポイント残高が不足しています" });
-      }
-
-      const newLike = await storage.createLike({
-        cardId: data.cardId,
-        userId: currentUser.id,
-        points: data.points
+      
+      console.log("プロフィール更新リクエスト:", JSON.stringify(req.body));
+      const data = profileUpdateSchema.parse(req.body);
+      
+      // ユーザー更新
+      const updatedUser = await storage.updateUser(userId, {
+        name: data.name,
+        displayName: data.displayName || null,
+        department: data.department || null
       });
-
-      // 更新されたユーザー情報を取得
-      const updatedUser = await storage.getUser(currentUser.id);
-      const { password: _, ...userWithoutPassword } = updatedUser!;
-
-      return res.status(201).json({
-        like: newLike,
-        user: userWithoutPassword
+      
+      console.log("プロフィール更新成功:", updatedUser.id);
+      return res.json({
+        message: "プロフィールを更新しました",
+        user: updatedUser
       });
     } catch (error) {
-      return handleZodError(error, res);
+      if (error instanceof ZodError) {
+        return handleZodError(error, res);
+      }
+      console.error("プロフィール更新エラー:", error);
+      return res.status(500).json({ message: "プロフィールの更新に失敗しました" });
     }
   });
 
-  // 部署管理エンドポイント
+  // ユーザー取得API
+  app.get("/api/users", authenticate, async (req, res) => {
+    try {
+      const users = await storage.getUsers();
+      return res.json(users);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      return res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
+    }
+  });
+
+  app.get("/api/users/:id", authenticate, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const user = await storage.getUser(id);
+      if (!user) {
+        return res.status(404).json({ message: "ユーザーが見つかりません" });
+      }
+      return res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      return res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
+    }
+  });
+
+  // 部署API
   app.get("/api/departments", authenticate, async (req, res) => {
     try {
       const departments = await storage.getDepartments();
@@ -559,44 +497,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "部署の一括登録に失敗しました" });
     }
   });
-  app.post("/api/departments/batch", authenticate, async (req, res) => {
-    try {
-      const currentUser = (req as any).user;
-      console.log("部署一括作成リクエスト:", JSON.stringify(req.body));
-      const { departments } = req.body;
-      
-      if (!departments || !Array.isArray(departments) || departments.length === 0) {
-        return res.status(400).json({ message: "有効な部署データが提供されていません" });
-      }
-      
-      console.log("部署一括作成処理 - ユーザー:", currentUser.id, currentUser.name);
-      console.log("部署一括作成処理 - 件数:", departments.length);
-
-      // 全ての部署を登録
-      const results = [];
-      for (const dept of departments) {
-        if (!dept.name || dept.name.trim() === '') {
-          continue; // 名前が空の部署はスキップ
-        }
-        
-        const newDepartment = await storage.createDepartment({
-          name: dept.name.trim(),
-          description: dept.description || null
-        });
-        
-        results.push(newDepartment);
-      }
-
-      console.log("部署一括作成成功:", results.length, "件");
-      return res.status(201).json({ 
-        message: `${results.length}件の部署を登録しました`, 
-        departments: results 
-      });
-    } catch (error) {
-      console.error("部署一括作成エラー:", error);
-      return res.status(500).json({ message: "部署の一括登録に失敗しました" });
-    }
-  });
 
   app.post("/api/departments", authenticate, async (req, res) => {
     try {
@@ -604,14 +504,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("部署作成リクエスト:", JSON.stringify(req.body));
       const data = insertDepartmentSchema.parse(req.body);
       
-      // リクエストデータのログ
-      console.log("部署作成処理 - ユーザー:", currentUser.id, currentUser.name);
-      console.log("部署作成処理 - 名称:", data.name);
-      
-      const newDepartment = await storage.createDepartment({
-        name: data.name,
-        description: data.description
-      });
+      // 部署作成
+      const newDepartment = await storage.createDepartment(data);
       
       console.log("部署作成成功:", newDepartment.id, newDepartment.name);
       return res.json(newDepartment);
@@ -623,62 +517,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "部署の作成に失敗しました" });
     }
   });
-  app.post("/api/departments/batch", authenticate, async (req, res) => {
-    try {
-      const currentUser = (req as any).user;
-      console.log("部署一括作成リクエスト:", JSON.stringify(req.body));
-      const { departments } = req.body;
-      
-      if (!departments || !Array.isArray(departments) || departments.length === 0) {
-        return res.status(400).json({ message: "有効な部署データが提供されていません" });
-      }
-      
-      console.log("部署一括作成処理 - ユーザー:", currentUser.id, currentUser.name);
-      console.log("部署一括作成処理 - 件数:", departments.length);
-
-      // 全ての部署を登録
-      const results = [];
-      for (const dept of departments) {
-        if (!dept.name || dept.name.trim() === '') {
-          continue; // 名前が空の部署はスキップ
-        }
-        
-        const newDepartment = await storage.createDepartment({
-          name: dept.name.trim(),
-          description: dept.description || null
-        });
-        
-        results.push(newDepartment);
-      }
-
-      console.log("部署一括作成成功:", results.length, "件");
-      res.status(201).json({ 
-        message: `${results.length}件の部署を登録しました`, 
-        departments: results 
-      });
-    } catch (error) {
-      console.error("部署一括作成エラー:", error);
-      return res.status(500).json({ message: "部署の一括登録に失敗しました" });
-    }
-  });
 
   app.put("/api/departments/:id", authenticate, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const currentUser = (req as any).user;
       console.log("部署更新リクエスト:", id, JSON.stringify(req.body));
       const data = insertDepartmentSchema.parse(req.body);
       
-      // 部署の存在確認
-      const existingDepartment = await storage.getDepartment(id);
-      if (!existingDepartment) {
+      // 部署存在確認
+      const department = await storage.getDepartment(id);
+      if (!department) {
         return res.status(404).json({ message: "部署が見つかりません" });
       }
       
-      const updatedDepartment = await storage.updateDepartment(id, {
-        name: data.name,
-        description: data.description
-      });
+      // 部署更新
+      const updatedDepartment = await storage.updateDepartment(id, data);
       
       console.log("部署更新成功:", updatedDepartment.id, updatedDepartment.name);
       return res.json(updatedDepartment);
@@ -694,16 +547,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/departments/:id", authenticate, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const currentUser = (req as any).user;
-      console.log("部署削除リクエスト:", id, "by", currentUser.id, currentUser.name);
+      console.log("部署削除リクエスト:", id);
       
-      // 部署の存在確認
-      const existingDepartment = await storage.getDepartment(id);
-      if (!existingDepartment) {
+      // 部署存在確認
+      const department = await storage.getDepartment(id);
+      if (!department) {
         return res.status(404).json({ message: "部署が見つかりません" });
       }
       
+      // 部署削除
       await storage.deleteDepartment(id);
+      
       console.log("部署削除成功:", id);
       return res.json({ message: "部署を削除しました" });
     } catch (error) {
@@ -712,5 +566,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // サーバー起動
+  const httpServer = createServer(app);
   return httpServer;
 }
