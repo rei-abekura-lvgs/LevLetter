@@ -97,7 +97,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
     // 「未設定」が選択された場合はnullとして送信
     const updatedData = {
       ...data,
-      department: data.department === "未設定" ? null : data.department
+      department: data.department === "none_selected" ? null : data.department
     };
     console.log("送信データ:", updatedData);
     updateProfileMutation.mutate(updatedData);
@@ -172,7 +172,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                         <SelectContent>
                           <SelectGroup>
                             <SelectLabel>部署一覧</SelectLabel>
-                            <SelectItem value="未設定">未設定</SelectItem>
+                            <SelectItem value="none_selected">未設定</SelectItem>
                             {departments.map((dept) => (
                               <SelectItem key={dept.id} value={dept.name}>
                                 {dept.name}

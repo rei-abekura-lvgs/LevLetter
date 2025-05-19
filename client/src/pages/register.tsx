@@ -77,7 +77,7 @@ export default function Register() {
         email: data.email,
         name: data.name,
         password: data.password,
-        department: data.department || "未設定"
+        department: data.department === "none_selected" ? null : data.department
       };
       
       console.log("送信データ:", registerData); // デバッグ用
@@ -191,6 +191,7 @@ export default function Register() {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>部署一覧</SelectLabel>
+                <SelectItem value="none_selected">未設定</SelectItem>
                 {departments.map((dept) => (
                   <SelectItem key={dept.id} value={dept.name}>
                     {dept.name}
