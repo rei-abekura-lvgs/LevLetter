@@ -571,6 +571,55 @@ export default function DepartmentsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* 一括削除確認ダイアログ */}
+      <Dialog open={showBatchDeleteDialog} onOpenChange={setShowBatchDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>部署の一括削除</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <Alert className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>注意</AlertTitle>
+              <AlertDescription>
+                選択した{checkedDepartments.size}件の部署を削除します。
+                この操作は元に戻せません。
+              </AlertDescription>
+            </Alert>
+            <p>
+              以下の部署を削除します：
+            </p>
+            <div className="max-h-40 overflow-y-auto mt-2 border rounded p-2">
+              <ul className="list-disc pl-5 space-y-1">
+                {Array.from(checkedDepartments).map(id => {
+                  const dept = departments.find(d => d.id === id);
+                  return dept ? (
+                    <li key={id} className="text-sm">{dept.name}</li>
+                  ) : null;
+                })}
+              </ul>
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                キャンセル
+              </Button>
+            </DialogClose>
+            <Button
+              variant="destructive"
+              onClick={confirmBatchDelete}
+              disabled={batchDeleteMutation.isPending}
+            >
+              {batchDeleteMutation.isPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {checkedDepartments.size}件の部署を削除
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
