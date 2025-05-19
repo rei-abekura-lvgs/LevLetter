@@ -56,6 +56,13 @@ export interface IStorage {
   addTeamMember(teamMember: InsertTeamMember): Promise<TeamMember>;
   removeTeamMember(teamId: number, userId: number): Promise<void>;
 
+  // 部署
+  getDepartments(): Promise<Department[]>;
+  getDepartment(id: number): Promise<Department | undefined>;
+  createDepartment(department: InsertDepartment): Promise<Department>;
+  updateDepartment(id: number, department: Partial<Department>): Promise<Department>;
+  deleteDepartment(id: number): Promise<void>;
+
   // カード
   getCards(options?: { limit?: number; offset?: number; senderId?: number; recipientId?: number; }): Promise<CardWithRelations[]>;
   getCard(id: number): Promise<CardWithRelations | undefined>;

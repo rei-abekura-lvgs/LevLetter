@@ -42,6 +42,14 @@ export const likes = pgTable("likes", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// 部署テーブル
+export const departments = pgTable("departments", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 // チームテーブル
 export const teams = pgTable("teams", {
   id: serial("id").primaryKey(),
@@ -82,6 +90,11 @@ export const insertTeamSchema = createInsertSchema(teams).omit({
 });
 
 export const insertTeamMemberSchema = createInsertSchema(teamMembers).omit({
+  id: true,
+  createdAt: true
+});
+
+export const insertDepartmentSchema = createInsertSchema(departments).omit({
   id: true,
   createdAt: true
 });
@@ -129,6 +142,8 @@ export type Team = typeof teams.$inferSelect;
 export type InsertTeam = z.infer<typeof insertTeamSchema>;
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
+export type Department = typeof departments.$inferSelect;
+export type InsertDepartment = z.infer<typeof insertDepartmentSchema>;
 
 // カスタム型
 export type CardWithRelations = Card & {
