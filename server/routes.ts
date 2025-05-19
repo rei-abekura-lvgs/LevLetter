@@ -585,8 +585,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "部署の作成に失敗しました" });
     }
   });
-
-  // 部署一括登録API
   app.post("/api/departments/batch", authenticate, async (req, res) => {
     try {
       const currentUser = (req as any).user;
