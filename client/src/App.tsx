@@ -25,8 +25,17 @@ function AppRoutes() {
     // 保護されたルートとパブリックルートの定義
     const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
     
+    // リセット画面のトークンパラメータを確認
+    const isResetWithToken = location.startsWith('/reset-password') && location.includes('token=');
+    
     // 認証状態によるリダイレクト処理
     if (!loading) {
+      // パスワードリセット画面は特別扱い（トークン付きの場合は未認証でもアクセスを許可）
+      if (location.startsWith('/reset-password') && location.includes('token=')) {
+        // トークン付きリセット画面はリダイレクトしない
+        return;
+      }
+      
       // 認証済みかつログイン関連ページにいる場合はホームへリダイレクト
       if (isAuthenticated && publicRoutes.includes(location)) {
         setLocation('/');
