@@ -46,6 +46,7 @@ export default function ResetPassword() {
       return;
     }
     
+    console.log("トークンを検出しました:", tokenParam.substring(0, 10) + "...");
     setToken(tokenParam);
   }, []);
 
