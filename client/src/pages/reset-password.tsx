@@ -38,16 +38,26 @@ export default function ResetPassword() {
 
   // URLからトークンを取得
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const tokenParam = searchParams.get("token");
+    // URLパスからトークンを取得を試みる
+    const pathSegments = window.location.pathname.split('/');
+    let tokenValue = null;
     
-    if (!tokenParam) {
+    if (pathSegments.length >= 3 && pathSegments[1] === 'reset-password') {
+      // /reset-password/:token の形式
+      tokenValue = pathSegments[2];
+    } else {
+      // クエリパラメータからも確認
+      const searchParams = new URLSearchParams(window.location.search);
+      tokenValue = searchParams.get("token");
+    }
+    
+    if (!tokenValue) {
       setError("リセットトークンが見つかりません。URLをご確認ください。");
       return;
     }
     
-    console.log("トークンを検出しました:", tokenParam.substring(0, 10) + "...");
-    setToken(tokenParam);
+    console.log("トークンを検出しました:", tokenValue.substring(0, 10) + "...");
+    setToken(tokenValue);
   }, []);
 
   // フォームの初期化

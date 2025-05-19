@@ -303,7 +303,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const domain = '39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev';
         const protocol = 'https'; // Replitでは常にHTTPSを使用
         
-        const resetUrl = `${protocol}://${domain}/reset-password?token=${resetToken}`;
+        const resetUrl = `${protocol}://${domain}/reset-password/${resetToken}`;
         console.log("生成したリセットURL:", resetUrl);
         
         const { html, text } = getPasswordResetEmailTemplate({

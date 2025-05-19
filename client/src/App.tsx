@@ -102,6 +102,9 @@ function AppRoutes() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
+          <Route path="/reset-password/:token">
+            <ResetPassword />
+          </Route>
           <Route path="*">
             <Login />
           </Route>
