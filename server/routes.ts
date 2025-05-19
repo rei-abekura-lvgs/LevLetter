@@ -298,7 +298,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // リセットメール送信
       try {
-        const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
+        // 環境変数からドメインを取得する（存在しない場合はホストヘッダーを使用）
+        // 39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev の形式
+        const domain = process.env.REPLIT_DOMAINS || req.get('host');
+        const protocol = 'https'; // Replitでは常にHTTPSを使用
+        
+        const resetUrl = `${protocol}://${domain}/reset-password?token=${resetToken}`;
+        console.log("生成したリセットURL:", resetUrl);
         
         const { html, text } = getPasswordResetEmailTemplate({
           userName: user.name,
