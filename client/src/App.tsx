@@ -23,16 +23,13 @@ function AppRoutes() {
   // 初期認証処理とナビゲーション制御
   useEffect(() => {
     // 保護されたルートとパブリックルートの定義
-    const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
-    
-    // リセット画面のトークンパラメータを確認
-    const isResetWithToken = location.startsWith('/reset-password') && location.includes('token=');
+    const publicRoutes = ['/login', '/register', '/forgot-password'];
     
     // 認証状態によるリダイレクト処理
     if (!loading) {
-      // パスワードリセット画面は特別扱い（トークン付きの場合は未認証でもアクセスを許可）
-      if (location.startsWith('/reset-password') && location.includes('token=')) {
-        // トークン付きリセット画面はリダイレクトしない
+      // パスワードリセット画面は特別扱い（reset-passwordから始まる場合は未認証でもアクセスを許可）
+      if (location.startsWith('/reset-password')) {
+        // リセット画面はリダイレクトしない
         return;
       }
       

@@ -31,11 +31,12 @@ type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 export default function ResetPassword() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
-  const [, params] = useRoute("/reset-password");
+  const [, params] = useRoute("/reset-password/:token");
   const [token, setToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [manualInputMode, setManualInputMode] = useState<boolean>(false);
 
   // URLからトークンを取得
   useEffect(() => {
@@ -46,19 +47,23 @@ export default function ResetPassword() {
     if (pathSegments.length >= 3 && pathSegments[1] === 'reset-password') {
       // /reset-password/:token の形式
       tokenValue = pathSegments[2];
+      console.log("パスからトークンを検出:", tokenValue.substring(0, 10) + "...");
     } else {
       // クエリパラメータからも確認
       const searchParams = new URLSearchParams(window.location.search);
       tokenValue = searchParams.get("token");
+      if (tokenValue) {
+        console.log("クエリからトークンを検出:", tokenValue.substring(0, 10) + "...");
+      }
     }
     
-    if (!tokenValue) {
-      setError("リセットトークンが見つかりません。URLをご確認ください。");
-      return;
+    if (tokenValue) {
+      setToken(tokenValue);
+    } else {
+      // トークンがない場合は手動入力モードに切り替え
+      setManualInputMode(true);
+      console.log("トークンが見つかりません。手動入力モードに切り替えます。");
     }
-    
-    console.log("トークンを検出しました:", tokenValue.substring(0, 10) + "...");
-    setToken(tokenValue);
   }, []);
 
   // フォームの初期化
@@ -146,7 +151,7 @@ export default function ResetPassword() {
           ) : (
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                {!token && (
+                {(manualInputMode || !token) && (
                   <FormField
                     control={form.control}
                     name="token"
