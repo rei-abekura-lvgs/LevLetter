@@ -1,27 +1,27 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
+import { createContext, useContext, ReactNode, useState, useEffect, useCallback } from "react";
 import { User } from "@shared/schema";
-import { getAuthenticatedUser, getAuthToken } from "@/lib/auth";
+import { getAuthenticatedUser, getAuthToken, logout as logoutUtil } from "@/lib/auth";
 import { useLocation } from "wouter";
 
-// デフォルト値を提供して、コンテキストが初期化されていない場合のエラーを防ぐ
+// デフォルト値
 const defaultAuthContext = {
   user: null as User | null,
   loading: false,
   isAuthenticated: false,
-  setUser: () => {},
-  fetchUser: async () => {},
-  logout: () => {}
+  logout: () => {},
+  fetchUser: async () => null as User | null,
 };
 
+// コンテキスト型
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
-  setUser: (user: User | null) => void;
   fetchUser: () => Promise<User | null>;
   logout: () => void;
 }
 
+// コンテキスト作成
 export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 interface AuthProviderProps {
@@ -29,107 +29,99 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  // 状態管理
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [retryCounter, setRetryCounter] = useState(0);
   const [, setLocation] = useLocation();
 
-  // ユーザーデータを取得する関数
+  // 認証状態
+  const isAuthenticated = !!user;
+
+  // リクエスト中かどうかを追跡するためのref
+  const [isRequesting, setIsRequesting] = useState(false);
+  
+  // ユーザー情報の取得 - シンプルな実装に変更
   const fetchUser = useCallback(async (): Promise<User | null> => {
-    console.log("認証情報取得を開始...");
+    // すでにリクエスト中の場合や認証済みの場合は再取得しない
+    if (isRequesting) {
+      return user;
+    }
+    
+    if (user) {
+      return user;
+    }
+    
+    // リクエスト状態の更新
+    setIsRequesting(true);
     setLoading(true);
     
-    // 認証トークンの存在確認
-    const token = getAuthToken();
-    if (!token) {
-      console.log("認証トークンがありません");
-      setLoading(false);
-      return null;
-    }
-
     try {
-      console.log("APIからユーザー情報を取得中...");
+      // トークンの存在確認
+      const token = getAuthToken();
+      if (!token) {
+        setUser(null);
+        return null;
+      }
+      
+      // APIからユーザー情報取得
       const userData = await getAuthenticatedUser();
       
       if (userData) {
-        console.log("ユーザー情報取得成功:", userData.name, "(ID:", userData.id, ")");
         setUser(userData);
         return userData;
       } else {
-        console.warn("APIからのレスポンスが空です");
         setUser(null);
         return null;
       }
     } catch (error) {
-      console.error("ユーザー情報の取得に失敗しました:", error);
+      console.error("認証エラー:", error);
       setUser(null);
       return null;
     } finally {
       setLoading(false);
+      setIsRequesting(false);
     }
-  }, []);
-
-  // ログアウト関数
+  }, [user, isRequesting]);
+  
+  // ログアウト処理
   const logout = useCallback(() => {
+    // ユーザー情報をクリア
     setUser(null);
-    localStorage.removeItem('levletter-auth-token');
+    // ローカルストレージからトークン削除
+    logoutUtil();
+    // ログインページへリダイレクト
     setLocation("/login");
   }, [setLocation]);
 
-  // 初回とリトライの認証処理
+  // 初回マウント時に認証情報を取得
   useEffect(() => {
     let isMounted = true;
     
     const initAuth = async () => {
-      // すでにユーザーが取得できている場合は再取得しない
-      if (user) return;
-      
-      const result = await fetchUser();
-      
-      // コンポーネントがアンマウントされていたら状態更新しない
-      if (!isMounted) return;
-      
-      // 認証に失敗した場合でトークンが存在する場合、数回リトライ
-      if (!result && getAuthToken() && retryCounter < 3) {
-        console.log(`認証リトライ (${retryCounter + 1}/3)...`);
-        setTimeout(() => {
-          if (isMounted) {
-            setRetryCounter(prev => prev + 1);
-          }
-        }, 1000);
+      try {
+        if (!user && isMounted) {
+          await fetchUser();
+        }
+      } catch (error) {
+        console.error("初期認証エラー:", error);
       }
     };
-
+    
     initAuth();
     
-    // クリーンアップ関数
     return () => {
       isMounted = false;
     };
-  }, [retryCounter, user]);
-
-  // 認証状態の判定
-  const isAuthenticated = !!user;
+  }, [fetchUser, user]);
 
   // コンテキスト値
-  const value = {
+  const value: AuthContextType = {
     user,
     loading,
     isAuthenticated,
-    setUser,
     fetchUser,
     logout
   };
-
-  // デバッグ用ログ
-  useEffect(() => {
-    console.log("認証状態変更:", { 
-      isAuthenticated, 
-      userId: user?.id,
-      userName: user?.name,
-      loading 
-    });
-  }, [isAuthenticated, user, loading]);
 
   return (
     <AuthContext.Provider value={value}>

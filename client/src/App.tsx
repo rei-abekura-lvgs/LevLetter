@@ -22,42 +22,21 @@ function AppRoutes() {
   
   // 初期認証処理とナビゲーション制御
   useEffect(() => {
-    // 認証情報を取得
-    const checkAuth = async () => {
-      try {
-        console.log("認証情報を確認中...");
-        const userData = await fetchUser();
-        
-        // 認証済みの場合
-        if (userData) {
-          console.log("認証成功:", userData.name);
-          
-          // 認証済みユーザーがログインページにアクセスした場合はホームへリダイレクト
-          if (location === '/login' || location === '/register' || location === '/forgot-password' || location === '/reset-password') {
-            console.log("認証済みユーザーをホームへリダイレクト");
-            setLocation('/');
-          }
-        } 
-        // 未認証の場合
-        else {
-          console.log("未認証状態");
-          // 保護されたルートへのアクセスを制限
-          const authRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
-          if (!authRoutes.includes(location)) {
-            console.log("未認証ユーザーをログインページへリダイレクト");
-            setLocation('/login');
-          }
-        }
-      } catch (err) {
-        console.error("認証確認中にエラー:", err);
-      }
-    };
+    // 保護されたルートとパブリックルートの定義
+    const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
     
-    // 認証状態が変わった時だけリダイレクトをチェック
+    // 認証状態によるリダイレクト処理
     if (!loading) {
-      checkAuth();
+      // 認証済みかつログイン関連ページにいる場合はホームへリダイレクト
+      if (isAuthenticated && publicRoutes.includes(location)) {
+        setLocation('/');
+      } 
+      // 未認証かつ保護されたページにいる場合はログインへリダイレクト
+      else if (!isAuthenticated && !publicRoutes.includes(location)) {
+        setLocation('/login');
+      }
     }
-  }, [fetchUser, isAuthenticated, loading, location, setLocation]);
+  }, [isAuthenticated, loading, location, setLocation]);
   
   // デバッグ用ログ
   useEffect(() => {
@@ -124,6 +103,7 @@ function AppRoutes() {
 }
 
 function App() {
+  // QueryClientProviderがルートレベルに配置され、すべてのコンポーネントにQueryClientを提供します
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
