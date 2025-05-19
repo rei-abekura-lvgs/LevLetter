@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileUpdateSchema } from "@shared/schema";
@@ -15,8 +15,17 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { User } from "@shared/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProfile } from "@/lib/api";
+import { updateProfile, getDepartments } from "@/lib/api";
 import { Coins, HeartIcon } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ProfileFormProps {
   user: User;
@@ -27,16 +36,39 @@ interface ProfileFormProps {
 export default function ProfileForm({ user, open, onOpenChange }: ProfileFormProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [departments, setDepartments] = useState<{id: number, name: string}[]>([]);
+
+  // 部署一覧を取得
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const data = await getDepartments();
+        setDepartments(data);
+      } catch (error) {
+        console.error("部署一覧取得エラー:", error);
+        toast({
+          title: "エラー",
+          description: "部署情報の取得に失敗しました",
+          variant: "destructive",
+        });
+      }
+    };
+
+    if (open) {
+      fetchDepartments();
+    }
+  }, [open, toast]);
 
   const form = useForm({
     resolver: zodResolver(profileUpdateSchema),
     defaultValues: {
-      displayName: user.displayName || user.name
+      displayName: user.displayName || user.name,
+      department: user.department || null
     }
   });
 
   const updateProfileMutation = useMutation({
-    mutationFn: (data: { displayName: string }) => updateProfile(user.id, data),
+    mutationFn: (data: { displayName: string, department?: string | null }) => updateProfile(user.id, data),
     onSuccess: () => {
       // キャッシュを更新
       queryClient.invalidateQueries({
@@ -61,7 +93,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
     }
   });
 
-  const onSubmit = (data: { displayName: string }) => {
+  const onSubmit = (data: { displayName: string, department?: string | null }) => {
     updateProfileMutation.mutate(data);
   };
 
@@ -116,6 +148,38 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                   className="bg-gray-50"
                 />
               </FormItem>
+              
+              <FormField
+                control={form.control}
+                name="department"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>部署</FormLabel>
+                    <FormControl>
+                      <Select 
+                        onValueChange={field.onChange}
+                        defaultValue={field.value || ""}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="部署を選択してください" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>部署一覧</SelectLabel>
+                            <SelectItem value="">未設定</SelectItem>
+                            {departments.map((dept) => (
+                              <SelectItem key={dept.id} value={dept.name}>
+                                {dept.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </form>
           </Form>
           

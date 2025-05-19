@@ -433,8 +433,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 部署API
-  app.get("/api/departments", authenticate, async (req, res) => {
+  // 部署API - アカウント作成でも使用するため認証不要
+  app.get("/api/departments", async (req, res) => {
     try {
       const departments = await storage.getDepartments();
       return res.json(departments);

@@ -128,7 +128,8 @@ export const likeFormSchema = z.object({
 });
 
 export const profileUpdateSchema = z.object({
-  displayName: z.string().min(1, { message: "表示名を入力してください" })
+  displayName: z.string().min(1, { message: "表示名を入力してください" }),
+  department: z.string().nullable().optional()
 });
 
 // 型定義
