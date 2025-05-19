@@ -25,7 +25,7 @@ export async function sendEmail({
   subject,
   htmlContent,
   textContent,
-  from = process.env.DEFAULT_FROM_EMAIL || "noreply@example.com"
+  from = process.env.DEFAULT_FROM_EMAIL || "rei.abekura@leverages.jp"
 }: EmailParams): Promise<boolean> {
   try {
     const command = new SendEmailCommand({
