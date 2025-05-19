@@ -9,7 +9,8 @@ import {
   loginSchema,
   cardFormSchema,
   likeFormSchema,
-  profileUpdateSchema
+  profileUpdateSchema,
+  insertDepartmentSchema
 } from "@shared/schema";
 
 const JWT_SECRET = process.env.JWT_SECRET || "levletter-development-secret";
@@ -491,6 +492,107 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       return handleZodError(error, res);
+    }
+  });
+
+  // 部署管理エンドポイント
+  app.get("/api/departments", authenticate, async (req, res) => {
+    try {
+      const departments = await storage.getDepartments();
+      return res.json(departments);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+      return res.status(500).json({ message: "部署情報の取得に失敗しました" });
+    }
+  });
+
+  app.get("/api/departments/:id", authenticate, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const department = await storage.getDepartment(id);
+      if (!department) {
+        return res.status(404).json({ message: "部署が見つかりません" });
+      }
+      return res.json(department);
+    } catch (error) {
+      console.error("Error fetching department:", error);
+      return res.status(500).json({ message: "部署情報の取得に失敗しました" });
+    }
+  });
+
+  app.post("/api/departments", authenticate, async (req, res) => {
+    try {
+      const currentUser = (req as any).user;
+      console.log("部署作成リクエスト:", JSON.stringify(req.body));
+      const data = insertDepartmentSchema.parse(req.body);
+      
+      // リクエストデータのログ
+      console.log("部署作成処理 - ユーザー:", currentUser.id, currentUser.name);
+      console.log("部署作成処理 - 名称:", data.name);
+      
+      const newDepartment = await storage.createDepartment({
+        name: data.name,
+        description: data.description
+      });
+      
+      console.log("部署作成成功:", newDepartment.id, newDepartment.name);
+      return res.json(newDepartment);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return handleZodError(error, res);
+      }
+      console.error("Error creating department:", error);
+      return res.status(500).json({ message: "部署の作成に失敗しました" });
+    }
+  });
+
+  app.put("/api/departments/:id", authenticate, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const currentUser = (req as any).user;
+      console.log("部署更新リクエスト:", id, JSON.stringify(req.body));
+      const data = insertDepartmentSchema.parse(req.body);
+      
+      // 部署の存在確認
+      const existingDepartment = await storage.getDepartment(id);
+      if (!existingDepartment) {
+        return res.status(404).json({ message: "部署が見つかりません" });
+      }
+      
+      const updatedDepartment = await storage.updateDepartment(id, {
+        name: data.name,
+        description: data.description
+      });
+      
+      console.log("部署更新成功:", updatedDepartment.id, updatedDepartment.name);
+      return res.json(updatedDepartment);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return handleZodError(error, res);
+      }
+      console.error("Error updating department:", error);
+      return res.status(500).json({ message: "部署の更新に失敗しました" });
+    }
+  });
+
+  app.delete("/api/departments/:id", authenticate, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const currentUser = (req as any).user;
+      console.log("部署削除リクエスト:", id, "by", currentUser.id, currentUser.name);
+      
+      // 部署の存在確認
+      const existingDepartment = await storage.getDepartment(id);
+      if (!existingDepartment) {
+        return res.status(404).json({ message: "部署が見つかりません" });
+      }
+      
+      await storage.deleteDepartment(id);
+      console.log("部署削除成功:", id);
+      return res.json({ message: "部署を削除しました" });
+    } catch (error) {
+      console.error("Error deleting department:", error);
+      return res.status(500).json({ message: "部署の削除に失敗しました" });
     }
   });
 

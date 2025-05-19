@@ -112,12 +112,38 @@ export class MemStorage implements IStorage {
   }
 
   private initSampleData() {
+    // サンプル部署
+    const dept1 = this.createDepartment({
+      name: "マーケティング部",
+      description: "マーケティング戦略の立案と実行を担当"
+    });
+
+    const dept2 = this.createDepartment({
+      name: "営業部",
+      description: "顧客対応と販売促進活動を担当"
+    });
+
+    const dept3 = this.createDepartment({
+      name: "人事部",
+      description: "採用活動と社員教育を担当"
+    });
+
+    const dept4 = this.createDepartment({
+      name: "開発部",
+      description: "製品・サービスの開発と改善を担当"
+    });
+
+    const dept5 = this.createDepartment({
+      name: "デザイン部",
+      description: "UI/UXデザインとブランドイメージの維持を担当"
+    });
+
     // サンプルユーザー
     const user1 = this.createUser({
       email: "yamada@example.com",
       name: "山田 太郎",
       displayName: "山田 太郎",
-      department: "マーケティング部",
+      department: dept1.name,
       password: "password123",
       avatarColor: "primary-500",
       weeklyPoints: 350,
@@ -128,7 +154,7 @@ export class MemStorage implements IStorage {
       email: "satou@example.com",
       name: "佐藤 聡",
       displayName: "佐藤 聡",
-      department: "営業部",
+      department: dept2.name,
       password: "password123",
       avatarColor: "secondary-500",
       weeklyPoints: 400,
@@ -139,7 +165,7 @@ export class MemStorage implements IStorage {
       email: "suzuki@example.com",
       name: "鈴木 花子",
       displayName: "鈴木 花子",
-      department: "人事部",
+      department: dept3.name,
       password: "password123",
       avatarColor: "green-500",
       weeklyPoints: 450,
@@ -150,7 +176,7 @@ export class MemStorage implements IStorage {
       email: "tanaka@example.com",
       name: "田中 雄一",
       displayName: "田中 雄一",
-      department: "開発部",
+      department: dept4.name,
       password: "password123",
       avatarColor: "blue-500",
       weeklyPoints: 500,
@@ -445,6 +471,47 @@ export class MemStorage implements IStorage {
     }
 
     throw new Error(`Team member with teamId ${teamId} and userId ${userId} not found`);
+  }
+
+  // 部署管理機能
+  async getDepartments(): Promise<Department[]> {
+    return Array.from(this.departments.values());
+  }
+
+  async getDepartment(id: number): Promise<Department | undefined> {
+    return this.departments.get(id);
+  }
+
+  async createDepartment(insertDepartment: InsertDepartment): Promise<Department> {
+    const id = this.departmentIdCounter++;
+    const now = new Date();
+    
+    const department: Department = {
+      id,
+      name: insertDepartment.name,
+      description: insertDepartment.description || null,
+      createdAt: now
+    };
+
+    this.departments.set(id, department);
+    return department;
+  }
+
+  async updateDepartment(id: number, updates: Partial<Department>): Promise<Department> {
+    const department = this.departments.get(id);
+    if (!department) {
+      throw new Error(`部署が見つかりません: ${id}`);
+    }
+    
+    const updatedDepartment = { ...department, ...updates };
+    this.departments.set(id, updatedDepartment);
+    return updatedDepartment;
+  }
+
+  async deleteDepartment(id: number): Promise<void> {
+    if (!this.departments.delete(id)) {
+      throw new Error(`部署が見つかりません: ${id}`);
+    }
   }
 
   // カード関連
