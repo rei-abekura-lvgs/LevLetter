@@ -389,7 +389,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // ユーザー更新
       const updatedUser = await storage.updateUser(userId, {
-        name: data.name,
         displayName: data.displayName || null,
         department: data.department || null
       });
