@@ -29,6 +29,7 @@ export function verifyPasswordResetToken(token: string): {
   email?: string;
   error?: string;
 } {
+  console.log("トークン検証開始:", token.substring(0, 20) + "...");
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as any;
     
