@@ -146,6 +146,25 @@ export default function ResetPassword() {
           ) : (
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                {!token && (
+                  <FormField
+                    control={form.control}
+                    name="token"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>リセットコード</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="メールに記載されたリセットコードを入力" 
+                            {...field} 
+                            autoComplete="off"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 <FormField
                   control={form.control}
                   name="password"
@@ -187,7 +206,7 @@ export default function ResetPassword() {
                 <Button 
                   type="submit" 
                   className="w-full" 
-                  disabled={isSubmitting || !token}
+                  disabled={isSubmitting}
                 >
                   {isSubmitting ? "処理中..." : "パスワードをリセット"}
                 </Button>
