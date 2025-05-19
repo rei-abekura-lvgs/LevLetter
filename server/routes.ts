@@ -325,9 +325,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           to: user.email,
           subject: "【LevLetter】パスワードリセットのご案内",
           userName: userName,
-          resetLink: resetToken_forDisplay.substring(0, 20) + "...",
+          resetLink: resetToken_forDisplay,
           htmlPreview: html.substring(0, 100) + "..."
         });
+        
+        // AWS SESのサンドボックス環境では、検証済みメールアドレスにしか送信できない制限があるため
+        // 開発テスト用にリセットトークンをログに出力
+        console.log("テスト用リセットトークン（コピーして直接入力してください）:", resetToken_forDisplay);
       } catch (emailError) {
         console.error("パスワードリセットメール送信エラー:", emailError);
         return res.status(500).json({ message: "メールの送信に失敗しました" });
@@ -349,14 +353,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "リセットトークンが必要です" });
       }
       
+      // トークン検証の詳細をデバッグする
+      console.log("検証するトークン:", token.substring(0, 20) + "...");
+      
       // トークン検証
       const verificationResult = verifyPasswordResetToken(token);
+      console.log("トークン検証結果:", verificationResult);
+      
       if (!verificationResult.valid) {
         return res.status(400).json({ message: "無効または期限切れのトークンです" });
       }
       
       // verificationResultから直接userIdを取得
       const { userId } = verificationResult;
+      if (!userId) {
+        return res.status(400).json({ message: "トークンからユーザーIDを取得できませんでした" });
+      }
       
       // ユーザー存在確認
       const user = await storage.getUser(userId);
