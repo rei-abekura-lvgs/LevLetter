@@ -573,7 +573,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/departments/:id", authenticate, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      console.log("部署削除リクエスト:", id);
+      const currentUser = (req as any).user;
+      console.log("部署削除リクエスト:", id, "by", currentUser.id, currentUser.name);
       
       // 部署存在確認
       const department = await storage.getDepartment(id);
@@ -589,6 +590,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting department:", error);
       return res.status(500).json({ message: "部署の削除に失敗しました" });
+    }
+  });
+  
+  // 部署一括削除API
+  app.post("/api/departments/batch-delete", authenticate, async (req, res) => {
+    try {
+      const currentUser = (req as any).user;
+      console.log("部署一括削除リクエスト:", JSON.stringify(req.body));
+      const { departmentIds } = req.body;
+      
+      if (!departmentIds || !Array.isArray(departmentIds) || departmentIds.length === 0) {
+        return res.status(400).json({ message: "有効な部署IDが提供されていません" });
+      }
+      
+      console.log("部署一括削除処理 - ユーザー:", currentUser.id, currentUser.name);
+      console.log("部署一括削除処理 - 件数:", departmentIds.length);
+      
+      // 削除結果を追跡
+      let successCount = 0;
+      let notFoundCount = 0;
+      let errorCount = 0;
+      const results = {
+        success: [] as number[],
+        notFound: [] as number[],
+        error: [] as number[]
+      };
+      
+      // 各部署を順番に削除
+      for (const id of departmentIds) {
+        try {
+          // 部署存在確認
+          const department = await storage.getDepartment(id);
+          if (!department) {
+            console.log(`部署ID:${id}は存在しません`);
+            notFoundCount++;
+            results.notFound.push(id);
+            continue;
+          }
+          
+          // 部署削除
+          await storage.deleteDepartment(id);
+          console.log(`部署ID:${id}(${department.name})を削除しました`);
+          successCount++;
+          results.success.push(id);
+        } catch (err) {
+          console.error(`部署ID:${id}の削除に失敗しました:`, err);
+          errorCount++;
+          results.error.push(id);
+        }
+      }
+      
+      console.log(`部署一括削除結果: 成功=${successCount}, 未存在=${notFoundCount}, エラー=${errorCount}`);
+      
+      return res.json({
+        message: `${successCount}件の部署を削除しました`,
+        results: {
+          successCount,
+          notFoundCount,
+          errorCount,
+          details: results
+        }
+      });
+    } catch (error) {
+      console.error("部署一括削除エラー:", error);
+      return res.status(500).json({ message: "部署の一括削除に失敗しました" });
     }
   });
 

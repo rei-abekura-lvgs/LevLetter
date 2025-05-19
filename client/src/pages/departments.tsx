@@ -26,7 +26,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Trash2, Edit, Plus, Loader2, Upload } from "lucide-react";
+import { 
+  Trash2, 
+  Edit, 
+  Plus, 
+  Loader2, 
+  Upload, 
+  CheckSquare, 
+  Square, 
+  AlertCircle,
+  Trash
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -45,6 +55,11 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
 import { apiRequest } from "@/lib/queryClient";
 import type { Department } from "@shared/schema";
 import { useAuth } from "@/context/auth-context";
@@ -264,6 +279,8 @@ export default function DepartmentsPage() {
   const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>(undefined);
   const [showDialog, setShowDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [checkedDepartments, setCheckedDepartments] = useState<Set<number>>(new Set());
+  const [showBatchDeleteDialog, setShowBatchDeleteDialog] = useState(false);
 
   const {
     data: departments = [],
@@ -295,6 +312,43 @@ export default function DepartmentsPage() {
       });
     },
   });
+  
+  const batchDeleteMutation = useMutation({
+    mutationFn: async (departmentIds: number[]) => {
+      return await apiRequest("POST", "/api/departments/batch-delete", { departmentIds });
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/departments"] });
+      
+      const { successCount, notFoundCount, errorCount } = data.results || { 
+        successCount: 0, notFoundCount: 0, errorCount: 0 
+      };
+      
+      let message = `${successCount}件の部署を削除しました`;
+      if (notFoundCount > 0) {
+        message += `（${notFoundCount}件は見つかりませんでした）`;
+      }
+      if (errorCount > 0) {
+        message += `（${errorCount}件はエラーが発生しました）`;
+      }
+      
+      toast({
+        title: "部署一括削除完了",
+        description: message,
+      });
+      
+      setShowBatchDeleteDialog(false);
+      setCheckedDepartments(new Set());
+    },
+    onError: (error) => {
+      console.error("一括削除エラー:", error);
+      toast({
+        title: "エラーが発生しました",
+        description: "部署の一括削除中にエラーが発生しました。もう一度お試しください。",
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleAddDepartment = () => {
     setSelectedDepartment(undefined);
@@ -316,6 +370,44 @@ export default function DepartmentsPage() {
       deleteMutation.mutate(selectedDepartment.id);
     }
   };
+  
+  const handleCheckDepartment = (id: number) => {
+    setCheckedDepartments(prev => {
+      const newChecked = new Set(prev);
+      if (newChecked.has(id)) {
+        newChecked.delete(id);
+      } else {
+        newChecked.add(id);
+      }
+      return newChecked;
+    });
+  };
+  
+  const handleCheckAll = () => {
+    if (checkedDepartments.size === departments.length) {
+      // 全選択解除
+      setCheckedDepartments(new Set());
+    } else {
+      // 全選択
+      setCheckedDepartments(new Set(departments.map(d => d.id)));
+    }
+  };
+  
+  const handleBatchDelete = () => {
+    if (checkedDepartments.size === 0) {
+      toast({
+        title: "選択エラー",
+        description: "削除する部署を選択してください",
+        variant: "destructive",
+      });
+      return;
+    }
+    setShowBatchDeleteDialog(true);
+  };
+  
+  const confirmBatchDelete = () => {
+    batchDeleteMutation.mutate(Array.from(checkedDepartments));
+  };
 
   const loading = isDepartmentsLoading;
 
@@ -329,7 +421,22 @@ export default function DepartmentsPage() {
         
         {/* 部署一覧タブ */}
         <TabsContent value="list" className="space-y-4">
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-between mb-4">
+            <div>
+              {checkedDepartments.size > 0 && (
+                <Button 
+                  variant="destructive" 
+                  onClick={handleBatchDelete}
+                  disabled={batchDeleteMutation.isPending}
+                >
+                  {batchDeleteMutation.isPending && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  <Trash className="mr-2 h-4 w-4" />
+                  選択した部署を削除 ({checkedDepartments.size}件)
+                </Button>
+              )}
+            </div>
             <Button onClick={handleAddDepartment}>
               <Plus className="mr-2 h-4 w-4" />
               新規部署作成
@@ -352,6 +459,18 @@ export default function DepartmentsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-12">
+                    <div 
+                      className="cursor-pointer flex items-center"
+                      onClick={handleCheckAll}
+                    >
+                      {checkedDepartments.size === departments.length ? (
+                        <CheckSquare className="h-5 w-5 text-primary" />
+                      ) : (
+                        <Square className="h-5 w-5" />
+                      )}
+                    </div>
+                  </TableHead>
                   <TableHead>部署名</TableHead>
                   <TableHead>説明</TableHead>
                   <TableHead className="w-24">操作</TableHead>
@@ -360,6 +479,18 @@ export default function DepartmentsPage() {
               <TableBody>
                 {departments.map((department: Department) => (
                   <TableRow key={department.id}>
+                    <TableCell>
+                      <div 
+                        className="cursor-pointer"
+                        onClick={() => handleCheckDepartment(department.id)}
+                      >
+                        {checkedDepartments.has(department.id) ? (
+                          <CheckSquare className="h-5 w-5 text-primary" />
+                        ) : (
+                          <Square className="h-5 w-5" />
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="font-medium">{department.name}</TableCell>
                     <TableCell>{department.description || "-"}</TableCell>
                     <TableCell>
