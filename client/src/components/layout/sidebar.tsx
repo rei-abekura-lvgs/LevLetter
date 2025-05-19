@@ -54,8 +54,7 @@ export default function Sidebar({ user }: SidebarProps) {
           {/* ナビゲーションメニュー */}
           <div className="mb-6 space-y-1">
             <NavItem href="/" icon={Home} label="ホーム" />
-            <NavItem href="/my-cards" icon={FileText} label="マイカード" />
-            <NavItem href="/departments" icon={Building2} label="部署管理" />
+            <NavItem href="/settings" icon={Building2} label="システム設定" />
           </div>
           
           {/* ポイント情報 */}

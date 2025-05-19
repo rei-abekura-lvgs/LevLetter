@@ -152,7 +152,7 @@ function DepartmentForm({ department, onClose }: DepartmentFormProps) {
 }
 
 export default function DepartmentsPage() {
-  const { user, isAuthenticated, loading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>(undefined);
@@ -211,80 +211,66 @@ export default function DepartmentsPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+  const loading = isDepartmentsLoading;
 
   return (
-    <div className="container mx-auto py-8">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">部署管理</CardTitle>
-          <CardDescription>部署の追加、編集、削除を行うことができます</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex justify-end mb-4">
-            <Button onClick={handleAddDepartment}>
-              <Plus className="mr-2 h-4 w-4" />
-              新規部署作成
-            </Button>
-          </div>
+    <div>
+      <div className="flex justify-end mb-4">
+        <Button onClick={handleAddDepartment}>
+          <Plus className="mr-2 h-4 w-4" />
+          新規部署作成
+        </Button>
+      </div>
 
-          {isDepartmentsLoading ? (
-            <div className="flex justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          ) : error ? (
-            <div className="text-center py-8 text-destructive">
-              部署情報の読み込み中にエラーが発生しました
-            </div>
-          ) : departments.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              部署が登録されていません
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>部署名</TableHead>
-                  <TableHead>説明</TableHead>
-                  <TableHead className="w-24">操作</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {departments.map((department: Department) => (
-                  <TableRow key={department.id}>
-                    <TableCell className="font-medium">{department.name}</TableCell>
-                    <TableCell>{department.description || "-"}</TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleEditDepartment(department)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleDeleteDepartment(department)}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+      {loading ? (
+        <div className="flex justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : error ? (
+        <div className="text-center py-8 text-destructive">
+          部署情報の読み込み中にエラーが発生しました
+        </div>
+      ) : departments.length === 0 ? (
+        <div className="text-center py-8 text-muted-foreground">
+          部署が登録されていません
+        </div>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>部署名</TableHead>
+              <TableHead>説明</TableHead>
+              <TableHead className="w-24">操作</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {departments.map((department: Department) => (
+              <TableRow key={department.id}>
+                <TableCell className="font-medium">{department.name}</TableCell>
+                <TableCell>{department.description || "-"}</TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleEditDepartment(department)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleDeleteDepartment(department)}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
 
       {/* 部署作成・編集ダイアログ */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>

@@ -7,11 +7,10 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
-import MyCards from "@/pages/my-cards";
 import Profile from "@/pages/profile";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
-import Departments from "@/pages/departments";
+import Settings from "@/pages/settings";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context";
@@ -84,14 +83,11 @@ function AppRoutes() {
     return (
       <MainLayout>
         <Switch>
-          <Route path="/my-cards">
-            <MyCards user={user} />
-          </Route>
           <Route path="/profile">
             <Profile user={user} />
           </Route>
-          <Route path="/departments">
-            <Departments />
+          <Route path="/settings">
+            <Settings />
           </Route>
           <Route path="/">
             <Home user={user} />
