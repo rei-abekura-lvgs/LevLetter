@@ -66,10 +66,13 @@ export async function sendEmail({
 /**
  * パスワードリセット用メールテンプレート
  */
-export function getPasswordResetEmailTemplate(
+export function getPasswordResetEmailTemplate({
+  userName,
+  resetLink
+}: {
   userName: string,
   resetLink: string
-): { html: string; text: string } {
+}): { html: string; text: string } {
   const html = `
     <!DOCTYPE html>
     <html>

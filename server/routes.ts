@@ -299,14 +299,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // リセットメール送信
       try {
         // 環境変数からドメインを取得する（存在しない場合はホストヘッダーを使用）
-        // 相対URLを使用する（メールクライアントではフルURLが必要だが、表示用にシンプルなURLを使用）
+        // リセットURL作成
         const resetUrl = `/reset-password/${resetToken}`;
-        const userReadableToken = resetToken.substring(0, 20) + '...'; // 短縮版を表示用に保持
+        // メール内に表示するトークン
+        const resetToken_forDisplay = resetToken;
         console.log("生成したリセットURL:", resetUrl);
         
+        // ユーザー名を正しく取得
+        const userName = user.displayName || user.name;
+        
         const { html, text } = getPasswordResetEmailTemplate({
-          userName: user.name,
-          resetUrl
+          userName: userName,
+          resetLink: resetToken_forDisplay
         });
         
         await sendEmail({
