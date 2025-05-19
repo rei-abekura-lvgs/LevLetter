@@ -520,7 +520,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // この部分は削除 - 下に同一のエンドポイントが定義されています
+  // 部署一括登録API - 特殊なパスを先に定義
+  app.post("/api/departments/batch", authenticate, async (req, res) => {
+    try {
+      const currentUser = (req as any).user;
+      console.log("部署一括作成リクエスト:", JSON.stringify(req.body));
+      const { departments } = req.body;
+      
+      if (!departments || !Array.isArray(departments) || departments.length === 0) {
+        return res.status(400).json({ message: "有効な部署データが提供されていません" });
+      }
+      
+      console.log("部署一括作成処理 - ユーザー:", currentUser.id, currentUser.name);
+      console.log("部署一括作成処理 - 件数:", departments.length);
+
+      // 全ての部署を登録
+      const results = [];
+      for (const dept of departments) {
+        if (!dept.name || dept.name.trim() === '') {
+          continue; // 名前が空の部署はスキップ
+        }
+        
+        const newDepartment = await storage.createDepartment({
+          name: dept.name.trim(),
+          description: dept.description || null
+        });
+        
+        results.push(newDepartment);
+      }
+
+      console.log("部署一括作成成功:", results.length, "件");
+      return res.status(201).json({ 
+        message: `${results.length}件の部署を登録しました`, 
+        departments: results 
+      });
+    } catch (error) {
+      console.error("部署一括作成エラー:", error);
+      return res.status(500).json({ message: "部署の一括登録に失敗しました" });
+    }
+  });
+  app.post("/api/departments/batch", authenticate, async (req, res) => {
+    try {
+      const currentUser = (req as any).user;
+      console.log("部署一括作成リクエスト:", JSON.stringify(req.body));
+      const { departments } = req.body;
+      
+      if (!departments || !Array.isArray(departments) || departments.length === 0) {
+        return res.status(400).json({ message: "有効な部署データが提供されていません" });
+      }
+      
+      console.log("部署一括作成処理 - ユーザー:", currentUser.id, currentUser.name);
+      console.log("部署一括作成処理 - 件数:", departments.length);
+
+      // 全ての部署を登録
+      const results = [];
+      for (const dept of departments) {
+        if (!dept.name || dept.name.trim() === '') {
+          continue; // 名前が空の部署はスキップ
+        }
+        
+        const newDepartment = await storage.createDepartment({
+          name: dept.name.trim(),
+          description: dept.description || null
+        });
+        
+        results.push(newDepartment);
+      }
+
+      console.log("部署一括作成成功:", results.length, "件");
+      return res.status(201).json({ 
+        message: `${results.length}件の部署を登録しました`, 
+        departments: results 
+      });
+    } catch (error) {
+      console.error("部署一括作成エラー:", error);
+      return res.status(500).json({ message: "部署の一括登録に失敗しました" });
+    }
+  });
 
   app.post("/api/departments", authenticate, async (req, res) => {
     try {
