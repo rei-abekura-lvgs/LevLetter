@@ -96,8 +96,13 @@ function BatchDepartmentsForm() {
         };
       });
       
+      // リクエストデータをログ出力
+      const requestData = { departments: departmentList };
+      console.log("一括登録リクエストデータ:", JSON.stringify(requestData));
+      
       // サーバーに送信して一括登録
-      await apiRequest("POST", "/api/departments/batch", { departments: departmentList });
+      const result = await apiRequest("POST", "/api/departments/batch", requestData);
+      console.log("一括登録レスポンス:", result);
       
       // 成功メッセージを表示
       toast({

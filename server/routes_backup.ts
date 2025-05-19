@@ -520,7 +520,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // 部署一括登録API - 先に定義して優先度を高くする
+  // 部署一括登録API - より具体的なパスを先に定義
   app.post("/api/departments/batch", authenticate, async (req, res) => {
     try {
       const currentUser = (req as any).user;
