@@ -94,7 +94,13 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
   });
 
   const onSubmit = (data: { displayName: string, department?: string | null }) => {
-    updateProfileMutation.mutate(data);
+    // 「未設定」が選択された場合はnullとして送信
+    const updatedData = {
+      ...data,
+      department: data.department === "未設定" ? null : data.department
+    };
+    console.log("送信データ:", updatedData);
+    updateProfileMutation.mutate(updatedData);
   };
 
   // ユーザーのイニシャル
@@ -158,7 +164,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                     <FormControl>
                       <Select 
                         onValueChange={field.onChange}
-                        defaultValue={field.value || ""}
+                        value={field.value || undefined}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="部署を選択してください" />
@@ -208,15 +214,18 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
           
           <div className="flex justify-end">
             <DialogClose asChild>
-              <Button variant="outline" className="mr-2">
+              <Button variant="outline" className="mr-2" type="button">
                 キャンセル
               </Button>
             </DialogClose>
             <Button
-              type="submit"
+              type="button"
               disabled={updateProfileMutation.isPending}
               className="bg-primary-600 hover:bg-primary-700"
-              onClick={form.handleSubmit(onSubmit)}
+              onClick={() => {
+                console.log("フォームデータ:", form.getValues());
+                form.handleSubmit(onSubmit)();
+              }}
             >
               変更を保存
               {updateProfileMutation.isPending && (
