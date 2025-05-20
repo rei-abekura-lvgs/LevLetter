@@ -30,7 +30,7 @@ export async function sendEmail({
   try {
     // 送信情報をログに表示（デバッグ用）
     console.log(`メール送信試行 - 宛先: ${to}, 件名: ${subject}`);
-
+    
     const command = new SendEmailCommand({
       Destination: {
         ToAddresses: [to],
@@ -86,26 +86,26 @@ export function getPasswordResetEmailTemplate({
         <p>こんにちは、${userName} さん</p>
         <p>あなたのアカウントのパスワードリセットリクエストを受け付けました。</p>
         <p>以下のボタンをクリックしてパスワードリセット画面に移動してください：</p>
-
+        
         <div style="text-align: center; margin: 30px 0;">
-          <a href="${process.env.BASE_URL || 'https://' + process.env.REPL_SLUG + '.' + process.env.REPL_OWNER + '.repl.co'}/reset-password/${resetLink}" 
+          <a href="https://39d5973c-7a1f-41b4-be1d-15a49ae7ac36.id.repl.co/reset-password/${resetLink}" 
              style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
             パスワードをリセットする
           </a>
         </div>
-
+        
         <p>または、以下のリセットコードをコピーして直接入力することもできます：</p>
         <p style="margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 4px; font-family: monospace; word-break: break-all;">
           ${resetLink}
         </p>
-
+        
         <p><strong>手順：</strong></p>
         <ol>
           <li>上記のボタンをクリックするか、アプリを開いてパスワードリセット画面にアクセス</li>
           <li>ボタンが機能しない場合は、コードをコピーして入力</li>
           <li>新しいパスワードを設定</li>
         </ol>
-
+        
         <p>このコードは24時間有効です。リクエストしていない場合は、このメールを無視してください。</p>
         <p>何かご不明な点がございましたら、システム管理者にお問い合わせください。</p>
         <p>よろしくお願いいたします。<br>LevLetter管理チーム</p>
@@ -120,7 +120,7 @@ export function getPasswordResetEmailTemplate({
 あなたのアカウントのパスワードリセットリクエストを受け付けました。
 
 以下のURLにアクセスしてパスワードをリセットしてください：
-${process.env.BASE_URL || 'https://' + process.env.REPL_SLUG + '.' + process.env.REPL_OWNER + '.repl.co'}/reset-password/${resetLink}
+https://39d5973c-7a1f-41b4-be1d-15a49ae7ac36.id.repl.co/reset-password/${resetLink}
 
 または、以下のリセットコードをコピーして直接入力することもできます：
 ${resetLink}

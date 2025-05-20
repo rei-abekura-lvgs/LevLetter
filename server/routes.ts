@@ -21,31 +21,31 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 // 認証ミドルウェア
 const authenticate = async (req: Request, res: Response, next: Function) => {
   console.log("認証処理開始 - パス:", req.path);
-
+  
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     console.log("認証ヘッダーがありません");
     return res.status(401).json({ message: "認証が必要です" });
   }
-
+  
   console.log("認証ヘッダー: 存在します");
   const token = authHeader.split(" ")[1];
-
+  
   if (!token) {
     console.log("トークンが見つかりません");
     return res.status(401).json({ message: "有効なトークンが必要です" });
   }
-
+  
   try {
     console.log("トークン検証中...");
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
     const user = await storage.getUser(decoded.id);
-
+    
     if (!user) {
       console.log("ユーザーが見つかりません:", decoded.id);
       return res.status(401).json({ message: "無効なユーザーです" });
     }
-
+    
     console.log("トークン検証成功 - ユーザーID:", user.id);
     (req as any).user = user;
     console.log("認証成功:", user.id, user.email);
@@ -74,13 +74,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("ユーザー登録リクエスト:", JSON.stringify(req.body));
       const data = registerSchema.parse(req.body);
-
+      
       // メールアドレスの重複チェック
       const existingUser = await storage.getUserByEmail(data.email);
       if (existingUser) {
         return res.status(400).json({ message: "このメールアドレスは既に使用されています" });
       }
-
+      
       // ユーザー作成
       const newUser = await storage.createUser({
         ...data,
@@ -92,29 +92,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         cognitoSub: null,
         googleId: null,
       });
-
+      
       console.log("ユーザー登録成功:", newUser.id, newUser.email);
-
+      
       // 新規アカウント作成メール送信
       try {
         const { html, text } = getWelcomeEmailTemplate({
           userName: newUser.name,
           email: newUser.email
         });
-
+        
         await sendEmail({
           to: newUser.email,
           subject: "【LevLetter】アカウント作成完了のお知らせ",
           htmlContent: html,
           textContent: text
         });
-
+        
         console.log("新規アカウント作成メール送信成功:", newUser.email);
       } catch (emailError) {
         console.error("新規アカウント作成メール送信エラー:", emailError);
         // メール送信エラーはユーザー作成自体の失敗とはしない
       }
-
+      
       // トークン生成とレスポンス
       const token = jwt.sign({ id: newUser.id }, JWT_SECRET, { expiresIn: "7d" });
       return res.status(201).json({
@@ -135,12 +135,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("ログインリクエスト:", JSON.stringify(req.body));
       const data = loginSchema.parse(req.body);
-
+      
       const user = await storage.authenticateUser(data.email, data.password);
       if (!user) {
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
-
+      
       const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
       console.log("ログイン成功:", user.id, user.email);
       return res.json({
@@ -171,20 +171,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/cards", authenticate, async (req, res) => {
     try {
       const { senderId, recipientId, limit = 100, offset = 0 } = req.query;
-
+      
       const options: any = {
         limit: Number(limit),
         offset: Number(offset)
       };
-
+      
       if (senderId) {
         options.senderId = Number(senderId);
       }
-
+      
       if (recipientId) {
         options.recipientId = Number(recipientId);
       }
-
+      
       const cards = await storage.getCards(options);
       return res.json(cards);
     } catch (error) {
@@ -212,7 +212,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const currentUser = (req as any).user;
       console.log("カード作成リクエスト:", JSON.stringify(req.body));
       const data = cardFormSchema.parse(req.body);
-
+      
       // カード作成
       const newCard = await storage.createCard({
         senderId: currentUser.id,
@@ -223,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         public: true,
         additionalRecipients: data.additionalRecipients || null
       });
-
+      
       console.log("カード作成成功:", newCard.id);
       return res.status(201).json(newCard);
     } catch (error) {
@@ -252,20 +252,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const currentUser = (req as any).user;
       console.log("いいね作成リクエスト:", JSON.stringify(req.body));
       const data = likeFormSchema.parse(req.body);
-
+      
       // いいねの重複チェック
       const existingLike = await storage.getLike(data.cardId, currentUser.id);
       if (existingLike) {
         return res.status(400).json({ message: "既にいいねしています" });
       }
-
+      
       // いいね作成
       const newLike = await storage.createLike({
         userId: currentUser.id,
         cardId: data.cardId,
         points: data.points || 0
       });
-
+      
       console.log("いいね作成成功:", newLike.id);
       return res.status(201).json(newLike);
     } catch (error) {
@@ -282,51 +282,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("パスワードリセットリクエスト:", JSON.stringify(req.body));
       const { email } = req.body;
-
+      
       if (!email) {
         return res.status(400).json({ message: "メールアドレスを入力してください" });
       }
-
+      
       // ユーザー検索
       const user = await storage.getUserByEmail(email);
       if (!user) {
         // セキュリティ上、ユーザーが存在しなくても成功レスポンスを返す
         return res.json({ message: "パスワードリセット手順をメールで送信しました" });
       }
-
+      
       // リセットトークン生成
       const resetToken = generatePasswordResetToken(user.id, user.email);
-
+      
       // リセットメール送信
       try {
-        // アプリのベースURL
-        const baseUrl = process.env.BASE_URL || `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`;
-        const resetLink = resetToken; // トークンのみを送信
-
+        // リセットURL作成 - トークンのみを渡す
+        const resetUrl = resetToken;
+        
         // コンソールにURLを正しく表示する
         const host = req.get('host') || 'localhost:5000';
         const protocol = req.protocol || 'https';
         console.log("実際のリセットURL（アクセス用）:", `${protocol}://${host}/reset-password/${resetToken}`);
-
+        
         // メール内に表示するトークン
         const resetToken_forDisplay = resetToken;
         console.log("生成したリセットURL:", resetUrl);
-
+        
         // ユーザー名を正しく取得
         const userName = user.displayName || user.name;
-
+        
         const { html, text } = getPasswordResetEmailTemplate({
           userName: userName,
           resetLink: resetToken_forDisplay
         });
-
+        
         await sendEmail({
           to: user.email,
           subject: "【LevLetter】パスワードリセットのご案内",
           htmlContent: html,
           textContent: text
         });
-
+        
         console.log("パスワードリセットメール送信成功:", user.email);
         console.log("送信されたリセットメール内容:", {
           to: user.email,
@@ -335,7 +334,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           resetLink: resetToken_forDisplay,
           htmlPreview: html.substring(0, 100) + "..."
         });
-
+        
         // AWS SESのサンドボックス環境では、検証済みメールアドレスにしか送信できない制限があるため
         // 開発テスト用にリセットトークンをログに出力（ここをコピーしてください）
         console.log("\n========= テスト用リセットトークン（ここから） =========\n", 
@@ -345,7 +344,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("パスワードリセットメール送信エラー:", emailError);
         return res.status(500).json({ message: "メールの送信に失敗しました" });
       }
-
+      
       return res.json({ message: "パスワードリセット手順をメールで送信しました" });
     } catch (error) {
       console.error("パスワードリセットリクエストエラー:", error);
@@ -357,45 +356,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("パスワードリセット実行:", JSON.stringify({ token: "非表示", hasPassword: !!req.body.password }));
       const { token, password } = req.body;
-
+      
       if (!token) {
         return res.status(400).json({ message: "リセットトークンが必要です" });
       }
-
+      
       // トークン検証の詳細をデバッグする
       console.log("検証するトークン:", token.substring(0, 20) + "...");
-
+      
       // トークン検証
       const verificationResult = verifyPasswordResetToken(token);
       console.log("トークン検証結果:", verificationResult);
-
+      
       if (!verificationResult.valid) {
         return res.status(400).json({ message: "無効または期限切れのトークンです" });
       }
-
+      
       // verificationResultから直接userIdを取得
       const { userId } = verificationResult;
       if (!userId) {
         return res.status(400).json({ message: "トークンからユーザーIDを取得できませんでした" });
       }
-
+      
       // ユーザー存在確認 - ここでnumberに変換して確実に数値にする
       const userIdNum = Number(userId);
       if (isNaN(userIdNum)) {
         return res.status(400).json({ message: "無効なユーザーIDです" });
       }
-
+      
       // ユーザー情報取得
       const user = await storage.getUser(userIdNum);
       if (!user) {
         return res.status(404).json({ message: "ユーザーが見つかりません" });
       }
-
+      
       console.log("パスワードリセット - ユーザー情報:", { id: user.id, email: user.email });
-
+      
       // パスワードのハッシュ化 - シンプルなハッシュ化処理を直接記述
       const hashedPassword = require('crypto').createHash('sha256').update(password).digest('hex');
-
+      
       // ユーザー更新
       try {
         await storage.updateUser(userIdNum, { password: hashedPassword });
@@ -404,7 +403,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("ユーザー更新エラー:", updateError);
         return res.status(500).json({ message: "パスワード更新に失敗しました" });
       }
-
+      
       return res.json({
         message: "パスワードがリセットされました"
       });
@@ -419,21 +418,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const currentUser = (req as any).user;
       const userId = parseInt(req.params.id);
-
+      
       // 自分自身のプロフィールのみ更新可能
       if (currentUser.id !== userId) {
         return res.status(403).json({ message: "自分以外のプロフィールは更新できません" });
       }
-
+      
       console.log("プロフィール更新リクエスト:", JSON.stringify(req.body));
       const data = profileUpdateSchema.parse(req.body);
-
+      
       // ユーザー更新
       const updatedUser = await storage.updateUser(userId, {
         displayName: data.displayName || null,
         department: data.department || null
       });
-
+      
       console.log("プロフィール更新成功:", updatedUser.id);
       return res.json({
         message: "プロフィールを更新しました",
@@ -497,18 +496,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "部署情報の取得に失敗しました" });
     }
   });
-
+  
   // 部署一括登録API - 特殊なパスを先に定義
   app.post("/api/departments/batch", authenticate, async (req, res) => {
     try {
       const currentUser = (req as any).user;
       console.log("部署一括作成リクエスト:", JSON.stringify(req.body));
       const { departments } = req.body;
-
+      
       if (!departments || !Array.isArray(departments) || departments.length === 0) {
         return res.status(400).json({ message: "有効な部署データが提供されていません" });
       }
-
+      
       console.log("部署一括作成処理 - ユーザー:", currentUser.id, currentUser.name);
       console.log("部署一括作成処理 - 件数:", departments.length);
 
@@ -516,32 +515,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const results = [];
       const existingDepartments = await storage.getDepartments();
       const existingNames = new Set(existingDepartments.map(d => d.name.toLowerCase()));
-
+      
       let successCount = 0;
       let skipCount = 0;
       let errorCount = 0;
-
+      
       for (const dept of departments) {
         if (!dept.name || dept.name.trim() === '') {
           skipCount++;
           continue; // 名前が空の部署はスキップ
         }
-
+        
         const trimmedName = dept.name.trim();
-
+        
         // 既に存在する部署名はスキップ
         if (existingNames.has(trimmedName.toLowerCase())) {
           console.log(`部署「${trimmedName}」は既に存在するためスキップします`);
           skipCount++;
           continue;
         }
-
+        
         try {
           const newDepartment = await storage.createDepartment({
             name: trimmedName,
             description: dept.description || null
           });
-
+          
           results.push(newDepartment);
           existingNames.add(trimmedName.toLowerCase()); // 新しく追加した部署名も重複チェック対象に追加
           successCount++;
@@ -550,7 +549,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           errorCount++;
         }
       }
-
+      
       console.log(`部署一括作成結果: 成功=${successCount}, スキップ=${skipCount}, エラー=${errorCount}`);
 
       console.log("部署一括作成成功:", results.length, "件");
@@ -569,10 +568,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const currentUser = (req as any).user;
       console.log("部署作成リクエスト:", JSON.stringify(req.body));
       const data = insertDepartmentSchema.parse(req.body);
-
+      
       // 部署作成
       const newDepartment = await storage.createDepartment(data);
-
+      
       console.log("部署作成成功:", newDepartment.id, newDepartment.name);
       return res.json(newDepartment);
     } catch (error) {
@@ -589,16 +588,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       console.log("部署更新リクエスト:", id, JSON.stringify(req.body));
       const data = insertDepartmentSchema.parse(req.body);
-
+      
       // 部署存在確認
       const department = await storage.getDepartment(id);
       if (!department) {
         return res.status(404).json({ message: "部署が見つかりません" });
       }
-
+      
       // 部署更新
       const updatedDepartment = await storage.updateDepartment(id, data);
-
+      
       console.log("部署更新成功:", updatedDepartment.id, updatedDepartment.name);
       return res.json(updatedDepartment);
     } catch (error) {
@@ -615,16 +614,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const currentUser = (req as any).user;
       console.log("部署削除リクエスト:", id, "by", currentUser.id, currentUser.name);
-
+      
       // 部署存在確認
       const department = await storage.getDepartment(id);
       if (!department) {
         return res.status(404).json({ message: "部署が見つかりません" });
       }
-
+      
       // 部署削除
       await storage.deleteDepartment(id);
-
+      
       console.log("部署削除成功:", id);
       return res.json({ message: "部署を削除しました" });
     } catch (error) {
@@ -632,21 +631,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "部署の削除に失敗しました" });
     }
   });
-
+  
   // 部署一括削除API
   app.post("/api/departments/batch-delete", authenticate, async (req, res) => {
     try {
       const currentUser = (req as any).user;
       console.log("部署一括削除リクエスト:", JSON.stringify(req.body));
       const { departmentIds } = req.body;
-
+      
       if (!departmentIds || !Array.isArray(departmentIds) || departmentIds.length === 0) {
         return res.status(400).json({ message: "有効な部署IDが提供されていません" });
       }
-
+      
       console.log("部署一括削除処理 - ユーザー:", currentUser.id, currentUser.name);
       console.log("部署一括削除処理 - 件数:", departmentIds.length);
-
+      
       // 削除結果を追跡
       let successCount = 0;
       let notFoundCount = 0;
@@ -656,7 +655,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         notFound: [] as number[],
         error: [] as number[]
       };
-
+      
       // 各部署を順番に削除
       for (const id of departmentIds) {
         try {
@@ -668,7 +667,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             results.notFound.push(id);
             continue;
           }
-
+          
           // 部署削除
           await storage.deleteDepartment(id);
           console.log(`部署ID:${id}(${department.name})を削除しました`);
@@ -680,9 +679,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           results.error.push(id);
         }
       }
-
+      
       console.log(`部署一括削除結果: 成功=${successCount}, 未存在=${notFoundCount}, エラー=${errorCount}`);
-
+      
       return res.json({
         message: `${successCount}件の部署を削除しました`,
         results: {
