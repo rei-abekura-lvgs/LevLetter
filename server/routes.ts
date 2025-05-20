@@ -393,8 +393,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("パスワードリセット - ユーザー情報:", { id: user.id, email: user.email });
       
-      // パスワードのハッシュ化 - シンプルなハッシュ化処理を直接記述
-      const hashedPassword = require('crypto').createHash('sha256').update(password).digest('hex');
+      // パスワードのハッシュ化 - importしたcryptoモジュールを使用
+      const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
       
       // ユーザー更新
       try {
