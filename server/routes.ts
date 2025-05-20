@@ -393,12 +393,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("パスワードリセット - ユーザー情報:", { id: user.id, email: user.email });
       
-      // パスワードのハッシュ化 - importしたcryptoモジュールを使用
-      const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
+      // パスワードを更新（storageクラスのupdateUser内でハッシュ化される）
       
       // ユーザー更新
       try {
-        await storage.updateUser(userIdNum, { password: hashedPassword });
+        await storage.updateUser(userIdNum, { password });
         console.log("パスワードリセット成功:", user.id, user.email);
       } catch (updateError) {
         console.error("ユーザー更新エラー:", updateError);
