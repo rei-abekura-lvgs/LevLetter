@@ -299,10 +299,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // リセットメール送信
       try {
-        // リセットURL作成
-        const resetUrl = `/reset-password/${resetToken}`;
-        // メール内に表示するトークン
+        // ベースURLの設定 - 環境変数から取得または現在のホストから生成
+        const host = req.get('host') || '39d5973c-7a1f-41b4-be1d-15a49ae7ac36.id.repl.co';
+        const protocol = req.protocol || 'https';
+        const baseUrl = process.env.BASE_URL || `${protocol}://${host}`;
+        
+        // 完全なリセットURL作成
+        const resetUrl = `${baseUrl}/reset-password/${resetToken}`;
+        
+        // メール内に表示するトークン（完全なURL）
         const resetToken_forDisplay = resetToken;
+        
         console.log("生成したリセットURL:", resetUrl);
         
         // ユーザー名を正しく取得
