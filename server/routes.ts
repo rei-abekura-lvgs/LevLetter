@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import { hashPassword } from "./storage";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
+import { users } from "@shared/schema";
 import {
   registerSchema,
   loginSchema,
@@ -393,10 +396,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("パスワードリセット - ユーザー情報:", { id: user.id, email: user.email });
       
-      // パスワードを更新（storageクラスのupdateUser内でハッシュ化される）
+      // パスワードを直接ハッシュ化してから更新する
+      const hashedPassword = hashPassword(password);
+      console.log("パスワードハッシュ化 - 長さ:", hashedPassword.length);
       
-      // ユーザー更新
+      // ユーザー更新 - ストレージクラスを使用して更新
       try {
+        // ストレージクラス経由でパスワード更新（直接ハッシュ化したパスワードを渡す）
         await storage.updateUser(userIdNum, { password });
         console.log("パスワードリセット成功:", user.id, user.email);
       } catch (updateError) {
