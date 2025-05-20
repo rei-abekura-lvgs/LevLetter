@@ -88,7 +88,7 @@ export function getPasswordResetEmailTemplate({
         <p>以下のボタンをクリックしてパスワードリセット画面に移動してください：</p>
         
         <div style="text-align: center; margin: 30px 0;">
-          <a href="https://39d5973c-7a1f-41b4-be1d-15a49ae7ac36.id.repl.co/reset-password/${resetLink}" 
+          <a href="/reset-password/${resetLink}" 
              style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
             パスワードをリセットする
           </a>
@@ -120,7 +120,7 @@ export function getPasswordResetEmailTemplate({
 あなたのアカウントのパスワードリセットリクエストを受け付けました。
 
 以下のURLにアクセスしてパスワードをリセットしてください：
-https://39d5973c-7a1f-41b4-be1d-15a49ae7ac36.id.repl.co/reset-password/${resetLink}
+/reset-password/${resetLink}
 
 または、以下のリセットコードをコピーして直接入力することもできます：
 ${resetLink}
