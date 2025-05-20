@@ -94,15 +94,9 @@ export function getPasswordResetEmailTemplate({
           </a>
         </div>
         
-        <p>または、以下のリセットコードをコピーして直接入力することもできます：</p>
-        <p style="margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 4px; font-family: monospace; word-break: break-all;">
-          ${resetLink.split('/').pop()}
-        </p>
-        
         <p><strong>手順：</strong></p>
         <ol>
-          <li>上記のボタンをクリックするか、アプリを開いてパスワードリセット画面にアクセス</li>
-          <li>ボタンが機能しない場合は、コードをコピーして入力</li>
+          <li>上記のボタンをクリックしてパスワードリセット画面にアクセス</li>
           <li>新しいパスワードを設定</li>
         </ol>
         
@@ -122,13 +116,9 @@ export function getPasswordResetEmailTemplate({
 以下のURLにアクセスしてパスワードをリセットしてください：
 ${resetLink}
 
-または、以下のリセットコードをコピーして直接入力することもできます：
-${resetLink.split('/').pop()}
-
 手順：
-1. 上記のURLにアクセスするか、アプリを開いてパスワードリセット画面にアクセス
-2. URLが機能しない場合は、コードをコピーして入力
-3. 新しいパスワードを設定
+1. 上記のURLにアクセスしてパスワードリセット画面に移動
+2. 新しいパスワードを設定
 
 このコードは24時間有効です。リクエストしていない場合は、このメールを無視してください。
 何かご不明な点がございましたら、システム管理者にお問い合わせください。
