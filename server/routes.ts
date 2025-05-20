@@ -317,7 +317,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         const { html, text } = getPasswordResetEmailTemplate({
           userName: userName,
-          resetLink: resetToken_forDisplay
+          resetLink: resetUrl
         });
         
         await sendEmail({
