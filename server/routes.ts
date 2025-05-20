@@ -2,9 +2,9 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import jwt from "jsonwebtoken";
-import * as crypto from "crypto";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+import { hashPassword } from "./storage";
 import {
   registerSchema,
   loginSchema,

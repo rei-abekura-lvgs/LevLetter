@@ -22,11 +22,7 @@ function getRandomAvatarColor(): string {
   return DEFAULT_AVATAR_COLORS[randomIndex];
 }
 
-function hashPassword(password: string): string {
-  return crypto.createHash('sha256').update(password).digest('hex');
-}
-
-import { IStorage } from "./storage";
+import { IStorage, hashPassword } from "./storage";
 
 export class DatabaseStorage implements IStorage {
   // ユーザー関連

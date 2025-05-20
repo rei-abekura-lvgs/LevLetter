@@ -28,7 +28,7 @@ function getInitials(name: string): string {
     .join('');
 }
 
-function hashPassword(password: string): string {
+export function hashPassword(password: string): string {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
 
