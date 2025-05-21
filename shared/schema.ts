@@ -52,15 +52,7 @@ const departmentId = serial("id").primaryKey();
 // 部署テーブル
 export const departments = pgTable("departments", {
   id: departmentId,
-  code: text("code").notNull().unique(), // 部署コード (例: "IT" など)
   name: text("name").notNull().unique(), // 正式名称 (例: "情報システム部")
-  level1: text("level1").notNull().default(""), // 第1階層 (例: "全社")
-  level2: text("level2").notNull().default(""), // 第2階層 (例: "技術本部")
-  level3: text("level3").notNull().default(""), // 第3階層 (例: "システム統括部")
-  level4: text("level4").notNull().default(""), // 第4階層 (例: "情報システム部")
-  level5: text("level5").notNull().default(""), // 第5階層 (例: "インフラチーム")
-  fullPath: text("full_path").notNull().default(""), // 完全パス (例: "全社/技術本部/システム統括部/情報システム部/インフラチーム")
-  parentId: integer("parent_id"), // 親部署のID
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
