@@ -74,7 +74,7 @@ export default function UserManagement() {
   // 管理者権限更新ミューテーション
   const updateAdminMutation = useMutation({
     mutationFn: async ({ userId, isAdmin }: { userId: number; isAdmin: boolean }) => {
-      return apiRequest(`/api/admin/users/${userId}/admin`, "PATCH", { 
+      return apiRequest("PATCH", `/api/admin/users/${userId}/admin`, { 
         isAdmin 
       });
     },
@@ -97,7 +97,7 @@ export default function UserManagement() {
   // アクティブ状態更新ミューテーション
   const updateStatusMutation = useMutation({
     mutationFn: async ({ userId, isActive }: { userId: number; isActive: boolean }) => {
-      return apiRequest(`/api/admin/users/${userId}/status`, "PATCH", { 
+      return apiRequest("PATCH", `/api/admin/users/${userId}/status`, { 
         isActive 
       });
     },
