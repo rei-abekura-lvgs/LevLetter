@@ -338,39 +338,142 @@ export class DatabaseStorage implements IStorage {
 
   // 部署管理機能
   async getDepartments(): Promise<Department[]> {
-    return await db.select().from(departments).orderBy(asc(departments.name));
+    try {
+      // 実際のデータベース構造に合わせてカラムを選択
+      const depts = await db.select({
+        id: departments.id,
+        name: departments.name,
+        description: departments.description,
+        createdAt: departments.createdAt
+      }).from(departments).orderBy(asc(departments.name));
+      
+      // TypeScriptの型に合わせた形に変換（実際のDBにない項目にはデフォルト値を設定）
+      return depts.map(dept => ({
+        ...dept,
+        code: dept.name.substring(0, 2).toUpperCase(), // 名前の最初の2文字をコードとして使用
+        level1: "",  // デフォルト値
+        level2: "",
+        level3: "",
+        level4: "",
+        level5: "",
+        fullPath: dept.name,
+        parentId: null
+      }));
+    } catch (error) {
+      console.error("部署一覧取得エラー:", error);
+      return []; // エラー時は空配列を返す
+    }
   }
 
   async getDepartment(id: number): Promise<Department | undefined> {
-    const [department] = await db
-      .select()
+    try {
+      const [dept] = await db.select({
+        id: departments.id,
+        name: departments.name,
+        description: departments.description,
+        createdAt: departments.createdAt
+      })
       .from(departments)
       .where(eq(departments.id, id));
-    
-    return department;
+      
+      if (!dept) return undefined;
+      
+      // TypeScriptの型に合わせた形に変換
+      return {
+        ...dept,
+        code: dept.name.substring(0, 2).toUpperCase(),
+        level1: "",
+        level2: "",
+        level3: "",
+        level4: "",
+        level5: "",
+        fullPath: dept.name,
+        parentId: null
+      };
+    } catch (error) {
+      console.error(`部署ID ${id} 取得エラー:`, error);
+      return undefined;
+    }
   }
 
   async createDepartment(insertDepartment: InsertDepartment): Promise<Department> {
-    const [department] = await db
-      .insert(departments)
-      .values(insertDepartment)
-      .returning();
-    
-    return department;
+    try {
+      // 実際のDBにあるカラムのみを抽出
+      const dbValues = {
+        name: insertDepartment.name,
+        description: insertDepartment.description
+      };
+      
+      const [dept] = await db
+        .insert(departments)
+        .values(dbValues)
+        .returning();
+      
+      // TypeScriptの型に合わせた形に変換
+      return {
+        ...dept,
+        code: dept.name.substring(0, 2).toUpperCase(),
+        level1: "",
+        level2: "",
+        level3: "",
+        level4: "",
+        level5: "",
+        fullPath: dept.name,
+        parentId: null
+      };
+    } catch (error) {
+      console.error("部署作成エラー:", error);
+      throw error;
+    }
   }
 
   async updateDepartment(id: number, updates: Partial<Department>): Promise<Department> {
-    const [department] = await db
-      .update(departments)
-      .set(updates)
-      .where(eq(departments.id, id))
-      .returning();
+    try {
+      // 実際のDBにあるカラムのみを抽出
+      const dbUpdates: any = {};
+      if (updates.name) dbUpdates.name = updates.name;
+      if (updates.description) dbUpdates.description = updates.description;
+      
+      const [dept] = await db
+        .update(departments)
+        .set(dbUpdates)
+        .where(eq(departments.id, id))
+        .returning();
     
-    if (!department) {
-      throw new Error(`部署が見つかりません: ${id}`);
+      if (!dept) {
+        throw new Error(`部署が見つかりません: ${id}`);
+      }
+      
+      // TypeScriptの型に合わせた形に変換
+      return {
+        ...dept,
+        code: dept.name.substring(0, 2).toUpperCase(),
+        level1: "",
+        level2: "",
+        level3: "",
+        level4: "",
+        level5: "",
+        fullPath: dept.name,
+        parentId: null
+      };
+    } catch (error) {
+      console.error(`部署ID ${id} の更新エラー:`, error);
+      throw error;
     }
-    
-    return department;
+  }
+  
+  async deleteDepartment(id: number): Promise<void> {
+    try {
+      // 部署を削除
+      await db
+        .delete(departments)
+        .where(eq(departments.id, id));
+        
+      console.log(`部署ID ${id} を削除しました`);
+    } catch (error) {
+      console.error(`部署ID ${id} の削除エラー:`, error);
+      throw error;
+    }
   }
 
   async deleteDepartment(id: number): Promise<void> {
