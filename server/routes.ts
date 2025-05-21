@@ -712,6 +712,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // 指定ユーザーIDリストの一括削除API（rei.abekura@leverages.jp以外）
+  app.post("/api/admin/users/bulk-delete", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const userIds = req.body.userIds as number[];
+      if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+        return res.status(400).json({ message: "削除対象のユーザーIDが指定されていません" });
+      }
+      
+      // protected admin check (ID: 5, rei.abekura@leverages.jp)
+      const filteredIds = userIds.filter(id => id !== 5);
+      const protectedCount = userIds.length - filteredIds.length;
+      
+      console.log(`指定ユーザー一括削除リクエスト: ${filteredIds.length}人（保護されたユーザー: ${protectedCount}人）`);
+      
+      const deletePromises = filteredIds.map(async (id) => {
+        try {
+          await storage.deleteUser(id);
+          return { id, success: true };
+        } catch (err) {
+          console.error(`ユーザーID ${id} の削除に失敗:`, err);
+          return { id, success: false, error: (err as Error).message };
+        }
+      });
+      
+      const results = await Promise.all(deletePromises);
+      
+      const successCount = results.filter(r => r.success).length;
+      const failCount = results.filter(r => !r.success).length;
+      
+      console.log(`指定ユーザー一括削除完了: 成功=${successCount}, 失敗=${failCount}, 保護=${protectedCount}`);
+      
+      return res.json({
+        message: `${successCount}人のユーザーを削除しました`,
+        results,
+        protected: protectedCount
+      });
+    } catch (error) {
+      console.error("指定ユーザー一括削除処理エラー:", error);
+      return res.status(500).json({ message: "ユーザーの一括削除に失敗しました" });
+    }
+  });
+  
   // 開発用: 全ユーザー物理削除API（rei.abekura@leverages.jp以外）
   app.delete("/api/admin/users/delete-all", authenticate, checkAdmin, async (req, res) => {
     try {
@@ -726,15 +768,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .filter(user => user.email !== protectedEmail)
         .map(user => user.id);
       
-      console.log(`管理者API: 一括削除対象ユーザー ${userIdsToDelete.length}件`);
+      console.log(`管理者API: 全ユーザー一括削除開始 - 対象ユーザー ${userIdsToDelete.length}件`);
+      console.log(`削除対象ユーザーリスト:`, allUsers
+        .filter(user => user.email !== protectedEmail)
+        .map(user => ({ id: user.id, email: user.email, name: user.name }))
+      );
       
       // 削除実行
       let deletedCount = 0;
+      let failedUsers = [];
+      
       for (const userId of userIdsToDelete) {
         try {
+          console.log(`ユーザーID: ${userId} の削除処理開始...`);
+          
           // 関連するデータを削除
           // いいねの削除
-          await db.delete(likes).where(eq(likes.userId, userId));
+          const likesResult = await db.delete(likes).where(eq(likes.userId, userId));
           // 送信したカードを削除
           await db.delete(cards).where(eq(cards.senderId, userId));
           // 受信したカードの関連を削除 (recipientTypeが'user'の場合のみ)
