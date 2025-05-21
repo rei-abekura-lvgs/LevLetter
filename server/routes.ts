@@ -7,7 +7,7 @@ import { fromZodError } from "zod-validation-error";
 import { hashPassword } from "./storage";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
-import { users } from "@shared/schema";
+import { users, cards, likes, teamMembers } from "@shared/schema";
 import {
   registerSchema,
   loginSchema,
@@ -671,6 +671,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("管理者API: ユーザー一覧取得エラー:", error);
       res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
+    }
+  });
+  
+  // 開発用: 全ユーザー物理削除API（rei.abekura@leverages.jp以外）
+  app.delete("/api/admin/users/delete-all", authenticate, checkAdmin, async (req, res) => {
+    try {
+      // 保護されたユーザーのメールアドレス
+      const protectedEmail = "rei.abekura@leverages.jp";
+      
+      // 全ユーザー取得
+      const allUsers = await storage.getUsers();
+      
+      // 保護対象以外のユーザーIDを抽出
+      const userIdsToDelete = allUsers
+        .filter(user => user.email !== protectedEmail)
+        .map(user => user.id);
+      
+      console.log(`管理者API: 一括削除対象ユーザー ${userIdsToDelete.length}件`);
+      
+      // 削除実行
+      let deletedCount = 0;
+      for (const userId of userIdsToDelete) {
+        try {
+          // 関連するデータを削除
+          // いいねの削除
+          await db.delete(likes).where(eq(likes.userId, userId));
+          // 送信したカードを削除
+          await db.delete(cards).where(eq(cards.senderId, userId));
+          // 受信したカードの関連を削除 (recipientTypeが'user'の場合のみ)
+          await db.delete(cards).where(eq(cards.recipientId, userId)).where(eq(cards.recipientType, 'user'));
+          // チームメンバーシップを削除
+          await db.delete(teamMembers).where(eq(teamMembers.userId, userId));
+          // ユーザーを削除
+          await db.delete(users).where(eq(users.id, userId));
+          
+          deletedCount++;
+        } catch (deleteError) {
+          console.error(`ユーザーID ${userId} の削除に失敗:`, deleteError);
+        }
+      }
+      
+      console.log(`管理者API: ユーザー一括削除成功 (${deletedCount}件)`);
+      res.json({ 
+        success: true, 
+        message: `${deletedCount}件のユーザーを削除しました（rei.abekura@leverages.jpは保護されています）`,
+        deletedCount 
+      });
+    } catch (error) {
+      console.error("管理者API: ユーザー一括削除 エラー", error);
+      res.status(500).json({ 
+        success: false,
+        message: "ユーザーの一括削除に失敗しました" 
+      });
     }
   });
 
