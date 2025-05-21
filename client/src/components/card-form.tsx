@@ -14,6 +14,14 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { 
   Card, 
   CardContent,
@@ -52,6 +60,9 @@ export default function CardForm({ onSent }: CardFormProps) {
   const departmentsByLevel: { [level: number]: string[] } = {
     1: [], // 階層レベル1の部署リスト
     2: [], // 階層レベル2の部署リスト
+    3: [], // 階層レベル3の部署リスト
+    4: [], // 階層レベル4の部署リスト
+    5: [], // 階層レベル5の部署リスト
   };
 
   // 部署名を階層レベルに分割（区切り文字: '/', '>', '　')
@@ -61,20 +72,18 @@ export default function CardForm({ onSent }: CardFormProps) {
     // 部署文字列を階層に分割
     const parts = user.department.split(/[\/\>　]/);
     
-    // 階層レベル1があれば追加（重複は避ける）
-    if (parts[0] && !departmentsByLevel[1].includes(parts[0].trim())) {
-      departmentsByLevel[1].push(parts[0].trim());
-    }
-    
-    // 階層レベル2があれば追加（重複は避ける）
-    if (parts[1] && !departmentsByLevel[2].includes(parts[1].trim())) {
-      departmentsByLevel[2].push(parts[1].trim());
+    // 各階層レベルを処理（最大5階層まで）
+    for (let i = 0; i < 5; i++) {
+      if (parts[i] && !departmentsByLevel[i+1].includes(parts[i].trim())) {
+        departmentsByLevel[i+1].push(parts[i].trim());
+      }
     }
   });
   
   // 各階層でソート
-  departmentsByLevel[1].sort();
-  departmentsByLevel[2].sort();
+  for (let i = 1; i <= 5; i++) {
+    departmentsByLevel[i].sort();
+  }
 
   // 検索とフィルター処理
   const filteredUsers = availableUsers.filter(u => {
@@ -279,75 +288,92 @@ export default function CardForm({ onSent }: CardFormProps) {
               </TabsContent>
               
               <TabsContent value="filter" className="mt-2">
-                {/* 階層1の部署選択 */}
-                <div className="mb-3">
-                  <h4 className="text-sm font-medium mb-2">所属階層1</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      type="button" 
-                      variant={selectedLevel1Department === null ? "default" : "outline"}
-                      className="text-xs h-9"
-                      onClick={() => {
-                        setSelectedLevel1Department(null);
+                <div className="space-y-4">
+                  {/* 階層式ドロップダウン: 所属階層1 */}
+                  <div>
+                    <Label className="text-sm font-medium block mb-1.5">所属階層1</Label>
+                    <Select 
+                      value={selectedLevel1Department || ""}
+                      onValueChange={(value: string) => {
+                        setSelectedLevel1Department(value || null);
                         setDepartmentFilter(null);
                       }}
                     >
-                      全部署
-                    </Button>
-                    {departmentsByLevel[1].map(dept => (
-                      <Button
-                        key={dept}
-                        type="button"
-                        variant={selectedLevel1Department === dept ? "default" : "outline"}
-                        className="text-xs h-9"
-                        onClick={() => {
-                          setSelectedLevel1Department(dept);
-                          setDepartmentFilter(null);
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="階層1の部署を選択" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">全ての部署</SelectItem>
+                        {departmentsByLevel[1].map(dept => (
+                          <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {/* 階層1が選択されている場合のみ階層2を表示 */}
+                  {selectedLevel1Department && (
+                    <div>
+                      <Label className="text-sm font-medium block mb-1.5">所属階層2</Label>
+                      <Select
+                        value={
+                          departmentFilter && departmentFilter.startsWith(selectedLevel1Department) 
+                            ? departmentFilter.replace(`${selectedLevel1Department}/`, "") 
+                            : ""
+                        }
+                        onValueChange={(value: string) => {
+                          if (value) {
+                            setDepartmentFilter(`${selectedLevel1Department}/${value}`);
+                          } else {
+                            setDepartmentFilter(null);
+                          }
                         }}
                       >
-                        {dept}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* 階層1が選択されている場合、関連する階層2の部署を表示 */}
-                {selectedLevel1Department && (
-                  <div className="mb-2">
-                    <h4 className="text-sm font-medium mb-2">所属階層2</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button
-                        type="button" 
-                        variant="outline"
-                        className="text-xs h-9"
-                        onClick={() => setDepartmentFilter(null)}
-                      >
-                        全て ({selectedLevel1Department})
-                      </Button>
-                      
-                      {/* 選択された階層1に関連する階層2の部署をフィルタリング */}
-                      {availableUsers
-                        .filter(u => u.department?.startsWith(selectedLevel1Department))
-                        .map(u => {
-                          const parts = u.department?.split(/[\/\>　]/);
-                          return parts && parts.length > 1 ? parts[1].trim() : null;
-                        })
-                        .filter((v, i, a) => v && a.indexOf(v) === i) // 重複を除去
-                        .map(dept => dept && (
-                          <Button
-                            key={dept}
-                            type="button"
-                            variant={departmentFilter === `${selectedLevel1Department}/${dept}` ? "default" : "outline"}
-                            className="text-xs h-9"
-                            onClick={() => setDepartmentFilter(`${selectedLevel1Department}/${dept}`)}
-                          >
-                            {dept}
-                          </Button>
-                        ))
-                      }
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder={`${selectedLevel1Department}内の部署を選択`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">全て ({selectedLevel1Department})</SelectItem>
+                          {availableUsers
+                            .filter(u => u.department?.startsWith(selectedLevel1Department))
+                            .map(u => {
+                              const parts = u.department?.split(/[\/\>　]/);
+                              return parts && parts.length > 1 ? parts[1].trim() : null;
+                            })
+                            .filter((v, i, a) => v && a.indexOf(v) === i) // 重複を除去
+                            .map(dept => dept && (
+                              <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                            ))
+                          }
+                        </SelectContent>
+                      </Select>
                     </div>
-                  </div>
-                )}
+                  )}
+                  
+                  {/* 現在の部署フィルター表示 */}
+                  {(selectedLevel1Department || departmentFilter) && (
+                    <div className="pt-2">
+                      <p className="text-xs text-gray-500">現在のフィルター:</p>
+                      <p className="text-sm font-medium">
+                        {departmentFilter || selectedLevel1Department || "全部署"}
+                      </p>
+                      {(selectedLevel1Department || departmentFilter) && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs mt-1 h-8 px-2 text-gray-500"
+                          onClick={() => {
+                            setSelectedLevel1Department(null);
+                            setDepartmentFilter(null);
+                          }}
+                        >
+                          <X size={12} className="mr-1" />
+                          フィルターをクリア
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </TabsContent>
             </Tabs>
             
