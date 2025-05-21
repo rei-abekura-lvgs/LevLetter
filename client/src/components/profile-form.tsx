@@ -62,13 +62,12 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
   const form = useForm({
     resolver: zodResolver(profileUpdateSchema),
     defaultValues: {
-      displayName: user.displayName || user.name,
-      department: user.department || null
+      displayName: user.displayName || user.name
     }
   });
 
   const updateProfileMutation = useMutation({
-    mutationFn: (data: { displayName: string, department?: string | null }) => updateProfile(user.id, data),
+    mutationFn: (data: { displayName: string }) => updateProfile(user.id, data),
     onSuccess: () => {
       // キャッシュを更新
       queryClient.invalidateQueries({
@@ -93,14 +92,10 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
     }
   });
 
-  const onSubmit = (data: { displayName: string, department?: string | null }) => {
-    // 「未設定」が選択された場合はnullとして送信
-    const updatedData = {
-      ...data,
-      department: data.department === "none_selected" ? null : data.department
-    };
-    console.log("送信データ:", updatedData);
-    updateProfileMutation.mutate(updatedData);
+  const onSubmit = (data: { displayName: string }) => {
+    // 部署変更は無効化されたので、表示名のみ更新
+    console.log("送信データ:", data);
+    updateProfileMutation.mutate(data);
   };
 
   // ユーザーのイニシャル
@@ -155,37 +150,16 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                 />
               </FormItem>
               
-              <FormField
-                control={form.control}
-                name="department"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>部署</FormLabel>
-                    <FormControl>
-                      <Select 
-                        onValueChange={field.onChange}
-                        value={field.value || undefined}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="部署を選択してください" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>部署一覧</SelectLabel>
-                            <SelectItem value="none_selected">未設定</SelectItem>
-                            {departments.map((dept) => (
-                              <SelectItem key={dept.id} value={dept.name}>
-                                {dept.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <FormItem>
+                <FormLabel>部署</FormLabel>
+                <Input
+                  type="text"
+                  value={user.department || "未設定"}
+                  disabled
+                  className="bg-gray-50"
+                />
+                <p className="text-xs text-gray-500 mt-1">部署は管理者によって設定されます</p>
+              </FormItem>
             </form>
           </Form>
           

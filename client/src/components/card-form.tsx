@@ -37,6 +37,7 @@ export default function CardForm({ onSent }: CardFormProps) {
   const [selectedRecipients, setSelectedRecipients] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState<string | null>(null);
+  const [selectedLevel1Department, setSelectedLevel1Department] = useState<string | null>(null);
 
   // ユーザー情報を取得
   const { data: users = [], isLoading: isLoadingUsers } = useQuery<User[]>({
@@ -47,12 +48,33 @@ export default function CardForm({ onSent }: CardFormProps) {
   // 現在のユーザーを除外
   const availableUsers = users.filter(u => u.id !== user?.id);
 
-  // 部署リストを取得（重複を除く）
-  const departments = Array.from(new Set(
-    availableUsers
-      .map(u => u.department)
-      .filter(Boolean) as string[]
-  )).sort();
+  // 階層的な部署リストを取得
+  const departmentsByLevel: { [level: number]: string[] } = {
+    1: [], // 階層レベル1の部署リスト
+    2: [], // 階層レベル2の部署リスト
+  };
+
+  // 部署名を階層レベルに分割（区切り文字: '/', '>', '　')
+  availableUsers.forEach(user => {
+    if (!user.department) return;
+    
+    // 部署文字列を階層に分割
+    const parts = user.department.split(/[\/\>　]/);
+    
+    // 階層レベル1があれば追加（重複は避ける）
+    if (parts[0] && !departmentsByLevel[1].includes(parts[0].trim())) {
+      departmentsByLevel[1].push(parts[0].trim());
+    }
+    
+    // 階層レベル2があれば追加（重複は避ける）
+    if (parts[1] && !departmentsByLevel[2].includes(parts[1].trim())) {
+      departmentsByLevel[2].push(parts[1].trim());
+    }
+  });
+  
+  // 各階層でソート
+  departmentsByLevel[1].sort();
+  departmentsByLevel[2].sort();
 
   // 検索とフィルター処理
   const filteredUsers = availableUsers.filter(u => {
@@ -63,8 +85,19 @@ export default function CardForm({ onSent }: CardFormProps) {
        (u.email && u.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
        (u.department && u.department.toLowerCase().includes(searchQuery.toLowerCase())));
     
-    // 部署フィルターがある場合は部署で絞り込み
-    const matchesDepartment = !departmentFilter || u.department === departmentFilter;
+    // 部署フィルターの処理
+    let matchesDepartment = true;
+    
+    if (departmentFilter) {
+      // 完全一致の場合
+      matchesDepartment = u.department === departmentFilter;
+    } else if (selectedLevel1Department) {
+      // 階層レベル1が選択されている場合、その部署で始まるユーザーを絞り込み
+      matchesDepartment = u.department?.startsWith(selectedLevel1Department + '/') || 
+                          u.department?.startsWith(selectedLevel1Department + '>') || 
+                          u.department?.startsWith(selectedLevel1Department + '　') || 
+                          u.department === selectedLevel1Department;
+    }
     
     return matchesSearch && matchesDepartment;
   });
@@ -246,27 +279,75 @@ export default function CardForm({ onSent }: CardFormProps) {
               </TabsContent>
               
               <TabsContent value="filter" className="mt-2">
-                <div className="grid grid-cols-2 gap-2">
-                  <Button
-                    type="button" 
-                    variant={departmentFilter === null ? "default" : "outline"}
-                    className="text-xs h-9"
-                    onClick={() => setDepartmentFilter(null)}
-                  >
-                    全部署
-                  </Button>
-                  {departments.map(dept => (
+                {/* 階層1の部署選択 */}
+                <div className="mb-3">
+                  <h4 className="text-sm font-medium mb-2">所属階層1</h4>
+                  <div className="grid grid-cols-2 gap-2">
                     <Button
-                      key={dept}
-                      type="button"
-                      variant={departmentFilter === dept ? "default" : "outline"}
+                      type="button" 
+                      variant={selectedLevel1Department === null ? "default" : "outline"}
                       className="text-xs h-9"
-                      onClick={() => setDepartmentFilter(dept)}
+                      onClick={() => {
+                        setSelectedLevel1Department(null);
+                        setDepartmentFilter(null);
+                      }}
                     >
-                      {dept}
+                      全部署
                     </Button>
-                  ))}
+                    {departmentsByLevel[1].map(dept => (
+                      <Button
+                        key={dept}
+                        type="button"
+                        variant={selectedLevel1Department === dept ? "default" : "outline"}
+                        className="text-xs h-9"
+                        onClick={() => {
+                          setSelectedLevel1Department(dept);
+                          setDepartmentFilter(null);
+                        }}
+                      >
+                        {dept}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
+                
+                {/* 階層1が選択されている場合、関連する階層2の部署を表示 */}
+                {selectedLevel1Department && (
+                  <div className="mb-2">
+                    <h4 className="text-sm font-medium mb-2">所属階層2</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button
+                        type="button" 
+                        variant="outline"
+                        className="text-xs h-9"
+                        onClick={() => setDepartmentFilter(null)}
+                      >
+                        全て ({selectedLevel1Department})
+                      </Button>
+                      
+                      {/* 選択された階層1に関連する階層2の部署をフィルタリング */}
+                      {availableUsers
+                        .filter(u => u.department?.startsWith(selectedLevel1Department))
+                        .map(u => {
+                          const parts = u.department?.split(/[\/\>　]/);
+                          return parts && parts.length > 1 ? parts[1].trim() : null;
+                        })
+                        .filter((v, i, a) => v && a.indexOf(v) === i) // 重複を除去
+                        .map(dept => dept && (
+                          <Button
+                            key={dept}
+                            type="button"
+                            variant={departmentFilter === `${selectedLevel1Department}/${dept}` ? "default" : "outline"}
+                            className="text-xs h-9"
+                            onClick={() => setDepartmentFilter(`${selectedLevel1Department}/${dept}`)}
+                          >
+                            {dept}
+                          </Button>
+                        ))
+                      }
+                    </div>
+                  </div>
+                )}
               </TabsContent>
             </Tabs>
             
