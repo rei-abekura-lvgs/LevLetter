@@ -51,7 +51,18 @@ export default function DepartmentManagement() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
-  const [newDepartment, setNewDepartment] = useState({
+  const [newDepartment, setNewDepartment] = useState<{
+    code: string;
+    name: string;
+    level1: string;
+    level2: string;
+    level3: string;
+    level4: string;
+    level5: string;
+    fullPath: string;
+    parentId: number | null;
+    description: string;
+  }>({
     code: "",
     name: "",
     level1: "",
