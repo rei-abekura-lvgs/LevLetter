@@ -670,8 +670,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 静的ファイルの配信
-  serveStatic(app);
+  // 開発環境では静的ファイルの配信はViteが行うので、
+  // 本番環境でのみ静的ファイル配信を設定
+  if (process.env.NODE_ENV === "production") {
+    serveStatic(app);
+  }
 
   const httpServer = createServer(app);
   return httpServer;
