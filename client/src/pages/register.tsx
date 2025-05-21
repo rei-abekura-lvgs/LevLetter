@@ -5,21 +5,14 @@ import { Link, useLocation } from "wouter";
 import { z } from "zod";
 import { registerSchema } from "@shared/schema";
 import { register as registerUser } from "@/lib/auth";
-import { getDepartments } from "@/lib/api";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { apiRequest } from "@/lib/queryClient";
+import { InfoIcon, CheckCircle, XCircle } from "lucide-react";
 
 // バリデーションルールを拡張
 const extendedRegisterSchema = registerSchema.extend({
@@ -28,7 +21,7 @@ const extendedRegisterSchema = registerSchema.extend({
 }).refine(data => data.password === data.confirmPassword, {
   message: "パスワードが一致しません",
   path: ["confirmPassword"]
-});
+}).omit({ name: true, department: true });  // 名前と部署を省略
 
 type RegisterFormValues = z.infer<typeof extendedRegisterSchema>;
 
@@ -37,55 +30,69 @@ export default function Register() {
   const { fetchUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [departments, setDepartments] = useState<{id: number, name: string}[]>([]);
-
-  useEffect(() => {
-    // 部署一覧を取得
-    const fetchDepartments = async () => {
-      try {
-        const data = await getDepartments();
-        setDepartments(data);
-      } catch (error) {
-        console.error("部署一覧取得エラー:", error);
-        toast({
-          title: "エラー",
-          description: "部署情報の取得に失敗しました",
-          variant: "destructive",
-        });
-      }
-    };
-
-    fetchDepartments();
-  }, [toast]);
+  const [emailVerified, setEmailVerified] = useState<boolean | null>(null);
+  const [verifyingEmail, setVerifyingEmail] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(extendedRegisterSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
       confirmPassword: "",
-      department: "",
     },
   });
 
+  // メールアドレスの検証
+  const verifyEmail = async (email: string) => {
+    if (!email || !email.includes('@')) return;
+    
+    setVerifyingEmail(true);
+    try {
+      const response = await apiRequest("GET", `/api/auth/verify-email?email=${encodeURIComponent(email)}`);
+      setEmailVerified(response.exists === true);
+    } catch (error) {
+      console.error("メール検証エラー:", error);
+      setEmailVerified(false);
+    } finally {
+      setVerifyingEmail(false);
+    }
+  };
+
+  // メールアドレスが変更されたときに検証
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'email' && value.email) {
+        const timer = setTimeout(() => verifyEmail(value.email), 1000);
+        return () => clearTimeout(timer);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
+
   async function onSubmit(data: RegisterFormValues) {
+    if (emailVerified !== true) {
+      toast({
+        title: "検証エラー",
+        description: "メールアドレスが事前登録されていないため、アカウントを作成できません。",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
-      // 確認用のパスワードを除外し、新しいオブジェクトを作成
+      // 登録データを準備
       const registerData = {
         email: data.email,
-        name: data.name,
         password: data.password,
-        department: data.department === "none_selected" ? null : data.department
       };
       
-      console.log("送信データ:", registerData); // デバッグ用
+      console.log("送信データ:", registerData);
       const response = await registerUser(registerData);
       
       console.log("登録成功レスポンス:", response);
       
-      // ユーザーコンテキストを更新（ユーザー情報を再取得）
+      // ユーザーコンテキストを更新
       await fetchUser();
       
       // 成功メッセージを表示
@@ -94,12 +101,10 @@ export default function Register() {
         description: "LevLetterへようこそ！",
       });
       
-      // SPAルーティングを使用して画面遷移
-      console.log("ホーム画面への遷移を実行します");
+      // ホームページに遷移
       setLocation("/");
     } catch (error) {
       console.error("登録エラー:", error);
-      // エラーの詳細情報を表示
       if (error instanceof Response) {
         const errorText = await error.text();
         console.error("サーバーエラー詳細:", errorText);
@@ -129,21 +134,33 @@ export default function Register() {
         </p>
       </div>
 
+      <Alert className="bg-blue-50 border-blue-200">
+        <InfoIcon className="h-4 w-4 text-blue-500" />
+        <AlertDescription className="text-blue-700">
+          アカウント作成には管理者が事前登録したメールアドレスが必要です。
+        </AlertDescription>
+      </Alert>
+
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="name">名前</Label>
-          <Input
-            id="name"
-            placeholder="山田 太郎"
-            {...form.register("name")}
-          />
-          {form.formState.errors.name && (
-            <p className="text-sm text-red-500">{form.formState.errors.name.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="email">メールアドレス</Label>
+          <Label htmlFor="email" className="flex justify-between">
+            <span>メールアドレス</span>
+            {emailVerified !== null && !verifyingEmail && (
+              <span className="flex items-center text-xs">
+                {emailVerified ? (
+                  <>
+                    <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
+                    <span className="text-green-600">登録済みアドレス</span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="h-3 w-3 text-red-500 mr-1" />
+                    <span className="text-red-600">未登録アドレス</span>
+                  </>
+                )}
+              </span>
+            )}
+          </Label>
           <Input
             id="email"
             type="email"
@@ -179,33 +196,11 @@ export default function Register() {
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="department">部署</Label>
-          <Select 
-            onValueChange={(value) => form.setValue("department", value)}
-            defaultValue={form.getValues("department")}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="部署を選択してください" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>部署一覧</SelectLabel>
-                <SelectItem value="none_selected">未設定</SelectItem>
-                {departments.map((dept) => (
-                  <SelectItem key={dept.id} value={dept.name}>
-                    {dept.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          {form.formState.errors.department && (
-            <p className="text-sm text-red-500">{form.formState.errors.department.message}</p>
-          )}
-        </div>
-
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          className="w-full" 
+          disabled={isLoading || emailVerified !== true}
+        >
           {isLoading ? "登録中..." : "アカウント作成"}
         </Button>
       </form>

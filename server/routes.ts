@@ -192,6 +192,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
     }
   });
+  
+  // メールアドレスの存在確認API（サインアップ前の検証用）
+  app.get("/api/auth/verify-email", async (req, res) => {
+    try {
+      const { email } = req.query;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ message: "メールアドレスは必須です" });
+      }
+      
+      console.log(`メールアドレス検証: ${email}`);
+      
+      // 既存ユーザーをチェック
+      const user = await storage.getUserByEmail(email);
+      
+      // ユーザーが存在しないか、パスワードが設定されている場合
+      if (user && user.password) {
+        return res.json({ exists: false, message: "このメールアドレスは既に使用されています" });
+      }
+      
+      // CSVインポートされているが、パスワード未設定の場合
+      if (user && !user.password) {
+        return res.json({ exists: true, message: "このメールアドレスは登録可能です" });
+      }
+      
+      // ユーザーが存在しない場合
+      return res.json({ exists: false, message: "このメールアドレスは事前登録されていません" });
+    } catch (error) {
+      console.error("メールアドレス検証エラー:", error);
+      return res.status(500).json({ message: "メールアドレスの検証に失敗しました" });
+    }
+  });
 
   // カードAPI
   app.get("/api/cards", authenticate, async (req, res) => {
