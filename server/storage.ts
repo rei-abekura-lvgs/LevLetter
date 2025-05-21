@@ -729,6 +729,70 @@ export class MemStorage implements IStorage {
 
     this.likes.delete(id);
   }
+  
+  // ユーザー物理削除（開発用）
+  async deleteUser(id: number): Promise<void> {
+    if (!this.users.has(id)) {
+      throw new Error(`User with ID ${id} not found`);
+    }
+    
+    console.log(`ユーザーID ${id} の削除を開始`);
+    
+    // 1. ユーザーに紐づくカードといいねを削除
+    const userCardsToDelete: number[] = [];
+    this.cards.forEach((card, cardId) => {
+      if (card.senderId === id || card.recipientId === id) {
+        userCardsToDelete.push(cardId);
+      }
+    });
+    
+    // カードに紐づくいいねを削除し、カード自体も削除
+    for (const cardId of userCardsToDelete) {
+      const cardLikesToDelete: number[] = [];
+      this.likes.forEach((like, likeId) => {
+        if (like.cardId === cardId) {
+          cardLikesToDelete.push(likeId);
+        }
+      });
+      
+      // いいねを削除
+      for (const likeId of cardLikesToDelete) {
+        this.likes.delete(likeId);
+      }
+      
+      // カードを削除
+      this.cards.delete(cardId);
+    }
+    
+    // 2. ユーザーが行ったいいねを削除
+    const userLikesToDelete: number[] = [];
+    this.likes.forEach((like, likeId) => {
+      if (like.userId === id) {
+        userLikesToDelete.push(likeId);
+      }
+    });
+    
+    for (const likeId of userLikesToDelete) {
+      this.likes.delete(likeId);
+    }
+    
+    // 3. チームメンバーシップを削除
+    const teamMembershipsToDelete: number[] = [];
+    this.teamMembers.forEach((member, memberId) => {
+      if (member.userId === id) {
+        teamMembershipsToDelete.push(memberId);
+      }
+    });
+    
+    for (const memberId of teamMembershipsToDelete) {
+      this.teamMembers.delete(memberId);
+    }
+    
+    // 4. ユーザーを削除
+    this.users.delete(id);
+    
+    console.log(`ユーザーID ${id} の削除が完了しました`);
+  }
 }
 
 // PostgreSQLデータベースを使用するストレージへ切り替え

@@ -46,9 +46,12 @@ export const likes = pgTable("likes", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// 部署テーブル用IDの型を定義
+const departmentId = serial("id").primaryKey();
+
 // 部署テーブル
 export const departments = pgTable("departments", {
-  id: serial("id").primaryKey(),
+  id: departmentId,
   code: text("code").notNull().unique(), // 部署コード (例: "IT" など)
   name: text("name").notNull().unique(), // 正式名称 (例: "情報システム部")
   level1: text("level1").notNull().default(""), // 第1階層 (例: "全社")
@@ -57,7 +60,7 @@ export const departments = pgTable("departments", {
   level4: text("level4").notNull().default(""), // 第4階層 (例: "情報システム部")
   level5: text("level5").notNull().default(""), // 第5階層 (例: "インフラチーム")
   fullPath: text("full_path").notNull().default(""), // 完全パス (例: "全社/技術本部/システム統括部/情報システム部/インフラチーム")
-  parentId: integer("parent_id").references(() => departments.id), // 親部署のID
+  parentId: integer("parent_id"), // 親部署のID
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
