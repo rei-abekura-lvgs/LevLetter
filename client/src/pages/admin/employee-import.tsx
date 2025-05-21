@@ -1,47 +1,17 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "@/lib/queryClient";
-import { UploadCloud, AlertCircle, FileText, CheckCircle, X, HelpCircle, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Textarea } from "@/components/ui/textarea";
+import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Upload, FileText, AlertCircle, CheckCircle2, Info } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import Papa from 'papaparse';
 
-// 従業員データの型定義
-interface EmployeeData {
-  employeeId: string;
-  name: string;
-  displayName: string;
-  email: string;
-  department: string;
-  departmentCode: string;
-  position?: string;
-}
-
-// インポート結果の型定義
 interface ImportResult {
   success: boolean;
   newUsers: number;
@@ -49,329 +19,343 @@ interface ImportResult {
   errors: string[];
 }
 
+interface CsvEmployee {
+  email: string;
+  name: string;
+  employeeId: string;
+  displayName?: string;
+  department?: string;
+}
+
+const SAMPLE_CSV = `email,name,employeeId,displayName,department
+tanaka@example.com,田中太郎,E001,タナカ,営業部
+yamada@example.com,山田花子,E002,ヤマダ,マーケティング部
+suzuki@example.com,鈴木一郎,E003,スズキ,開発部`;
+
 export default function EmployeeImport() {
   const { toast } = useToast();
-  const [csvData, setCsvData] = useState("");
-  const [previewData, setPreviewData] = useState<EmployeeData[]>([]);
-  const [showPreview, setShowPreview] = useState(false);
-  const [importStep, setImportStep] = useState<"input" | "preview" | "result">("input");
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<CsvEmployee[]>([]);
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
+  const [isPreviewMode, setIsPreviewMode] = useState(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // CSVデータのパース
-  const parseCSVData = () => {
-    try {
-      // 入力テキストを行に分割
-      const lines = csvData.trim().split('\n');
-      if (lines.length <= 1) {
-        toast({
-          variant: "destructive",
-          title: "エラー",
-          description: "データが少なすぎます。適切なCSVデータを入力してください。",
-        });
-        return;
-      }
+  // CSVファイルのパース
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
 
-      // ヘッダー行を取得
-      const headers = lines[0].split(',').map(header => header.trim());
-      const expectedHeaders = ['社員番号', '氏名', '職場氏名', '会社メールアドレス', '所属部門', '所属コード'];
-      
-      // ヘッダー検証
-      const missingHeaders = expectedHeaders.filter(header => 
-        !headers.some(h => h.includes(header))
-      );
-      
-      if (missingHeaders.length > 0) {
-        toast({
-          variant: "destructive",
-          title: "ヘッダーエラー",
-          description: `必要なヘッダーが見つかりません: ${missingHeaders.join(', ')}`,
-        });
-        return;
-      }
+    setFile(selectedFile);
+    setImportResult(null);
 
-      // ヘッダーのインデックスを特定
-      const employeeIdIndex = headers.findIndex(h => h.includes('社員番号'));
-      const nameIndex = headers.findIndex(h => h.includes('氏名'));
-      const displayNameIndex = headers.findIndex(h => h.includes('職場氏名'));
-      const emailIndex = headers.findIndex(h => h.includes('会社メールアドレス'));
-      const departmentIndex = headers.findIndex(h => h.includes('所属部門'));
-      const departmentCodeIndex = headers.findIndex(h => h.includes('所属コード'));
-      
-      // データ行を処理
-      const parsedData: EmployeeData[] = [];
-      for (let i = 1; i < lines.length; i++) {
-        // 空行をスキップ
-        if (!lines[i].trim()) continue;
+    // CSVのパース
+    Papa.parse(selectedFile, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        // 必須フィールドのチェック
+        const validData = results.data.filter((row: any) => 
+          row.email && row.name && row.employeeId
+        ) as CsvEmployee[];
         
-        const values = lines[i].split(',').map(val => val.trim());
-        if (values.length < 6) continue; // 不完全な行をスキップ
-        
-        const employee: EmployeeData = {
-          employeeId: values[employeeIdIndex],
-          name: values[nameIndex],
-          displayName: values[displayNameIndex],
-          email: values[emailIndex],
-          department: values[departmentIndex],
-          departmentCode: values[departmentCodeIndex],
-          position: values[headers.findIndex(h => h.includes('職種'))] || undefined
-        };
-        
-        parsedData.push(employee);
+        setPreview(validData.slice(0, 10)); // 先頭10件をプレビュー表示
+        setIsPreviewMode(true);
       }
-      
-      if (parsedData.length === 0) {
-        toast({
-          variant: "destructive",
-          title: "エラー",
-          description: "有効なデータが見つかりませんでした。",
+    });
+  };
+
+  // インポート処理
+  const importMutation = useMutation({
+    mutationFn: async () => {
+      if (!file) return null;
+
+      return new Promise<ImportResult>((resolve) => {
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: true,
+          complete: async (results) => {
+            try {
+              // 必須フィールドのチェック
+              const validData = results.data.filter((row: any) => 
+                row.email && row.name && row.employeeId
+              ) as CsvEmployee[];
+
+              // APIリクエスト
+              const response = await apiRequest('/api/admin/employees/import', {
+                method: 'POST',
+                data: { employees: validData }
+              });
+              
+              resolve(response as ImportResult);
+            } catch (error) {
+              console.error('Import error:', error);
+              resolve({
+                success: false,
+                newUsers: 0,
+                updatedUsers: 0,
+                errors: [(error as Error).message || '不明なエラーが発生しました']
+              });
+            }
+          },
+          error: (error) => {
+            resolve({
+              success: false,
+              newUsers: 0,
+              updatedUsers: 0,
+              errors: [error.message || 'CSVファイルの解析に失敗しました']
+            });
+          }
         });
-        return;
-      }
-      
-      setPreviewData(parsedData);
-      setImportStep("preview");
-      setShowPreview(true);
-      
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "パースエラー",
-        description: "データの解析中にエラーが発生しました。CSV形式を確認してください。",
       });
+    },
+    onSuccess: (data) => {
+      if (data) {
+        setImportResult(data);
+        setIsPreviewMode(false);
+        toast({
+          title: data.success ? 'インポート完了' : 'インポート完了（警告あり）',
+          description: `${data.newUsers}件新規追加、${data.updatedUsers}件更新しました。${data.errors.length > 0 ? `${data.errors.length}件のエラーが発生しました。` : ''}`,
+          variant: data.success && data.errors.length === 0 ? 'default' : 'destructive',
+        });
+      }
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'インポートエラー',
+        description: error.message || 'データのインポートに失敗しました',
+        variant: 'destructive',
+      });
+    }
+  });
+
+  // ファイル選択のリセット
+  const resetFileSelection = () => {
+    setFile(null);
+    setPreview([]);
+    setImportResult(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
-  // 従業員データのインポート処理
-  const importEmployees = useMutation({
-    mutationFn: async (data: EmployeeData[]) => {
-      const response = await fetch("/api/admin/employees/import", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ employees: data }),
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "データのインポートに失敗しました");
-      }
-      
-      return response.json();
-    },
-    onSuccess: (data: ImportResult) => {
-      setImportResult(data);
-      setImportStep("result");
-      toast({
-        title: "インポート完了",
-        description: `${data.newUsers}件の新規ユーザーと${data.updatedUsers}件の更新を完了しました。`,
-      });
-      
-      // 関連データを更新
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/departments"] });
-    },
-    onError: (error: Error) => {
-      toast({
-        variant: "destructive",
-        title: "インポートエラー",
-        description: error.message,
-      });
-    },
-  });
-
-  // インポート実行
-  const handleImport = () => {
-    importEmployees.mutate(previewData);
-  };
-
-  // インポート処理のリセット
-  const resetImport = () => {
-    setCsvData("");
-    setPreviewData([]);
-    setShowPreview(false);
-    setImportStep("input");
-    setImportResult(null);
+  // サンプルCSVのダウンロード
+  const downloadSampleCsv = () => {
+    const blob = new Blob([SAMPLE_CSV], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'employee_sample.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>従業員データインポート</CardTitle>
-        <CardDescription>CSVデータを使用して従業員情報を一括登録・更新します</CardDescription>
+        <CardDescription>
+          CSVファイルから従業員データを一括登録・更新します。
+          新規ユーザーはランダムパスワードで作成され、既存ユーザーは情報が更新されます。
+        </CardDescription>
       </CardHeader>
-      
       <CardContent>
-        {importStep === "input" && (
-          <>
-            <Alert className="mb-6">
-              <FileText className="h-4 w-4" />
-              <AlertTitle>CSVデータ形式</AlertTitle>
-              <AlertDescription>
-                人事システムからエクスポートしたCSVファイルを貼り付けてください。<br />
-                必須項目: 社員番号、氏名、職場氏名、会社メールアドレス、所属部門、所属コード
-              </AlertDescription>
-            </Alert>
-            
-            <Textarea
-              placeholder="CSVデータを貼り付けてください..."
-              className="min-h-[300px] font-mono text-sm"
-              value={csvData}
-              onChange={(e) => setCsvData(e.target.value)}
-            />
-            
-            <Accordion type="single" collapsible className="mt-4">
-              <AccordionItem value="format">
-                <AccordionTrigger>CSVフォーマット例</AccordionTrigger>
-                <AccordionContent>
-                  <pre className="bg-muted p-4 rounded-md text-xs overflow-auto">
-                    社員番号,氏名,職場氏名,会社メールアドレス,所属部門,所属コード,所属階層１,所属階層２,所属階層３,所属階層４,所属階層５,勤務地コード,勤務地名,職種コード,職種名<br />
-                    326901,阿部倉　怜,阿部倉　怜,rei.abekura@leverages.jp,SY,SY1000000000,システム本部,メディアシステム部,,,,67,渋谷一丁目支店2階,2,内勤開発
-                  </pre>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </>
-        )}
-        
-        {importStep === "preview" && (
-          <>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">データプレビュー</h3>
-              <Badge variant="outline" className="text-sm">
-                {previewData.length}件のデータ
-              </Badge>
-            </div>
-            
-            <div className="rounded-md border overflow-auto max-h-[400px]">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>社員番号</TableHead>
-                    <TableHead>氏名</TableHead>
-                    <TableHead>メールアドレス</TableHead>
-                    <TableHead>部署</TableHead>
-                    <TableHead>部署コード</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {previewData.map((employee, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{employee.employeeId}</TableCell>
-                      <TableCell>{employee.name}</TableCell>
-                      <TableCell>{employee.email}</TableCell>
-                      <TableCell>{employee.department}</TableCell>
-                      <TableCell>{employee.departmentCode}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            
-            <Alert className="mt-6">
-              <HelpCircle className="h-4 w-4" />
-              <AlertTitle>インポート前の確認</AlertTitle>
-              <AlertDescription>
-                上記のデータをインポートします。既存ユーザーは更新され、新規ユーザーが作成されます。<br />
-                ・メールアドレスが一致するユーザーは情報が更新されます<br />
-                ・存在しない部署は自動的に作成されます<br />
-                ・パスワードは設定されません（ユーザーが初回ログイン時に設定）
-              </AlertDescription>
-            </Alert>
-          </>
-        )}
-        
-        {importStep === "result" && importResult && (
-          <>
-            <div className="mb-6 text-center">
-              {importResult.success ? (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="rounded-full bg-green-100 p-3">
-                    <CheckCircle className="h-8 w-8 text-green-600" />
+        <Tabs defaultValue="upload" className="w-full">
+          <TabsList>
+            <TabsTrigger value="upload">データアップロード</TabsTrigger>
+            <TabsTrigger value="help">使い方ガイド</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="upload" className="space-y-4">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex-1">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv"
+                  className="hidden"
+                  onChange={handleFileChange}
+                  id="csv-upload"
+                />
+                <label
+                  htmlFor="csv-upload"
+                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer bg-gray-50 hover:bg-gray-100"
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <Upload className="w-8 h-8 mb-2 text-gray-400" />
+                    <p className="mb-1 text-sm text-gray-500">
+                      <span className="font-semibold">CSVファイルをクリックして選択</span>
+                      またはドラッグ＆ドロップ
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      CSVファイルのみ (.csv)
+                    </p>
                   </div>
-                  <h3 className="text-xl font-semibold">インポート成功</h3>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="rounded-full bg-red-100 p-3">
-                    <AlertCircle className="h-8 w-8 text-red-600" />
+                </label>
+              </div>
+              
+              <div className="w-48">
+                <Button 
+                  variant="outline" 
+                  className="w-full" 
+                  onClick={downloadSampleCsv}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  サンプルCSV
+                </Button>
+              </div>
+            </div>
+
+            {file && (
+              <div className="p-4 border rounded-md bg-gray-50">
+                <div className="flex justify-between items-center mb-3">
+                  <div>
+                    <h3 className="text-sm font-medium">選択したファイル</h3>
+                    <p className="text-xs text-gray-500">{file.name} ({(file.size / 1024).toFixed(1)} KB)</p>
                   </div>
-                  <h3 className="text-xl font-semibold">一部エラーが発生しました</h3>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={resetFileSelection}
+                    >
+                      リセット
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => importMutation.mutate()}
+                      disabled={importMutation.isPending}
+                    >
+                      {importMutation.isPending ? 'インポート中...' : 'インポート実行'}
+                    </Button>
+                  </div>
                 </div>
-              )}
-            </div>
-            
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-center text-2xl">{previewData.length}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">処理対象レコード</CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-center text-2xl text-green-600">{importResult.newUsers}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">新規作成ユーザー</CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-center text-2xl text-blue-600">{importResult.updatedUsers}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">更新ユーザー</CardContent>
-              </Card>
-            </div>
-            
-            {importResult.errors.length > 0 && (
-              <Alert variant="destructive" className="mb-6">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>エラーが発生したレコード</AlertTitle>
+
+                {isPreviewMode && preview.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-sm font-medium mb-2">データプレビュー（最初の10件）</h4>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs border-collapse">
+                        <thead>
+                          <tr className="bg-gray-100">
+                            <th className="p-2 border text-left">メールアドレス</th>
+                            <th className="p-2 border text-left">名前</th>
+                            <th className="p-2 border text-left">従業員ID</th>
+                            <th className="p-2 border text-left">表示名</th>
+                            <th className="p-2 border text-left">部署</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {preview.map((row, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50">
+                              <td className="p-2 border">{row.email}</td>
+                              <td className="p-2 border">{row.name}</td>
+                              <td className="p-2 border">{row.employeeId}</td>
+                              <td className="p-2 border">{row.displayName || '-'}</td>
+                              <td className="p-2 border">{row.department || '-'}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {importResult && (
+                  <div className="mt-4 space-y-3">
+                    <h4 className="text-sm font-medium">インポート結果</h4>
+                    
+                    <div className="flex gap-4">
+                      <div className="p-3 bg-white rounded border flex-1 text-center">
+                        <p className="text-xs text-gray-500 mb-1">新規ユーザー</p>
+                        <p className="text-lg font-semibold text-green-600">{importResult.newUsers}</p>
+                      </div>
+                      <div className="p-3 bg-white rounded border flex-1 text-center">
+                        <p className="text-xs text-gray-500 mb-1">更新ユーザー</p>
+                        <p className="text-lg font-semibold text-blue-600">{importResult.updatedUsers}</p>
+                      </div>
+                      <div className="p-3 bg-white rounded border flex-1 text-center">
+                        <p className="text-xs text-gray-500 mb-1">エラー</p>
+                        <p className="text-lg font-semibold text-red-500">{importResult.errors.length}</p>
+                      </div>
+                    </div>
+                    
+                    {importResult.errors.length > 0 && (
+                      <Alert variant="destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>エラーが発生しました</AlertTitle>
+                        <AlertDescription>
+                          <ul className="list-disc pl-5 mt-2 text-sm">
+                            {importResult.errors.slice(0, 5).map((err, idx) => (
+                              <li key={idx}>{err}</li>
+                            ))}
+                            {importResult.errors.length > 5 && (
+                              <li>...他 {importResult.errors.length - 5} 件のエラー</li>
+                            )}
+                          </ul>
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="help">
+            <div className="space-y-4">
+              <Alert>
+                <Info className="h-4 w-4" />
+                <AlertTitle>CSVファイルの形式について</AlertTitle>
                 <AlertDescription>
-                  <ul className="list-disc pl-5 mt-2">
-                    {importResult.errors.map((error, index) => (
-                      <li key={index}>{error}</li>
-                    ))}
+                  CSVファイルは以下のフィールドを含む必要があります。
+                  <div className="mt-2 grid grid-cols-3 gap-2">
+                    <div>
+                      <Badge variant="secondary">必須</Badge>
+                      <p className="text-sm mt-1">email - メールアドレス</p>
+                    </div>
+                    <div>
+                      <Badge variant="secondary">必須</Badge>
+                      <p className="text-sm mt-1">name - 氏名</p>
+                    </div>
+                    <div>
+                      <Badge variant="secondary">必須</Badge>
+                      <p className="text-sm mt-1">employeeId - 従業員ID</p>
+                    </div>
+                    <div>
+                      <Badge variant="outline">任意</Badge>
+                      <p className="text-sm mt-1">displayName - 表示名</p>
+                    </div>
+                    <div>
+                      <Badge variant="outline">任意</Badge>
+                      <p className="text-sm mt-1">department - 部署名</p>
+                    </div>
+                  </div>
+                </AlertDescription>
+              </Alert>
+              
+              <Alert className="bg-emerald-50 border-emerald-200">
+                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                <AlertTitle>インポート処理について</AlertTitle>
+                <AlertDescription>
+                  <ul className="list-disc pl-5 mt-1 space-y-1 text-sm">
+                    <li>メールアドレスが既存ユーザーと一致する場合は情報が更新されます</li>
+                    <li>新規ユーザーはランダムパスワードで作成されます</li>
+                    <li>存在しない部署名が指定された場合は自動的に作成されます</li>
+                    <li>データに不備がある行はスキップされます</li>
                   </ul>
                 </AlertDescription>
               </Alert>
-            )}
-          </>
-        )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
-      
-      <CardFooter className="justify-between">
-        {importStep === "input" && (
-          <Button 
-            className="ml-auto" 
-            onClick={parseCSVData} 
-            disabled={!csvData.trim()}
-          >
-            <FileText className="mr-2 h-4 w-4" /> データをプレビュー
-          </Button>
-        )}
-        
-        {importStep === "preview" && (
-          <>
-            <Button variant="outline" onClick={resetImport}>
-              <X className="mr-2 h-4 w-4" /> キャンセル
-            </Button>
-            <Button 
-              onClick={handleImport} 
-              disabled={importEmployees.isPending || previewData.length === 0}
-            >
-              {importEmployees.isPending ? (
-                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <UploadCloud className="mr-2 h-4 w-4" />
-              )}
-              インポートを実行
-            </Button>
-          </>
-        )}
-        
-        {importStep === "result" && (
-          <Button onClick={resetImport} className="ml-auto">
-            新しいインポートを開始
-          </Button>
-        )}
+      <CardFooter className="flex justify-between border-t pt-4">
+        <p className="text-xs text-gray-500">
+          アップロードするCSVファイルには機密情報が含まれる場合があります。
+          ファイルの内容は安全に処理され、必要なデータのみがデータベースに保存されます。
+        </p>
       </CardFooter>
     </Card>
   );

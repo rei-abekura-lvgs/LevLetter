@@ -1,16 +1,8 @@
 import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { queryClient } from "@/lib/queryClient";
-import { PlusCircle, RefreshCw, Trash2, Edit, Save, X, AlertCircle, UploadCloud } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { Department } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 import {
   Table,
   TableBody,
@@ -19,8 +11,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -29,397 +28,369 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useToast } from "@/hooks/use-toast";
-import type { Department, InsertDepartment } from "@shared/schema";
+import { MoreHorizontal, Plus, Search, Pencil, Trash2 } from "lucide-react";
+import { format } from "date-fns";
 
 export default function DepartmentManagement() {
   const { toast } = useToast();
-  const [newDeptName, setNewDeptName] = useState("");
-  const [newDeptDesc, setNewDeptDesc] = useState("");
-  const [bulkImportOpen, setBulkImportOpen] = useState(false);
-  const [bulkImportText, setBulkImportText] = useState("");
-  const [editingDept, setEditingDept] = useState<Department | null>(null);
+  const queryClient = useQueryClient();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
+  const [newDepartment, setNewDepartment] = useState({ name: "", description: "" });
 
-  // 部署一覧の取得
-  const { data: departments, isLoading, error, refetch } = useQuery<Department[]>({
+  // 部署一覧を取得
+  const { data: departments = [], isLoading } = useQuery({
     queryKey: ["/api/departments"],
   });
 
-  // 部署作成のミューテーション
-  const createDepartment = useMutation({
-    mutationFn: async (data: InsertDepartment) => {
-      const response = await fetch("/api/admin/departments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "部署の作成に失敗しました");
-      }
-      
-      return response.json();
-    },
-    onSuccess: () => {
-      toast({
-        title: "部署を作成しました",
-        description: "新しい部署が正常に追加されました",
-      });
-      setNewDeptName("");
-      setNewDeptDesc("");
-      queryClient.invalidateQueries({ queryKey: ["/api/departments"] });
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "エラーが発生しました",
-        description: error.message,
-      });
-    },
+  // フィルタリングされた部署
+  const filteredDepartments = departments.filter((dept: Department) => {
+    const lowerQuery = searchQuery.toLowerCase();
+    return (
+      dept.name.toLowerCase().includes(lowerQuery) ||
+      (dept.description && dept.description.toLowerCase().includes(lowerQuery))
+    );
   });
 
-  // 部署更新のミューテーション
-  const updateDepartment = useMutation({
-    mutationFn: async (data: Department) => {
-      const response = await fetch(`/api/admin/departments/${data.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: data.name, description: data.description }),
+  // 部署作成ミューテーション
+  const createDepartmentMutation = useMutation({
+    mutationFn: async (data: { name: string; description: string | null }) => {
+      return apiRequest('/api/departments', {
+        method: 'POST',
+        data,
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "部署の更新に失敗しました");
-      }
-      
-      return response.json();
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/departments'] });
+      setIsAddDialogOpen(false);
+      setNewDepartment({ name: "", description: "" });
       toast({
-        title: "部署を更新しました",
-        description: "部署情報が正常に更新されました",
+        title: "部署作成完了",
+        description: "新しい部署を作成しました",
       });
-      setEditingDept(null);
-      queryClient.invalidateQueries({ queryKey: ["/api/departments"] });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
+        title: "エラー",
+        description: error.message || "部署の作成に失敗しました",
         variant: "destructive",
-        title: "エラーが発生しました",
-        description: error.message,
-      });
-    },
-  });
-
-  // 部署削除のミューテーション
-  const deleteDepartment = useMutation({
-    mutationFn: async (id: number) => {
-      const response = await fetch(`/api/admin/departments/${id}`, {
-        method: "DELETE",
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "部署の削除に失敗しました");
-      }
-      
-      return true;
-    },
-    onSuccess: () => {
-      toast({
-        title: "部署を削除しました",
-        description: "部署が正常に削除されました",
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/departments"] });
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "エラーが発生しました",
-        description: error.message,
-      });
-    },
-  });
-
-  // 一括インポート処理
-  const handleBulkImport = () => {
-    try {
-      // 入力テキストを行ごとに分割
-      const lines = bulkImportText.trim().split('\n');
-      
-      // 行ごとに処理
-      const departmentsToAdd = lines
-        .filter(line => line.trim() !== '')
-        .map(line => {
-          // タブまたはカンマで分割
-          const parts = line.includes('\t') ? line.split('\t') : line.split(',');
-          const name = parts[0]?.trim() || '';
-          const description = parts[1]?.trim() || '';
-          
-          return { name, description };
-        })
-        .filter(dept => dept.name !== ''); // 名前が空の部署は除外
-      
-      // バルク作成処理 - 本来は一括処理をするAPIを実装するべきですが、
-      // この例では個別に作成処理を呼び出します
-      let successCount = 0;
-      let errorCount = 0;
-      
-      departmentsToAdd.forEach(dept => {
-        createDepartment.mutate(dept, {
-          onSuccess: () => { successCount++; },
-          onError: () => { errorCount++; }
-        });
-      });
-      
-      // 処理完了のトースト表示
-      toast({
-        title: "インポート完了",
-        description: `${departmentsToAdd.length}件中 ${successCount}件の部署を追加しました。${errorCount > 0 ? `${errorCount}件のエラーがありました。` : ''}`,
-      });
-      
-      // ダイアログを閉じる
-      setBulkImportOpen(false);
-      setBulkImportText("");
-      
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "インポートエラー",
-        description: "データの形式が正しくありません。",
       });
     }
-  };
+  });
 
-  // 新規部署追加
-  const handleAddDepartment = () => {
-    if (!newDeptName.trim()) {
+  // 部署更新ミューテーション
+  const updateDepartmentMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: { name: string; description: string | null } }) => {
+      return apiRequest(`/api/departments/${id}`, {
+        method: 'PUT',
+        data,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/departments'] });
+      setIsEditDialogOpen(false);
+      setSelectedDepartment(null);
       toast({
+        title: "部署更新完了",
+        description: "部署情報を更新しました",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "エラー",
+        description: error.message || "部署の更新に失敗しました",
         variant: "destructive",
+      });
+    }
+  });
+
+  // 部署削除ミューテーション
+  const deleteDepartmentMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest(`/api/departments/${id}`, {
+        method: 'DELETE',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/departments'] });
+      setIsDeleteDialogOpen(false);
+      setSelectedDepartment(null);
+      toast({
+        title: "部署削除完了",
+        description: "部署を削除しました",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "エラー",
+        description: error.message || "部署の削除に失敗しました",
+        variant: "destructive",
+      });
+    }
+  });
+
+  // 部署追加ハンドラー
+  const handleAddDepartment = () => {
+    if (!newDepartment.name.trim()) {
+      toast({
         title: "エラー",
         description: "部署名を入力してください",
+        variant: "destructive",
       });
       return;
     }
-    
-    createDepartment.mutate({
-      name: newDeptName,
-      description: newDeptDesc || null,
+
+    createDepartmentMutation.mutate({
+      name: newDepartment.name.trim(),
+      description: newDepartment.description.trim() || null,
     });
   };
 
-  if (isLoading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>部署管理</CardTitle>
-          <CardDescription>読み込み中...</CardDescription>
-        </CardHeader>
-        <CardContent className="h-40 flex items-center justify-center">
-          <RefreshCw className="animate-spin h-8 w-8 text-muted-foreground" />
-        </CardContent>
-      </Card>
-    );
-  }
+  // 部署編集ハンドラー
+  const handleEditDepartment = () => {
+    if (!selectedDepartment) return;
 
-  if (error) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>部署管理</CardTitle>
-          <CardDescription>エラーが発生しました</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>読み込みエラー</AlertTitle>
-            <AlertDescription>
-              部署情報の取得中にエラーが発生しました。再読み込みをお試しください。
-            </AlertDescription>
-          </Alert>
-          <Button onClick={() => refetch()} className="mt-4">
-            <RefreshCw className="mr-2 h-4 w-4" /> 再読み込み
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  }
+    updateDepartmentMutation.mutate({
+      id: selectedDepartment.id,
+      data: {
+        name: selectedDepartment.name.trim(),
+        description: selectedDepartment.description?.trim() || null,
+      }
+    });
+  };
+
+  // 部署削除ハンドラー
+  const handleDeleteDepartment = () => {
+    if (!selectedDepartment) return;
+    deleteDepartmentMutation.mutate(selectedDepartment.id);
+  };
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>部署管理</CardTitle>
-        <CardDescription>部署情報の追加・編集・削除</CardDescription>
+        <CardDescription>
+          システム内の部署情報を管理します。部署の追加・編集・削除を行えます。
+        </CardDescription>
       </CardHeader>
-      
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="col-span-2">
-            <Label htmlFor="dept-name">部署名</Label>
+        <div className="flex justify-between items-center mb-4">
+          <div className="relative w-72">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              id="dept-name"
-              placeholder="新しい部署名"
-              value={newDeptName}
-              onChange={(e) => setNewDeptName(e.target.value)}
+              placeholder="部署検索..."
+              className="pl-8"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <div>
-            <Label>&nbsp;</Label>
-            <Button 
-              className="w-full" 
-              onClick={handleAddDepartment} 
-              disabled={createDepartment.isPending}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              部署を追加
-            </Button>
-          </div>
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                部署を追加
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>新しい部署を追加</DialogTitle>
+                <DialogDescription>
+                  新しい部署の情報を入力してください。
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="name">部署名</Label>
+                  <Input
+                    id="name"
+                    placeholder="例: マーケティング部"
+                    value={newDepartment.name}
+                    onChange={(e) => setNewDepartment({ ...newDepartment, name: e.target.value })}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="description">説明 (任意)</Label>
+                  <Textarea
+                    id="description"
+                    placeholder="部署の説明や役割などを入力"
+                    value={newDepartment.description}
+                    onChange={(e) => setNewDepartment({ ...newDepartment, description: e.target.value })}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">キャンセル</Button>
+                </DialogClose>
+                <Button 
+                  onClick={handleAddDepartment}
+                  disabled={createDepartmentMutation.isPending || !newDepartment.name.trim()}
+                >
+                  {createDepartmentMutation.isPending ? "作成中..." : "部署を作成"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
-        
-        <div className="mb-6">
-          <Label htmlFor="dept-desc">説明（オプション）</Label>
-          <Textarea
-            id="dept-desc"
-            placeholder="部署の説明"
-            value={newDeptDesc}
-            onChange={(e) => setNewDeptDesc(e.target.value)}
-          />
-        </div>
-        
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>部署名</TableHead>
-                <TableHead>説明</TableHead>
-                <TableHead className="w-[150px]">操作</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {departments && departments.length > 0 ? (
-                departments.map((dept) => (
-                  <TableRow key={dept.id}>
-                    <TableCell>
-                      {editingDept?.id === dept.id ? (
-                        <Input
-                          value={editingDept.name}
-                          onChange={(e) => setEditingDept({...editingDept, name: e.target.value})}
-                        />
-                      ) : (
-                        <div className="font-medium">{dept.name}</div>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {editingDept?.id === dept.id ? (
-                        <Input
-                          value={editingDept.description || ''}
-                          onChange={(e) => setEditingDept({...editingDept, description: e.target.value || null})}
-                        />
-                      ) : (
-                        <div>{dept.description || "-"}</div>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {editingDept?.id === dept.id ? (
-                        <>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => updateDepartment.mutate(editingDept)}
-                            disabled={updateDepartment.isPending}
-                          >
-                            <Save className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => setEditingDept(null)}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => setEditingDept(dept)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => {
-                              if (window.confirm(`「${dept.name}」部署を削除してもよろしいですか？`)) {
-                                deleteDepartment.mutate(dept.id);
-                              }
-                            }}
-                            disabled={deleteDepartment.isPending}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </>
-                      )}
+
+        {isLoading ? (
+          <div className="py-8 text-center text-muted-foreground">読み込み中...</div>
+        ) : (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>部署名</TableHead>
+                  <TableHead>説明</TableHead>
+                  <TableHead>作成日</TableHead>
+                  <TableHead className="w-[80px]"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredDepartments.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
+                      部署が見つかりませんでした
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={3} className="h-24 text-center">
-                    部署情報がありません
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-      
-      <CardFooter className="justify-between">
-        <div>
-          {departments && <span className="text-sm text-muted-foreground">合計 {departments.length} 部署</span>}
-        </div>
-        
-        <Dialog open={bulkImportOpen} onOpenChange={setBulkImportOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline">
-              <UploadCloud className="mr-2 h-4 w-4" /> 一括インポート
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+                ) : (
+                  filteredDepartments.map((dept: Department) => (
+                    <TableRow key={dept.id}>
+                      <TableCell className="font-medium">{dept.name}</TableCell>
+                      <TableCell>{dept.description || "-"}</TableCell>
+                      <TableCell>
+                        {dept.createdAt ? format(new Date(dept.createdAt), 'yyyy/MM/dd') : "-"}
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>アクション</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setSelectedDepartment(dept);
+                                setIsEditDialogOpen(true);
+                              }}
+                            >
+                              <Pencil className="mr-2 h-4 w-4" />
+                              編集
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setSelectedDepartment(dept);
+                                setIsDeleteDialogOpen(true);
+                              }}
+                              className="text-red-600"
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              削除
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+
+        {/* 部署編集ダイアログ */}
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent>
             <DialogHeader>
-              <DialogTitle>部署データの一括インポート</DialogTitle>
+              <DialogTitle>部署を編集</DialogTitle>
               <DialogDescription>
-                CSVまたはタブ区切りのテキストを貼り付けてください。<br />
-                形式: 「部署名, 説明」（説明はオプション）<br />
-                例: 「営業部, 営業を担当する部署」
+                部署情報を変更します。
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
-              <Textarea
-                placeholder="部署データを貼り付け..."
-                rows={10}
-                value={bulkImportText}
-                onChange={(e) => setBulkImportText(e.target.value)}
-              />
+              <div className="grid gap-2">
+                <Label htmlFor="edit-name">部署名</Label>
+                <Input
+                  id="edit-name"
+                  value={selectedDepartment?.name || ""}
+                  onChange={(e) => setSelectedDepartment(prev => 
+                    prev ? { ...prev, name: e.target.value } : null
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-description">説明 (任意)</Label>
+                <Textarea
+                  id="edit-description"
+                  value={selectedDepartment?.description || ""}
+                  onChange={(e) => setSelectedDepartment(prev => 
+                    prev ? { ...prev, description: e.target.value } : null
+                  )}
+                />
+              </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setBulkImportOpen(false)}>
-                キャンセル
-              </Button>
-              <Button onClick={handleBulkImport} disabled={!bulkImportText.trim()}>
-                インポート
+              <DialogClose asChild>
+                <Button variant="outline">キャンセル</Button>
+              </DialogClose>
+              <Button 
+                onClick={handleEditDepartment}
+                disabled={updateDepartmentMutation.isPending || !selectedDepartment?.name.trim()}
+              >
+                {updateDepartmentMutation.isPending ? "更新中..." : "部署を更新"}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </CardFooter>
+
+        {/* 部署削除確認ダイアログ */}
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>部署を削除</DialogTitle>
+              <DialogDescription>
+                この部署を削除しますか？この操作は取り消せません。
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <p className="text-sm text-gray-500">
+                部署「<span className="font-medium text-foreground">{selectedDepartment?.name}</span>」を削除します。
+                部署に所属していたユーザーは所属なしとなります。
+              </p>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">キャンセル</Button>
+              </DialogClose>
+              <Button 
+                variant="destructive"
+                onClick={handleDeleteDepartment}
+                disabled={deleteDepartmentMutation.isPending}
+              >
+                {deleteDepartmentMutation.isPending ? "削除中..." : "部署を削除"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </CardContent>
     </Card>
   );
 }

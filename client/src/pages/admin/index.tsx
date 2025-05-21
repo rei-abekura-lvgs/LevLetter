@@ -1,143 +1,131 @@
 import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from "@/context/auth-context";
-import { Redirect } from "wouter";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { UserPlus, Users, Building2, Upload } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useNavigate } from "wouter";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertTriangle, Users, Building2, FileSpreadsheet } from "lucide-react";
+
+// 管理者ページのコンポーネントをインポート
+import UserManagement from "./user-management";
+import DepartmentManagement from "./department-management";
+import EmployeeImport from "./employee-import";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, loading } = useAuth();
-  const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("users");
+  const [showAccessDenied, setShowAccessDenied] = useState(false);
 
-  // 認証状態の確認
+  // 認証・権限チェック
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">読み込み中...</div>;
+    return <div className="p-8 text-center text-muted-foreground">読み込み中...</div>;
   }
 
-  // 未認証または非管理者の場合はリダイレクト
-  if (!isAuthenticated || !user?.isAdmin) {
-    return <Redirect to="/" />;
+  if (!isAuthenticated) {
+    return (
+      <AlertDialog open={true} onOpenChange={() => navigate("/login")}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>アクセス制限</AlertDialogTitle>
+            <AlertDialogDescription>
+              このページにアクセスするにはログインが必要です。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => navigate("/login")}>
+              ログインページへ
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
+  }
+
+  // 管理者権限チェック
+  if (!user?.isAdmin) {
+    return (
+      <AlertDialog open={true} onOpenChange={() => navigate("/")}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>権限エラー</AlertDialogTitle>
+            <AlertDialogDescription>
+              管理者専用ページへのアクセス権限がありません。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => navigate("/")}>
+              ホームに戻る
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
   }
 
   return (
-    <div className="container py-6">
-      <h1 className="text-2xl font-bold mb-6">管理者ダッシュボード</h1>
-      
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-4">
-          <TabsTrigger value="overview">概要</TabsTrigger>
-          <TabsTrigger value="users">ユーザー管理</TabsTrigger>
-          <TabsTrigger value="departments">部署管理</TabsTrigger>
-          <TabsTrigger value="import">データインポート</TabsTrigger>
+    <div className="container mx-auto px-4 py-6">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold tracking-tight">管理者設定</h1>
+        <p className="text-muted-foreground mt-1">
+          LevLetterシステムの設定や管理を行うための管理者専用ページです。
+        </p>
+      </div>
+
+      <Alert className="mb-6">
+        <AlertTriangle className="h-4 w-4" />
+        <AlertTitle>管理者権限での操作に注意</AlertTitle>
+        <AlertDescription>
+          このページでの変更はシステム全体に影響します。操作には十分注意してください。
+        </AlertDescription>
+      </Alert>
+
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="w-full"
+      >
+        <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsTrigger value="users" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            <span>ユーザー管理</span>
+          </TabsTrigger>
+          <TabsTrigger value="departments" className="flex items-center gap-2">
+            <Building2 className="h-4 w-4" />
+            <span>部署管理</span>
+          </TabsTrigger>
+          <TabsTrigger value="import" className="flex items-center gap-2">
+            <FileSpreadsheet className="h-4 w-4" />
+            <span>従業員データインポート</span>
+          </TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="overview">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>ユーザー管理</CardTitle>
-                <CardDescription>アカウントの有効化・管理者権限の設定</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Users className="w-8 h-8 text-primary mr-2" />
-                    <span className="text-2xl font-bold">--</span>
-                  </div>
-                  <Button onClick={() => setActiveTab("users")} variant="outline">
-                    管理する
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>部署管理</CardTitle>
-                <CardDescription>部署の作成・編集・削除</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Building2 className="w-8 h-8 text-primary mr-2" />
-                    <span className="text-2xl font-bold">--</span>
-                  </div>
-                  <Button onClick={() => setActiveTab("departments")} variant="outline">
-                    管理する
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>従業員データインポート</CardTitle>
-                <CardDescription>CSVからのユーザーデータ一括登録</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Upload className="w-8 h-8 text-primary mr-2" />
-                  </div>
-                  <Button onClick={() => setActiveTab("import")} variant="outline">
-                    インポート
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-        
+
         <TabsContent value="users">
-          <Card>
-            <CardHeader>
-              <CardTitle>ユーザー管理</CardTitle>
-              <CardDescription>システム内のユーザーアカウントを管理します</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-center text-gray-500 my-12">ユーザー管理機能開発中...</p>
-              <div className="flex justify-center">
-                <Button variant="outline" onClick={() => setActiveTab("overview")}>
-                  概要に戻る
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <UserManagement />
         </TabsContent>
-        
+
         <TabsContent value="departments">
-          <Card>
-            <CardHeader>
-              <CardTitle>部署管理</CardTitle>
-              <CardDescription>部署の作成・編集・削除を行います</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-center text-gray-500 my-12">部署管理機能開発中...</p>
-              <div className="flex justify-center">
-                <Button variant="outline" onClick={() => setActiveTab("overview")}>
-                  概要に戻る
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <DepartmentManagement />
         </TabsContent>
-        
+
         <TabsContent value="import">
-          <Card>
-            <CardHeader>
-              <CardTitle>従業員データインポート</CardTitle>
-              <CardDescription>CSVファイルから従業員データをインポートします</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-center text-gray-500 my-12">インポート機能開発中...</p>
-              <div className="flex justify-center">
-                <Button variant="outline" onClick={() => setActiveTab("overview")}>
-                  概要に戻る
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <EmployeeImport />
         </TabsContent>
       </Tabs>
     </div>

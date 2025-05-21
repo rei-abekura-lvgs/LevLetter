@@ -11,6 +11,7 @@ import Profile from "@/pages/profile";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
 import Settings from "@/pages/settings";
+import AdminDashboard from "@/pages/admin";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context";
@@ -78,10 +79,7 @@ function AppRoutes() {
           </Route>
           <Route path="/admin">
             {user.isAdmin ? (
-              <div className="p-6">
-                <h1 className="text-2xl font-bold mb-4">管理者ダッシュボード</h1>
-                <p className="text-gray-500 mb-6">現在準備中です。左のナビゲーションからメイン機能にアクセスしてください。</p>
-              </div>
+              <AdminDashboard />
             ) : (
               <Home user={user} />
             )}
