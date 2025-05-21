@@ -982,14 +982,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
             result.newUsers++;
           }
           
-          // 部署が存在しない場合は作成
+          // 部署情報の処理 - 5階層構造に対応
           if (employee.department) {
+            const departmentPath = employee.department.trim();
             const departments = await storage.getDepartments();
-            const departmentExists = departments.some(dept => dept.name === employee.department);
+            
+            // 部署フルパスで既存部署を検索
+            const departmentExists = departments.some(dept => 
+              dept.name === departmentPath || 
+              dept.fullPath === departmentPath
+            );
             
             if (!departmentExists) {
+              console.log(`新規部署を登録: ${departmentPath}`);
+              
+              // 部署階層を「/」で分割（最大5階層）
+              const levels = departmentPath.split('/').filter(Boolean);
+              const levelsObj: any = {
+                level1: levels[0] || null,
+                level2: levels[1] || null,
+                level3: levels[2] || null,
+                level4: levels[3] || null,
+                level5: levels[4] || null,
+              };
+              
+              // 部署コードを生成（部署名の先頭2文字をカタカナに変換）
+              const deptCode = levelsObj.level5 || levelsObj.level4 || levelsObj.level3 || 
+                               levelsObj.level2 || levelsObj.level1 || "その他";
+              const code = deptCode.substring(0, 2).toUpperCase();
+              
               await storage.createDepartment({
-                name: employee.department,
+                name: departmentPath,
+                code: code,
+                level1: levelsObj.level1,
+                level2: levelsObj.level2,
+                level3: levelsObj.level3,
+                level4: levelsObj.level4,
+                level5: levelsObj.level5,
+                fullPath: departmentPath,
+                parentId: null,
                 description: null
               });
             }
