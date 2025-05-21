@@ -14,7 +14,10 @@ import Settings from "@/pages/settings";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
+
+// 管理者ページの遅延ロード
+const AdminDashboard = lazy(() => import("@/pages/admin"));
 
 function AppRoutes() {
   const { user, loading, isAuthenticated, fetchUser } = useAuth();
@@ -75,6 +78,15 @@ function AppRoutes() {
           </Route>
           <Route path="/settings">
             <Settings />
+          </Route>
+          <Route path="/admin">
+            {user.isAdmin ? (
+              <Suspense fallback={<div className="p-6">読み込み中...</div>}>
+                <AdminDashboard />
+              </Suspense>
+            ) : (
+              <Home user={user} />
+            )}
           </Route>
           <Route path="/">
             <Home user={user} />
