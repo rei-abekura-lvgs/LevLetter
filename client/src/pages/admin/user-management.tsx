@@ -46,10 +46,18 @@ export default function UserManagement() {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+  const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
 
   // ユーザー一覧を取得
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["/api/admin/users"],
+    enabled: true,
+  });
+  
+  // 部署一覧を取得
+  const { data: departments = [] } = useQuery({
+    queryKey: ["/api/admin/departments"],
     enabled: true,
   });
 
@@ -273,7 +281,32 @@ export default function UserManagement() {
                         )}
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
-                      <TableCell>{user.department || "未設定"}</TableCell>
+                      <TableCell>
+                        {user.department ? (
+                          <div className="max-w-md text-xs">
+                            {(() => {
+                              // 部署IDがあれば部署情報を取得
+                              const deptId = Number(user.department);
+                              // 部署情報を取得
+                              const dept = departments.find((d: any) => d.id === deptId);
+                              if (dept) {
+                                return (
+                                  <div className="space-y-0.5">
+                                    {dept.level1 && <div className="text-emerald-700 font-medium">{dept.level1}</div>}
+                                    {dept.level2 && <div className="pl-2 text-emerald-600">{dept.level2}</div>}
+                                    {dept.level3 && <div className="pl-4 text-emerald-600">{dept.level3}</div>}
+                                    {dept.level4 && <div className="pl-6 text-emerald-600">{dept.level4}</div>}
+                                    {dept.level5 && <div className="pl-8 text-emerald-600">{dept.level5}</div>}
+                                  </div>
+                                );
+                              }
+                              return user.department;
+                            })()}
+                          </div>
+                        ) : (
+                          "未設定"
+                        )}
+                      </TableCell>
                       <TableCell>
                         {user.isActive ? (
                           <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200">
