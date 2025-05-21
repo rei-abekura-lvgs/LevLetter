@@ -800,11 +800,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
+      // 削除結果の詳細ログ
       console.log(`管理者API: ユーザー一括削除成功 (${deletedCount}件)`);
+      console.log(`残りユーザー数:`, await db.select({ count: sql`count(*)` }).from(users));
+      
+      // 全ユーザー取得して確認（rei.abekura@leverages.jpのみ残っているはず）
+      const remainingUsers = await storage.getUsers();
+      console.log(`残りユーザーリスト:`, remainingUsers.map(u => ({ id: u.id, email: u.email, name: u.name })));
+      
       res.json({ 
         success: true, 
         message: `${deletedCount}件のユーザーを削除しました（rei.abekura@leverages.jpは保護されています）`,
-        deletedCount 
+        deletedCount,
+        remainingCount: remainingUsers.length
       });
     } catch (error) {
       console.error("管理者API: ユーザー一括削除 エラー", error);
