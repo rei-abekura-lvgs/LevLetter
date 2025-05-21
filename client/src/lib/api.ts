@@ -3,7 +3,37 @@ import {
   CardFormRequest, LikeFormRequest, ProfileUpdateRequest,
   CardWithRelations, Card, Like, User
 } from "@shared/schema";
+
+// 従業員データインポート用インターフェース
+export interface ImportEmployeesRequest {
+  employees: Array<{
+    email: string;
+    name: string;
+    employeeId: string;
+    displayName?: string;
+    department?: string;
+  }>;
+}
+
+export interface ImportResult {
+  success: boolean;
+  newUsers: number;
+  updatedUsers: number;
+  errors: string[];
+}
 import { getAuthToken } from "./auth";
+
+// 従業員データインポート関数
+export async function importEmployees(data: ImportEmployeesRequest) {
+  try {
+    const result = await apiRequest<ImportResult>("POST", "/api/admin/employees/import", data);
+    console.log("従業員データインポート成功:", result);
+    return result;
+  } catch (error) {
+    console.error("従業員データインポートエラー:", error);
+    throw error;
+  }
+}
 
 // ユーザー関連
 export async function getUsers() {

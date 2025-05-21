@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,13 +11,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
+import { importEmployees, ImportResult, ImportEmployeesRequest } from "@/lib/api";
 
-interface ImportResult {
-  success: boolean;
-  newUsers: number;
-  updatedUsers: number;
-  errors: string[];
-}
+// 既にAPI.tsで定義されているのでコメントアウト
+// interface ImportResult {
+//   success: boolean;
+//   newUsers: number;
+//   updatedUsers: number;
+//   errors: string[];
+// }
 
 interface CsvEmployee {
   email: string;
@@ -134,11 +135,7 @@ export default function EmployeeImport() {
                 ) as CsvEmployee[];
 
                 // APIリクエスト
-                const response = await apiRequest<ImportResult>(
-                  'POST',
-                  '/api/admin/employees/import',
-                  { employees: validData }
-                );
+                const response = await importEmployees({ employees: validData });
                 
                 resolve(response as ImportResult);
               } catch (error) {
