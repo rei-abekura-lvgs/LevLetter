@@ -78,7 +78,7 @@ const checkAdmin = async (req: Request, res: Response, next: Function) => {
     next();
   } catch (error) {
     console.error("管理者権限チェックエラー:", error);
-    res.status(500).json({ message: "サーバーエラーが発生しました" });
+    return res.status(500).json({ message: "管理者権限の確認中にエラーが発生しました" });
   }
 };
 
