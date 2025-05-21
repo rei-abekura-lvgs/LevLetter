@@ -316,11 +316,7 @@ export default function UserManagement() {
                               if (dept) {
                                 return (
                                   <div className="space-y-0.5">
-                                    {dept.level1 && <div className="text-emerald-700 font-medium">{dept.level1}</div>}
-                                    {dept.level2 && <div className="pl-2 text-emerald-600">{dept.level2}</div>}
-                                    {dept.level3 && <div className="pl-4 text-emerald-600">{dept.level3}</div>}
-                                    {dept.level4 && <div className="pl-6 text-emerald-600">{dept.level4}</div>}
-                                    {dept.level5 && <div className="pl-8 text-emerald-600">{dept.level5}</div>}
+                                    <div className="text-emerald-700 font-medium">{dept.name}</div>
                                   </div>
                                 );
                               }
