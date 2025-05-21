@@ -1,7 +1,7 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/context/auth-context";
-import { Home, Award, Gift, Star, TrendingUp, LogOut, Building2, FileText } from "lucide-react";
+import { Award, Gift, TrendingUp, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
 import { Progress } from "@/components/ui/progress";
@@ -13,28 +13,10 @@ interface SidebarProps {
 export default function Sidebar({ user }: SidebarProps) {
   const [location] = useLocation();
   const { user: authUser } = useAuth();
-  const isAdmin = authUser?.isAdmin || false;
 
   const handleLogout = () => {
     logout();
     window.location.href = "/login";
-  };
-
-  const NavItem = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
-    const isActive = location === href;
-    return (
-      <Link href={href}
-          className={cn(
-            "flex items-center gap-3 px-4 py-3 rounded-md transition-colors",
-            isActive
-              ? "bg-primary text-primary-foreground"
-              : "hover:bg-muted"
-          )}
-        >
-          <Icon className="h-5 w-5" />
-          <span>{label}</span>
-      </Link>
-    );
   };
 
   return (
@@ -42,7 +24,7 @@ export default function Sidebar({ user }: SidebarProps) {
       {user && (
         <div className="flex-1 flex flex-col">
           {/* ユーザー情報カード */}
-          <div className="bg-gray-50 rounded-lg p-4 mb-4">
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <div className="flex items-center gap-3 mb-3">
               <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
                 {user.displayName?.[0] || user.name[0]}
@@ -54,63 +36,47 @@ export default function Sidebar({ user }: SidebarProps) {
             </div>
           </div>
           
-          {/* ナビゲーションメニュー */}
-          <div className="mb-6 space-y-1">
-            <NavItem href="/" icon={Home} label="ホーム" />
-            <NavItem href="/my-cards" icon={FileText} label="自分宛てカード" />
-            <NavItem href="/departments" icon={Building2} label="部署一覧" />
-            
-            {isAdmin && (
-              <>
-                <div className="pt-3 pb-1">
-                  <div className="text-xs font-semibold text-muted-foreground px-4 py-1">
-                    管理者メニュー
-                  </div>
-                </div>
-                <NavItem href="/admin" icon={Star} label="管理ダッシュボード" />
-              </>
-            )}
-          </div>
-          
           {/* ポイント情報 */}
-          <div className="space-y-4">
+          <div className="space-y-6 mb-auto">
+            <h2 className="text-lg font-semibold mb-3">ポイント状況</h2>
+            
             {/* 今週の付与可能ポイント */}
-            <div className="bg-white p-3 rounded-md border">
-              <div className="flex justify-between items-center mb-1">
+            <div className="bg-white p-4 rounded-md border">
+              <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center text-sm font-medium">
-                  <Gift className="h-4 w-4 mr-2 text-primary" />
+                  <Gift className="h-5 w-5 mr-2 text-primary" />
                   今週の付与可能ポイント
                 </div>
-                <span className="text-lg font-bold text-primary">{user.weeklyPoints} PT</span>
+                <span className="text-xl font-bold text-primary">{user.weeklyPoints} PT</span>
               </div>
-              <Progress value={(user.weeklyPoints / 500) * 100} className="h-2" />
-              <p className="text-xs text-gray-500 mt-1">毎週500ポイントが付与されます</p>
+              <Progress value={(user.weeklyPoints / 500) * 100} className="h-2.5" />
+              <p className="text-xs text-gray-500 mt-2">毎週500ポイントが付与されます</p>
             </div>
             
             {/* 累計獲得ポイント */}
-            <div className="bg-white p-3 rounded-md border">
+            <div className="bg-white p-4 rounded-md border">
               <div className="flex justify-between items-center">
                 <div className="flex items-center text-sm font-medium">
-                  <Award className="h-4 w-4 mr-2 text-amber-500" />
+                  <Award className="h-5 w-5 mr-2 text-amber-500" />
                   累計獲得ポイント
                 </div>
-                <span className="text-lg font-bold text-amber-500">{user.totalPointsReceived} PT</span>
+                <span className="text-xl font-bold text-amber-500">{user.totalPointsReceived} PT</span>
               </div>
             </div>
             
             {/* ポイントランキング */}
-            <div className="bg-white p-3 rounded-md border">
+            <div className="bg-white p-4 rounded-md border">
               <div className="flex justify-between items-center">
                 <div className="flex items-center text-sm font-medium">
-                  <TrendingUp className="h-4 w-4 mr-2 text-blue-500" />
+                  <TrendingUp className="h-5 w-5 mr-2 text-blue-500" />
                   ポイントランキング
                 </div>
-                <span className="text-sm px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">--位</span>
+                <span className="text-sm px-2.5 py-1.5 bg-blue-100 text-blue-700 rounded-full font-medium">--位</span>
               </div>
             </div>
           </div>
           
-          <div className="mt-auto pt-4">
+          <div className="mt-6">
             <button
               onClick={handleLogout}
               className="flex w-full items-center gap-3 px-4 py-3 rounded-md text-red-500 hover:bg-red-50 transition-colors"

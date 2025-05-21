@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { User } from "@shared/schema";
 import { useAuth } from "@/context/auth-context";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -11,9 +11,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Settings, User as UserIcon, LogOut, Bell, Menu } from "lucide-react";
+import { 
+  Settings, 
+  User as UserIcon, 
+  LogOut, 
+  Bell, 
+  Menu, 
+  Home, 
+  FileText, 
+  Building2,
+  Star
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
@@ -22,6 +33,7 @@ interface HeaderProps {
 export default function Header({ toggleSidebar }: HeaderProps) {
   const { user, logout } = useAuth();
   const isMobile = useIsMobile();
+  const [location] = useLocation();
   const [notifications, setNotifications] = useState<number>(2); // 仮の通知数
 
   // ユーザーのイニシャル取得
@@ -31,6 +43,26 @@ export default function Header({ toggleSidebar }: HeaderProps) {
       .map((n) => n[0])
       .join("")
       .toUpperCase();
+  };
+
+  // ナビゲーションリンク
+  const NavLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
+    const isActive = location === href;
+    return (
+      <Link href={href}>
+        <div
+          className={cn(
+            "flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+            isActive
+              ? "bg-primary/10 text-primary"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          )}
+        >
+          <Icon className="h-4 w-4" />
+          <span>{label}</span>
+        </div>
+      </Link>
+    );
   };
 
   return (
@@ -46,6 +78,15 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             <span className="text-xl font-bold text-primary">LevLetter</span>
           </div>
         </Link>
+
+        {/* デスクトップ用ナビゲーション */}
+        {!isMobile && user && (
+          <nav className="ml-6 hidden md:flex space-x-1">
+            <NavLink href="/" icon={Home} label="ホーム" />
+            <NavLink href="/my-cards" icon={FileText} label="自分宛てカード" />
+            <NavLink href="/departments" icon={Building2} label="部署一覧" />
+          </nav>
+        )}
       </div>
 
       <div className="flex items-center space-x-4">
@@ -88,7 +129,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex flex-col">
                     <span>{user.name}</span>
@@ -108,6 +149,24 @@ export default function Header({ toggleSidebar }: HeaderProps) {
                     <span>設定</span>
                   </DropdownMenuItem>
                 </Link>
+                
+                {/* 管理者メニュー */}
+                {user.isAdmin && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground">
+                      管理者メニュー
+                    </DropdownMenuLabel>
+                    
+                    <Link href="/admin">
+                      <DropdownMenuItem>
+                        <Star className="mr-2 h-4 w-4 text-amber-500" />
+                        <span>管理ダッシュボード</span>
+                      </DropdownMenuItem>
+                    </Link>
+                  </>
+                )}
+                
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
                   <LogOut className="mr-2 h-4 w-4" />
