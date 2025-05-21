@@ -18,7 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useNavigate } from "wouter";
+import { useLocation } from "wouter";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle, Users, Building2, FileSpreadsheet } from "lucide-react";
 
@@ -29,9 +29,8 @@ import EmployeeImport from "./employee-import";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, loading } = useAuth();
-  const navigate = useNavigate();
+  const [_, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("users");
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
 
   // 認証・権限チェック
   if (loading) {
@@ -40,7 +39,7 @@ export default function AdminDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <AlertDialog open={true} onOpenChange={() => navigate("/login")}>
+      <AlertDialog open={true} onOpenChange={() => setLocation("/login")}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>アクセス制限</AlertDialogTitle>
@@ -49,7 +48,7 @@ export default function AdminDashboard() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => navigate("/login")}>
+            <AlertDialogAction onClick={() => setLocation("/login")}>
               ログインページへ
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -61,7 +60,7 @@ export default function AdminDashboard() {
   // 管理者権限チェック
   if (!user?.isAdmin) {
     return (
-      <AlertDialog open={true} onOpenChange={() => navigate("/")}>
+      <AlertDialog open={true} onOpenChange={() => setLocation("/")}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>権限エラー</AlertDialogTitle>
@@ -70,7 +69,7 @@ export default function AdminDashboard() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => navigate("/")}>
+            <AlertDialogAction onClick={() => setLocation("/")}>
               ホームに戻る
             </AlertDialogAction>
           </AlertDialogFooter>

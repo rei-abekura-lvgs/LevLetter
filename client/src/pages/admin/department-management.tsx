@@ -70,10 +70,7 @@ export default function DepartmentManagement() {
   // 部署作成ミューテーション
   const createDepartmentMutation = useMutation({
     mutationFn: async (data: { name: string; description: string | null }) => {
-      return apiRequest('/api/departments', {
-        method: 'POST',
-        data,
-      });
+      return apiRequest('/api/departments', 'POST', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/departments'] });
