@@ -114,18 +114,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "このメールアドレスは管理者によって事前登録されていません" });
       }
       
-      // ユーザー作成 (既存ユーザーの場合は既存情報を保持してパスワードのみ設定)
-      const newUser = await storage.createUser({
-        ...data,
-        name: preexistingUser?.name || data.email.split('@')[0], // ユーザーが既存の場合は名前を維持、なければメールアドレスから生成
-        displayName: preexistingUser?.displayName || null,
-        department: preexistingUser?.department || null,
-        weeklyPoints: 30,
-        totalPointsReceived: 0,
-        cognitoSub: null,
-        googleId: null,
-        employeeId: preexistingUser?.employeeId || null,
-      });
+      // ユーザー作成 (既存ユーザーの場合は更新処理を行う)
+      let newUser;
+      
+      if (preexistingUser) {
+        // 既存ユーザーの場合はパスワードを更新
+        console.log("既存ユーザーを更新:", preexistingUser.id, preexistingUser.email);
+        newUser = await storage.updateUser(preexistingUser.id, {
+          password: data.password,
+        });
+      } else {
+        // 新規ユーザーの場合は作成（通常はここには入らない）
+        console.log("新規ユーザーを作成:", data.email);
+        newUser = await storage.createUser({
+          ...data,
+          name: data.email.split('@')[0],
+          displayName: null,
+          department: null,
+          weeklyPoints: 30,
+          totalPointsReceived: 0,
+          cognitoSub: null,
+          googleId: null,
+          employeeId: null,
+        });
+      }
       
       console.log("ユーザー登録成功:", newUser.id, newUser.email);
       
@@ -160,8 +172,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof ZodError) {
         return handleZodError(error, res);
       }
+      // 詳細なエラーログ出力
       console.error("ユーザー登録エラー:", error);
-      return res.status(500).json({ message: "ユーザーの作成に失敗しました" });
+      if (error instanceof Error) {
+        console.error("エラーメッセージ:", error.message);
+        console.error("エラースタック:", error.stack);
+      }
+      // エラーオブジェクトの詳細を出力
+      console.error("エラーの詳細情報:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      
+      return res.status(500).json({ message: "ユーザーの作成に失敗しました", error: error instanceof Error ? error.message : String(error) });
     }
   });
 

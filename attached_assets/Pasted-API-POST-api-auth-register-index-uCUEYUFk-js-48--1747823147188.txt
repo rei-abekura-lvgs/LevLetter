@@ -1,0 +1,89 @@
+API POST リクエスト: /api/auth/register データあり
+index-uCUEYUFk.js:48 
+            
+            
+           POST https://c6b20841-ba82-4f71-bc45-22105c353ceb.picard.prod.repl.run/api/auth/register 500 (Internal Server Error)
+Fr @ index-uCUEYUFk.js:48
+zj @ index-uCUEYUFk.js:48
+m @ index-uCUEYUFk.js:342
+(anonymous) @ index-uCUEYUFk.js:342
+await in (anonymous)
+W6 @ index-uCUEYUFk.js:37
+z6 @ index-uCUEYUFk.js:37
+H6 @ index-uCUEYUFk.js:37
+h2 @ index-uCUEYUFk.js:37
+O4 @ index-uCUEYUFk.js:37
+(anonymous) @ index-uCUEYUFk.js:37
+v1 @ index-uCUEYUFk.js:40
+s4 @ index-uCUEYUFk.js:37
+$m @ index-uCUEYUFk.js:37
+Gv @ index-uCUEYUFk.js:37
+o5 @ index-uCUEYUFk.js:37Understand this error
+index-uCUEYUFk.js:48 API POST エラー: /api/auth/register Error: ユーザーの作成に失敗しました
+    at Fr (index-uCUEYUFk.js:48:43931)
+    at async zj (index-uCUEYUFk.js:48:43036)
+    at async m (index-uCUEYUFk.js:342:171967)
+    at async index-uCUEYUFk.js:342:23914
+Fr @ index-uCUEYUFk.js:48
+await in Fr
+zj @ index-uCUEYUFk.js:48
+m @ index-uCUEYUFk.js:342
+(anonymous) @ index-uCUEYUFk.js:342
+await in (anonymous)
+W6 @ index-uCUEYUFk.js:37
+z6 @ index-uCUEYUFk.js:37
+H6 @ index-uCUEYUFk.js:37
+h2 @ index-uCUEYUFk.js:37
+O4 @ index-uCUEYUFk.js:37
+(anonymous) @ index-uCUEYUFk.js:37
+v1 @ index-uCUEYUFk.js:40
+s4 @ index-uCUEYUFk.js:37
+$m @ index-uCUEYUFk.js:37
+Gv @ index-uCUEYUFk.js:37
+o5 @ index-uCUEYUFk.js:37Understand this error
+index-uCUEYUFk.js:48 登録エラー: Error: ユーザーの作成に失敗しました
+    at Fr (index-uCUEYUFk.js:48:43931)
+    at async zj (index-uCUEYUFk.js:48:43036)
+    at async m (index-uCUEYUFk.js:342:171967)
+    at async index-uCUEYUFk.js:342:23914
+zj @ index-uCUEYUFk.js:48
+await in zj
+m @ index-uCUEYUFk.js:342
+(anonymous) @ index-uCUEYUFk.js:342
+await in (anonymous)
+W6 @ index-uCUEYUFk.js:37
+z6 @ index-uCUEYUFk.js:37
+H6 @ index-uCUEYUFk.js:37
+h2 @ index-uCUEYUFk.js:37
+O4 @ index-uCUEYUFk.js:37
+(anonymous) @ index-uCUEYUFk.js:37
+v1 @ index-uCUEYUFk.js:40
+s4 @ index-uCUEYUFk.js:37
+$m @ index-uCUEYUFk.js:37
+Gv @ index-uCUEYUFk.js:37
+o5 @ index-uCUEYUFk.js:37Understand this error
+index-uCUEYUFk.js:342 登録エラー: Error: ユーザーの作成に失敗しました
+    at zj (index-uCUEYUFk.js:48:43159)
+    at async m (index-uCUEYUFk.js:342:171967)
+    at async index-uCUEYUFk.js:342:23914
+m @ index-uCUEYUFk.js:342
+await in m
+(anonymous) @ index-uCUEYUFk.js:342
+await in (anonymous)
+W6 @ index-uCUEYUFk.js:37
+z6 @ index-uCUEYUFk.js:37
+H6 @ index-uCUEYUFk.js:37
+h2 @ index-uCUEYUFk.js:37
+O4 @ index-uCUEYUFk.js:37
+(anonymous) @ index-uCUEYUFk.js:37
+v1 @ index-uCUEYUFk.js:40
+s4 @ index-uCUEYUFk.js:37
+$m @ index-uCUEYUFk.js:37
+Gv @ index-uCUEYUFk.js:37
+o5 @ index-uCUEYUFk.js:37Understand this error
+index-uCUEYUFk.js:342 メール検証 (kota.makino@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: '登録可能なメールアドレスです'}
+index-uCUEYUFk.js:342 メール検証結果: 登録可能なメールアドレスです
+index-uCUEYUFk.js:342 メール検証 (kota.makino@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: '登録可能なメールアドレスです'}
+index-uCUEYUFk.js:342 メール検証結果: 登録可能なメールアドレスです
+index-uCUEYUFk.js:342 メール検証 (kota.makino@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: '登録可能なメールアドレスです'}
+index-uCUEYUFk.js:342 メール検証結果: 登録可能なメールアドレスです
