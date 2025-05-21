@@ -134,9 +134,11 @@ export default function EmployeeImport() {
                 ) as CsvEmployee[];
 
                 // APIリクエスト
-                const response = await apiRequest('/api/admin/employees/import', 'POST', {
-                  employees: validData
-                });
+                const response = await apiRequest<ImportResult>(
+                  'POST',
+                  '/api/admin/employees/import',
+                  { employees: validData }
+                );
                 
                 resolve(response as ImportResult);
               } catch (error) {
@@ -192,9 +194,11 @@ export default function EmployeeImport() {
               ) as CsvEmployee[];
 
               // APIリクエスト
-              const response = await apiRequest('/api/admin/employees/import', 'POST', {
-                employees: validData
-              });
+              const response = await apiRequest<ImportResult>(
+                'POST',
+                '/api/admin/employees/import', 
+                { employees: validData }
+              );
               
               resolve(response as ImportResult);
             } catch (error) {
