@@ -170,13 +170,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { email } = req.query;
       if (!email || typeof email !== 'string') {
+        console.log("メール検証エラー: メールアドレスが未指定");
         return res.status(400).json({ exists: false, message: "メールアドレスが指定されていません" });
       }
       
       // データベースからユーザーを検索
       const user = await storage.getUserByEmail(email);
       
-      console.log("メール検証:", email, "ユーザー存在:", !!user, "パスワード設定済み:", !!user?.password);
+      // 詳細なログ出力
+      if (user) {
+        console.log(`メール検証: ${email}`);
+        console.log(` - ユーザーID: ${user.id}`);
+        console.log(` - 名前: ${user.name}`);
+        console.log(` - パスワード設定: ${user.password ? '設定済み' : '未設定'}`);
+        console.log(` - アクティブ状態: ${user.isActive ? 'アクティブ' : '非アクティブ'}`);
+      } else {
+        console.log(`メール検証: ${email} - ユーザーが存在しません`);
+      }
       
       // 登録済みユーザーのチェック（この時点では password 設定の有無に関わらず）
       const userExists = !!user;
@@ -186,6 +196,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // 登録可能かどうかのチェック（存在して、かつパスワードが未設定）
       const canRegister = userExists && !hasPassword;
+      
+      // 結果をログに出力
+      console.log(`メール検証結果: ${email}`);
+      console.log(` - ユーザー存在: ${userExists ? 'はい' : 'いいえ'}`);
+      console.log(` - パスワード設定済み: ${hasPassword ? 'はい' : 'いいえ'}`);
+      console.log(` - 登録可能: ${canRegister ? 'はい' : 'いいえ'}`);
+      console.log(` - 判定: ${canRegister ? '登録可能' : (userExists && hasPassword) ? '既に登録済み' : '未登録'}`);
       
       // メールアドレスの検証結果をクライアントに返す
       return res.json({ 
@@ -1042,15 +1059,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
             result.updatedUsers++;
           } else {
-            // 新規ユーザーの作成
-            const randomPassword = Math.random().toString(36).slice(-8);
+            // 新規ユーザーの作成（パスワードはnullで作成）
             await storage.createUser({
               email: employee.email,
               name: employee.name,
               displayName: employee.displayName || null,
               department: employee.department || null,
               employeeId: employee.employeeId,
-              password: hashPassword(randomPassword), // ランダムパスワードを設定
+              password: null, // パスワードはnullに設定（ユーザーが初回登録時に設定）
               isActive: true,
               isAdmin: false,
               weeklyPoints: 30,
