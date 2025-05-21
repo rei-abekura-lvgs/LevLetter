@@ -109,12 +109,21 @@ export default function Register() {
   }, [form.watch]);
 
   async function onSubmit(data: RegisterFormValues) {
-    if (!verificationStatus.canRegister) {
+    // パスワード設定済みのメールアドレスの場合（既にアカウント作成済み）
+    if (verificationStatus.isRegistered) {
+      toast({
+        title: "既に登録済みです",
+        description: "このメールアドレスは既に登録されています。ログイン画面からログインしてください。",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // 事前に登録されていないメールアドレスの場合
+    if (!verificationStatus.canRegister && !verificationStatus.isRegistered) {
       toast({
         title: "検証エラー",
-        description: verificationStatus.isRegistered 
-          ? "このメールアドレスは既に登録されています。ログイン画面からログインしてください。" 
-          : "メールアドレスが事前登録されていないため、アカウントを作成できません。",
+        description: "このメールアドレスは管理者によって事前登録されていません。",
         variant: "destructive",
       });
       return;
@@ -188,20 +197,15 @@ export default function Register() {
             <span>メールアドレス</span>
             {!verifyingEmail && verificationStatus.message && (
               <span className="flex items-center text-xs">
-                {verificationStatus.canRegister ? (
+                {verificationStatus.canRegister || verificationStatus.isRegistered ? (
                   <>
                     <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
-                    <span className="text-green-600">登録可能なアドレス</span>
-                  </>
-                ) : verificationStatus.isRegistered ? (
-                  <>
-                    <XCircle className="h-3 w-3 text-blue-500 mr-1" />
-                    <span className="text-blue-600">既に登録済みのアドレス</span>
+                    <span className="text-green-600">有効なアドレス</span>
                   </>
                 ) : (
                   <>
                     <XCircle className="h-3 w-3 text-red-500 mr-1" />
-                    <span className="text-red-600">未登録アドレス</span>
+                    <span className="text-red-600">無効なアドレス</span>
                   </>
                 )}
               </span>
@@ -245,7 +249,7 @@ export default function Register() {
         <Button 
           type="submit" 
           className="w-full" 
-          disabled={isLoading || !verificationStatus.canRegister}
+          disabled={isLoading || (!verificationStatus.canRegister && !verificationStatus.isRegistered)}
         >
           {isLoading ? "登録中..." : "アカウント作成"}
         </Button>
