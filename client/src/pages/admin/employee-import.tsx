@@ -49,16 +49,34 @@ interface CompanyEmployee {
 
 // 従業員データをインポートする関数
 async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResult> {
-  // デバッグ用：インポート前のデータをログ出力
-  console.log('インポート前のデータ(最初の3件):', employees.slice(0, 3));
+  // デバッグ用：インポート前のデータをログ出力（詳細版）
+  console.log('■■■■■■ インポート前のデータ詳細 ■■■■■■');
+  console.log('データ件数:', employees?.length || 0);
+  console.log('データサンプル:', employees?.slice(0, 3));
+  if (employees?.length > 0) {
+    console.log('1件目の内容:', JSON.stringify(employees[0], null, 2));
+    console.log('データ型:', typeof employees[0]);
+    console.log('プロパティ一覧:', Object.keys(employees[0]));
+  }
+  console.log('■■■■■■ インポート前のデータ詳細(終わり) ■■■■■■');
   
   if (!employees || employees.length === 0) {
+    console.error('エラー: 有効な従業員データがありません', {
+      受け取ったデータ: employees,
+      データ型: typeof employees,
+      長さ: employees?.length
+    });
     throw new Error('有効な従業員データがありません。データマッピングに問題がある可能性があります。');
   }
   
-  return await apiRequest<ImportResult>("POST", "/api/admin/employees/import", {
-    employees: employees
-  });
+  try {
+    return await apiRequest<ImportResult>("POST", "/api/admin/employees/import", {
+      employees: employees
+    });
+  } catch (error) {
+    console.error('インポートAPI呼び出しエラー:', error);
+    throw error;
+  }
 }
 
 const SAMPLE_CSV = `社員番号,氏名,職場氏名,会社メールアドレス,所属部門,所属コード,所属階層１,所属階層２,所属階層３,所属階層４,所属階層５,勤務地コード,勤務地名,職種コード,職種名,雇用区分,入社日,PLコード
@@ -95,35 +113,55 @@ export default function EmployeeImport() {
     // ファイル形式に応じてパース処理を分岐
     if (fileExt === 'csv' || fileExt === 'txt' || fileExt === 'tsv') {
       // CSVまたはTSVファイルのパース
-      Papa.parse(selectedFile, {
-        header: true,
-        skipEmptyLines: true,
-        // TSVファイルの場合はタブ区切りを指定
-        delimiter: fileExt === 'tsv' ? '\t' : ',',
-        complete: (results) => {
-          console.log('パース結果:', results);
-          console.log('パース結果のヘッダー:', results.meta.fields);
-          console.log('パース結果の最初の行:', results.data[0]);
-          
-          // CSV/TSVパースデータのフィールドをマッピング
-          const mappedData = results.data.map((row: any) => {
-            console.log('処理中の行:', row);
-            
-            // 会社DBの形式かチェック（TSVと思われる場合）
-            if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
-              // 社内DB形式の場合、フィールドをマッピング
-              return {
-                email: row["会社メールアドレス"] || '',
-                name: row["氏名"] || '',
-                employeeId: row["社員番号"] || '',
-                displayName: row["職場氏名"] || '',
-                department: row["所属部門"] || ''
-              };
-            } else {
-              // 従来のCSV形式の場合はそのまま
-              return row;
+      // ファイルの内容を一度読み込んで、区切り文字を自動検出
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = event.target?.result as string;
+        if (!content) return;
+        
+        // ファイル内容の最初の数行を確認
+        const lines = content.split('\n').slice(0, 5);
+        console.log('ファイル内容サンプル:', lines);
+        
+        // タブが含まれているかチェック
+        const hasTab = lines.some(line => line.includes('\t'));
+        console.log('タブ区切り判定:', hasTab);
+        
+        // 自動検出した区切り文字を使用
+        Papa.parse(selectedFile, {
+          header: true,
+          skipEmptyLines: true,
+          delimiter: hasTab ? '\t' : ',',
+          complete: (results) => {
+            console.log('■■■■■■ パース結果詳細 ■■■■■■');
+            console.log('パース結果:', results);
+            console.log('パース結果のヘッダー:', results.meta.fields);
+            console.log('行数:', results.data.length);
+            if (results.data.length > 0) {
+              console.log('パース結果の最初の行:', results.data[0]);
+              console.log('データ型:', typeof results.data[0]);
+              console.log('プロパティ一覧:', Object.keys(results.data[0]));
             }
-          });
+            
+            // CSV/TSVパースデータのフィールドをマッピング
+            const mappedData = results.data.map((row: any) => {
+              console.log('処理中の行:', row);
+            
+              // 会社DBの形式かチェック（TSVと思われる場合）
+              if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
+                // 社内DB形式の場合、フィールドをマッピング
+                return {
+                  email: row["会社メールアドレス"] || '',
+                  name: row["氏名"] || '',
+                  employeeId: row["社員番号"] || '',
+                  displayName: row["職場氏名"] || '',
+                  department: row["所属部門"] || ''
+                };
+              } else {
+                // 従来のCSV形式の場合はそのまま
+                return row;
+              }
+            });
           
           console.log('マッピング後のデータ:', mappedData.slice(0, 3));
           
