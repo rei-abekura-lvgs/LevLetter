@@ -45,6 +45,7 @@ export default function UserManagement() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
+  const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   // ユーザー一覧を取得
   const { data: users = [], isLoading } = useQuery({
