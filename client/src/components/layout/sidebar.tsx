@@ -1,5 +1,6 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
+import { useAuth } from "@/context/auth-context";
 import { Home, Award, Gift, Star, TrendingUp, LogOut, Building2, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
@@ -11,6 +12,8 @@ interface SidebarProps {
 
 export default function Sidebar({ user }: SidebarProps) {
   const [location] = useLocation();
+  const { user: authUser } = useAuth();
+  const isAdmin = authUser?.isAdmin || false;
 
   const handleLogout = () => {
     logout();
@@ -53,7 +56,20 @@ export default function Sidebar({ user }: SidebarProps) {
           
           {/* ナビゲーションメニュー */}
           <div className="mb-6 space-y-1">
-            {/* サイドバーからメニュー項目を削除 */}
+            <NavItem href="/" icon={Home} label="ホーム" />
+            <NavItem href="/my-cards" icon={FileText} label="自分宛てカード" />
+            <NavItem href="/departments" icon={Building2} label="部署一覧" />
+            
+            {isAdmin && (
+              <>
+                <div className="pt-3 pb-1">
+                  <div className="text-xs font-semibold text-muted-foreground px-4 py-1">
+                    管理者メニュー
+                  </div>
+                </div>
+                <NavItem href="/admin" icon={Star} label="管理ダッシュボード" />
+              </>
+            )}
           </div>
           
           {/* ポイント情報 */}
