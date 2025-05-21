@@ -40,46 +40,92 @@ export class DatabaseStorage implements IStorage {
       console.log(`ユーザーID ${id} の関連データ削除開始: ${userExists[0].email}`);
       
       try {
-        // 1. このユーザーに送られたカードを検索
-        const recipientCards = await db.select().from(cards)
+        // まず、カード削除のために必要なクエリを実行
+        
+        // 1. このユーザーに関連する全てのカードIDを取得
+        console.log(`  - ユーザーID ${id} に関連するカードIDを取得中...`);
+        
+        // 受信したカードのID
+        const recipientCardIds = await db.select({ id: cards.id }).from(cards)
           .where(and(
             eq(cards.recipientId, id),
             eq(cards.recipientType, 'user')
           ));
+          
+        // 送信したカードのID
+        const senderCardIds = await db.select({ id: cards.id }).from(cards)
+          .where(eq(cards.senderId, id));
         
-        // 関連カードごとにいいねを削除してからカードを削除
-        for (const card of recipientCards) {
-          console.log(`  - 受信カードID ${card.id} の関連いいねを削除`);
-          await db.delete(likes).where(eq(likes.cardId, card.id));
-          console.log(`  - 受信カードID ${card.id} を削除`);
-          await db.delete(cards).where(eq(cards.id, card.id));
-        }
+        // すべてのカードIDを結合
+        const allCardIds = [
+          ...recipientCardIds.map(c => c.id),
+          ...senderCardIds.map(c => c.id)
+        ];
         
-        // 2. このユーザーが送信したカードを検索
-        const senderCards = await db.select().from(cards).where(eq(cards.senderId, id));
+        console.log(`  - 削除対象カード: ${allCardIds.length}件`);
         
-        // 送信カードごとにいいねを削除してからカードを削除
-        for (const card of senderCards) {
-          console.log(`  - 送信カードID ${card.id} の関連いいねを削除`);
-          await db.delete(likes).where(eq(likes.cardId, card.id));
-          console.log(`  - 送信カードID ${card.id} を削除`);
-          await db.delete(cards).where(eq(cards.id, card.id));
+        // 2. これらのカードに関連するいいねを一括削除
+        if (allCardIds.length > 0) {
+          console.log(`  - カードに関連するいいねを削除中...`);
+          try {
+            // SQLでIN句を使用して一括削除
+            await db.delete(likes).where(sql`"card_id" IN (${allCardIds.join(',')})`);
+            console.log(`  - カードに関連するいいねを削除完了`);
+          } catch (likesError) {
+            console.error(`  - カードいいね削除中のエラー:`, likesError);
+          }
         }
         
         // 3. ユーザーが行ったいいねを削除
-        console.log(`  - ユーザーID ${id} のいいねをすべて削除`);
-        await db.delete(likes).where(eq(likes.userId, id));
+        console.log(`  - ユーザーID ${id} が行ったいいねを削除中...`);
+        try {
+          await db.delete(likes).where(eq(likes.userId, id));
+          console.log(`  - ユーザーのいいねを削除完了`);
+        } catch (userLikesError) {
+          console.error(`  - ユーザーいいね削除中のエラー:`, userLikesError);
+        }
         
-        // 4. チームメンバーシップを削除
-        console.log(`  - ユーザーID ${id} のチームメンバーシップを削除`);
-        await db.delete(teamMembers).where(eq(teamMembers.userId, id));
+        // 4. ユーザーが受信者のカードを削除
+        console.log(`  - ユーザーが受信者のカードを削除中...`);
+        try {
+          await db.delete(cards)
+            .where(and(
+              eq(cards.recipientId, id),
+              eq(cards.recipientType, 'user')
+            ));
+          console.log(`  - 受信カードの削除完了`);
+        } catch (recipientCardsError) {
+          console.error(`  - 受信カード削除中のエラー:`, recipientCardsError);
+        }
         
-        // 5. 最後にユーザー自体を削除
-        console.log(`  - ユーザーID ${id} を物理削除`);
-        const deleteResult = await db.delete(users).where(eq(users.id, id));
-        console.log(`  - 削除結果:`, deleteResult);
+        // 5. ユーザーが送信者のカードを削除
+        console.log(`  - ユーザーが送信者のカードを削除中...`);
+        try {
+          await db.delete(cards).where(eq(cards.senderId, id));
+          console.log(`  - 送信カードの削除完了`);
+        } catch (senderCardsError) {
+          console.error(`  - 送信カード削除中のエラー:`, senderCardsError);
+        }
         
-        console.log(`ユーザーID ${id} の削除が完了しました`);
+        // 6. チームメンバーシップを削除
+        console.log(`  - チームメンバーシップを削除中...`);
+        try {
+          await db.delete(teamMembers).where(eq(teamMembers.userId, id));
+          console.log(`  - チームメンバーシップの削除完了`);
+        } catch (teamMembersError) {
+          console.error(`  - チームメンバーシップ削除中のエラー:`, teamMembersError);
+        }
+        
+        // 7. 最後にユーザー自体を削除
+        console.log(`  - ユーザー ${id} を物理削除中...`);
+        try {
+          const deleteResult = await db.delete(users).where(eq(users.id, id));
+          console.log(`  - ユーザー削除結果:`, deleteResult);
+          console.log(`ユーザーID ${id} の削除が完了しました`);
+        } catch (userDeleteError) {
+          console.error(`  - ユーザー削除中のエラー:`, userDeleteError);
+          throw userDeleteError; // ユーザー削除ができなかった場合はエラーを投げる
+        }
       } catch (innerError) {
         console.error(`ユーザーID ${id} の関連データ削除中にエラー:`, innerError);
         throw innerError;
