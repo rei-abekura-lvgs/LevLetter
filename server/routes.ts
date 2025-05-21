@@ -675,17 +675,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // 部署存在確認
       const department = await storage.getDepartment(id);
+      console.log("削除対象部署:", department);
       if (!department) {
         return res.status(404).json({ message: "部署が見つかりません" });
       }
       
-      // 部署削除
-      await storage.deleteDepartment(id);
-      
-      console.log("部署削除成功:", id);
-      return res.json({ message: "部署を削除しました" });
+      try {
+        // 部署削除
+        await storage.deleteDepartment(id);
+        console.log("部署削除成功:", id);
+        return res.json({ message: "部署を削除しました" });
+      } catch (deleteError) {
+        console.error("部署削除処理エラー詳細:", deleteError);
+        // エラーメッセージを詳細に
+        return res.status(500).json({ 
+          message: "部署の削除に失敗しました", 
+          details: deleteError.message || "不明なエラー" 
+        });
+      }
     } catch (error) {
-      console.error("Error deleting department:", error);
+      console.error("部署削除リクエスト処理エラー:", error);
       return res.status(500).json({ message: "部署の削除に失敗しました" });
     }
   });

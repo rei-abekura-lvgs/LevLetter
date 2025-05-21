@@ -186,6 +186,7 @@ export default function DepartmentManagement() {
       });
     },
     onError: (error: any) => {
+      console.error('部署削除エラー:', error);
       toast({
         title: "エラー",
         description: error.message || "部署の削除に失敗しました",
