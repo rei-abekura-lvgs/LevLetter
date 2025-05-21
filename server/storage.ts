@@ -43,6 +43,7 @@ export interface IStorage {
   updateUser(id: number, user: Partial<User>): Promise<User>;
   authenticateUser(email: string, password: string): Promise<User | null>;
   resetUserWeeklyPoints(): Promise<void>;
+  deleteUser(id: number): Promise<void>; // 開発用：ユーザー物理削除
 
   // チーム
   getTeams(): Promise<Team[]>;

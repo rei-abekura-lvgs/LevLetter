@@ -165,6 +165,78 @@ export default function UserManagement() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+          
+          <Dialog open={showDeleteAllDialog} onOpenChange={setShowDeleteAllDialog}>
+            <DialogTrigger asChild>
+              <Button variant="destructive" size="sm">
+                開発用：全ユーザー削除
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-destructive">危険な操作：全ユーザー削除</DialogTitle>
+                <DialogDescription>
+                  この操作は保護されたアカウント(rei.abekura@leverages.jp)以外の全ユーザーを削除します。
+                  この操作は元に戻せません。本番環境では絶対に実行しないでください。
+                </DialogDescription>
+              </DialogHeader>
+              <div className="bg-muted p-3 rounded-md text-sm">
+                <p>実行すると以下の影響があります：</p>
+                <ul className="list-disc ml-5 mt-2 space-y-1">
+                  <li>ユーザーデータが完全に削除されます</li>
+                  <li>関連するカード・いいねも削除されます</li>
+                  <li>チームメンバーシップも削除されます</li>
+                </ul>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setShowDeleteAllDialog(false)}>
+                  キャンセル
+                </Button>
+                <Button 
+                  variant="destructive"
+                  onClick={() => {
+                    // 開発用の一括削除処理
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                      toast({
+                        title: "認証エラー",
+                        description: "ログインしてください",
+                        variant: "destructive",
+                      });
+                      return;
+                    }
+                    
+                    // 保護されたユーザー以外を削除
+                    fetch('/api/admin/users/delete-all', {
+                      method: 'DELETE',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                      }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                      toast({
+                        title: "一括削除完了",
+                        description: data.message || "ユーザーを一括削除しました",
+                      });
+                      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+                      setShowDeleteAllDialog(false);
+                    })
+                    .catch(err => {
+                      toast({
+                        title: "エラー",
+                        description: "ユーザーの一括削除に失敗しました",
+                        variant: "destructive",
+                      });
+                    });
+                  }}
+                >
+                  全ユーザーを削除
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {isLoading ? (
