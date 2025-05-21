@@ -76,15 +76,7 @@ export default function DepartmentManagement() {
   // 部署作成ミューテーション
   const createDepartmentMutation = useMutation({
     mutationFn: async (data: {
-      code: string;
       name: string;
-      level1: string | null;
-      level2: string | null;
-      level3: string | null;
-      level4: string | null;
-      level5: string | null;
-      fullPath: string | null;
-      parentId: number | null;
       description: string | null;
     }) => {
       return apiRequest('/api/departments', 'POST', data);
@@ -93,15 +85,7 @@ export default function DepartmentManagement() {
       queryClient.invalidateQueries({ queryKey: ['/api/departments'] });
       setIsAddDialogOpen(false);
       setNewDepartment({
-        code: "",
         name: "",
-        level1: "",
-        level2: "",
-        level3: "",
-        level4: "",
-        level5: "",
-        fullPath: "",
-        parentId: null,
         description: ""
       });
       toast({
@@ -123,15 +107,7 @@ export default function DepartmentManagement() {
     mutationFn: async ({ id, data }: { 
       id: number; 
       data: { 
-        code: string; 
         name: string; 
-        level1: string | null; 
-        level2: string | null; 
-        level3: string | null; 
-        level4: string | null; 
-        level5: string | null; 
-        fullPath: string | null; 
-        parentId: number | null; 
         description: string | null; 
       } 
     }) => {
@@ -259,80 +235,15 @@ export default function DepartmentManagement() {
                   新しい部署の情報を入力してください。
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
+              <div className="grid gap-4 py-4">                
                 <div className="grid gap-2">
-                  <Label htmlFor="code">部署コード</Label>
-                  <Input
-                    id="code"
-                    placeholder="例: IT"
-                    value={newDepartment.code}
-                    onChange={(e) => setNewDepartment({ ...newDepartment, code: e.target.value })}
-                  />
-                  <p className="text-xs text-muted-foreground">短い部署コード（略称）を入力してください</p>
-                </div>
-                
-                <div className="grid gap-2">
-                  <Label htmlFor="name">部署正式名称</Label>
+                  <Label htmlFor="name">部署名</Label>
                   <Input
                     id="name"
                     placeholder="例: 情報システム部"
                     value={newDepartment.name}
                     onChange={(e) => setNewDepartment({ ...newDepartment, name: e.target.value })}
                   />
-                </div>
-                
-                <div className="grid grid-cols-1 gap-4">
-                  <h3 className="text-sm font-semibold">部署階層構造</h3>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="level1">第1階層</Label>
-                    <Input
-                      id="level1"
-                      placeholder="例: 全社"
-                      value={newDepartment.level1}
-                      onChange={(e) => setNewDepartment({ ...newDepartment, level1: e.target.value })}
-                    />
-                  </div>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="level2">第2階層</Label>
-                    <Input
-                      id="level2"
-                      placeholder="例: 技術本部"
-                      value={newDepartment.level2}
-                      onChange={(e) => setNewDepartment({ ...newDepartment, level2: e.target.value })}
-                    />
-                  </div>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="level3">第3階層</Label>
-                    <Input
-                      id="level3"
-                      placeholder="例: システム統括部"
-                      value={newDepartment.level3}
-                      onChange={(e) => setNewDepartment({ ...newDepartment, level3: e.target.value })}
-                    />
-                  </div>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="level4">第4階層</Label>
-                    <Input
-                      id="level4"
-                      placeholder="例: 情報システム部"
-                      value={newDepartment.level4}
-                      onChange={(e) => setNewDepartment({ ...newDepartment, level4: e.target.value })}
-                    />
-                  </div>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="level5">第5階層</Label>
-                    <Input
-                      id="level5"
-                      placeholder="例: インフラチーム"
-                      value={newDepartment.level5}
-                      onChange={(e) => setNewDepartment({ ...newDepartment, level5: e.target.value })}
-                    />
-                  </div>
                 </div>
 
                 <div className="grid gap-2">
@@ -343,18 +254,6 @@ export default function DepartmentManagement() {
                     value={newDepartment.description}
                     onChange={(e) => setNewDepartment({ ...newDepartment, description: e.target.value })}
                   />
-                </div>
-                
-                <div className="bg-muted/50 p-2 rounded-md">
-                  <p className="text-xs text-muted-foreground">
-                    フルパス: {[
-                      newDepartment.level1, 
-                      newDepartment.level2, 
-                      newDepartment.level3, 
-                      newDepartment.level4, 
-                      newDepartment.level5
-                    ].filter(Boolean).join('/') || '(未入力)'}
-                  </p>
                 </div>
               </div>
               <DialogFooter>
@@ -379,9 +278,7 @@ export default function DepartmentManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>部署コード</TableHead>
-                  <TableHead>正式名称</TableHead>
-                  <TableHead>階層構造/パス</TableHead>
+                  <TableHead>部署名</TableHead>
                   <TableHead>説明</TableHead>
                   <TableHead>作成日</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
@@ -390,29 +287,14 @@ export default function DepartmentManagement() {
               <TableBody>
                 {filteredDepartments.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
+                    <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
                       部署が見つかりませんでした
                     </TableCell>
                   </TableRow>
                 ) : (
                   filteredDepartments.map((dept: Department) => (
                     <TableRow key={dept.id}>
-                      <TableCell className="font-medium">{dept.code}</TableCell>
-                      <TableCell>{dept.name}</TableCell>
-                      <TableCell>
-                        <div className="max-w-xs truncate">
-                          {dept.fullPath ? (
-                            <span 
-                              className="text-sm text-muted-foreground cursor-help hover:text-foreground transition-colors" 
-                              title={dept.fullPath}
-                            >
-                              {dept.fullPath}
-                            </span>
-                          ) : (
-                            <span className="text-sm text-muted-foreground">-</span>
-                          )}
-                        </div>
-                      </TableCell>
+                      <TableCell className="font-medium">{dept.name}</TableCell>
                       <TableCell>{dept.description || "-"}</TableCell>
                       <TableCell>
                         {dept.createdAt ? format(new Date(dept.createdAt), 'yyyy/MM/dd') : "-"}
@@ -429,18 +311,7 @@ export default function DepartmentManagement() {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onClick={() => {
-                                // すべての必要なプロパティを確実に含める
-                                setSelectedDepartment({
-                                  ...dept,
-                                  code: dept.code || "",
-                                  level1: dept.level1 || "",
-                                  level2: dept.level2 || "",
-                                  level3: dept.level3 || "",
-                                  level4: dept.level4 || "",
-                                  level5: dept.level5 || "",
-                                  fullPath: dept.fullPath || "",
-                                  parentId: dept.parentId || null
-                                });
+                                setSelectedDepartment(dept);
                                 setIsEditDialogOpen(true);
                               }}
                             >
@@ -449,21 +320,10 @@ export default function DepartmentManagement() {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
-                                // 削除時にも必要な情報をすべて含める
-                                setSelectedDepartment({
-                                  ...dept,
-                                  code: dept.code || "",
-                                  level1: dept.level1 || "",
-                                  level2: dept.level2 || "",
-                                  level3: dept.level3 || "",
-                                  level4: dept.level4 || "",
-                                  level5: dept.level5 || "",
-                                  fullPath: dept.fullPath || "",
-                                  parentId: dept.parentId || null
-                                });
+                                setSelectedDepartment(dept);
                                 setIsDeleteDialogOpen(true);
                               }}
-                              className="text-red-600"
+                              className="text-destructive focus:text-destructive"
                             >
                               <Trash2 className="mr-2 h-4 w-4" />
                               削除
@@ -483,122 +343,34 @@ export default function DepartmentManagement() {
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>部署を編集</DialogTitle>
+              <DialogTitle>部署情報を編集</DialogTitle>
               <DialogDescription>
-                部署情報を変更します。
+                部署の情報を更新することができます。
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="edit-code">部署コード</Label>
-                <Input
-                  id="edit-code"
-                  value={selectedDepartment?.code || ""}
-                  onChange={(e) => setSelectedDepartment(prev => 
-                    prev ? { ...prev, code: e.target.value } : null
-                  )}
-                />
-                <p className="text-xs text-muted-foreground">短い部署コード（略称）</p>
-              </div>
-              
-              <div className="grid gap-2">
-                <Label htmlFor="edit-name">部署正式名称</Label>
-                <Input
-                  id="edit-name"
-                  value={selectedDepartment?.name || ""}
-                  onChange={(e) => setSelectedDepartment(prev => 
-                    prev ? { ...prev, name: e.target.value } : null
-                  )}
-                />
-              </div>
-              
-              <div className="grid grid-cols-1 gap-4">
-                <h3 className="text-sm font-semibold">部署階層構造</h3>
-                
+            {selectedDepartment && (
+              <div className="grid gap-4 py-4">                
                 <div className="grid gap-2">
-                  <Label htmlFor="edit-level1">第1階層</Label>
+                  <Label htmlFor="edit-name">部署名</Label>
                   <Input
-                    id="edit-level1"
-                    placeholder="例: 全社"
-                    value={selectedDepartment?.level1 || ""}
-                    onChange={(e) => setSelectedDepartment(prev => 
-                      prev ? { ...prev, level1: e.target.value } : null
-                    )}
-                  />
-                </div>
-                
-                <div className="grid gap-2">
-                  <Label htmlFor="edit-level2">第2階層</Label>
-                  <Input
-                    id="edit-level2"
-                    placeholder="例: 技術本部"
-                    value={selectedDepartment?.level2 || ""}
-                    onChange={(e) => setSelectedDepartment(prev => 
-                      prev ? { ...prev, level2: e.target.value } : null
-                    )}
-                  />
-                </div>
-                
-                <div className="grid gap-2">
-                  <Label htmlFor="edit-level3">第3階層</Label>
-                  <Input
-                    id="edit-level3"
-                    placeholder="例: システム統括部"
-                    value={selectedDepartment?.level3 || ""}
-                    onChange={(e) => setSelectedDepartment(prev => 
-                      prev ? { ...prev, level3: e.target.value } : null
-                    )}
-                  />
-                </div>
-                
-                <div className="grid gap-2">
-                  <Label htmlFor="edit-level4">第4階層</Label>
-                  <Input
-                    id="edit-level4"
+                    id="edit-name"
                     placeholder="例: 情報システム部"
-                    value={selectedDepartment?.level4 || ""}
-                    onChange={(e) => setSelectedDepartment(prev => 
-                      prev ? { ...prev, level4: e.target.value } : null
-                    )}
+                    value={selectedDepartment.name}
+                    onChange={(e) => setSelectedDepartment({ ...selectedDepartment, name: e.target.value })}
                   />
                 </div>
-                
+
                 <div className="grid gap-2">
-                  <Label htmlFor="edit-level5">第5階層</Label>
-                  <Input
-                    id="edit-level5"
-                    placeholder="例: インフラチーム"
-                    value={selectedDepartment?.level5 || ""}
-                    onChange={(e) => setSelectedDepartment(prev => 
-                      prev ? { ...prev, level5: e.target.value } : null
-                    )}
+                  <Label htmlFor="edit-description">説明 (任意)</Label>
+                  <Textarea
+                    id="edit-description"
+                    placeholder="部署の説明や役割などを入力"
+                    value={selectedDepartment.description || ""}
+                    onChange={(e) => setSelectedDepartment({ ...selectedDepartment, description: e.target.value })}
                   />
                 </div>
               </div>
-              
-              <div className="grid gap-2">
-                <Label htmlFor="edit-description">説明 (任意)</Label>
-                <Textarea
-                  id="edit-description"
-                  value={selectedDepartment?.description || ""}
-                  onChange={(e) => setSelectedDepartment(prev => 
-                    prev ? { ...prev, description: e.target.value } : null
-                  )}
-                />
-              </div>
-              
-              <div className="bg-muted/50 p-2 rounded-md">
-                <p className="text-xs text-muted-foreground">
-                  フルパス: {[
-                    selectedDepartment?.level1, 
-                    selectedDepartment?.level2, 
-                    selectedDepartment?.level3, 
-                    selectedDepartment?.level4, 
-                    selectedDepartment?.level5
-                  ].filter(Boolean).join('/') || '(未入力)'}
-                </p>
-              </div>
-            </div>
+            )}
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">キャンセル</Button>
@@ -617,17 +389,22 @@ export default function DepartmentManagement() {
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>部署を削除</DialogTitle>
+              <DialogTitle>部署削除の確認</DialogTitle>
               <DialogDescription>
-                この部署を削除しますか？この操作は取り消せません。
+                この部署を削除してもよろしいですか？この操作は元に戻せません。
               </DialogDescription>
             </DialogHeader>
-            <div className="py-4">
-              <p className="text-sm text-gray-500">
-                部署「<span className="font-medium text-foreground">{selectedDepartment?.name}</span>」を削除します。
-                部署に所属していたユーザーは所属なしとなります。
-              </p>
-            </div>
+            {selectedDepartment && (
+              <div className="py-4">
+                <div className="rounded-md bg-muted p-4 mb-4">
+                  <p><strong>部署名:</strong> {selectedDepartment.name}</p>
+                  <p><strong>説明:</strong> {selectedDepartment.description || "-"}</p>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  この部署を削除すると、関連するすべてのデータも削除されます。
+                </p>
+              </div>
+            )}
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">キャンセル</Button>
