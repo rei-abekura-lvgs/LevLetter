@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileUpdateSchema } from "@shared/schema";
@@ -15,8 +15,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { User } from "@shared/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProfile, getDepartments } from "@/lib/api";
-import { Coins, HeartIcon } from "lucide-react";
+import { updateProfile, getDepartments, uploadAvatar } from "@/lib/api";
+import { Coins, HeartIcon, Camera, Upload, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -114,9 +114,39 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
         
         <div className="px-1 py-4">
           <div className="flex flex-col items-center mb-6">
-            <div className={`h-20 w-20 rounded-full bg-${user.avatarColor} flex items-center justify-center text-white text-xl font-semibold mb-4`}>
-              {userInitials}
-            </div>
+            {user.customAvatarUrl ? (
+              <div className="relative">
+                <img 
+                  src={user.customAvatarUrl} 
+                  alt={user.name}
+                  className="h-20 w-20 rounded-full object-cover mb-4" 
+                />
+                <button
+                  type="button"
+                  onClick={() => setImageUploadOpen(true)}
+                  className="absolute bottom-3 right-0 bg-primary-600 rounded-full p-1 shadow-md hover:bg-primary-700 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <div className="relative">
+                <div className={`h-20 w-20 rounded-full bg-${user.avatarColor} flex items-center justify-center text-white text-xl font-semibold mb-4`}>
+                  {userInitials}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setImageUploadOpen(true)}
+                  className="absolute bottom-3 right-0 bg-primary-600 rounded-full p-1 shadow-md hover:bg-primary-700 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                  </svg>
+                </button>
+              </div>
+            )}
             
             <div className="text-center">
               <h3 className="text-lg font-medium text-gray-900">{user.displayName || user.name}</h3>

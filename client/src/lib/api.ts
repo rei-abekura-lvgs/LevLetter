@@ -67,6 +67,21 @@ export async function updateProfile(id: number, data: ProfileUpdateRequest) {
   }
 }
 
+export async function uploadAvatar(id: number, imageData: string) {
+  try {
+    const result = await apiRequest<{success: boolean, user: User}>(
+      "POST", 
+      `/api/users/${id}/avatar`, 
+      { imageData }
+    );
+    console.log("アバターアップロード成功:", result);
+    return result.user;
+  } catch (error) {
+    console.error("アバターアップロードエラー:", error);
+    throw error;
+  }
+}
+
 // チーム関連
 export async function getTeams() {
   try {
