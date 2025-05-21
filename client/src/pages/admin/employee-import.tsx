@@ -5,12 +5,13 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileText, AlertCircle, CheckCircle2, Info } from "lucide-react";
+import { Upload, FileText, AlertCircle, CheckCircle2, Info, FileSpreadsheet } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
 
 interface ImportResult {
   success: boolean;
@@ -40,7 +41,7 @@ export default function EmployeeImport() {
   const [isPreviewMode, setIsPreviewMode] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // CSVファイルのパース
+  // ファイルのパース（CSVまたはExcel）
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
@@ -48,20 +49,67 @@ export default function EmployeeImport() {
     setFile(selectedFile);
     setImportResult(null);
 
-    // CSVのパース
-    Papa.parse(selectedFile, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        // 必須フィールドのチェック
-        const validData = results.data.filter((row: any) => 
-          row.email && row.name && row.employeeId
-        ) as CsvEmployee[];
-        
-        setPreview(validData.slice(0, 10)); // 先頭10件をプレビュー表示
-        setIsPreviewMode(true);
-      }
-    });
+    const fileExt = selectedFile.name.split('.').pop()?.toLowerCase();
+    
+    // ファイル形式に応じてパース処理を分岐
+    if (fileExt === 'csv') {
+      // CSVファイルのパース
+      Papa.parse(selectedFile, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          // 必須フィールドのチェック
+          const validData = results.data.filter((row: any) => 
+            row.email && row.name && row.employeeId
+          ) as CsvEmployee[];
+          
+          setPreview(validData.slice(0, 10)); // 先頭10件をプレビュー表示
+          setIsPreviewMode(true);
+        }
+      });
+    } else if (fileExt === 'xlsx' || fileExt === 'xls') {
+      // Excelファイルのパース
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = e.target?.result;
+          if (!data) return;
+          
+          // Excelファイルを読み込み
+          const workbook = XLSX.read(data, { type: 'binary' });
+          
+          // 最初のシートのデータを取得
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          
+          // シートデータをJSONに変換
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: false });
+          
+          // 必須フィールドのチェック
+          const validData = jsonData.filter((row: any) => 
+            row.email && row.name && row.employeeId
+          ) as CsvEmployee[];
+          
+          setPreview(validData.slice(0, 10)); // 先頭10件をプレビュー表示
+          setIsPreviewMode(true);
+        } catch (error) {
+          console.error('Excelファイルのパースエラー:', error);
+          toast({
+            title: 'エラー',
+            description: 'Excelファイルの読み込みに失敗しました',
+            variant: 'destructive',
+          });
+        }
+      };
+      
+      reader.readAsBinaryString(selectedFile);
+    } else {
+      toast({
+        title: 'エラー',
+        description: 'CSVまたはExcel形式のファイルをアップロードしてください',
+        variant: 'destructive',
+      });
+    }
   };
 
   // インポート処理
@@ -69,14 +117,77 @@ export default function EmployeeImport() {
     mutationFn: async () => {
       if (!file) return null;
 
-      return new Promise<ImportResult>((resolve) => {
-        Papa.parse(file, {
-          header: true,
-          skipEmptyLines: true,
-          complete: async (results) => {
+      const fileExt = file.name.split('.').pop()?.toLowerCase();
+
+      // CSVまたはExcelに基づいて処理を分岐
+      if (fileExt === 'csv') {
+        // CSVファイル処理
+        return new Promise<ImportResult>((resolve) => {
+          Papa.parse(file, {
+            header: true,
+            skipEmptyLines: true,
+            complete: async (results) => {
+              try {
+                // 必須フィールドのチェック
+                const validData = results.data.filter((row: any) => 
+                  row.email && row.name && row.employeeId
+                ) as CsvEmployee[];
+
+                // APIリクエスト
+                const response = await apiRequest('/api/admin/employees/import', 'POST', {
+                  employees: validData
+                });
+                
+                resolve(response as ImportResult);
+              } catch (error) {
+                console.error('Import error:', error);
+                resolve({
+                  success: false,
+                  newUsers: 0,
+                  updatedUsers: 0,
+                  errors: [(error as Error).message || '不明なエラーが発生しました']
+                });
+              }
+            },
+            error: (error) => {
+              resolve({
+                success: false,
+                newUsers: 0,
+                updatedUsers: 0,
+                errors: [error.message || 'CSVファイルの解析に失敗しました']
+              });
+            }
+          });
+        });
+      } else if (fileExt === 'xlsx' || fileExt === 'xls') {
+        // Excelファイル処理
+        return new Promise<ImportResult>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = async (e) => {
             try {
+              const data = e.target?.result;
+              if (!data) {
+                resolve({
+                  success: false,
+                  newUsers: 0,
+                  updatedUsers: 0,
+                  errors: ['Excelファイルの読み込みに失敗しました']
+                });
+                return;
+              }
+              
+              // Excelファイルを読み込み
+              const workbook = XLSX.read(data, { type: 'binary' });
+              
+              // 最初のシートのデータを取得
+              const firstSheetName = workbook.SheetNames[0];
+              const worksheet = workbook.Sheets[firstSheetName];
+              
+              // シートデータをJSONに変換
+              const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: false });
+              
               // 必須フィールドのチェック
-              const validData = results.data.filter((row: any) => 
+              const validData = jsonData.filter((row: any) => 
                 row.email && row.name && row.employeeId
               ) as CsvEmployee[];
 
@@ -87,25 +198,35 @@ export default function EmployeeImport() {
               
               resolve(response as ImportResult);
             } catch (error) {
-              console.error('Import error:', error);
+              console.error('Excel import error:', error);
               resolve({
                 success: false,
                 newUsers: 0,
                 updatedUsers: 0,
-                errors: [(error as Error).message || '不明なエラーが発生しました']
+                errors: [(error as Error).message || 'Excelファイルの処理中にエラーが発生しました']
               });
             }
-          },
-          error: (error) => {
+          };
+          
+          reader.onerror = () => {
             resolve({
               success: false,
               newUsers: 0,
               updatedUsers: 0,
-              errors: [error.message || 'CSVファイルの解析に失敗しました']
+              errors: ['Excelファイルの読み込み中にエラーが発生しました']
             });
-          }
+          };
+          
+          reader.readAsBinaryString(file);
         });
-      });
+      } else {
+        return {
+          success: false,
+          newUsers: 0,
+          updatedUsers: 0,
+          errors: ['サポートされていないファイル形式です']
+        };
+      }
     },
     onSuccess: (data) => {
       if (data) {
@@ -149,6 +270,28 @@ export default function EmployeeImport() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+  
+  // サンプルExcelのダウンロード
+  const downloadSampleExcel = () => {
+    // サンプルデータの定義
+    const sampleData = [
+      { email: 'tanaka@example.com', name: '田中太郎', employeeId: 'E001', displayName: 'タナカ', department: '営業部' },
+      { email: 'yamada@example.com', name: '山田花子', employeeId: 'E002', displayName: 'ヤマダ', department: 'マーケティング部' },
+      { email: 'suzuki@example.com', name: '鈴木一郎', employeeId: 'E003', displayName: 'スズキ', department: '開発部' }
+    ];
+    
+    // ワークブックの作成
+    const wb = XLSX.utils.book_new();
+    
+    // データをシートに変換
+    const ws = XLSX.utils.json_to_sheet(sampleData);
+    
+    // シートをワークブックに追加
+    XLSX.utils.book_append_sheet(wb, ws, "従業員データ");
+    
+    // Excelファイルとしてダウンロード
+    XLSX.writeFile(wb, "employee_sample.xlsx");
+  };
 
   return (
     <Card>
@@ -172,7 +315,7 @@ export default function EmployeeImport() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".csv"
+                  accept=".csv,.xlsx,.xls"
                   className="hidden"
                   onChange={handleFileChange}
                   id="csv-upload"
@@ -184,25 +327,35 @@ export default function EmployeeImport() {
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Upload className="w-8 h-8 mb-2 text-gray-400" />
                     <p className="mb-1 text-sm text-gray-500">
-                      <span className="font-semibold">CSVファイルをクリックして選択</span>
+                      <span className="font-semibold">ファイルをクリックして選択</span>
                       またはドラッグ＆ドロップ
                     </p>
                     <p className="text-xs text-gray-400">
-                      CSVファイルのみ (.csv)
+                      CSVまたはExcelファイル (.csv, .xlsx, .xls)
                     </p>
                   </div>
                 </label>
               </div>
               
               <div className="w-48">
-                <Button 
-                  variant="outline" 
-                  className="w-full" 
-                  onClick={downloadSampleCsv}
-                >
-                  <FileText className="w-4 h-4 mr-2" />
-                  サンプルCSV
-                </Button>
+                <div className="space-y-2">
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={downloadSampleCsv}
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    サンプルCSV
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={downloadSampleExcel}
+                  >
+                    <FileSpreadsheet className="w-4 h-4 mr-2" />
+                    サンプルExcel
+                  </Button>
+                </div>
               </div>
             </div>
 
