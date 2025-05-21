@@ -52,26 +52,10 @@ export default function DepartmentManagement() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [newDepartment, setNewDepartment] = useState<{
-    code: string;
     name: string;
-    level1: string;
-    level2: string;
-    level3: string;
-    level4: string;
-    level5: string;
-    fullPath: string;
-    parentId: number | null;
     description: string;
   }>({
-    code: "",
     name: "",
-    level1: "",
-    level2: "",
-    level3: "",
-    level4: "",
-    level5: "",
-    fullPath: "",
-    parentId: null,
     description: ""
   });
 
@@ -196,45 +180,19 @@ export default function DepartmentManagement() {
   });
 
   // 部署追加ハンドラー
-  const handleAddDepartment = () => {
-    if (!newDepartment.code.trim()) {
-      toast({
-        title: "エラー",
-        description: "部署コードを入力してください",
-        variant: "destructive",
-      });
-      return;
-    }
-    
+  const handleAddDepartment = () => {    
     if (!newDepartment.name.trim()) {
       toast({
         title: "エラー",
-        description: "部署正式名称を入力してください",
+        description: "部署名を入力してください",
         variant: "destructive",
       });
       return;
     }
 
-    // 階層構造を生成
-    const fullPath = [
-      newDepartment.level1, 
-      newDepartment.level2, 
-      newDepartment.level3, 
-      newDepartment.level4, 
-      newDepartment.level5
-    ].filter(Boolean).join('/');
-
     createDepartmentMutation.mutate({
-      code: newDepartment.code.trim(),
       name: newDepartment.name.trim(),
-      level1: newDepartment.level1 ? newDepartment.level1.trim() : null,
-      level2: newDepartment.level2 ? newDepartment.level2.trim() : null,
-      level3: newDepartment.level3 ? newDepartment.level3.trim() : null,
-      level4: newDepartment.level4 ? newDepartment.level4.trim() : null,
-      level5: newDepartment.level5 ? newDepartment.level5.trim() : null,
-      fullPath: fullPath || null,
-      parentId: newDepartment.parentId,
-      description: newDepartment.description.trim() || null,
+      description: newDepartment.description?.trim() || null,
     });
   };
 
@@ -242,45 +200,19 @@ export default function DepartmentManagement() {
   const handleEditDepartment = () => {
     if (!selectedDepartment) return;
     
-    if (!selectedDepartment.code.trim()) {
-      toast({
-        title: "エラー",
-        description: "部署コードを入力してください",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     if (!selectedDepartment.name.trim()) {
       toast({
         title: "エラー",
-        description: "部署正式名称を入力してください",
+        description: "部署名を入力してください",
         variant: "destructive",
       });
       return;
     }
-
-    // フルパスを生成
-    const fullPath = [
-      selectedDepartment.level1, 
-      selectedDepartment.level2, 
-      selectedDepartment.level3, 
-      selectedDepartment.level4, 
-      selectedDepartment.level5
-    ].filter(Boolean).join('/');
 
     updateDepartmentMutation.mutate({
       id: selectedDepartment.id,
       data: {
-        code: selectedDepartment.code.trim(),
         name: selectedDepartment.name.trim(),
-        level1: selectedDepartment.level1 ? selectedDepartment.level1.trim() : null,
-        level2: selectedDepartment.level2 ? selectedDepartment.level2.trim() : null,
-        level3: selectedDepartment.level3 ? selectedDepartment.level3.trim() : null,
-        level4: selectedDepartment.level4 ? selectedDepartment.level4.trim() : null,
-        level5: selectedDepartment.level5 ? selectedDepartment.level5.trim() : null,
-        fullPath: fullPath || null,
-        parentId: selectedDepartment.parentId,
         description: selectedDepartment.description?.trim() || null,
       }
     });
