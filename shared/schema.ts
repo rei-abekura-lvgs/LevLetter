@@ -18,7 +18,7 @@ export const users = pgTable("users", {
   password: text("password"),
   cognitoSub: text("cognito_sub").unique(),
   googleId: text("google_id").unique(),
-  employeeId: text("employee_id").unique(), // 従業員番号
+  employeeId: text("employee_id").unique(), // 従業員番号（既存ユーザーはnull許容）
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
