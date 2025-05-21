@@ -83,28 +83,16 @@ export default function DepartmentManagement() {
     mutationFn: async (data: {
       code: string;
       name: string;
-      level1?: string;
-      level2?: string;
-      level3?: string;
-      level4?: string;
-      level5?: string;
-      fullPath?: string;
-      parentId?: number | null;
-      description?: string | null;
+      level1: string | null;
+      level2: string | null;
+      level3: string | null;
+      level4: string | null;
+      level5: string | null;
+      fullPath: string | null;
+      parentId: number | null;
+      description: string | null;
     }) => {
-      // フルパスを生成
-      const fullPath = [
-        data.level1, 
-        data.level2, 
-        data.level3, 
-        data.level4, 
-        data.level5
-      ].filter(Boolean).join('/');
-      
-      return apiRequest('/api/departments', 'POST', {
-        ...data,
-        fullPath
-      });
+      return apiRequest('/api/departments', 'POST', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/departments'] });
@@ -227,11 +215,11 @@ export default function DepartmentManagement() {
     createDepartmentMutation.mutate({
       code: newDepartment.code.trim(),
       name: newDepartment.name.trim(),
-      level1: newDepartment.level1.trim() || null,
-      level2: newDepartment.level2.trim() || null,
-      level3: newDepartment.level3.trim() || null,
-      level4: newDepartment.level4.trim() || null,
-      level5: newDepartment.level5.trim() || null,
+      level1: newDepartment.level1 ? newDepartment.level1.trim() : null,
+      level2: newDepartment.level2 ? newDepartment.level2.trim() : null,
+      level3: newDepartment.level3 ? newDepartment.level3.trim() : null,
+      level4: newDepartment.level4 ? newDepartment.level4.trim() : null,
+      level5: newDepartment.level5 ? newDepartment.level5.trim() : null,
       fullPath: fullPath || null,
       parentId: newDepartment.parentId,
       description: newDepartment.description.trim() || null,
@@ -274,11 +262,11 @@ export default function DepartmentManagement() {
       data: {
         code: selectedDepartment.code.trim(),
         name: selectedDepartment.name.trim(),
-        level1: selectedDepartment.level1?.trim() || null,
-        level2: selectedDepartment.level2?.trim() || null,
-        level3: selectedDepartment.level3?.trim() || null,
-        level4: selectedDepartment.level4?.trim() || null,
-        level5: selectedDepartment.level5?.trim() || null,
+        level1: selectedDepartment.level1 ? selectedDepartment.level1.trim() : null,
+        level2: selectedDepartment.level2 ? selectedDepartment.level2.trim() : null,
+        level3: selectedDepartment.level3 ? selectedDepartment.level3.trim() : null,
+        level4: selectedDepartment.level4 ? selectedDepartment.level4.trim() : null,
+        level5: selectedDepartment.level5 ? selectedDepartment.level5.trim() : null,
         fullPath: fullPath || null,
         parentId: selectedDepartment.parentId,
         description: selectedDepartment.description?.trim() || null,
@@ -515,7 +503,18 @@ export default function DepartmentManagement() {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
-                                setSelectedDepartment(dept);
+                                // 削除時にも必要な情報をすべて含める
+                                setSelectedDepartment({
+                                  ...dept,
+                                  code: dept.code || "",
+                                  level1: dept.level1 || "",
+                                  level2: dept.level2 || "",
+                                  level3: dept.level3 || "",
+                                  level4: dept.level4 || "",
+                                  level5: dept.level5 || "",
+                                  fullPath: dept.fullPath || "",
+                                  parentId: dept.parentId || null
+                                });
                                 setIsDeleteDialogOpen(true);
                               }}
                               className="text-red-600"
