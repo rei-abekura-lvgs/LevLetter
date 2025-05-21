@@ -21,8 +21,6 @@ interface ImportResult {
   errors: string[];
 }
 
-
-
 // 従業員データの型定義
 interface CsvEmployee {
   email: string;
@@ -140,7 +138,9 @@ export default function EmployeeImport() {
             if (results.data.length > 0) {
               console.log('パース結果の最初の行:', results.data[0]);
               console.log('データ型:', typeof results.data[0]);
-              console.log('プロパティ一覧:', Object.keys(results.data[0]));
+              if (results.data[0] && typeof results.data[0] === 'object') {
+                console.log('プロパティ一覧:', Object.keys(results.data[0] as object));
+              }
             }
             
             // CSV/TSVパースデータのフィールドをマッピング
@@ -153,7 +153,7 @@ export default function EmployeeImport() {
                 return {
                   email: row["会社メールアドレス"] || '',
                   name: row["氏名"] || '',
-                  employeeId: row["社員番号"] || '',
+                  employeeId: String(row["社員番号"] || ''),
                   displayName: row["職場氏名"] || '',
                   department: row["所属部門"] || ''
                 };
@@ -162,31 +162,34 @@ export default function EmployeeImport() {
                 return row;
               }
             });
-          
-          console.log('マッピング後のデータ:', mappedData.slice(0, 3));
-          
-          // 必須フィールドのチェック
-          const validData = mappedData.filter((row: any) => {
-            const isValid = row.email && row.name && row.employeeId;
-            if (!isValid) {
-              console.log('無効なデータ行:', row);
-            }
-            return isValid;
-          }) as CsvEmployee[];
-          
-          console.log('有効なデータ件数:', validData.length);
-          setPreview(validData.slice(0, 10)); // 先頭10件をプレビュー表示
-          setIsPreviewMode(true);
-        },
-        error: (error) => {
-          console.error('ファイルパースエラー:', error);
-          toast({
-            title: 'エラー',
-            description: `ファイルの解析に失敗しました: ${error.message}`,
-            variant: 'destructive',
-          });
-        }
-      });
+            
+            console.log('マッピング後のデータ:', mappedData.slice(0, 3));
+            
+            // 必須フィールドのチェック
+            const validData = mappedData.filter((row: any) => {
+              const isValid = row.email && row.name && row.employeeId;
+              if (!isValid) {
+                console.log('無効なデータ行:', row);
+              }
+              return isValid;
+            }) as CsvEmployee[];
+            
+            console.log('有効なデータ件数:', validData.length);
+            setPreview(validData.slice(0, 10)); // 先頭10件をプレビュー表示
+            setIsPreviewMode(true);
+          },
+          error: (error) => {
+            console.error('ファイルパースエラー:', error);
+            toast({
+              title: 'エラー',
+              description: `ファイルの解析に失敗しました: ${error.message}`,
+              variant: 'destructive',
+            });
+          }
+        });
+      };
+      
+      reader.readAsText(selectedFile);
     } else if (fileExt === 'xlsx' || fileExt === 'xls') {
       // Excelファイルのパース
       const reader = new FileReader();
@@ -217,7 +220,7 @@ export default function EmployeeImport() {
               return {
                 email: row["会社メールアドレス"] || '',
                 name: row["氏名"] || '',
-                employeeId: String(row["社員番号"] || ''), // 数値の場合を考慮して文字列に変換
+                employeeId: String(row["社員番号"] || ''),
                 displayName: row["職場氏名"] || '',
                 department: row["所属部門"] || ''
               };
@@ -270,7 +273,7 @@ export default function EmployeeImport() {
       const fileExt = file.name.split('.').pop()?.toLowerCase();
 
       // CSVまたはExcelに基づいて処理を分岐
-      if (fileExt === 'csv') {
+      if (fileExt === 'csv' || fileExt === 'txt' || fileExt === 'tsv') {
         // CSVファイル処理
         return new Promise<ImportResult>((resolve) => {
           Papa.parse(file, {
@@ -278,11 +281,29 @@ export default function EmployeeImport() {
             skipEmptyLines: true,
             complete: async (results) => {
               try {
+                // データのマッピング
+                const mappedData = results.data.map((row: any) => {
+                  // 会社DBの形式かチェック
+                  if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
+                    return {
+                      email: row["会社メールアドレス"] || '',
+                      name: row["氏名"] || '',
+                      employeeId: String(row["社員番号"] || ''),
+                      displayName: row["職場氏名"] || '',
+                      department: row["所属部門"] || ''
+                    };
+                  } else {
+                    return row;
+                  }
+                });
+                
                 // 必須フィールドのチェック
-                const validData = results.data.filter((row: any) => 
+                const validData = mappedData.filter((row: any) => 
                   row.email && row.name && row.employeeId
                 ) as CsvEmployee[];
 
+                console.log('インポート対象データ件数:', validData.length);
+                
                 // APIリクエスト
                 const response = await importEmployeesData(validData);
                 
@@ -336,13 +357,18 @@ export default function EmployeeImport() {
               
               // フィールドのマッピング（社内DB形式からアプリの形式へ）
               const mappedData = jsonData.map((row: any) => {
-                return {
-                  email: row["会社メールアドレス"],
-                  name: row["氏名"],
-                  employeeId: row["社員番号"],
-                  displayName: row["職場氏名"],
-                  department: row["所属部門"]
-                };
+                // 会社DBの形式かチェック
+                if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
+                  return {
+                    email: row["会社メールアドレス"] || '',
+                    name: row["氏名"] || '',
+                    employeeId: String(row["社員番号"] || ''),
+                    displayName: row["職場氏名"] || '',
+                    department: row["所属部門"] || ''
+                  };
+                } else {
+                  return row;
+                }
               });
               
               // 必須フィールドのチェック
@@ -350,6 +376,8 @@ export default function EmployeeImport() {
                 row.email && row.name && row.employeeId
               ) as CsvEmployee[];
 
+              console.log('インポート対象Excelデータ件数:', validData.length);
+              
               // APIリクエスト
               const response = await importEmployeesData(validData);
               
@@ -513,236 +541,257 @@ export default function EmployeeImport() {
         "PLコード": ''
       }
     ];
+
+    // Excelファイルの作成
+    const worksheet = XLSX.utils.json_to_sheet(sampleData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "社員データ");
     
-    // ワークブックの作成
-    const wb = XLSX.utils.book_new();
-    
-    // データをシートに変換
-    const ws = XLSX.utils.json_to_sheet(sampleData);
-    
-    // シートをワークブックに追加
-    XLSX.utils.book_append_sheet(wb, ws, "従業員データ");
-    
-    // Excelファイルとしてダウンロード
-    XLSX.writeFile(wb, "employee_sample.xlsx");
+    // Excelファイルのダウンロード
+    XLSX.writeFile(workbook, "employee_sample.xlsx");
   };
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>従業員データインポート</CardTitle>
-        <CardDescription>
-          CSVまたはExcelファイルから従業員データを一括登録・更新します。
-          新規ユーザーはランダムパスワードで作成され、既存ユーザーは情報が更新されます。
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="upload" className="w-full">
-          <TabsList>
-            <TabsTrigger value="upload">データアップロード</TabsTrigger>
-            <TabsTrigger value="help">使い方ガイド</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="upload" className="space-y-4">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="flex-1">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".csv,.xlsx,.xls"
-                  className="hidden"
-                  onChange={handleFileChange}
-                  id="csv-upload"
-                />
-                <label
-                  htmlFor="csv-upload"
-                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer bg-gray-50 hover:bg-gray-100"
-                >
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-8 h-8 mb-2 text-gray-400" />
-                    <p className="mb-1 text-sm text-gray-500">
-                      <span className="font-semibold">ファイルをクリックして選択</span>
-                      またはドラッグ＆ドロップ
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      CSVまたはExcelファイル (.csv, .xlsx, .xls)
-                    </p>
-                  </div>
-                </label>
+  // インポート完了画面の表示
+  const renderImportResult = () => {
+    if (!importResult) return null;
+
+    return (
+      <Card className="shadow-md">
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            {importResult.success ? 
+              <CheckCircle2 className="text-green-500 mr-2" /> : 
+              <AlertCircle className="text-amber-500 mr-2" />
+            }
+            インポート結果
+          </CardTitle>
+          <CardDescription>
+            {importResult.success ? 
+              'データのインポートが完了しました。' : 
+              'データのインポートは完了しましたが、一部エラーがあります。'
+            }
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-muted rounded-lg p-4">
+                <div className="text-2xl font-bold">{importResult.newUsers}</div>
+                <div className="text-muted-foreground">新規追加</div>
               </div>
-              
-              <div className="w-48">
-                <div className="space-y-2">
-                  <Button 
-                    variant="outline" 
-                    className="w-full" 
-                    onClick={downloadSampleCsv}
-                  >
-                    <FileText className="w-4 h-4 mr-2" />
-                    サンプルCSV
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="w-full" 
-                    onClick={downloadSampleExcel}
-                  >
-                    <FileSpreadsheet className="w-4 h-4 mr-2" />
-                    サンプルExcel
-                  </Button>
-                </div>
+              <div className="bg-muted rounded-lg p-4">
+                <div className="text-2xl font-bold">{importResult.updatedUsers}</div>
+                <div className="text-muted-foreground">更新</div>
               </div>
             </div>
 
-            {file && (
-              <div className="p-4 border rounded-md bg-gray-50">
-                <div className="flex justify-between items-center mb-3">
-                  <div>
-                    <h3 className="text-sm font-medium">選択したファイル</h3>
-                    <p className="text-xs text-gray-500">{file.name} ({(file.size / 1024).toFixed(1)} KB)</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={resetFileSelection}
-                    >
-                      リセット
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => importMutation.mutate()}
-                      disabled={importMutation.isPending}
-                    >
-                      {importMutation.isPending ? 'インポート中...' : 'インポート実行'}
-                    </Button>
-                  </div>
-                </div>
-
-                {isPreviewMode && preview.length > 0 && (
-                  <div className="mt-4">
-                    <h4 className="text-sm font-medium mb-2">データプレビュー（最初の10件）</h4>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-xs border-collapse">
-                        <thead>
-                          <tr className="bg-gray-100">
-                            <th className="p-2 border text-left">メールアドレス</th>
-                            <th className="p-2 border text-left">名前</th>
-                            <th className="p-2 border text-left">従業員ID</th>
-                            <th className="p-2 border text-left">表示名</th>
-                            <th className="p-2 border text-left">部署</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {preview.map((row, idx) => (
-                            <tr key={idx} className="hover:bg-gray-50">
-                              <td className="p-2 border">{row.email}</td>
-                              <td className="p-2 border">{row.name}</td>
-                              <td className="p-2 border">{row.employeeId}</td>
-                              <td className="p-2 border">{row.displayName || '-'}</td>
-                              <td className="p-2 border">{row.department || '-'}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-
-                {importResult && (
-                  <div className="mt-4 space-y-3">
-                    <h4 className="text-sm font-medium">インポート結果</h4>
-                    
-                    <div className="flex gap-4">
-                      <div className="p-3 bg-white rounded border flex-1 text-center">
-                        <p className="text-xs text-gray-500 mb-1">新規ユーザー</p>
-                        <p className="text-lg font-semibold text-green-600">{importResult.newUsers}</p>
-                      </div>
-                      <div className="p-3 bg-white rounded border flex-1 text-center">
-                        <p className="text-xs text-gray-500 mb-1">更新ユーザー</p>
-                        <p className="text-lg font-semibold text-blue-600">{importResult.updatedUsers}</p>
-                      </div>
-                      <div className="p-3 bg-white rounded border flex-1 text-center">
-                        <p className="text-xs text-gray-500 mb-1">エラー</p>
-                        <p className="text-lg font-semibold text-red-500">{importResult.errors.length}</p>
-                      </div>
-                    </div>
-                    
-                    {importResult.errors.length > 0 && (
-                      <Alert variant="destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>エラーが発生しました</AlertTitle>
-                        <AlertDescription>
-                          <ul className="list-disc pl-5 mt-2 text-sm">
-                            {importResult.errors.slice(0, 5).map((err, idx) => (
-                              <li key={idx}>{err}</li>
-                            ))}
-                            {importResult.errors.length > 5 && (
-                              <li>...他 {importResult.errors.length - 5} 件のエラー</li>
-                            )}
-                          </ul>
-                        </AlertDescription>
-                      </Alert>
-                    )}
-                  </div>
-                )}
+            {importResult.errors.length > 0 && (
+              <div className="mt-4">
+                <h4 className="text-sm font-medium mb-2 flex items-center">
+                  <AlertCircle className="h-4 w-4 mr-1 text-destructive" />
+                  エラー ({importResult.errors.length}件)
+                </h4>
+                <ul className="space-y-1 text-sm">
+                  {importResult.errors.map((error, index) => (
+                    <li key={index} className="text-destructive">
+                      {error}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
-          </TabsContent>
-          
-          <TabsContent value="help">
-            <div className="space-y-4">
-              <Alert>
-                <Info className="h-4 w-4" />
-                <AlertTitle>CSVファイルの形式について</AlertTitle>
-                <AlertDescription>
-                  CSVファイルは以下のフィールドを含む必要があります。
-                  <div className="mt-2 grid grid-cols-3 gap-2">
-                    <div>
-                      <Badge variant="secondary">必須</Badge>
-                      <p className="text-sm mt-1">email - メールアドレス</p>
-                    </div>
-                    <div>
-                      <Badge variant="secondary">必須</Badge>
-                      <p className="text-sm mt-1">name - 氏名</p>
-                    </div>
-                    <div>
-                      <Badge variant="secondary">必須</Badge>
-                      <p className="text-sm mt-1">employeeId - 従業員ID</p>
-                    </div>
-                    <div>
-                      <Badge variant="outline">任意</Badge>
-                      <p className="text-sm mt-1">displayName - 表示名</p>
-                    </div>
-                    <div>
-                      <Badge variant="outline">任意</Badge>
-                      <p className="text-sm mt-1">department - 部署名</p>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button 
+            variant="outline" 
+            onClick={resetFileSelection}
+            className="w-full"
+          >
+            別のファイルをインポート
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  };
+
+  // プレビュー画面の表示
+  const renderPreview = () => {
+    if (!file || preview.length === 0) return null;
+
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <FileText className="h-5 w-5 text-muted-foreground" />
+          <span className="font-medium">{file.name}</span>
+          <Badge variant="outline">{(file.size / 1024).toFixed(2)} KB</Badge>
+        </div>
+
+        <div className="rounded-md border">
+          <div className="grid grid-cols-5 gap-2 p-4 font-medium border-b bg-muted">
+            <div>社員番号</div>
+            <div>氏名</div>
+            <div>職場氏名</div>
+            <div>メールアドレス</div>
+            <div>所属部門</div>
+          </div>
+          <div className="divide-y">
+            {preview.map((employee, index) => (
+              <div key={index} className="grid grid-cols-5 gap-2 p-4">
+                <div>{employee.employeeId}</div>
+                <div>{employee.name}</div>
+                <div>{employee.displayName || '-'}</div>
+                <div className="truncate">{employee.email}</div>
+                <div>{employee.department || '-'}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <Alert variant="info">
+          <Info className="h-4 w-4" />
+          <AlertTitle>インポート前の確認</AlertTitle>
+          <AlertDescription>
+            上記の情報でインポートを実行します。全部で {preview.length} 件以上のデータがインポートされます。
+          </AlertDescription>
+        </Alert>
+
+        <div className="flex justify-end gap-2">
+          <Button 
+            variant="outline" 
+            onClick={resetFileSelection}
+          >
+            キャンセル
+          </Button>
+          <Button
+            onClick={() => importMutation.mutate()}
+            disabled={importMutation.isPending}
+          >
+            {importMutation.isPending ? 'インポート中...' : 'インポート実行'}
+          </Button>
+        </div>
+
+        {importMutation.isPending && (
+          <div className="pt-4">
+            <Progress value={30} className="h-2" />
+            <p className="text-center text-sm text-muted-foreground mt-2">
+              データをインポート中です...
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  };
+  
+  // メイン画面の表示
+  return (
+    <div className="container py-4 max-w-5xl">
+      <h1 className="text-2xl font-bold mb-6">従業員データインポート</h1>
+      
+      <div className="space-y-6">
+        {!file && !importResult && (
+          <Card className="shadow-md">
+            <CardHeader>
+              <CardTitle>CSVまたはExcelファイルをアップロード</CardTitle>
+              <CardDescription>
+                従業員データをインポートするためのCSVまたはExcelファイルをアップロードしてください。
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="upload">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="upload">ファイルアップロード</TabsTrigger>
+                  <TabsTrigger value="template">テンプレート</TabsTrigger>
+                </TabsList>
+                <TabsContent value="upload" className="p-4">
+                  <div className="flex items-center justify-center w-full">
+                    <label 
+                      htmlFor="dropzone-file" 
+                      className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-muted/30 hover:bg-muted/50"
+                    >
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <Upload className="h-10 w-10 text-muted-foreground mb-3" />
+                        <p className="mb-2 text-sm font-semibold">
+                          ここにファイルをドロップ、またはクリックしてアップロード
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          CSVまたはExcel(.xlsx)ファイル
+                        </p>
+                      </div>
+                      <input
+                        id="dropzone-file"
+                        type="file"
+                        className="hidden"
+                        accept=".csv,.xlsx,.xls"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                      />
+                    </label>
+                  </div>
+                </TabsContent>
+                <TabsContent value="template" className="p-4">
+                  <div className="space-y-3">
+                    <p className="text-sm text-muted-foreground">
+                      以下のテンプレートをダウンロードして、従業員データを入力してください。
+                    </p>
+                    <Separator />
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-start gap-4">
+                        <div className="bg-muted p-2 rounded-md">
+                          <FileText className="h-8 w-8 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium">CSVテンプレート</h4>
+                          <p className="text-sm text-muted-foreground">
+                            シンプルなCSV形式のテンプレートです。
+                          </p>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={downloadSampleCsv}
+                            className="mt-2"
+                          >
+                            CSVテンプレートをダウンロード
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <Separator />
+                      
+                      <div className="flex items-start gap-4">
+                        <div className="bg-muted p-2 rounded-md">
+                          <FileSpreadsheet className="h-8 w-8 text-green-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium">Excelテンプレート</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Excel(.xlsx)形式のテンプレートです。
+                          </p>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={downloadSampleExcel}
+                            className="mt-2"
+                          >
+                            Excelテンプレートをダウンロード
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </AlertDescription>
-              </Alert>
-              
-              <Alert className="bg-emerald-50 border-emerald-200">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                <AlertTitle>インポート処理について</AlertTitle>
-                <AlertDescription>
-                  <ul className="list-disc pl-5 mt-1 space-y-1 text-sm">
-                    <li>メールアドレスが既存ユーザーと一致する場合は情報が更新されます</li>
-                    <li>新規ユーザーはランダムパスワードで作成されます</li>
-                    <li>存在しない部署名が指定された場合は自動的に作成されます</li>
-                    <li>データに不備がある行はスキップされます</li>
-                  </ul>
-                </AlertDescription>
-              </Alert>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-      <CardFooter className="flex justify-between border-t pt-4">
-        <p className="text-xs text-gray-500">
-          アップロードするCSVファイルには機密情報が含まれる場合があります。
-          ファイルの内容は安全に処理され、必要なデータのみがデータベースに保存されます。
-        </p>
-      </CardFooter>
-    </Card>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        )}
+        
+        {/* プレビューまたはインポート結果の表示 */}
+        {file && (
+          <div className="mt-6">
+            {isPreviewMode ? renderPreview() : renderImportResult()}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
