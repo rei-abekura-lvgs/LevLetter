@@ -175,6 +175,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const user = await storage.getUserByEmail(email);
       
+      console.log("メール検証:", email, "ユーザー存在:", !!user, "パスワード設定済み:", !!user?.password);
+      
       // ユーザーが存在し、かつパスワードが設定されていない場合のみ登録可能とする
       // （パスワードが設定済みの場合は、既に登録済みのユーザー）
       const canRegister = !!user && !user.password;

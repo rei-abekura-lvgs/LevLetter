@@ -49,8 +49,13 @@ export default function Register() {
     
     setVerifyingEmail(true);
     try {
-      const response = await apiRequest("GET", `/api/auth/verify-email?email=${encodeURIComponent(email)}`);
-      setEmailVerified(response.exists === true);
+      // メールアドレスの検証リクエスト
+      const response = await fetch(`/api/auth/verify-email?email=${encodeURIComponent(email)}`);
+      const data = await response.json();
+      console.log(`メール検証 (${email}) レスポンス:`, data);
+      
+      // レスポンスに基づいて状態を更新
+      setEmailVerified(data.exists === true);
     } catch (error) {
       console.error("メール検証エラー:", error);
       setEmailVerified(false);
@@ -63,7 +68,9 @@ export default function Register() {
   useEffect(() => {
     const subscription = form.watch((value) => {
       if (value.email) {
-        const timer = setTimeout(() => verifyEmail(value.email), 1000);
+        const timer = setTimeout(() => {
+          if (value.email) verifyEmail(value.email);
+        }, 1000);
         return () => clearTimeout(timer);
       }
     });
