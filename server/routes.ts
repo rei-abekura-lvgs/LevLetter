@@ -712,11 +712,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // 指定ユーザーIDリストの一括削除API（rei.abekura@leverages.jp以外）
+  // 指定ユーザーIDリストの一括削除API（rei.abekura@leverages.jp以外）- フロントエンド互換性のため両方のパスをサポート
   app.post("/api/admin/users/bulk-delete", authenticate, checkAdmin, async (req, res) => {
     try {
       const userIds = req.body.userIds as number[];
       if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+        return res.status(400).json({ message: "削除対象のユーザーIDが指定されていません" });
+      }
+      
+      // protected admin check (ID: 5, rei.abekura@leverages.jp)
+      const filteredIds = userIds.filter(id => id !== 5);
+      const protectedCount = userIds.length - filteredIds.length;
+      
+      console.log(`指定ユーザー一括削除リクエスト: ${filteredIds.length}人（保護されたユーザー: ${protectedCount}人）`);
+      
+      const deletePromises = filteredIds.map(async (id) => {
+        try {
+          await storage.deleteUser(id);
+          return { id, success: true };
+        } catch (err) {
+          console.error(`ユーザーID ${id} の削除に失敗:`, err);
+          return { id, success: false, error: (err as Error).message };
+        }
+      });
+      
+      const results = await Promise.all(deletePromises);
+      
+      const successCount = results.filter(r => r.success).length;
+      const failCount = results.filter(r => !r.success).length;
+      
+      console.log(`指定ユーザー一括削除完了: 成功=${successCount}, 失敗=${failCount}, 保護=${protectedCount}`);
+      
+      return res.json({
+        message: `${successCount}人のユーザーを削除しました`,
+        results,
+        protected: protectedCount
+      });
+    } catch (error) {
+      console.error("管理者API: ユーザー一括削除エラー:", error);
+      return res.status(500).json({ message: "ユーザー削除中にエラーが発生しました" });
+    }
+  });
+  
+  // DELETE メソッド用ユーザー一括削除API（フロントエンドで呼び出されるパス）
+  app.delete("/api/admin/users/delete-bulk", authenticate, checkAdmin, async (req, res) => {
+    try {
+      console.log("管理者API: DELETE メソッドによるユーザー一括削除 - リクエスト:", JSON.stringify(req.body));
+      const { userIds } = req.body;
+      
+      if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+        console.log("管理者API: ユーザー一括削除 - 無効なリクエスト");
         return res.status(400).json({ message: "削除対象のユーザーIDが指定されていません" });
       }
       
