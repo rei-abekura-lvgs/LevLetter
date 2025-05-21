@@ -46,8 +46,6 @@ export default function CardForm({ onSent }: CardFormProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState<string | null>(null);
   const [selectedLevel1Department, setSelectedLevel1Department] = useState<string | null>(null);
-  const [selectedLevel2Department, setSelectedLevel2Department] = useState<string | null>(null);
-  const [selectedLevel3Department, setSelectedLevel3Department] = useState<string | null>(null);
 
   // ユーザー情報を取得
   const { data: users = [], isLoading: isLoadingUsers } = useQuery<User[]>({
@@ -320,21 +318,15 @@ export default function CardForm({ onSent }: CardFormProps) {
                       <Label className="text-sm font-medium block mb-1.5">所属階層2</Label>
                       <Select
                         value={
-                          departmentFilter && departmentFilter.startsWith(selectedLevel1Department) && 
-                          departmentFilter.split('/').length === 2
-                            ? departmentFilter.split('/')[1]
+                          departmentFilter && departmentFilter.startsWith(selectedLevel1Department) 
+                            ? departmentFilter.replace(`${selectedLevel1Department}/`, "") 
                             : "all"
                         }
                         onValueChange={(value: string) => {
                           console.log("階層2選択:", value);
                           if (value && value !== "all") {
-                            // 階層2を選択した場合
-                            const level2Path = `${selectedLevel1Department}/${value}`;
-                            setSelectedLevel2Department(value);
-                            setDepartmentFilter(level2Path);
+                            setDepartmentFilter(`${selectedLevel1Department}/${value}`);
                           } else {
-                            // 「全て」を選択した場合
-                            setSelectedLevel2Department(null);
                             setDepartmentFilter(null);
                           }
                         }}
@@ -353,55 +345,7 @@ export default function CardForm({ onSent }: CardFormProps) {
                             .filter((v, i, a) => v && a.indexOf(v) === i) // 重複を除去
                             .filter(Boolean) // nullを除外
                             .map(dept => (
-                              <SelectItem key={dept} value={dept}>{dept}</SelectItem>
-                            ))
-                          }
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                  
-                  {/* 階層2が選択されている場合のみ階層3を表示 */}
-                  {selectedLevel1Department && selectedLevel2Department && (
-                    <div>
-                      <Label className="text-sm font-medium block mb-1.5">所属階層3</Label>
-                      <Select
-                        value={
-                          departmentFilter && 
-                          departmentFilter.startsWith(`${selectedLevel1Department}/${selectedLevel2Department}`) && 
-                          departmentFilter.split('/').length === 3
-                            ? departmentFilter.split('/')[2]
-                            : "all"
-                        }
-                        onValueChange={(value: string) => {
-                          console.log("階層3選択:", value);
-                          if (value && value !== "all") {
-                            // 階層3を選択した場合
-                            const level3Path = `${selectedLevel1Department}/${selectedLevel2Department}/${value}`;
-                            setSelectedLevel3Department(value);
-                            setDepartmentFilter(level3Path);
-                          } else {
-                            // 「全て」を選択した場合
-                            setSelectedLevel3Department(null);
-                            setDepartmentFilter(`${selectedLevel1Department}/${selectedLevel2Department}`);
-                          }
-                        }}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder={`${selectedLevel2Department}内の部署を選択`} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">全て ({selectedLevel2Department})</SelectItem>
-                          {availableUsers
-                            .filter(u => u.department?.startsWith(`${selectedLevel1Department}/${selectedLevel2Department}`))
-                            .map(u => {
-                              const parts = u.department?.split(/[\/\>　]/);
-                              return parts && parts.length > 2 ? parts[2].trim() : null;
-                            })
-                            .filter((v, i, a) => v && a.indexOf(v) === i) // 重複を除去
-                            .filter(Boolean) // nullを除外
-                            .map(dept => (
-                              <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                              <SelectItem key={dept} value={dept || "unknown"}>{dept}</SelectItem>
                             ))
                           }
                         </SelectContent>
