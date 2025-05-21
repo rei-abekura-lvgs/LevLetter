@@ -205,8 +205,8 @@ export default function UserManagement() {
                       variant="destructive"
                       onClick={async () => {
                         try {
-                          // 選択したユーザーを一括削除
-                          await apiRequest('/api/admin/users/delete-bulk', 'DELETE', { userIds: selectedUsers });
+                          // 選択したユーザーを一括削除（POSTメソッドで削除リクエストを送信）
+                          await apiRequest('POST', '/api/admin/users/bulk-delete', { userIds: selectedUsers });
                           
                           toast({
                             title: "成功",
