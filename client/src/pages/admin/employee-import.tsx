@@ -32,6 +32,21 @@ interface CsvEmployee {
   department?: string;
 }
 
+// 社内DBの形式に合わせた型定義
+interface CompanyEmployee {
+  // 社員番号
+  employeeId: string;
+  // 氏名
+  name: string;
+  // 職場氏名
+  displayName?: string;
+  // 会社メールアドレス
+  email: string;
+  // 所属部門
+  department?: string;
+  // その他のフィールドは必要に応じて追加
+}
+
 // 従業員データをインポートする関数
 async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResult> {
   return await apiRequest<ImportResult>("POST", "/api/admin/employees/import", {
@@ -39,10 +54,11 @@ async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResu
   });
 }
 
-const SAMPLE_CSV = `email,name,employeeId,displayName,department
-tanaka@example.com,田中太郎,E001,タナカ,営業部
-yamada@example.com,山田花子,E002,ヤマダ,マーケティング部
-suzuki@example.com,鈴木一郎,E003,スズキ,開発部`;
+const SAMPLE_CSV = `社員番号,氏名,職場氏名,会社メールアドレス,所属部門,所属コード,所属階層１,所属階層２,所属階層３,所属階層４,所属階層５,勤務地コード,勤務地名,職種コード,職種名,雇用区分,入社日,PLコード
+E001,田中太郎,タナカ,tanaka@example.com,営業部,S001,営業本部,第一営業部,,,,T01,東京本社,J01,営業,正社員,2020/04/01,PL001
+E002,山田花子,ヤマダ,yamada@example.com,マーケティング部,M001,事業推進本部,マーケティング部,,,,T01,東京本社,J02,マーケティング,正社員,2019/10/01,PL002
+E003,鈴木一郎,スズキ,suzuki@example.com,開発部,D001,技術本部,開発部,フロントエンド課,,,O01,大阪支社,J03,エンジニア,正社員,2021/07/01,PL003
+E004,佐藤太一,サトウ,sato@example.com,,EX001,役員,,,,,T01,東京本社,J10,役員,役員,2015/01/01,`;
 
 export default function EmployeeImport() {
   const { toast } = useToast();
@@ -69,8 +85,26 @@ export default function EmployeeImport() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
+          // CSVパースデータのフィールドをマッピング
+          const mappedData = results.data.map((row: any) => {
+            // 会社DBの形式かチェック
+            if (row["会社メールアドレス"] !== undefined) {
+              // 社内DB形式の場合、フィールドをマッピング
+              return {
+                email: row["会社メールアドレス"] || '',
+                name: row["氏名"] || '',
+                employeeId: row["社員番号"] || '',
+                displayName: row["職場氏名"] || '',
+                department: row["所属部門"] || ''
+              };
+            } else {
+              // 従来のCSV形式の場合はそのまま
+              return row;
+            }
+          });
+          
           // 必須フィールドのチェック
-          const validData = results.data.filter((row: any) => 
+          const validData = mappedData.filter((row: any) => 
             row.email && row.name && row.employeeId
           ) as CsvEmployee[];
           
@@ -195,8 +229,19 @@ export default function EmployeeImport() {
               // シートデータをJSONに変換
               const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: false });
               
+              // フィールドのマッピング（社内DB形式からアプリの形式へ）
+              const mappedData = jsonData.map((row: any) => {
+                return {
+                  email: row["会社メールアドレス"],
+                  name: row["氏名"],
+                  employeeId: row["社員番号"],
+                  displayName: row["職場氏名"],
+                  department: row["所属部門"]
+                };
+              });
+              
               // 必須フィールドのチェック
-              const validData = jsonData.filter((row: any) => 
+              const validData = mappedData.filter((row: any) => 
                 row.email && row.name && row.employeeId
               ) as CsvEmployee[];
 
@@ -280,11 +325,88 @@ export default function EmployeeImport() {
   
   // サンプルExcelのダウンロード
   const downloadSampleExcel = () => {
-    // サンプルデータの定義
+    // 社内DBの形式に合わせたサンプルデータの定義
     const sampleData = [
-      { email: 'tanaka@example.com', name: '田中太郎', employeeId: 'E001', displayName: 'タナカ', department: '営業部' },
-      { email: 'yamada@example.com', name: '山田花子', employeeId: 'E002', displayName: 'ヤマダ', department: 'マーケティング部' },
-      { email: 'suzuki@example.com', name: '鈴木一郎', employeeId: 'E003', displayName: 'スズキ', department: '開発部' }
+      { 
+        "社員番号": 'E001', 
+        "氏名": '田中太郎', 
+        "職場氏名": 'タナカ', 
+        "会社メールアドレス": 'tanaka@example.com', 
+        "所属部門": '営業部',
+        "所属コード": 'S001',
+        "所属階層１": '営業本部',
+        "所属階層２": '第一営業部',
+        "所属階層３": '',
+        "所属階層４": '',
+        "所属階層５": '',
+        "勤務地コード": 'T01',
+        "勤務地名": '東京本社',
+        "職種コード": 'J01',
+        "職種名": '営業',
+        "雇用区分": '正社員',
+        "入社日": '2020/04/01',
+        "PLコード": 'PL001'
+      },
+      { 
+        "社員番号": 'E002', 
+        "氏名": '山田花子', 
+        "職場氏名": 'ヤマダ', 
+        "会社メールアドレス": 'yamada@example.com', 
+        "所属部門": 'マーケティング部',
+        "所属コード": 'M001',
+        "所属階層１": '事業推進本部',
+        "所属階層２": 'マーケティング部',
+        "所属階層３": '',
+        "所属階層４": '',
+        "所属階層５": '',
+        "勤務地コード": 'T01',
+        "勤務地名": '東京本社',
+        "職種コード": 'J02',
+        "職種名": 'マーケティング',
+        "雇用区分": '正社員',
+        "入社日": '2019/10/01',
+        "PLコード": 'PL002'
+      },
+      { 
+        "社員番号": 'E003', 
+        "氏名": '鈴木一郎', 
+        "職場氏名": 'スズキ', 
+        "会社メールアドレス": 'suzuki@example.com', 
+        "所属部門": '開発部',
+        "所属コード": 'D001',
+        "所属階層１": '技術本部',
+        "所属階層２": '開発部',
+        "所属階層３": 'フロントエンド課',
+        "所属階層４": '',
+        "所属階層５": '',
+        "勤務地コード": 'O01',
+        "勤務地名": '大阪支社',
+        "職種コード": 'J03',
+        "職種名": 'エンジニア',
+        "雇用区分": '正社員',
+        "入社日": '2021/07/01',
+        "PLコード": 'PL003'
+      },
+      { 
+        "社員番号": 'E004', 
+        "氏名": '佐藤太一', 
+        "職場氏名": 'サトウ', 
+        "会社メールアドレス": 'sato@example.com', 
+        "所属部門": '', // 社長は部署なし
+        "所属コード": 'EX001',
+        "所属階層１": '役員',
+        "所属階層２": '',
+        "所属階層３": '',
+        "所属階層４": '',
+        "所属階層５": '',
+        "勤務地コード": 'T01',
+        "勤務地名": '東京本社',
+        "職種コード": 'J10',
+        "職種名": '役員',
+        "雇用区分": '役員',
+        "入社日": '2015/01/01',
+        "PLコード": ''
+      }
     ];
     
     // ワークブックの作成
