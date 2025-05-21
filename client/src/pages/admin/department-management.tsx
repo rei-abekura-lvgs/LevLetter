@@ -137,7 +137,21 @@ export default function DepartmentManagement() {
 
   // 部署更新ミューテーション
   const updateDepartmentMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: { name: string; description: string | null } }) => {
+    mutationFn: async ({ id, data }: { 
+      id: number; 
+      data: { 
+        code: string; 
+        name: string; 
+        level1: string | null; 
+        level2: string | null; 
+        level3: string | null; 
+        level4: string | null; 
+        level5: string | null; 
+        fullPath: string | null; 
+        parentId: number | null; 
+        description: string | null; 
+      } 
+    }) => {
       return apiRequest(`/api/departments/${id}`, 'PUT', data);
     },
     onSuccess: () => {
@@ -227,11 +241,46 @@ export default function DepartmentManagement() {
   // 部署編集ハンドラー
   const handleEditDepartment = () => {
     if (!selectedDepartment) return;
+    
+    if (!selectedDepartment.code.trim()) {
+      toast({
+        title: "エラー",
+        description: "部署コードを入力してください",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!selectedDepartment.name.trim()) {
+      toast({
+        title: "エラー",
+        description: "部署正式名称を入力してください",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // フルパスを生成
+    const fullPath = [
+      selectedDepartment.level1, 
+      selectedDepartment.level2, 
+      selectedDepartment.level3, 
+      selectedDepartment.level4, 
+      selectedDepartment.level5
+    ].filter(Boolean).join('/');
 
     updateDepartmentMutation.mutate({
       id: selectedDepartment.id,
       data: {
+        code: selectedDepartment.code.trim(),
         name: selectedDepartment.name.trim(),
+        level1: selectedDepartment.level1?.trim() || null,
+        level2: selectedDepartment.level2?.trim() || null,
+        level3: selectedDepartment.level3?.trim() || null,
+        level4: selectedDepartment.level4?.trim() || null,
+        level5: selectedDepartment.level5?.trim() || null,
+        fullPath: fullPath || null,
+        parentId: selectedDepartment.parentId,
         description: selectedDepartment.description?.trim() || null,
       }
     });
@@ -446,7 +495,18 @@ export default function DepartmentManagement() {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onClick={() => {
-                                setSelectedDepartment(dept);
+                                // すべての必要なプロパティを確実に含める
+                                setSelectedDepartment({
+                                  ...dept,
+                                  code: dept.code || "",
+                                  level1: dept.level1 || "",
+                                  level2: dept.level2 || "",
+                                  level3: dept.level3 || "",
+                                  level4: dept.level4 || "",
+                                  level5: dept.level5 || "",
+                                  fullPath: dept.fullPath || "",
+                                  parentId: dept.parentId || null
+                                });
                                 setIsEditDialogOpen(true);
                               }}
                             >

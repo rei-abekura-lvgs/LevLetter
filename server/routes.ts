@@ -616,7 +616,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       console.log("部署更新リクエスト:", id, JSON.stringify(req.body));
-      const data = insertDepartmentSchema.parse(req.body);
       
       // 部署存在確認
       const department = await storage.getDepartment(id);
@@ -624,8 +623,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "部署が見つかりません" });
       }
       
+      // データの検証
+      if (!req.body.code || !req.body.name) {
+        return res.status(400).json({ message: "部署コードと正式名称は必須です" });
+      }
+      
+      // 階層構造からフルパスを生成
+      const levels = [
+        req.body.level1,
+        req.body.level2,
+        req.body.level3,
+        req.body.level4,
+        req.body.level5
+      ].filter(Boolean);
+      
+      const fullPath = levels.length > 0 ? levels.join('/') : null;
+      
+      // 必須フィールドと階層フィールドを結合
+      const updateData = {
+        code: req.body.code,
+        name: req.body.name,
+        level1: req.body.level1 || null,
+        level2: req.body.level2 || null,
+        level3: req.body.level3 || null,
+        level4: req.body.level4 || null,
+        level5: req.body.level5 || null,
+        fullPath,
+        parentId: req.body.parentId || null,
+        description: req.body.description || null
+      };
+      
       // 部署更新
-      const updatedDepartment = await storage.updateDepartment(id, data);
+      const updatedDepartment = await storage.updateDepartment(id, updateData);
       
       console.log("部署更新成功:", updatedDepartment.id, updatedDepartment.name);
       return res.json(updatedDepartment);
