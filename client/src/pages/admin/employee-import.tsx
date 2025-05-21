@@ -298,7 +298,7 @@ export default function EmployeeImport() {
       <CardHeader>
         <CardTitle>従業員データインポート</CardTitle>
         <CardDescription>
-          CSVファイルから従業員データを一括登録・更新します。
+          CSVまたはExcelファイルから従業員データを一括登録・更新します。
           新規ユーザーはランダムパスワードで作成され、既存ユーザーは情報が更新されます。
         </CardDescription>
       </CardHeader>
