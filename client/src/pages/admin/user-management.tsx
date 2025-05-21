@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { User } from "@shared/schema";
+import { User, Department } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import {
   Table,
@@ -46,31 +46,30 @@ export default function UserManagement() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
-  const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
 
   // ユーザー一覧を取得
-  const { data: users = [], isLoading } = useQuery({
+  const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ["/api/admin/users"],
     enabled: true,
   });
   
   // 部署一覧を取得
-  const { data: departments = [] } = useQuery({
+  const { data: departments = [] } = useQuery<Department[]>({
     queryKey: ["/api/admin/departments"],
     enabled: true,
   });
 
   // フィルタリングされたユーザー
-  const filteredUsers = users.filter((user: User) => {
+  const filteredUsers = users ? users.filter((user: User) => {
     const lowerQuery = searchQuery.toLowerCase();
     return (
       user.name.toLowerCase().includes(lowerQuery) ||
       user.email.toLowerCase().includes(lowerQuery) ||
-      (user.department && user.department.toLowerCase().includes(lowerQuery))
+      (user.department && user.department.toString().toLowerCase().includes(lowerQuery))
     );
-  });
+  }) : [];
 
   // 管理者権限更新ミューテーション
   const updateAdminMutation = useMutation({
@@ -176,7 +175,7 @@ export default function UserManagement() {
           </div>
           
           <div className="flex gap-2">
-            {selectedUsers.length > 0 && (
+            {selectedUsers.length > 0 ? (
               <Dialog open={showBulkDeleteDialog} onOpenChange={setShowBulkDeleteDialog}>
                 <DialogTrigger asChild>
                   <Button variant="destructive" size="sm">
@@ -216,14 +215,8 @@ export default function UserManagement() {
                           return;
                         }
                         
-                        fetch('/api/admin/users/delete-bulk', {
-                          method: 'DELETE',
-                          headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                          },
-                          body: JSON.stringify({ userIds: selectedUsers })
-                        })
+                        // APIリクエストに変更
+                        apiRequest('/api/admin/users/delete-bulk', 'DELETE', { userIds: selectedUsers })
                         .then(response => {
                           if (response.ok) {
                             toast({
@@ -256,79 +249,11 @@ export default function UserManagement() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+            ) : (
+              <div className="text-sm text-muted-foreground">
+                削除するユーザーを選択してください
+              </div>
             )}
-            
-            <Dialog open={showDeleteAllDialog} onOpenChange={setShowDeleteAllDialog}>
-              <DialogTrigger asChild>
-                <Button variant="destructive" size="sm">
-                  開発用：全ユーザー削除
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="text-destructive">危険な操作：全ユーザー削除</DialogTitle>
-                  <DialogDescription>
-                    この操作は保護されたアカウント(rei.abekura@leverages.jp)以外の全ユーザーを削除します。
-                    この操作は元に戻せません。本番環境では絶対に実行しないでください。
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="bg-muted p-3 rounded-md text-sm">
-                  <p>実行すると以下の影響があります：</p>
-                  <ul className="list-disc ml-5 mt-2 space-y-1">
-                    <li>ユーザーデータが完全に削除されます</li>
-                    <li>関連するカード・いいねも削除されます</li>
-                    <li>チームメンバーシップも削除されます</li>
-                  </ul>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setShowDeleteAllDialog(false)}>
-                    キャンセル
-                  </Button>
-                  <Button 
-                    variant="destructive"
-                    onClick={() => {
-                      // 開発用の一括削除処理
-                      const token = localStorage.getItem('token');
-                      if (!token) {
-                        toast({
-                          title: "認証エラー",
-                          description: "ログインしてください",
-                          variant: "destructive",
-                        });
-                        return;
-                      }
-                      
-                      // 保護されたユーザー以外を削除
-                      fetch('/api/admin/users/delete-all', {
-                        method: 'DELETE',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Authorization': `Bearer ${token}`
-                        }
-                      })
-                      .then(res => res.json())
-                      .then(data => {
-                        toast({
-                          title: "一括削除完了",
-                          description: data.message || "ユーザーを一括削除しました",
-                        });
-                        queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
-                        setShowDeleteAllDialog(false);
-                      })
-                      .catch(err => {
-                        toast({
-                          title: "エラー",
-                          description: "ユーザーの一括削除に失敗しました",
-                          variant: "destructive",
-                        });
-                      });
-                    }}
-                  >
-                    全ユーザーを削除
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
           </div>
         </div>
 
