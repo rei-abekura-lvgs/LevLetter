@@ -289,6 +289,8 @@ export default function DepartmentManagement() {
   // 部署削除ハンドラー
   const handleDeleteDepartment = () => {
     if (!selectedDepartment) return;
+    
+    console.log("部署削除処理開始:", selectedDepartment);
     deleteDepartmentMutation.mutate(selectedDepartment.id);
   };
 

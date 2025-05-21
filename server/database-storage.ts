@@ -9,7 +9,7 @@ import {
   type CardWithRelations
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, asc } from "drizzle-orm";
+import { eq, and, desc, asc, sql } from "drizzle-orm";
 import * as crypto from "crypto";
 
 const DEFAULT_AVATAR_COLORS = [
@@ -264,13 +264,46 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteDepartment(id: number): Promise<void> {
-    const result = await db
-      .delete(departments)
-      .where(eq(departments.id, id))
-      .returning({ id: departments.id });
+    console.log(`部署削除処理開始: ID=${id}`);
     
-    if (result.length === 0) {
-      throw new Error(`部署が見つかりません: ${id}`);
+    try {
+      // まず、この部署を参照しているユーザーがいないか確認
+      const usersWithDept = await db
+        .select()
+        .from(users)
+        .where(eq(users.department, String(id)));
+      
+      if (usersWithDept.length > 0) {
+        console.error(`部署削除エラー: ID=${id} には ${usersWithDept.length}人のユーザーが関連付けられています`);
+        console.log('関連ユーザー:', usersWithDept.map(u => ({ id: u.id, name: u.name, email: u.email })));
+        throw new Error(`この部署には${usersWithDept.length}人のユーザーが関連付けられているため削除できません。先にユーザーの部署を変更してください`);
+      }
+      
+      // 削除前に部署情報をログ出力
+      const deptToDelete = await db
+        .select()
+        .from(departments)
+        .where(eq(departments.id, id));
+      
+      console.log(`削除対象部署情報:`, deptToDelete);
+      
+      // 部署削除実行
+      const result = await db
+        .delete(departments)
+        .where(eq(departments.id, id))
+        .returning({ id: departments.id });
+      
+      console.log(`部署削除結果:`, result);
+      
+      if (result.length === 0) {
+        console.error(`部署削除エラー: ID=${id} は存在しないか、すでに削除されています`);
+        throw new Error(`部署が見つかりません: ${id}`);
+      }
+      
+      console.log(`部署削除成功: ID=${id}`);
+    } catch (error) {
+      console.error(`部署削除エラー詳細:`, error);
+      throw error;
     }
   }
 
