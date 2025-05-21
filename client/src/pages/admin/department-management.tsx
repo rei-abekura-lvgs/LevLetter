@@ -65,13 +65,13 @@ export default function DepartmentManagement() {
   });
 
   // フィルタリングされた部署
-  const filteredDepartments = departments.filter((dept: Department) => {
+  const filteredDepartments = Array.isArray(departments) ? departments.filter((dept: Department) => {
     const lowerQuery = searchQuery.toLowerCase();
     return (
       dept.name.toLowerCase().includes(lowerQuery) ||
       (dept.description && dept.description.toLowerCase().includes(lowerQuery))
     );
-  });
+  }) : [];
 
   // 部署作成ミューテーション
   const createDepartmentMutation = useMutation({
@@ -297,7 +297,7 @@ export default function DepartmentManagement() {
                 ) : (
                   filteredDepartments.map((dept: Department) => {
                     // 部署名を階層に分割（スラッシュで区切られている場合）
-                    const hierarchyLevels = dept.name.split('/');
+                    const hierarchyLevels = dept.name ? dept.name.split('/') : [];
                     
                     return (
                       <TableRow key={dept.id}>
@@ -314,40 +314,41 @@ export default function DepartmentManagement() {
                         <TableCell>
                           {dept.createdAt ? format(new Date(dept.createdAt), 'yyyy/MM/dd') : "-"}
                         </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>アクション</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setSelectedDepartment(dept);
-                                setIsEditDialogOpen(true);
-                              }}
-                            >
-                              <Pencil className="mr-2 h-4 w-4" />
-                              編集
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setSelectedDepartment(dept);
-                                setIsDeleteDialogOpen(true);
-                              }}
-                              className="text-destructive focus:text-destructive"
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              削除
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="h-8 w-8 p-0">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>アクション</DropdownMenuLabel>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setSelectedDepartment(dept);
+                                  setIsEditDialogOpen(true);
+                                }}
+                              >
+                                <Pencil className="mr-2 h-4 w-4" />
+                                編集
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setSelectedDepartment(dept);
+                                  setIsDeleteDialogOpen(true);
+                                }}
+                                className="text-destructive focus:text-destructive"
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                削除
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 )}
               </TableBody>
             </Table>

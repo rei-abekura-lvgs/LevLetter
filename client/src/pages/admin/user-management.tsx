@@ -315,7 +315,7 @@ export default function UserManagement() {
                               const dept = departments.find((d: any) => d.id === deptId);
                               if (dept) {
                                 // 部署名を階層に分割（スラッシュで区切られている場合）
-                                const hierarchyLevels = dept.name.split('/');
+                                const hierarchyLevels = dept.name ? dept.name.split('/') : [];
                                 
                                 return (
                                   <div className="space-y-0.5">
@@ -324,6 +324,7 @@ export default function UserManagement() {
                                         {level.trim()}
                                       </div>
                                     ))}
+                                    {hierarchyLevels.length === 0 && <div className="text-gray-400">（部署なし）</div>}
                                   </div>
                                 );
                               }
