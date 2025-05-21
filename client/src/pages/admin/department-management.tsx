@@ -237,13 +237,16 @@ export default function DepartmentManagement() {
               </DialogHeader>
               <div className="grid gap-4 py-4">                
                 <div className="grid gap-2">
-                  <Label htmlFor="name">部署名</Label>
+                  <Label htmlFor="name">部署名（階層は '/' で区切ってください）</Label>
                   <Input
                     id="name"
-                    placeholder="例: 情報システム部"
+                    placeholder="例: システム本部/レバテック開発部/ITRプロダクト開発グループ/オウンドITRチーム"
                     value={newDepartment.name}
                     onChange={(e) => setNewDepartment({ ...newDepartment, name: e.target.value })}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    階層構造を表現する場合は、スラッシュで区切って入力してください。
+                  </p>
                 </div>
 
                 <div className="grid gap-2">
@@ -278,7 +281,7 @@ export default function DepartmentManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>部署名</TableHead>
+                  <TableHead>部署階層</TableHead>
                   <TableHead>説明</TableHead>
                   <TableHead>作成日</TableHead>
                   <TableHead className="w-[80px]"></TableHead>
@@ -292,13 +295,25 @@ export default function DepartmentManagement() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredDepartments.map((dept: Department) => (
-                    <TableRow key={dept.id}>
-                      <TableCell className="font-medium">{dept.name}</TableCell>
-                      <TableCell>{dept.description || "-"}</TableCell>
-                      <TableCell>
-                        {dept.createdAt ? format(new Date(dept.createdAt), 'yyyy/MM/dd') : "-"}
-                      </TableCell>
+                  filteredDepartments.map((dept: Department) => {
+                    // 部署名を階層に分割（スラッシュで区切られている場合）
+                    const hierarchyLevels = dept.name.split('/');
+                    
+                    return (
+                      <TableRow key={dept.id}>
+                        <TableCell>
+                          <div className="space-y-0.5">
+                            {hierarchyLevels.map((level, index) => (
+                              <div key={index} className={`${index > 0 ? `pl-${index * 4}` : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
+                                {level.trim()}
+                              </div>
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell>{dept.description || "-"}</TableCell>
+                        <TableCell>
+                          {dept.createdAt ? format(new Date(dept.createdAt), 'yyyy/MM/dd') : "-"}
+                        </TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
