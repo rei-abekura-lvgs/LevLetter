@@ -38,6 +38,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Search, MoreHorizontal, ShieldCheck, Shield, UserCog } from "lucide-react";
 import { format } from "date-fns";
 
@@ -254,6 +255,23 @@ export default function UserManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-[50px]">
+                    <Checkbox 
+                      checked={selectedUsers.length > 0 && selectedUsers.length === filteredUsers.filter((u: any) => u.email !== "rei.abekura@leverages.jp").length}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          // すべてのユーザーを選択（管理者アカウントは除外）
+                          const nonAdminUsers = filteredUsers
+                            .filter((user: any) => user.email !== "rei.abekura@leverages.jp")
+                            .map((user: any) => user.id);
+                          setSelectedUsers(nonAdminUsers);
+                        } else {
+                          // すべての選択を解除
+                          setSelectedUsers([]);
+                        }
+                      }}
+                    />
+                  </TableHead>
                   <TableHead>名前</TableHead>
                   <TableHead>メールアドレス</TableHead>
                   <TableHead>部署</TableHead>
@@ -265,13 +283,27 @@ export default function UserManagement() {
               <TableBody>
                 {filteredUsers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
                       ユーザーが見つかりませんでした
                     </TableCell>
                   </TableRow>
                 ) : (
                   filteredUsers.map((user: User) => (
                     <TableRow key={user.id}>
+                      <TableCell>
+                        {user.email !== "rei.abekura@leverages.jp" && (
+                          <Checkbox
+                            checked={selectedUsers.includes(user.id)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setSelectedUsers([...selectedUsers, user.id]);
+                              } else {
+                                setSelectedUsers(selectedUsers.filter(id => id !== user.id));
+                              }
+                            }}
+                          />
+                        )}
+                      </TableCell>
                       <TableCell className="font-medium">
                         {user.name}
                         {user.isAdmin && (
