@@ -77,11 +77,12 @@ async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResu
   }
 }
 
-const SAMPLE_CSV = `社員番号,氏名,職場氏名,会社メールアドレス,所属部門,所属コード,所属階層１,所属階層２,所属階層３,所属階層４,所属階層５,勤務地コード,勤務地名,職種コード,職種名,雇用区分,入社日,PLコード
-E001,田中太郎,タナカ,tanaka@example.com,営業部,S001,営業本部,第一営業部,,,,T01,東京本社,J01,営業,正社員,2020/04/01,PL001
-E002,山田花子,ヤマダ,yamada@example.com,マーケティング部,M001,事業推進本部,マーケティング部,,,,T01,東京本社,J02,マーケティング,正社員,2019/10/01,PL002
-E003,鈴木一郎,スズキ,suzuki@example.com,開発部,D001,技術本部,開発部,フロントエンド課,,,O01,大阪支社,J03,エンジニア,正社員,2021/07/01,PL003
-E004,佐藤太一,サトウ,sato@example.com,,EX001,役員,,,,,T01,東京本社,J10,役員,役員,2015/01/01,`;
+const SAMPLE_CSV = `社員番号,氏名,職場氏名,会社メールアドレス,所属コード,所属階層１,所属階層２,所属階層３,所属階層４,所属階層５,勤務地コード,勤務地名,職種コード,職種名,雇用区分,入社日,PLコード
+E001,田中太郎,タナカ,tanaka@example.com,S001,営業本部,第一営業部,,,,T01,東京本社,J01,営業,正社員,2020/04/01,PL001
+E002,山田花子,ヤマダ,yamada@example.com,M001,事業推進本部,マーケティング部,,,,T01,東京本社,J02,マーケティング,正社員,2019/10/01,PL002
+E003,鈴木一郎,スズキ,suzuki@example.com,D001,技術本部,開発部,フロントエンド課,,,O01,大阪支社,J03,エンジニア,正社員,2021/07/01,PL003
+E004,佐藤太一,サトウ,sato@example.com,EX001,役員,,,,,T01,東京本社,J10,役員,役員,2015/01/01,
+E005,高橋恵子,タカハシ,takahashi@example.com,NULL,その他,,,,,T01,東京本社,J05,総務,正社員,2022/04/01,PL005`;
 
 export default function EmployeeImport() {
   const { toast } = useToast();
@@ -150,12 +151,23 @@ export default function EmployeeImport() {
               // 会社DBの形式かチェック（TSVと思われる場合）
               if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
                 // 社内DB形式の場合、フィールドをマッピング
+                // 所属階層1～5を連結して部署として使用
+                const dept1 = row["所属階層１"] || 'その他';
+                const dept2 = row["所属階層２"] || '';
+                const dept3 = row["所属階層３"] || '';
+                const dept4 = row["所属階層４"] || '';
+                const dept5 = row["所属階層５"] || '';
+                
+                // 階層をスラッシュで連結（空の階層は除外）
+                const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== '');
+                const departmentPath = departmentParts.join('/');
+                
                 return {
                   email: row["会社メールアドレス"] || '',
                   name: row["氏名"] || '',
                   employeeId: String(row["社員番号"] || ''),
                   displayName: row["職場氏名"] || '',
-                  department: row["所属部門"] || 'その他' // 部署が空の場合は「その他」
+                  department: departmentPath
                 };
               } else {
                 // 従来のCSV形式の場合はそのまま
@@ -217,12 +229,23 @@ export default function EmployeeImport() {
             // 会社DB形式かチェック
             if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
               // 社内DB形式の場合、フィールドをマッピング
+              // 所属階層1～5を連結して部署として使用
+              const dept1 = row["所属階層１"] || 'その他';
+              const dept2 = row["所属階層２"] || '';
+              const dept3 = row["所属階層３"] || '';
+              const dept4 = row["所属階層４"] || '';
+              const dept5 = row["所属階層５"] || '';
+              
+              // 階層をスラッシュで連結（空の階層は除外）
+              const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== '');
+              const departmentPath = departmentParts.join('/');
+              
               return {
                 email: row["会社メールアドレス"] || '',
                 name: row["氏名"] || '',
                 employeeId: String(row["社員番号"] || ''),
                 displayName: row["職場氏名"] || '',
-                department: row["所属部門"] || 'その他' // 部署が空の場合は「その他」
+                department: departmentPath
               };
             } else {
               // 従来の形式の場合はそのまま
@@ -285,12 +308,23 @@ export default function EmployeeImport() {
                 const mappedData = results.data.map((row: any) => {
                   // 会社DBの形式かチェック
                   if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
+                    // 所属階層1～5を連結して部署として使用
+                    const dept1 = row["所属階層１"] || 'その他';
+                    const dept2 = row["所属階層２"] || '';
+                    const dept3 = row["所属階層３"] || '';
+                    const dept4 = row["所属階層４"] || '';
+                    const dept5 = row["所属階層５"] || '';
+                    
+                    // 階層をスラッシュで連結（空の階層は除外）
+                    const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== '');
+                    const departmentPath = departmentParts.join('/');
+                    
                     return {
                       email: row["会社メールアドレス"] || '',
                       name: row["氏名"] || '',
                       employeeId: String(row["社員番号"] || ''),
                       displayName: row["職場氏名"] || '',
-                      department: row["所属部門"] || 'その他' // 部署が空の場合は「その他」
+                      department: departmentPath
                     };
                   } else {
                     return row;
@@ -359,12 +393,23 @@ export default function EmployeeImport() {
               const mappedData = jsonData.map((row: any) => {
                 // 会社DBの形式かチェック
                 if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
+                  // 所属階層1～5を連結して部署として使用
+                  const dept1 = row["所属階層１"] || 'その他';
+                  const dept2 = row["所属階層２"] || '';
+                  const dept3 = row["所属階層３"] || '';
+                  const dept4 = row["所属階層４"] || '';
+                  const dept5 = row["所属階層５"] || '';
+                  
+                  // 階層をスラッシュで連結（空の階層は除外）
+                  const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== '');
+                  const departmentPath = departmentParts.join('/');
+                  
                   return {
                     email: row["会社メールアドレス"] || '',
                     name: row["氏名"] || '',
                     employeeId: String(row["社員番号"] || ''),
                     displayName: row["職場氏名"] || '',
-                    department: row["所属部門"] || 'その他' // 部署が空の場合は「その他」
+                    department: departmentPath
                   };
                 } else {
                   return row;
@@ -465,7 +510,6 @@ export default function EmployeeImport() {
         "氏名": '田中太郎', 
         "職場氏名": 'タナカ', 
         "会社メールアドレス": 'tanaka@example.com', 
-        "所属部門": '営業部',
         "所属コード": 'S001',
         "所属階層１": '営業本部',
         "所属階層２": '第一営業部',

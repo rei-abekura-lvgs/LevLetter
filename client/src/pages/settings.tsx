@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "@/context/auth-context";
-import { Loader2, Building2 } from "lucide-react";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from "@/components/ui/tabs";
+import { Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -14,15 +8,10 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { User } from "@shared/schema";
-import Departments from "./departments";
 
 export default function Settings() {
   const { user, loading } = useAuth();
-
-  // ユーザーが管理者かどうかをチェック
-  const isAdmin = user ? true : false; // 現時点ではすべてのユーザーが部署管理できるように
 
   if (loading) {
     return (
@@ -52,25 +41,14 @@ export default function Settings() {
     <div className="container mx-auto py-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">システム設定</CardTitle>
-          <CardDescription>LevLetterのシステム設定を管理します</CardDescription>
+          <CardTitle className="text-2xl font-bold">ユーザー設定</CardTitle>
+          <CardDescription>LevLetterの個人設定を管理します</CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="departments">
-            <TabsList className="mb-6">
-              <TabsTrigger value="departments" className="flex items-center gap-2">
-                <Building2 className="h-4 w-4" />
-                部署管理
-              </TabsTrigger>
-              {/* 他の設定タブをここに追加 */}
-            </TabsList>
-            
-            <TabsContent value="departments">
-              <Departments />
-            </TabsContent>
-            
-            {/* 他の設定コンテンツをここに追加 */}
-          </Tabs>
+          <div className="text-center py-12 text-muted-foreground">
+            <p>現在設定可能な項目はありません。</p>
+            <p className="mt-2">管理者設定は管理者メニューからアクセスしてください。</p>
+          </div>
         </CardContent>
       </Card>
     </div>
