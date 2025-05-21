@@ -46,10 +46,6 @@ export default function CardForm({ onSent }: CardFormProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState<string | null>(null);
   const [selectedLevel1Department, setSelectedLevel1Department] = useState<string | null>(null);
-  const [selectedLevel2Department, setSelectedLevel2Department] = useState<string | null>(null);
-  const [selectedLevel3Department, setSelectedLevel3Department] = useState<string | null>(null);
-  const [selectedLevel4Department, setSelectedLevel4Department] = useState<string | null>(null);
-  const [selectedLevel5Department, setSelectedLevel5Department] = useState<string | null>(null);
 
   // ユーザー情報を取得
   const { data: users = [], isLoading: isLoadingUsers } = useQuery<User[]>({
@@ -300,10 +296,6 @@ export default function CardForm({ onSent }: CardFormProps) {
                       value={selectedLevel1Department || ""}
                       onValueChange={(value: string) => {
                         setSelectedLevel1Department(value || null);
-                        setSelectedLevel2Department(null);
-                        setSelectedLevel3Department(null);
-                        setSelectedLevel4Department(null);
-                        setSelectedLevel5Department(null);
                         setDepartmentFilter(null);
                       }}
                     >
@@ -319,21 +311,21 @@ export default function CardForm({ onSent }: CardFormProps) {
                     </Select>
                   </div>
                   
-                  {/* 階層2 - 階層1が選択されている場合のみ表示 */}
+                  {/* 階層1が選択されている場合のみ階層2を表示 */}
                   {selectedLevel1Department && (
                     <div>
                       <Label className="text-sm font-medium block mb-1.5">所属階層2</Label>
                       <Select
-                        value={selectedLevel2Department || ""}
+                        value={
+                          departmentFilter && departmentFilter.startsWith(selectedLevel1Department) 
+                            ? departmentFilter.replace(`${selectedLevel1Department}/`, "") 
+                            : ""
+                        }
                         onValueChange={(value: string) => {
-                          setSelectedLevel2Department(value || null);
-                          setSelectedLevel3Department(null);
-                          setSelectedLevel4Department(null);
-                          setSelectedLevel5Department(null);
                           if (value) {
                             setDepartmentFilter(`${selectedLevel1Department}/${value}`);
                           } else {
-                            setDepartmentFilter(selectedLevel1Department);
+                            setDepartmentFilter(null);
                           }
                         }}
                       >
@@ -349,46 +341,6 @@ export default function CardForm({ onSent }: CardFormProps) {
                               return parts && parts.length > 1 ? parts[1].trim() : null;
                             })
                             .filter((v, i, a) => v && a.indexOf(v) === i) // 重複を除去
-                            .sort() // ソート
-                            .map(dept => dept && (
-                              <SelectItem key={dept} value={dept}>{dept}</SelectItem>
-                            ))
-                          }
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-
-                  {/* 階層3 - 階層2が選択されている場合のみ表示 */}
-                  {selectedLevel1Department && selectedLevel2Department && (
-                    <div>
-                      <Label className="text-sm font-medium block mb-1.5">所属階層3</Label>
-                      <Select
-                        value={selectedLevel3Department || ""}
-                        onValueChange={(value: string) => {
-                          setSelectedLevel3Department(value || null);
-                          setSelectedLevel4Department(null);
-                          setSelectedLevel5Department(null);
-                          if (value) {
-                            setDepartmentFilter(`${selectedLevel1Department}/${selectedLevel2Department}/${value}`);
-                          } else {
-                            setDepartmentFilter(`${selectedLevel1Department}/${selectedLevel2Department}`);
-                          }
-                        }}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="階層3の部署を選択" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="">全て ({selectedLevel2Department})</SelectItem>
-                          {availableUsers
-                            .filter(u => u.department?.startsWith(`${selectedLevel1Department}/${selectedLevel2Department}`))
-                            .map(u => {
-                              const parts = u.department?.split(/[\/\>　]/);
-                              return parts && parts.length > 2 ? parts[2].trim() : null;
-                            })
-                            .filter((v, i, a) => v && a.indexOf(v) === i) // 重複を除去
-                            .sort() // ソート
                             .map(dept => dept && (
                               <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                             ))
@@ -399,28 +351,26 @@ export default function CardForm({ onSent }: CardFormProps) {
                   )}
                   
                   {/* 現在の部署フィルター表示 */}
-                  {(departmentFilter || selectedLevel1Department) && (
+                  {(selectedLevel1Department || departmentFilter) && (
                     <div className="pt-2">
                       <p className="text-xs text-gray-500">現在のフィルター:</p>
-                      <p className="text-sm font-medium truncate">
+                      <p className="text-sm font-medium">
                         {departmentFilter || selectedLevel1Department || "全部署"}
                       </p>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs mt-1 h-8 px-2 text-gray-500"
-                        onClick={() => {
-                          setSelectedLevel1Department(null);
-                          setSelectedLevel2Department(null);
-                          setSelectedLevel3Department(null);
-                          setSelectedLevel4Department(null);
-                          setSelectedLevel5Department(null);
-                          setDepartmentFilter(null);
-                        }}
-                      >
-                        <X size={12} className="mr-1" />
-                        フィルターをクリア
-                      </Button>
+                      {(selectedLevel1Department || departmentFilter) && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs mt-1 h-8 px-2 text-gray-500"
+                          onClick={() => {
+                            setSelectedLevel1Department(null);
+                            setDepartmentFilter(null);
+                          }}
+                        >
+                          <X size={12} className="mr-1" />
+                          フィルターをクリア
+                        </Button>
+                      )}
                     </div>
                   )}
                 </div>
