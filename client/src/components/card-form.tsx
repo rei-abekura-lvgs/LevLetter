@@ -303,7 +303,7 @@ export default function CardForm({ onSent }: CardFormProps) {
                         <SelectValue placeholder="階層1の部署を選択" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">全ての部署</SelectItem>
+                        <SelectItem value="all">全ての部署</SelectItem>
                         {departmentsByLevel[1].map(dept => (
                           <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                         ))}
@@ -333,7 +333,7 @@ export default function CardForm({ onSent }: CardFormProps) {
                           <SelectValue placeholder={`${selectedLevel1Department}内の部署を選択`} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">全て ({selectedLevel1Department})</SelectItem>
+                          <SelectItem value="all">全て ({selectedLevel1Department})</SelectItem>
                           {availableUsers
                             .filter(u => u.department?.startsWith(selectedLevel1Department))
                             .map(u => {
@@ -341,8 +341,9 @@ export default function CardForm({ onSent }: CardFormProps) {
                               return parts && parts.length > 1 ? parts[1].trim() : null;
                             })
                             .filter((v, i, a) => v && a.indexOf(v) === i) // 重複を除去
-                            .map(dept => dept && (
-                              <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                            .filter(Boolean) // nullを除外
+                            .map(dept => (
+                              <SelectItem key={dept} value={dept || "unknown"}>{dept}</SelectItem>
                             ))
                           }
                         </SelectContent>
