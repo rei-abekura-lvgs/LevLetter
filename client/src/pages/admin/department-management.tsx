@@ -93,10 +93,7 @@ export default function DepartmentManagement() {
   // 部署更新ミューテーション
   const updateDepartmentMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: { name: string; description: string | null } }) => {
-      return apiRequest(`/api/departments/${id}`, {
-        method: 'PUT',
-        data,
-      });
+      return apiRequest(`/api/departments/${id}`, 'PUT', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/departments'] });
@@ -119,9 +116,7 @@ export default function DepartmentManagement() {
   // 部署削除ミューテーション
   const deleteDepartmentMutation = useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`/api/departments/${id}`, {
-        method: 'DELETE',
-      });
+      return apiRequest(`/api/departments/${id}`, 'DELETE');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/departments'] });

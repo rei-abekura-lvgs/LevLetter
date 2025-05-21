@@ -81,9 +81,8 @@ export default function EmployeeImport() {
               ) as CsvEmployee[];
 
               // APIリクエスト
-              const response = await apiRequest('/api/admin/employees/import', {
-                method: 'POST',
-                data: { employees: validData }
+              const response = await apiRequest('/api/admin/employees/import', 'POST', {
+                employees: validData
               });
               
               resolve(response as ImportResult);
