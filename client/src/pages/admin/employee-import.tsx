@@ -49,6 +49,13 @@ interface CompanyEmployee {
 
 // 従業員データをインポートする関数
 async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResult> {
+  // デバッグ用：インポート前のデータをログ出力
+  console.log('インポート前のデータ(最初の3件):', employees.slice(0, 3));
+  
+  if (!employees || employees.length === 0) {
+    throw new Error('有効な従業員データがありません。データマッピングに問題がある可能性があります。');
+  }
+  
   return await apiRequest<ImportResult>("POST", "/api/admin/employees/import", {
     employees: employees
   });
@@ -68,7 +75,7 @@ export default function EmployeeImport() {
   const [isPreviewMode, setIsPreviewMode] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // ファイルのパース（CSVまたはExcel）
+  // ファイルのパース（CSVまたはExcelまたはTSV）
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
@@ -76,19 +83,34 @@ export default function EmployeeImport() {
     setFile(selectedFile);
     setImportResult(null);
 
+    // ファイル名とファイルタイプの情報をログ出力（デバッグ用）
     const fileExt = selectedFile.name.split('.').pop()?.toLowerCase();
+    console.log('ファイル情報:', {
+      名前: selectedFile.name,
+      拡張子: fileExt,
+      タイプ: selectedFile.type,
+      サイズ: `${(selectedFile.size / 1024).toFixed(2)} KB`
+    });
     
     // ファイル形式に応じてパース処理を分岐
-    if (fileExt === 'csv') {
-      // CSVファイルのパース
+    if (fileExt === 'csv' || fileExt === 'txt' || fileExt === 'tsv') {
+      // CSVまたはTSVファイルのパース
       Papa.parse(selectedFile, {
         header: true,
         skipEmptyLines: true,
+        // TSVファイルの場合はタブ区切りを指定
+        delimiter: fileExt === 'tsv' ? '\t' : ',',
         complete: (results) => {
-          // CSVパースデータのフィールドをマッピング
+          console.log('パース結果:', results);
+          console.log('パース結果のヘッダー:', results.meta.fields);
+          console.log('パース結果の最初の行:', results.data[0]);
+          
+          // CSV/TSVパースデータのフィールドをマッピング
           const mappedData = results.data.map((row: any) => {
-            // 会社DBの形式かチェック
-            if (row["会社メールアドレス"] !== undefined) {
+            console.log('処理中の行:', row);
+            
+            // 会社DBの形式かチェック（TSVと思われる場合）
+            if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
               // 社内DB形式の場合、フィールドをマッピング
               return {
                 email: row["会社メールアドレス"] || '',
@@ -103,13 +125,28 @@ export default function EmployeeImport() {
             }
           });
           
-          // 必須フィールドのチェック
-          const validData = mappedData.filter((row: any) => 
-            row.email && row.name && row.employeeId
-          ) as CsvEmployee[];
+          console.log('マッピング後のデータ:', mappedData.slice(0, 3));
           
+          // 必須フィールドのチェック
+          const validData = mappedData.filter((row: any) => {
+            const isValid = row.email && row.name && row.employeeId;
+            if (!isValid) {
+              console.log('無効なデータ行:', row);
+            }
+            return isValid;
+          }) as CsvEmployee[];
+          
+          console.log('有効なデータ件数:', validData.length);
           setPreview(validData.slice(0, 10)); // 先頭10件をプレビュー表示
           setIsPreviewMode(true);
+        },
+        error: (error) => {
+          console.error('ファイルパースエラー:', error);
+          toast({
+            title: 'エラー',
+            description: `ファイルの解析に失敗しました: ${error.message}`,
+            variant: 'destructive',
+          });
         }
       });
     } else if (fileExt === 'xlsx' || fileExt === 'xls') {
@@ -130,10 +167,40 @@ export default function EmployeeImport() {
           // シートデータをJSONに変換
           const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: false });
           
+          console.log('Excelパース結果:', jsonData.slice(0, 3));
+          
+          // Excelデータのフィールドをマッピング
+          const mappedData = jsonData.map((row: any) => {
+            console.log('処理中のExcel行:', row);
+            
+            // 会社DB形式かチェック
+            if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
+              // 社内DB形式の場合、フィールドをマッピング
+              return {
+                email: row["会社メールアドレス"] || '',
+                name: row["氏名"] || '',
+                employeeId: String(row["社員番号"] || ''), // 数値の場合を考慮して文字列に変換
+                displayName: row["職場氏名"] || '',
+                department: row["所属部門"] || ''
+              };
+            } else {
+              // 従来の形式の場合はそのまま
+              return row;
+            }
+          });
+          
+          console.log('Excel マッピング後のデータ:', mappedData.slice(0, 3));
+          
           // 必須フィールドのチェック
-          const validData = jsonData.filter((row: any) => 
-            row.email && row.name && row.employeeId
-          ) as CsvEmployee[];
+          const validData = mappedData.filter((row: any) => {
+            const isValid = row.email && row.name && row.employeeId;
+            if (!isValid) {
+              console.log('無効なExcelデータ行:', row);
+            }
+            return isValid;
+          }) as CsvEmployee[];
+          
+          console.log('有効なExcelデータ件数:', validData.length);
           
           setPreview(validData.slice(0, 10)); // 先頭10件をプレビュー表示
           setIsPreviewMode(true);
