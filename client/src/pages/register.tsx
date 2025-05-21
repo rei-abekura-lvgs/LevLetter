@@ -15,13 +15,14 @@ import { apiRequest } from "@/lib/queryClient";
 import { InfoIcon, CheckCircle, XCircle } from "lucide-react";
 
 // バリデーションルールを拡張
-const extendedRegisterSchema = registerSchema.extend({
-  // フロント側でのみ検証するフィールド - APIには送信しない
+const extendedRegisterSchema = z.object({
+  email: z.string().email({ message: "有効なメールアドレスを入力してください" }),
+  password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" }),
   confirmPassword: z.string().min(6, { message: "パスワードは6文字以上で入力してください" })
 }).refine(data => data.password === data.confirmPassword, {
   message: "パスワードが一致しません",
   path: ["confirmPassword"]
-}).omit({ name: true, department: true });  // 名前と部署を省略
+});
 
 type RegisterFormValues = z.infer<typeof extendedRegisterSchema>;
 
@@ -60,8 +61,8 @@ export default function Register() {
 
   // メールアドレスが変更されたときに検証
   useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === 'email' && value.email) {
+    const subscription = form.watch((value) => {
+      if (value.email) {
         const timer = setTimeout(() => verifyEmail(value.email), 1000);
         return () => clearTimeout(timer);
       }

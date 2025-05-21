@@ -101,22 +101,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("ユーザー登録リクエスト:", JSON.stringify(req.body));
       const data = registerSchema.parse(req.body);
       
-      // メールアドレスの重複チェック
-      const existingUser = await storage.getUserByEmail(data.email);
-      if (existingUser) {
+      // メールアドレスでユーザーを検索（CSVインポートされたユーザーの確認）
+      const preexistingUser = await storage.getUserByEmail(data.email);
+      
+      // すでにパスワードが設定されている場合はエラー
+      if (preexistingUser && preexistingUser.password) {
         return res.status(400).json({ message: "このメールアドレスは既に使用されています" });
       }
       
-      // ユーザー作成
+      // CSVインポートされていないメールアドレスはエラー
+      if (!preexistingUser) {
+        return res.status(400).json({ message: "このメールアドレスは管理者によって事前登録されていません" });
+      }
+      
+      // ユーザー作成 (既存ユーザーの場合は既存情報を保持してパスワードのみ設定)
       const newUser = await storage.createUser({
         ...data,
-        displayName: data.displayName || null,
-        department: data.department || null,
+        name: preexistingUser?.name || data.email.split('@')[0], // ユーザーが既存の場合は名前を維持、なければメールアドレスから生成
+        displayName: preexistingUser?.displayName || null,
+        department: preexistingUser?.department || null,
         weeklyPoints: 30,
         totalPointsReceived: 0,
-        lastWeeklyPointsReset: new Date(),
         cognitoSub: null,
         googleId: null,
+        employeeId: preexistingUser?.employeeId || null,
       });
       
       console.log("ユーザー登録成功:", newUser.id, newUser.email);

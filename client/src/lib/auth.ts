@@ -22,8 +22,6 @@ export async function login(email: string, password: string): Promise<AuthRespon
 export async function register(formData: {
   email: string;
   password: string;
-  name: string;
-  department: string;
 }): Promise<AuthResponse> {
   try {
     const data = await apiRequest<AuthResponse>("POST", "/api/auth/register", formData);
