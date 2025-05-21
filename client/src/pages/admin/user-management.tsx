@@ -175,7 +175,90 @@ export default function UserManagement() {
             />
           </div>
           
-          <Dialog open={showDeleteAllDialog} onOpenChange={setShowDeleteAllDialog}>
+          <div className="flex gap-2">
+            {selectedUsers.length > 0 && (
+              <Dialog open={showBulkDeleteDialog} onOpenChange={setShowBulkDeleteDialog}>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" size="sm">
+                    選択したユーザーを削除 ({selectedUsers.length})
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="text-destructive">ユーザー一括削除の確認</DialogTitle>
+                    <DialogDescription>
+                      {selectedUsers.length}人のユーザーを削除します。この操作は元に戻せません。
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="bg-muted p-3 rounded-md text-sm">
+                    <p>実行すると以下の影響があります：</p>
+                    <ul className="list-disc ml-5 mt-2 space-y-1">
+                      <li>ユーザーデータが完全に削除されます</li>
+                      <li>関連するカード・いいねも削除されます</li>
+                      <li>チームメンバーシップも削除されます</li>
+                    </ul>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setShowBulkDeleteDialog(false)}>
+                      キャンセル
+                    </Button>
+                    <Button 
+                      variant="destructive"
+                      onClick={() => {
+                        // 選択したユーザーを一括削除
+                        const token = localStorage.getItem('token');
+                        if (!token) {
+                          toast({
+                            title: "認証エラー",
+                            description: "ログインしてください",
+                            variant: "destructive",
+                          });
+                          return;
+                        }
+                        
+                        fetch('/api/admin/users/delete-bulk', {
+                          method: 'DELETE',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                          },
+                          body: JSON.stringify({ userIds: selectedUsers })
+                        })
+                        .then(response => {
+                          if (response.ok) {
+                            toast({
+                              title: "成功",
+                              description: `${selectedUsers.length}人のユーザーを削除しました`,
+                            });
+                            queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+                            setSelectedUsers([]);
+                            setShowBulkDeleteDialog(false);
+                          } else {
+                            toast({
+                              title: "エラー",
+                              description: "ユーザー削除中にエラーが発生しました",
+                              variant: "destructive",
+                            });
+                          }
+                        })
+                        .catch(error => {
+                          console.error("削除エラー:", error);
+                          toast({
+                            title: "エラー",
+                            description: "ユーザー削除中にエラーが発生しました",
+                            variant: "destructive",
+                          });
+                        });
+                      }}
+                    >
+                      選択したユーザーを削除
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
+            
+            <Dialog open={showDeleteAllDialog} onOpenChange={setShowDeleteAllDialog}>
             <DialogTrigger asChild>
               <Button variant="destructive" size="sm">
                 開発用：全ユーザー削除
@@ -246,6 +329,7 @@ export default function UserManagement() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
 
         {isLoading ? (
