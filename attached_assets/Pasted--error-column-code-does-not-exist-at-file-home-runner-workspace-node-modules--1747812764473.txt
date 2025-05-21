@@ -1,0 +1,76 @@
+従業員データ処理エラー: error: column "code" does not exist
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.getDepartments (/home/runner/workspace/server/database-storage.ts:260:12)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:987:33) {
+  length: 104,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '14',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+従業員データ処理エラー: error: column "code" does not exist
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.getDepartments (/home/runner/workspace/server/database-storage.ts:260:12)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:987:33) {
+  length: 104,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '14',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+管理者API: 従業員データインポート結果: {
+  success: false,
+  newUsers: 20,
+  updatedUsers: 0,
+  errors: [
+    'データ処理エラー: 1 - column "code" does not exist',
+    'データ処理エラー: 2 - column "code" does not exist',
+    'データ処理エラー: 4 - column "code" does not exist',
+    'データ処理エラー: 6 - column "code" does not exist',
+    'データ処理エラー: 34 - column "code" does not exist',
+    'データ処理エラー: 44 - column "code" does not exist',
+    'データ処理エラー: 70 - column "code" does not exist',
+    'データ処理エラー: 76 - column "code" does not exist',
+    'データ処理エラー: 86 - column "code" does not exist',
+    'データ処理エラー: 113 - column "code" does not exist',
+    'データ処理エラー: 115 - column "code" does not exist',
+    'データ処理エラー: 149 - column "code" does not exist',
+    'データ処理エラー: 164 - column "code" does not exist',
+    'データ処理エラー: 172 - column "code" does not exist',
+    'データ処理エラー: 193 - column "code" does not exist',
+    'データ処理エラー: 215 - column "code" does not exist',
+    'データ処理エラー: 217 - column "code" does not exist',
+    'データ処理エラー: 218 - column "code" does not exist',
+    'データ処理エラー: 222 - column "code" does not exist',
+    'データ処理エラー: 231 - column "code" does not exist'
+  ]
+}
+7:32:24 AM [express] POST /api/admin/employees/import 200 in 3685ms :: {"success":false,"newUsers":2…

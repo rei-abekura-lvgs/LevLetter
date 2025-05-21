@@ -422,7 +422,6 @@ export class DatabaseStorage implements IStorage {
       throw error;
     }
   }
-  }
 
   // カード関連
   async getCards(options: { limit?: number; offset?: number; senderId?: number; recipientId?: number; } = {}): Promise<CardWithRelations[]> {
