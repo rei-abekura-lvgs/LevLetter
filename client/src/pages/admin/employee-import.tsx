@@ -162,11 +162,11 @@ export default function EmployeeImport() {
                 const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== '');
                 const departmentPath = departmentParts.join('/');
                 
+                // 職場氏名をユーザー名として使用、なければ氏名を使用
                 return {
                   email: row["会社メールアドレス"] || '',
-                  name: row["氏名"] || '',
+                  name: row["職場氏名"] || row["氏名"] || '',
                   employeeId: String(row["社員番号"] || ''),
-                  displayName: row["職場氏名"] || '',
                   department: departmentPath
                 };
               } else {
@@ -240,11 +240,11 @@ export default function EmployeeImport() {
               const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== '');
               const departmentPath = departmentParts.join('/');
               
+              // 職場氏名をユーザー名として使用、なければ氏名を使用
               return {
                 email: row["会社メールアドレス"] || '',
-                name: row["氏名"] || '',
+                name: row["職場氏名"] || row["氏名"] || '',
                 employeeId: String(row["社員番号"] || ''),
-                displayName: row["職場氏名"] || '',
                 department: departmentPath
               };
             } else {
@@ -404,11 +404,11 @@ export default function EmployeeImport() {
                   const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== '');
                   const departmentPath = departmentParts.join('/');
                   
+                  // 職場氏名をユーザー名として使用、なければ氏名を使用
                   return {
                     email: row["会社メールアドレス"] || '',
-                    name: row["氏名"] || '',
+                    name: row["職場氏名"] || row["氏名"] || '',
                     employeeId: String(row["社員番号"] || ''),
-                    displayName: row["職場氏名"] || '',
                     department: departmentPath
                   };
                 } else {
