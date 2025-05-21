@@ -13,10 +13,14 @@ export const users = pgTable("users", {
   weeklyPoints: integer("weekly_points").notNull().default(500),
   totalPointsReceived: integer("total_points_received").notNull().default(0),
   lastWeeklyPointsReset: timestamp("last_weekly_points_reset"),
+  isAdmin: boolean("is_admin").notNull().default(false),
+  isActive: boolean("is_active").notNull().default(true),
   password: text("password"),
   cognitoSub: text("cognito_sub").unique(),
   googleId: text("google_id").unique(),
-  createdAt: timestamp("created_at").defaultNow().notNull()
+  employeeId: text("employee_id").unique(), // 従業員番号
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
 // サンクスカードテーブル
