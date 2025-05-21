@@ -11,22 +11,32 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
-import { importEmployees, ImportResult, ImportEmployeesRequest } from "@/lib/api";
+import { apiRequest } from "@/lib/queryClient";
 
-// 既にAPI.tsで定義されているのでコメントアウト
-// interface ImportResult {
-//   success: boolean;
-//   newUsers: number;
-//   updatedUsers: number;
-//   errors: string[];
-// }
+// インポート結果の型定義
+interface ImportResult {
+  success: boolean;
+  newUsers: number;
+  updatedUsers: number;
+  errors: string[];
+}
 
+
+
+// 従業員データの型定義
 interface CsvEmployee {
   email: string;
   name: string;
   employeeId: string;
   displayName?: string;
   department?: string;
+}
+
+// 従業員データをインポートする関数
+async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResult> {
+  return await apiRequest<ImportResult>("POST", "/api/admin/employees/import", {
+    employees: employees
+  });
 }
 
 const SAMPLE_CSV = `email,name,employeeId,displayName,department
@@ -135,7 +145,7 @@ export default function EmployeeImport() {
                 ) as CsvEmployee[];
 
                 // APIリクエスト
-                const response = await importEmployees({ employees: validData });
+                const response = await importEmployeesData(validData);
                 
                 resolve(response as ImportResult);
               } catch (error) {
@@ -191,11 +201,9 @@ export default function EmployeeImport() {
               ) as CsvEmployee[];
 
               // APIリクエスト
-              const response = await apiRequest<ImportResult>(
-                'POST',
-                '/api/admin/employees/import', 
-                { employees: validData }
-              );
+              const response = await apiRequest<ImportResult>("POST", "/api/admin/employees/import", {
+                employees: validData
+              });
               
               resolve(response as ImportResult);
             } catch (error) {
