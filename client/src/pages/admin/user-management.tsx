@@ -314,9 +314,16 @@ export default function UserManagement() {
                               // 部署情報を取得
                               const dept = departments.find((d: any) => d.id === deptId);
                               if (dept) {
+                                // 部署名を階層に分割（スラッシュで区切られている場合）
+                                const hierarchyLevels = dept.name.split('/');
+                                
                                 return (
                                   <div className="space-y-0.5">
-                                    <div className="text-emerald-700 font-medium">{dept.name}</div>
+                                    {hierarchyLevels.map((level, index) => (
+                                      <div key={index} className={`${index > 0 ? `pl-${index * 4}` : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
+                                        {level.trim()}
+                                      </div>
+                                    ))}
                                   </div>
                                 );
                               }
