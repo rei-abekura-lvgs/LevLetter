@@ -422,27 +422,6 @@ export class DatabaseStorage implements IStorage {
       throw error;
     }
   }
-      
-      console.log(`削除対象部署情報:`, deptToDelete);
-      
-      // 部署削除実行
-      const result = await db
-        .delete(departments)
-        .where(eq(departments.id, id))
-        .returning({ id: departments.id });
-      
-      console.log(`部署削除結果:`, result);
-      
-      if (result.length === 0) {
-        console.error(`部署削除エラー: ID=${id} は存在しないか、すでに削除されています`);
-        throw new Error(`部署が見つかりません: ${id}`);
-      }
-      
-      console.log(`部署削除成功: ID=${id}`);
-    } catch (error) {
-      console.error(`部署削除エラー詳細:`, error);
-      throw error;
-    }
   }
 
   // カード関連
