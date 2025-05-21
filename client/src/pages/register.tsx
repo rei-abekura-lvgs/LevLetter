@@ -43,6 +43,17 @@ export default function Register() {
     },
   });
 
+  // メール検証の状態管理
+  const [verificationStatus, setVerificationStatus] = useState<{
+    canRegister: boolean;
+    isRegistered: boolean;
+    message: string;
+  }>({
+    canRegister: false,
+    isRegistered: false,
+    message: ""
+  });
+  
   // メールアドレスの検証
   const verifyEmail = async (email: string) => {
     if (!email || !email.includes('@')) return;
@@ -59,8 +70,13 @@ export default function Register() {
       const data = await response.json();
       console.log(`メール検証 (${email}) レスポンス:`, data);
       
-      // レスポンスに基づいて状態を更新（exists は登録可能かどうか）
+      // レスポンスに基づいて状態を更新
       setEmailVerified(data.exists === true);
+      setVerificationStatus({
+        canRegister: data.exists === true,
+        isRegistered: data.userExists === true && data.hasPassword === true,
+        message: data.message || ""
+      });
       
       // 検証結果メッセージをログに出力
       if (data.message) {
@@ -69,6 +85,11 @@ export default function Register() {
     } catch (error) {
       console.error("メール検証エラー:", error);
       setEmailVerified(false);
+      setVerificationStatus({
+        canRegister: false,
+        isRegistered: false,
+        message: "メールアドレスの検証中にエラーが発生しました"
+      });
     } finally {
       setVerifyingEmail(false);
     }
@@ -88,10 +109,12 @@ export default function Register() {
   }, [form.watch]);
 
   async function onSubmit(data: RegisterFormValues) {
-    if (emailVerified !== true) {
+    if (!verificationStatus.canRegister) {
       toast({
         title: "検証エラー",
-        description: "メールアドレスが事前登録されていないため、アカウントを作成できません。",
+        description: verificationStatus.isRegistered 
+          ? "このメールアドレスは既に登録されています。ログイン画面からログインしてください。" 
+          : "メールアドレスが事前登録されていないため、アカウントを作成できません。",
         variant: "destructive",
       });
       return;
@@ -163,12 +186,17 @@ export default function Register() {
         <div className="space-y-2">
           <Label htmlFor="email" className="flex justify-between">
             <span>メールアドレス</span>
-            {emailVerified !== null && !verifyingEmail && (
+            {!verifyingEmail && verificationStatus.message && (
               <span className="flex items-center text-xs">
-                {emailVerified ? (
+                {verificationStatus.canRegister ? (
                   <>
                     <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
-                    <span className="text-green-600">登録済みアドレス</span>
+                    <span className="text-green-600">登録可能なアドレス</span>
+                  </>
+                ) : verificationStatus.isRegistered ? (
+                  <>
+                    <XCircle className="h-3 w-3 text-blue-500 mr-1" />
+                    <span className="text-blue-600">既に登録済みのアドレス</span>
                   </>
                 ) : (
                   <>
@@ -217,7 +245,7 @@ export default function Register() {
         <Button 
           type="submit" 
           className="w-full" 
-          disabled={isLoading || emailVerified !== true}
+          disabled={isLoading || !verificationStatus.canRegister}
         >
           {isLoading ? "登録中..." : "アカウント作成"}
         </Button>
