@@ -364,7 +364,7 @@ export default function EmployeeImport() {
                     name: row["氏名"] || '',
                     employeeId: String(row["社員番号"] || ''),
                     displayName: row["職場氏名"] || '',
-                    department: row["所属部門"] || ''
+                    department: row["所属部門"] || 'その他' // 部署が空の場合は「その他」
                   };
                 } else {
                   return row;
@@ -648,7 +648,7 @@ export default function EmployeeImport() {
           </div>
         </div>
         
-        <Alert variant="info">
+        <Alert>
           <Info className="h-4 w-4" />
           <AlertTitle>インポート前の確認</AlertTitle>
           <AlertDescription>
