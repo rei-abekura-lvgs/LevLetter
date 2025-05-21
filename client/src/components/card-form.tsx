@@ -293,9 +293,10 @@ export default function CardForm({ onSent }: CardFormProps) {
                   <div>
                     <Label className="text-sm font-medium block mb-1.5">所属階層1</Label>
                     <Select 
-                      value={selectedLevel1Department || ""}
+                      value={selectedLevel1Department || "all"}
                       onValueChange={(value: string) => {
-                        setSelectedLevel1Department(value || null);
+                        console.log("階層1選択:", value);
+                        setSelectedLevel1Department(value === "all" ? null : value);
                         setDepartmentFilter(null);
                       }}
                     >
@@ -319,10 +320,11 @@ export default function CardForm({ onSent }: CardFormProps) {
                         value={
                           departmentFilter && departmentFilter.startsWith(selectedLevel1Department) 
                             ? departmentFilter.replace(`${selectedLevel1Department}/`, "") 
-                            : ""
+                            : "all"
                         }
                         onValueChange={(value: string) => {
-                          if (value) {
+                          console.log("階層2選択:", value);
+                          if (value && value !== "all") {
                             setDepartmentFilter(`${selectedLevel1Department}/${value}`);
                           } else {
                             setDepartmentFilter(null);
