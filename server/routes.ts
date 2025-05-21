@@ -173,15 +173,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ exists: false, message: "メールアドレスが指定されていません" });
       }
       
+      // データベースからユーザーを検索
       const user = await storage.getUserByEmail(email);
       
       console.log("メール検証:", email, "ユーザー存在:", !!user, "パスワード設定済み:", !!user?.password);
       
-      // ユーザーが存在し、かつパスワードが設定されていない場合のみ登録可能とする
-      // （パスワードが設定済みの場合は、既に登録済みのユーザー）
-      const canRegister = !!user && !user.password;
+      // 登録済みユーザーのチェック（この時点では password 設定の有無に関わらず）
+      const userExists = !!user;
       
-      return res.json({ exists: canRegister });
+      // パスワードが既に設定されているかどうかのチェック
+      const hasPassword = !!user?.password;
+      
+      // 登録可能かどうかのチェック（存在して、かつパスワードが未設定）
+      const canRegister = userExists && !hasPassword;
+      
+      // メールアドレスの検証結果をクライアントに返す
+      return res.json({ 
+        exists: canRegister,
+        userExists,
+        hasPassword,
+        message: canRegister ? "登録可能なメールアドレスです" : 
+                 (userExists && hasPassword) ? "既に登録済みのメールアドレスです" : 
+                 "管理者によって事前登録されていないメールアドレスです"
+      });
     } catch (error) {
       console.error("メール検証エラー:", error);
       return res.status(500).json({ exists: false, message: "サーバーエラーが発生しました" });

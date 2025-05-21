@@ -49,13 +49,23 @@ export default function Register() {
     
     setVerifyingEmail(true);
     try {
-      // メールアドレスの検証リクエスト
+      // メールアドレスの検証リクエスト（直接fetchを使用）
       const response = await fetch(`/api/auth/verify-email?email=${encodeURIComponent(email)}`);
+      
+      if (!response.ok) {
+        throw new Error(`検証エラー: ${response.status}`);
+      }
+      
       const data = await response.json();
       console.log(`メール検証 (${email}) レスポンス:`, data);
       
-      // レスポンスに基づいて状態を更新
+      // レスポンスに基づいて状態を更新（exists は登録可能かどうか）
       setEmailVerified(data.exists === true);
+      
+      // 検証結果メッセージをログに出力
+      if (data.message) {
+        console.log(`メール検証結果: ${data.message}`);
+      }
     } catch (error) {
       console.error("メール検証エラー:", error);
       setEmailVerified(false);
