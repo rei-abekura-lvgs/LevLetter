@@ -203,45 +203,28 @@ export default function UserManagement() {
                     </Button>
                     <Button 
                       variant="destructive"
-                      onClick={() => {
-                        // 選択したユーザーを一括削除
-                        const token = localStorage.getItem('token');
-                        if (!token) {
+                      onClick={async () => {
+                        try {
+                          // 選択したユーザーを一括削除
+                          await apiRequest('/api/admin/users/delete-bulk', 'DELETE', { userIds: selectedUsers });
+                          
                           toast({
-                            title: "認証エラー",
-                            description: "ログインしてください",
-                            variant: "destructive",
+                            title: "成功",
+                            description: `${selectedUsers.length}人のユーザーを削除しました`,
                           });
-                          return;
-                        }
-                        
-                        // APIリクエストに変更
-                        apiRequest('/api/admin/users/delete-bulk', 'DELETE', { userIds: selectedUsers })
-                        .then(response => {
-                          if (response.ok) {
-                            toast({
-                              title: "成功",
-                              description: `${selectedUsers.length}人のユーザーを削除しました`,
-                            });
-                            queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
-                            setSelectedUsers([]);
-                            setShowBulkDeleteDialog(false);
-                          } else {
-                            toast({
-                              title: "エラー",
-                              description: "ユーザー削除中にエラーが発生しました",
-                              variant: "destructive",
-                            });
-                          }
-                        })
-                        .catch(error => {
+                          
+                          // データを更新して状態をリセット
+                          queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+                          setSelectedUsers([]);
+                          setShowBulkDeleteDialog(false);
+                        } catch (error) {
                           console.error("削除エラー:", error);
                           toast({
                             title: "エラー",
                             description: "ユーザー削除中にエラーが発生しました",
                             variant: "destructive",
                           });
-                        });
+                        }
                       }}
                     >
                       選択したユーザーを削除

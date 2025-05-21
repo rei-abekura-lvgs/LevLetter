@@ -25,6 +25,35 @@ function getRandomAvatarColor(): string {
 import { IStorage, hashPassword } from "./storage";
 
 export class DatabaseStorage implements IStorage {
+  // ユーザー物理削除（開発用）
+  async deleteUser(id: number): Promise<void> {
+    try {
+      console.log(`ユーザーID ${id} の削除を開始`);
+      
+      // 1. ユーザーに紐づくカードといいねを削除
+      const userCards = await db.select().from(cards).where(eq(cards.senderId, id));
+      for (const card of userCards) {
+        // カードに紐づくいいねを削除
+        await db.delete(likes).where(eq(likes.cardId, card.id));
+        // カード自体を削除
+        await db.delete(cards).where(eq(cards.id, card.id));
+      }
+      
+      // 2. 受信したカードのいいねを削除（チーム宛てのものも含む）
+      await db.delete(likes).where(eq(likes.userId, id));
+      
+      // 3. チームメンバーシップを削除
+      await db.delete(teamMembers).where(eq(teamMembers.userId, id));
+      
+      // 4. 最後にユーザー自体を削除
+      await db.delete(users).where(eq(users.id, id));
+      
+      console.log(`ユーザーID ${id} の削除が完了しました`);
+    } catch (error) {
+      console.error(`ユーザーID ${id} の削除中にエラーが発生:`, error);
+      throw error;
+    }
+  }
   // ユーザー関連
   async getUsers(): Promise<User[]> {
     return await db.select().from(users);
