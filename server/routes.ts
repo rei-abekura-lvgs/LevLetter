@@ -165,6 +165,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // メール検証API - 事前登録されたユーザーの確認
+  app.get("/api/auth/verify-email", async (req, res) => {
+    try {
+      const { email } = req.query;
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ exists: false, message: "メールアドレスが指定されていません" });
+      }
+      
+      const user = await storage.getUserByEmail(email);
+      
+      // ユーザーが存在し、かつパスワードが設定されていない場合のみ登録可能とする
+      // （パスワードが設定済みの場合は、既に登録済みのユーザー）
+      const canRegister = !!user && !user.password;
+      
+      return res.json({ exists: canRegister });
+    } catch (error) {
+      console.error("メール検証エラー:", error);
+      return res.status(500).json({ exists: false, message: "サーバーエラーが発生しました" });
+    }
+  });
+
   app.post("/api/auth/login", async (req, res) => {
     try {
       console.log("ログインリクエスト:", JSON.stringify(req.body));
