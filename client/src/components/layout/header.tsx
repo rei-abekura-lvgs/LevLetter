@@ -78,15 +78,6 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             <span className="text-xl font-bold text-primary">LevLetter</span>
           </div>
         </Link>
-
-        {/* デスクトップ用ナビゲーション */}
-        {!isMobile && user && (
-          <nav className="ml-6 hidden md:flex space-x-1">
-            <NavLink href="/" icon={Home} label="ホーム" />
-            <NavLink href="/my-cards" icon={FileText} label="自分宛てカード" />
-            <NavLink href="/departments" icon={Building2} label="部署一覧" />
-          </nav>
-        )}
       </div>
 
       <div className="flex items-center space-x-4">
@@ -152,19 +143,12 @@ export default function Header({ toggleSidebar }: HeaderProps) {
                 
                 {/* 管理者メニュー */}
                 {user.isAdmin && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground">
-                      管理者メニュー
-                    </DropdownMenuLabel>
-                    
-                    <Link href="/admin">
-                      <DropdownMenuItem>
-                        <Star className="mr-2 h-4 w-4 text-amber-500" />
-                        <span>管理ダッシュボード</span>
-                      </DropdownMenuItem>
-                    </Link>
-                  </>
+                  <Link href="/admin">
+                    <DropdownMenuItem>
+                      <Star className="mr-2 h-4 w-4 text-amber-500" />
+                      <span>管理者設定</span>
+                    </DropdownMenuItem>
+                  </Link>
                 )}
                 
                 <DropdownMenuSeparator />
