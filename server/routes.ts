@@ -59,6 +59,29 @@ const authenticate = async (req: Request, res: Response, next: Function) => {
   }
 };
 
+// 管理者権限チェックミドルウェア
+const checkAdmin = async (req: Request, res: Response, next: Function) => {
+  try {
+    // ユーザーが認証済みであることを確認
+    const user = (req as any).user;
+    if (!user || !user.id) {
+      return res.status(401).json({ message: "認証が必要です" });
+    }
+    
+    // ユーザーが管理者であることを確認
+    if (!user.isAdmin) {
+      console.log("管理者権限が必要です - アクセス拒否:", user.id, user.email);
+      return res.status(403).json({ message: "管理者権限が必要です" });
+    }
+    
+    console.log("管理者権限確認:", user.id, user.email);
+    next();
+  } catch (error) {
+    console.error("管理者権限チェックエラー:", error);
+    res.status(500).json({ message: "サーバーエラーが発生しました" });
+  }
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Zodバリデーションエラーのフォーマッター
   const handleZodError = (error: unknown, res: Response) => {
@@ -635,6 +658,160 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting department:", error);
       return res.status(500).json({ message: "部署の削除に失敗しました" });
+    }
+  });
+
+  // 管理者APIエンドポイント
+  // 全ユーザー一覧を取得 (管理者用)
+  app.get("/api/admin/users", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const users = await storage.getUsers();
+      console.log("管理者API: ユーザー一覧取得 成功");
+      res.json(users);
+    } catch (error) {
+      console.error("管理者API: ユーザー一覧取得エラー:", error);
+      res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
+    }
+  });
+
+  // ユーザーの管理者権限を変更 (管理者用)
+  app.patch("/api/admin/users/:id/admin", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const { isAdmin } = req.body;
+      const currentUser = (req as any).user;
+      
+      console.log("管理者API: ユーザー権限変更リクエスト:", userId, isAdmin, "by", currentUser.id);
+      
+      if (typeof isAdmin !== 'boolean') {
+        return res.status(400).json({ message: "isAdminはboolean型である必要があります" });
+      }
+      
+      // 自分自身の管理者権限を削除しようとしていないか確認
+      if (currentUser.id === userId && !isAdmin) {
+        return res.status(400).json({ message: "自分自身の管理者権限は削除できません" });
+      }
+      
+      const updatedUser = await storage.updateUser(userId, { isAdmin });
+      console.log("管理者API: ユーザー権限変更成功:", userId, isAdmin);
+      
+      res.json({ message: "ユーザー権限を更新しました", user: updatedUser });
+    } catch (error) {
+      console.error("管理者API: ユーザー権限更新エラー:", error);
+      res.status(500).json({ message: "ユーザー権限の更新に失敗しました" });
+    }
+  });
+
+  // ユーザーのアクティブ状態を変更 (管理者用)
+  app.patch("/api/admin/users/:id/status", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const { isActive } = req.body;
+      const currentUser = (req as any).user;
+      
+      console.log("管理者API: ユーザー状態変更リクエスト:", userId, isActive, "by", currentUser.id);
+      
+      if (typeof isActive !== 'boolean') {
+        return res.status(400).json({ message: "isActiveはboolean型である必要があります" });
+      }
+      
+      // 自分自身を無効化しようとしていないか確認
+      if (currentUser.id === userId && !isActive) {
+        return res.status(400).json({ message: "自分自身のアカウントは無効化できません" });
+      }
+      
+      const updatedUser = await storage.updateUser(userId, { isActive });
+      console.log("管理者API: ユーザー状態変更成功:", userId, isActive);
+      
+      res.json({ message: "ユーザー状態を更新しました", user: updatedUser });
+    } catch (error) {
+      console.error("管理者API: ユーザー状態更新エラー:", error);
+      res.status(500).json({ message: "ユーザー状態の更新に失敗しました" });
+    }
+  });
+
+  // 従業員データインポート (管理者用)
+  app.post("/api/admin/employees/import", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const { employees } = req.body;
+      const currentUser = (req as any).user;
+      
+      console.log("管理者API: 従業員データインポートリクエスト:", employees?.length, "件 by", currentUser.id);
+      
+      if (!Array.isArray(employees) || employees.length === 0) {
+        return res.status(400).json({ message: "有効な従業員データがありません" });
+      }
+      
+      // 結果を保持する変数
+      const result = {
+        success: true,
+        newUsers: 0,
+        updatedUsers: 0,
+        errors: [] as string[]
+      };
+      
+      // 各従業員データを処理
+      for (const employee of employees) {
+        try {
+          if (!employee.email || !employee.name || !employee.employeeId) {
+            result.errors.push(`不完全なデータ: ${employee.employeeId || 'Unknown ID'} - ${employee.name || 'No Name'}`);
+            continue;
+          }
+          
+          // メールアドレスで既存ユーザーを検索
+          const existingUser = await storage.getUserByEmail(employee.email);
+          
+          if (existingUser) {
+            // 既存ユーザーの更新
+            await storage.updateUser(existingUser.id, {
+              employeeId: employee.employeeId,
+              name: employee.name,
+              displayName: employee.displayName || null,
+              department: employee.department || null
+            });
+            result.updatedUsers++;
+          } else {
+            // 新規ユーザーの作成
+            const randomPassword = Math.random().toString(36).slice(-8);
+            await storage.createUser({
+              email: employee.email,
+              name: employee.name,
+              displayName: employee.displayName || null,
+              department: employee.department || null,
+              employeeId: employee.employeeId,
+              password: hashPassword(randomPassword), // ランダムパスワードを設定
+              isActive: true,
+              isAdmin: false,
+              weeklyPoints: 30,
+              totalPointsReceived: 0
+            });
+            result.newUsers++;
+          }
+          
+          // 部署が存在しない場合は作成
+          if (employee.department) {
+            const departments = await storage.getDepartments();
+            const departmentExists = departments.some(dept => dept.name === employee.department);
+            
+            if (!departmentExists) {
+              await storage.createDepartment({
+                name: employee.department,
+                description: null
+              });
+            }
+          }
+        } catch (error) {
+          console.error("従業員データ処理エラー:", error);
+          result.errors.push(`データ処理エラー: ${employee.employeeId || 'Unknown ID'} - ${error.message || 'Unknown error'}`);
+          result.success = false;
+        }
+      }
+      
+      console.log("管理者API: 従業員データインポート結果:", result);
+      res.json(result);
+    } catch (error) {
+      console.error("管理者API: 従業員インポートエラー:", error);
+      res.status(500).json({ message: "従業員データのインポートに失敗しました" });
     }
   });
   
