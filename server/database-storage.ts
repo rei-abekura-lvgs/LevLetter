@@ -340,25 +340,9 @@ export class DatabaseStorage implements IStorage {
   async getDepartments(): Promise<Department[]> {
     try {
       // 実際のデータベース構造に合わせてカラムを選択
-      const depts = await db.select({
-        id: departments.id,
-        name: departments.name,
-        description: departments.description,
-        createdAt: departments.createdAt
-      }).from(departments).orderBy(asc(departments.name));
+      const depts = await db.select().from(departments).orderBy(asc(departments.name));
       
-      // TypeScriptの型に合わせた形に変換（実際のDBにない項目にはデフォルト値を設定）
-      return depts.map(dept => ({
-        ...dept,
-        code: dept.name.substring(0, 2).toUpperCase(), // 名前の最初の2文字をコードとして使用
-        level1: "",  // デフォルト値
-        level2: "",
-        level3: "",
-        level4: "",
-        level5: "",
-        fullPath: dept.name,
-        parentId: null
-      }));
+      return depts;
     } catch (error) {
       console.error("部署一覧取得エラー:", error);
       return []; // エラー時は空配列を返す
@@ -367,29 +351,14 @@ export class DatabaseStorage implements IStorage {
 
   async getDepartment(id: number): Promise<Department | undefined> {
     try {
-      const [dept] = await db.select({
-        id: departments.id,
-        name: departments.name,
-        description: departments.description,
-        createdAt: departments.createdAt
-      })
-      .from(departments)
-      .where(eq(departments.id, id));
+      const [dept] = await db.select()
+        .from(departments)
+        .where(eq(departments.id, id));
       
       if (!dept) return undefined;
       
-      // TypeScriptの型に合わせた形に変換
-      return {
-        ...dept,
-        code: dept.name.substring(0, 2).toUpperCase(),
-        level1: "",
-        level2: "",
-        level3: "",
-        level4: "",
-        level5: "",
-        fullPath: dept.name,
-        parentId: null
-      };
+      // そのまま返す
+      return dept;
     } catch (error) {
       console.error(`部署ID ${id} 取得エラー:`, error);
       return undefined;
@@ -409,18 +378,7 @@ export class DatabaseStorage implements IStorage {
         .values(dbValues)
         .returning();
       
-      // TypeScriptの型に合わせた形に変換
-      return {
-        ...dept,
-        code: dept.name.substring(0, 2).toUpperCase(),
-        level1: "",
-        level2: "",
-        level3: "",
-        level4: "",
-        level5: "",
-        fullPath: dept.name,
-        parentId: null
-      };
+      return dept;
     } catch (error) {
       console.error("部署作成エラー:", error);
       throw error;
@@ -444,18 +402,7 @@ export class DatabaseStorage implements IStorage {
         throw new Error(`部署が見つかりません: ${id}`);
       }
       
-      // TypeScriptの型に合わせた形に変換
-      return {
-        ...dept,
-        code: dept.name.substring(0, 2).toUpperCase(),
-        level1: "",
-        level2: "",
-        level3: "",
-        level4: "",
-        level5: "",
-        fullPath: dept.name,
-        parentId: null
-      };
+      return dept;
     } catch (error) {
       console.error(`部署ID ${id} の更新エラー:`, error);
       throw error;
@@ -475,28 +422,6 @@ export class DatabaseStorage implements IStorage {
       throw error;
     }
   }
-
-  async deleteDepartment(id: number): Promise<void> {
-    console.log(`部署削除処理開始: ID=${id}`);
-    
-    try {
-      // まず、この部署を参照しているユーザーがいないか確認
-      const usersWithDept = await db
-        .select()
-        .from(users)
-        .where(eq(users.department, String(id)));
-      
-      if (usersWithDept.length > 0) {
-        console.error(`部署削除エラー: ID=${id} には ${usersWithDept.length}人のユーザーが関連付けられています`);
-        console.log('関連ユーザー:', usersWithDept.map(u => ({ id: u.id, name: u.name, email: u.email })));
-        throw new Error(`この部署には${usersWithDept.length}人のユーザーが関連付けられているため削除できません。先にユーザーの部署を変更してください`);
-      }
-      
-      // 削除前に部署情報をログ出力
-      const deptToDelete = await db
-        .select()
-        .from(departments)
-        .where(eq(departments.id, id));
       
       console.log(`削除対象部署情報:`, deptToDelete);
       
