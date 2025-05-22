@@ -62,12 +62,15 @@ export default function UserManagement() {
   });
 
   // フィルタリングされたユーザー
+  // 検索中のフィルタリングを行うときに、データがundefinedの場合の対策を追加
   const filteredUsers = users ? users.filter((user: User) => {
+    if (!user) return false; // undefinedやnullは除外
+    
     const lowerQuery = searchQuery.toLowerCase();
     return (
-      user.name.toLowerCase().includes(lowerQuery) ||
-      user.email.toLowerCase().includes(lowerQuery) ||
-      (user.department && user.department.toString().toLowerCase().includes(lowerQuery))
+      (user.name?.toLowerCase() || '').includes(lowerQuery) ||
+      (user.email?.toLowerCase() || '').includes(lowerQuery) ||
+      (user.department && String(user.department).toLowerCase().includes(lowerQuery))
     );
   }) : [];
 
@@ -309,14 +312,13 @@ export default function UserManagement() {
                         {user.department ? (
                           <div className="max-w-md text-xs">
                             {(() => {
-                              // 部署IDがあれば部署情報を取得
-                              const deptId = Number(user.department);
-                              // 部署情報を取得
-                              const dept = departments.find((d: any) => d.id === deptId);
-                              if (dept) {
-                                // 部署名を階層に分割（スラッシュで区切られている場合）
-                                const hierarchyLevels = dept.name ? dept.name.split('/') : [];
-                                
+                              // 文字列として部署名を処理
+                              const deptString = String(user.department);
+                              
+                              // 部署名を階層に分割（スラッシュで区切られている場合）
+                              const hierarchyLevels = deptString.split('/');
+                              
+                              if (hierarchyLevels.length > 0) {
                                 return (
                                   <div className="space-y-0.5">
                                     {hierarchyLevels.map((level, index) => (
@@ -324,11 +326,34 @@ export default function UserManagement() {
                                         {level.trim()}
                                       </div>
                                     ))}
-                                    {hierarchyLevels.length === 0 && <div className="text-gray-400">（部署なし）</div>}
                                   </div>
                                 );
                               }
-                              return user.department;
+                              
+                              // 部署IDかどうかを確認
+                              const deptId = Number(user.department);
+                              if (!isNaN(deptId)) {
+                                // 部署情報を取得
+                                const dept = departments.find((d: any) => d.id === deptId);
+                                if (dept) {
+                                  // 部署名を階層に分割
+                                  const deptLevels = dept.name ? dept.name.split('/') : [];
+                                  
+                                  return (
+                                    <div className="space-y-0.5">
+                                      {deptLevels.map((level, index) => (
+                                        <div key={index} className={`${index > 0 ? `pl-${index * 4}` : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
+                                          {level.trim()}
+                                        </div>
+                                      ))}
+                                      {deptLevels.length === 0 && <div className="text-gray-400">（部署なし）</div>}
+                                    </div>
+                                  );
+                                }
+                              }
+                              
+                              // どちらにも該当しない場合はそのまま表示
+                              return deptString;
                             })()}
                           </div>
                         ) : (

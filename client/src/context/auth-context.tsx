@@ -95,7 +95,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // デバッグログ
       console.log("アプリ状態:", {
         "認証済み": isAuthenticated,
-        "ユーザー": user ? user.name || "名前なし" : "未ログイン",
+        "ユーザー": user && typeof user === 'object' ? (user.name || "名前なし") : "未ログイン",
         "読込中": loading,
         "現在のパス": window.location.pathname
       });
