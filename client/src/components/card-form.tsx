@@ -477,14 +477,16 @@ export default function CardForm({ onSent }: CardFormProps) {
                       <div 
                         key={availableUser.id} 
                         className="flex items-center space-x-2 py-2 px-2 hover:bg-blue-50 hover:border-l-4 hover:border-[#3990EA] rounded-sm cursor-pointer transition-all duration-200"
-                        onClick={() => toggleUserSelection(availableUser)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleUserSelection(availableUser);
+                        }}
                       >
                         <Checkbox
                           id={`user-${availableUser.id}`}
                           checked={selectedRecipients.some(r => r.id === availableUser.id)}
-                          onCheckedChange={(checked) => {
-                            // 親要素のクリックで処理するため、ここでは処理しない
-                          }}
+                          onCheckedChange={() => {}} 
                           className="pointer-events-none"
                         />
                         <div className="flex items-center text-sm flex-1">
