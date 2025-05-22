@@ -69,10 +69,7 @@ export default function Login() {
         {/* 可愛いクマのロゴ */}
         <div className="flex flex-col items-center space-y-3">
           <BearLogo size={80} />
-          <div>
-            <h1 className="text-3xl font-bold text-[#3990EA]">LevLetter</h1>
-            <p className="text-sm text-gray-600 mt-1">感謝を繋げるプラットフォーム</p>
-          </div>
+          <h1 className="text-3xl font-bold text-[#3990EA]">LevLetter</h1>
         </div>
         <div className="pt-4">
           <h2 className="text-2xl font-semibold">ログイン</h2>
