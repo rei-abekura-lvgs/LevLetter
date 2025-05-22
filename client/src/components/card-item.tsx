@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Heart, MessageSquare, Share } from "lucide-react";
 import LikeForm from "./like-form";
+import { BearLogo } from "@/components/bear-logo";
 
 interface CardItemProps {
   card: CardWithRelations;
@@ -40,9 +41,17 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
       {/* 送信者情報 */}
       <div className="flex items-center mb-3">
         <Avatar className="h-10 w-10 mr-3">
-          <AvatarFallback style={{ backgroundColor: card.sender.avatarColor }}>
-            {getInitials(card.sender.name)}
-          </AvatarFallback>
+          {card.sender.customAvatarUrl ? (
+            <AvatarImage 
+              src={card.sender.customAvatarUrl} 
+              alt={card.sender.displayName || card.sender.name}
+              className="object-cover"
+            />
+          ) : (
+            <AvatarFallback className="p-0 border-0">
+              <BearLogo size={40} useTransparent={true} bgColor="bg-[#3990EA]" />
+            </AvatarFallback>
+          )}
         </Avatar>
         <div>
           <div className="font-medium">{card.sender.displayName || card.sender.name}</div>

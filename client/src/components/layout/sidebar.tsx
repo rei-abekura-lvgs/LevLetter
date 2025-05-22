@@ -39,8 +39,8 @@ export default function Sidebar({ user }: SidebarProps) {
                   className="h-16 w-16 rounded-full object-cover border border-[#3990EA] mb-3 shadow-sm"
                 />
               ) : (
-                <div className="h-16 w-16 rounded-full bg-[#3990EA] flex items-center justify-center mb-3 shadow-sm">
-                  <BearLogo size={50} />
+                <div className="mb-3">
+                  <BearLogo size={64} useTransparent={true} bgColor="bg-[#3990EA]" />
                 </div>
               )}
               <div className="w-full">
