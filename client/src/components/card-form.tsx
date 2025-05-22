@@ -127,21 +127,33 @@ export default function CardForm({ onSent }: CardFormProps) {
     }
   });
 
-  // ユーザー選択の処理
-  const toggleUserSelection = (selectedUser: User) => {
-    console.log(`ユーザー選択切り替え: ${selectedUser.name} (ID: ${selectedUser.id})`);
-    console.log(`現在の選択状況:`, selectedRecipients.map(r => `${r.name}(${r.id})`));
-    
-    if (selectedRecipients.some(r => r.id === selectedUser.id)) {
-      // すでに選択されている場合は削除
-      console.log(`ユーザー ${selectedUser.name} を選択から除外`);
-      setSelectedRecipients(prev => prev.filter(r => r.id !== selectedUser.id));
-    } else {
-      // 選択されていない場合は追加
-      console.log(`ユーザー ${selectedUser.name} を選択に追加`);
-      setSelectedRecipients(prev => [...prev, selectedUser]);
+  // ユーザー選択の処理（メモ化してパフォーマンス改善）
+  const toggleUserSelection = useCallback((selectedUser: User) => {
+    try {
+      console.log(`ユーザー選択切り替え: ${selectedUser.name} (ID: ${selectedUser.id})`);
+      
+      setSelectedRecipients(prev => {
+        const isAlreadySelected = prev.some(r => r.id === selectedUser.id);
+        
+        if (isAlreadySelected) {
+          // すでに選択されている場合は削除
+          console.log(`ユーザー ${selectedUser.name} を選択から除外`);
+          return prev.filter(r => r.id !== selectedUser.id);
+        } else {
+          // 選択されていない場合は追加
+          console.log(`ユーザー ${selectedUser.name} を選択に追加`);
+          return [...prev, selectedUser];
+        }
+      });
+    } catch (error) {
+      console.error('ユーザー選択処理でエラーが発生:', error);
+      toast({
+        title: "選択エラー",
+        description: "ユーザーの選択処理中にエラーが発生しました。",
+        variant: "destructive"
+      });
     }
-  };
+  }, [toast]);
 
   // 選択解除の処理
   const removeRecipient = (id: number) => {
@@ -481,25 +493,32 @@ export default function CardForm({ onSent }: CardFormProps) {
                     filteredUsers.map((availableUser) => {
                       const isSelected = selectedRecipients.some(r => r.id === availableUser.id);
                       
+                      // ユーザークリック時のハンドラー（チェックボックスを除く）
+                      const handleUserClick = useCallback((e: React.MouseEvent) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        try {
+                          toggleUserSelection(availableUser);
+                        } catch (error) {
+                          console.error('ユーザー選択エラー:', error);
+                          toast({
+                            title: "選択エラー",
+                            description: "ユーザーの選択中にエラーが発生しました。",
+                            variant: "destructive"
+                          });
+                        }
+                      }, [availableUser, toggleUserSelection, toast]);
+                      
                       return (
                         <div 
                           key={availableUser.id} 
-                          className="flex items-center space-x-2 py-2 px-2 hover:bg-blue-50 hover:border-l-4 hover:border-[#3990EA] rounded-sm cursor-pointer transition-all duration-200"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            try {
-                              toggleUserSelection(availableUser);
-                            } catch (error) {
-                              console.error('ユーザー選択エラー:', error);
-                            }
-                          }}
+                          className="flex items-center space-x-2 py-2 px-2 hover:bg-blue-50 hover:border-l-4 hover:border-[#3990EA] rounded-sm transition-all duration-200"
                         >
                           <Checkbox
                             id={`user-${availableUser.id}`}
                             checked={isSelected}
-                            onCheckedChange={(checked) => {
-                              // チェックボックス直接操作時のハンドリング
+                            onCheckedChange={() => {
+                              // チェックボックス専用ハンドラー - 無限ループを防ぐため最小限に
                               try {
                                 toggleUserSelection(availableUser);
                               } catch (error) {
@@ -508,7 +527,10 @@ export default function CardForm({ onSent }: CardFormProps) {
                             }}
                             className="mr-3"
                           />
-                          <div className="flex items-center text-sm flex-1">
+                          <div 
+                            className="flex items-center text-sm flex-1 cursor-pointer"
+                            onClick={handleUserClick}
+                          >
                             <Avatar className="h-8 w-8 mr-3">
                               {availableUser.customAvatarUrl ? (
                                 <AvatarImage 
