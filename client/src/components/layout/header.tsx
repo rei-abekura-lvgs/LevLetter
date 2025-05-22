@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { User } from "@shared/schema";
 import { useAuth } from "@/context/auth-context";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { BearAvatar } from "@/components/ui/bear-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
@@ -36,14 +36,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
   const [location] = useLocation();
   const [notifications, setNotifications] = useState<number>(2); // 仮の通知数
 
-  // ユーザーのイニシャル取得
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-  };
+  // getInitialsはutilsから使用
 
   // ナビゲーションリンク
   const NavLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
@@ -113,11 +106,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback className={`bg-${user.avatarColor}`}>
-                      {getInitials(user.name)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <BearAvatar name={user.name} color={user.avatarColor} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
