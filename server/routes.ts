@@ -20,13 +20,21 @@ import {
 
 // 認証ミドルウェア
 const authenticate = async (req: Request, res: Response, next: Function) => {
+  console.log("認証チェック開始");
+  console.log("セッションID:", req.sessionID);
+  console.log("セッション全体:", req.session);
+  
   // セッションからユーザーIDを取得
   const userId = req.session.userId;
+  console.log("セッションから取得したユーザーID:", userId);
+  
   if (!userId) {
+    console.log("認証失敗 - ユーザーIDがセッションに存在しません");
     return res.status(401).json({ message: "認証が必要です" });
   }
 
   try {
+    console.log("ユーザー情報取得試行 - ユーザーID:", userId);
     // ユーザー情報を取得
     const user = await storage.getUser(userId);
     if (!user) {
@@ -88,15 +96,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 認証関連API
   app.post("/api/auth/login", async (req, res) => {
     try {
+      console.log("ログイン試行 - リクエストボディ:", req.body);
       const data = loginSchema.parse(req.body);
       const user = await storage.authenticateUser(data.email, data.password);
       
       if (!user) {
+        console.log("認証失敗 - ユーザーが見つからない:", data.email);
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       
       // ユーザーIDをセッションに保存
+      console.log("セッション保存前 - セッションID:", req.sessionID);
+      console.log("セッション保存前 - セッション内容:", req.session);
+      
       req.session.userId = user.id;
+      
+      // セッション保存を明示的に実行
+      await new Promise((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) {
+            console.error("セッション保存エラー:", err);
+            reject(err);
+          } else {
+            console.log("セッション保存成功 - ユーザーID:", user.id);
+            console.log("セッション保存後 - セッション内容:", req.session);
+            resolve(null);
+          }
+        });
+      });
+      
       const { password, ...userWithoutPassword } = user;
       
       return res.json({ message: "ログインに成功しました", user: userWithoutPassword });
@@ -244,9 +272,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/auth/me", authenticate, (req, res) => {
     try {
+      console.log("認証情報取得 - 認証済みユーザー確認");
       // パスワードフィールドを除外
       const user = (req as any).user;
+      console.log("取得したユーザー情報:", user ? `${user.name} (ID: ${user.id})` : "null");
+      
+      if (!user) {
+        console.log("認証情報取得エラー - ユーザー情報がリクエストに存在しません");
+        return res.status(401).json({ message: "認証が必要です" });
+      }
+      
       const { password, ...userWithoutPassword } = user;
+      console.log("認証情報取得成功 - ユーザー:", userWithoutPassword.name);
       return res.json(userWithoutPassword);
     } catch (error) {
       console.error("ユーザー情報取得エラー:", error);
