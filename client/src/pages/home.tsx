@@ -361,28 +361,36 @@ export default function Home({ user }: HomeProps) {
         </div>
 
         {/* タブ切り替え */}
-        <Tabs defaultValue="all" className="mb-6" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs defaultValue="all" className="flex flex-col flex-1 overflow-hidden" onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
             <TabsTrigger value="all">全て</TabsTrigger>
             <TabsTrigger value="received">受け取った</TabsTrigger>
             <TabsTrigger value="sent">送った</TabsTrigger>
             <TabsTrigger value="liked">いいねした</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="all" className="mt-4">
-            {renderCardList()}
+          <TabsContent value="all" className="flex-1 overflow-hidden mt-4">
+            <div className="h-full overflow-y-auto">
+              {renderCardList()}
+            </div>
           </TabsContent>
           
-          <TabsContent value="received" className="mt-4">
-            {renderCardList()}
+          <TabsContent value="received" className="flex-1 overflow-hidden mt-4">
+            <div className="h-full overflow-y-auto">
+              {renderCardList()}
+            </div>
           </TabsContent>
           
-          <TabsContent value="sent" className="mt-4">
-            {renderCardList()}
+          <TabsContent value="sent" className="flex-1 overflow-hidden mt-4">
+            <div className="h-full overflow-y-auto">
+              {renderCardList()}
+            </div>
           </TabsContent>
           
-          <TabsContent value="liked" className="mt-4">
-            {renderCardList()}
+          <TabsContent value="liked" className="flex-1 overflow-hidden mt-4">
+            <div className="h-full overflow-y-auto">
+              {renderCardList()}
+            </div>
           </TabsContent>
         </Tabs>
       </div>
