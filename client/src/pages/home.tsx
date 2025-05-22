@@ -108,16 +108,50 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
   return (
     <Card className={`overflow-hidden border border-gray-200 hover:shadow-md transition-shadow ${isHidden ? 'opacity-50' : ''}`}>
-      <CardHeader className="bg-gray-50 p-4 pb-2">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Avatar className="h-8 w-8" style={{ backgroundColor: `var(--${card.sender.avatarColor || 'blue-500'})` }}>
-              <AvatarFallback>{getInitials(card.sender.name)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <div className="font-medium">{card.sender.displayName || card.sender.name}</div>
-              <div className="text-xs text-gray-500">{card.sender.department}</div>
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 pb-3">
+        {/* 受信者をメインに表示 */}
+        <div className="flex items-center space-x-3 mb-3">
+          <Avatar className="h-12 w-12 ring-2 ring-white shadow-sm">
+            {card.recipientType === "user" && (card.recipient as User).customAvatarUrl ? (
+              <AvatarImage src={(card.recipient as User).customAvatarUrl} alt={recipientName} />
+            ) : (
+              <AvatarFallback 
+                className="text-white font-semibold text-sm"
+                style={{ backgroundColor: card.recipientType === "user" ? `var(--${(card.recipient as User).avatarColor || 'blue-500'})` : '#3990EA' }}
+              >
+                {getInitials(recipientName)}
+              </AvatarFallback>
+            )}
+          </Avatar>
+          <div className="flex-1">
+            <div className="font-semibold text-lg text-gray-800">{recipientName}</div>
+            {card.recipientType === "user" && (
+              <div className="text-sm text-gray-600">{(card.recipient as User).department}</div>
+            )}
+            <div className="text-xs text-[#3990EA] font-medium mt-1">
+              感謝カードを受け取りました
             </div>
+          </div>
+        </div>
+        
+        {/* 送信者情報を小さく表示 */}
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-2 text-sm">
+            <Avatar className="h-6 w-6">
+              {card.sender.customAvatarUrl ? (
+                <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
+              ) : (
+                <AvatarFallback 
+                  className="text-xs text-white"
+                  style={{ backgroundColor: `var(--${card.sender.avatarColor || 'blue-500'})` }}
+                >
+                  {getInitials(card.sender.name)}
+                </AvatarFallback>
+              )}
+            </Avatar>
+            <span className="text-gray-600">
+              {card.sender.displayName || card.sender.name} より
+            </span>
           </div>
           <div className="flex items-center text-xs text-gray-500">
             <Calendar className="h-3 w-3 mr-1" />
@@ -128,13 +162,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         </div>
       </CardHeader>
       <CardContent className="p-4">
-        {card.recipientType === "user" && (
-          <div className="flex items-center mb-3">
-            <UserIcon className="h-4 w-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-600">宛先: {recipientName}</span>
-          </div>
-        )}
-        <p className="text-gray-800 whitespace-pre-line">{card.message}</p>
+        <p className="text-gray-800 whitespace-pre-line leading-relaxed">{card.message}</p>
       </CardContent>
       <CardFooter className="bg-gray-50 px-4 py-2 flex justify-between items-center">
         <div className="flex items-center text-sm">
@@ -351,7 +379,7 @@ export default function Home({ user }: HomeProps) {
               <Plus size={24} />
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-sm">
             <DialogHeader>
               <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
             </DialogHeader>
@@ -425,7 +453,7 @@ export default function Home({ user }: HomeProps) {
                 </div>
               </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-sm">
               <DialogHeader>
                 <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
               </DialogHeader>
