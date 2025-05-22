@@ -105,7 +105,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full border-2 border-[#046EB8] hover:bg-[#046EB8]/10">
+                <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full border-2 border-[#3990EA] hover:bg-[#3990EA]/10">
                   {user.customAvatarUrl ? (
                     <img 
                       src={user.customAvatarUrl} 
@@ -113,23 +113,23 @@ export default function Header({ toggleSidebar }: HeaderProps) {
                       className="h-full w-full rounded-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center rounded-full bg-[#046EB8] text-white font-medium">
+                    <div className="flex h-full w-full items-center justify-center rounded-full bg-[#3990EA] text-white font-medium">
                       {user.displayName?.[0] || user.name[0]}
                     </div>
                   )}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
-                <DropdownMenuLabel className="bg-[#046EB8]/5 rounded-t-md pb-3">
+                <DropdownMenuLabel className="bg-[#3990EA]/5 rounded-t-md pb-3">
                   <div className="flex items-center gap-3">
                     {user.customAvatarUrl ? (
                       <img 
                         src={user.customAvatarUrl} 
                         alt={user.name}
-                        className="h-10 w-10 rounded-full object-cover border border-[#046EB8]"
+                        className="h-10 w-10 rounded-full object-cover border border-[#3990EA]"
                       />
                     ) : (
-                      <div className="h-10 w-10 rounded-full bg-[#046EB8] flex items-center justify-center text-white font-medium">
+                      <div className="h-10 w-10 rounded-full bg-[#3990EA] flex items-center justify-center text-white font-medium">
                         {user.displayName?.[0] || user.name[0]}
                       </div>
                     )}
@@ -141,8 +141,8 @@ export default function Header({ toggleSidebar }: HeaderProps) {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <Link href="/profile">
-                  <DropdownMenuItem className="py-2 focus:bg-[#046EB8]/10 focus:text-[#046EB8]">
-                    <UserIcon className="mr-2 h-4 w-4" />
+                  <DropdownMenuItem className="py-2 focus:bg-[#3990EA]/10 focus:text-[#3990EA]">
+                    <Settings className="mr-2 h-4 w-4" />
                     <span>プロフィール設定</span>
                   </DropdownMenuItem>
                 </Link>

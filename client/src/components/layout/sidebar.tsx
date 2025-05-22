@@ -30,15 +30,15 @@ export default function Sidebar({ user }: SidebarProps) {
                 <img 
                   src={user.customAvatarUrl} 
                   alt={user.name}
-                  className="h-16 w-16 rounded-full object-cover border border-[#046EB8] mb-3 shadow-sm"
+                  className="h-16 w-16 rounded-full object-cover border border-[#3990EA] mb-3 shadow-sm"
                 />
               ) : (
-                <div className={`h-16 w-16 rounded-full bg-[#046EB8] flex items-center justify-center text-white text-xl font-semibold mb-3 shadow-sm`}>
+                <div className={`h-16 w-16 rounded-full bg-[#3990EA] flex items-center justify-center text-white text-xl font-semibold mb-3 shadow-sm`}>
                   {user.displayName?.[0] || user.name[0]}
                 </div>
               )}
               <div className="w-full">
-                <p className="font-medium text-[#046EB8]">{user.displayName || user.name}</p>
+                <p className="font-medium text-[#3990EA]">{user.displayName || user.name}</p>
                 <p className="text-xs text-gray-600 mt-1 line-clamp-2">{user.department || "所属なし"}</p>
               </div>
             </div>
