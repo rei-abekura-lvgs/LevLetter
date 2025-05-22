@@ -62,9 +62,17 @@ export default function MobileNav({ user }: MobileNavProps) {
               {user && (
                 <div className="p-4 bg-gray-50 rounded-lg mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
-                      {user.displayName?.[0] || user.name[0]}
-                    </div>
+                    {user.customAvatarUrl ? (
+                      <img 
+                        src={user.customAvatarUrl} 
+                        alt={user.name}
+                        className="h-10 w-10 rounded-full object-cover border border-gray-200"
+                      />
+                    ) : (
+                      <div className={`h-10 w-10 rounded-full bg-${user.avatarColor || "primary"} flex items-center justify-center text-primary-foreground`}>
+                        {user.displayName?.[0] || user.name[0]}
+                      </div>
+                    )}
                     <div>
                       <p className="font-medium">{user.displayName || user.name}</p>
                       <p className="text-sm text-muted-foreground">{user.email}</p>

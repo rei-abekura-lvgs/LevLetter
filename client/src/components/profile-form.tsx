@@ -386,7 +386,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                 <Button
                   type="button"
                   disabled={uploadingImage}
-                  className="bg-primary-600 hover:bg-primary-700 font-semibold px-6 py-2"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-2 text-lg shadow-lg rounded-md"
                   onClick={handleUploadImage}
                 >
                   {uploadingImage ? (
