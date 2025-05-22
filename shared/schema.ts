@@ -10,6 +10,7 @@ export const users = pgTable("users", {
   displayName: text("display_name"),
   department: text("department"),
   avatarColor: text("avatar_color").notNull().default("primary-500"),
+  customAvatarUrl: text("custom_avatar_url"), // カスタムアバター画像のURL
   weeklyPoints: integer("weekly_points").notNull().default(500),
   totalPointsReceived: integer("total_points_received").notNull().default(0),
   lastWeeklyPointsReset: timestamp("last_weekly_points_reset"),
@@ -134,7 +135,8 @@ export const likeFormSchema = z.object({
 
 export const profileUpdateSchema = z.object({
   displayName: z.string().min(1, { message: "表示名を入力してください" }),
-  department: z.string().nullable().optional()
+  department: z.string().nullable().optional(),
+  customAvatarUrl: z.string().nullable().optional()
 });
 
 // 型定義

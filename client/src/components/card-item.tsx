@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { CardWithRelations, User } from "@shared/schema";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Heart, MessageSquare, Share } from "lucide-react";
 import LikeForm from "./like-form";
-import { BearAvatar } from "@/components/ui/bear-avatar";
 
 interface CardItemProps {
   card: CardWithRelations;
@@ -39,11 +39,11 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
     <div className="bg-white rounded-lg shadow p-4">
       {/* 送信者情報 */}
       <div className="flex items-center mb-3">
-        <BearAvatar 
-          userName={card.sender.name}
-          color={card.sender.avatarColor}
-          className="h-10 w-10 mr-3"
-        />
+        <Avatar className="h-10 w-10 mr-3">
+          <AvatarFallback style={{ backgroundColor: card.sender.avatarColor }}>
+            {getInitials(card.sender.name)}
+          </AvatarFallback>
+        </Avatar>
         <div>
           <div className="font-medium">{card.sender.displayName || card.sender.name}</div>
           <div className="text-sm text-gray-500">
