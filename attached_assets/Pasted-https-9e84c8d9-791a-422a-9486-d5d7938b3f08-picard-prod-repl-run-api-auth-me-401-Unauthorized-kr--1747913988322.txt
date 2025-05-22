@@ -1,0 +1,191 @@
+https://9e84c8d9-791a-422a-9486-d5d7938b3f08.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-CKGf8daB.js:48
+KL @ index-CKGf8daB.js:48
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+Bp @ index-CKGf8daB.js:40
+rc @ index-CKGf8daB.js:40
+(anonymous) @ index-CKGf8daB.js:40
+b @ index-CKGf8daB.js:25
+N @ index-CKGf8daB.js:25Understand this error
+index-CKGf8daB.js:48 ユーザーは未ログイン状態です
+index-CKGf8daB.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-CKGf8daB.js:48:44025)
+    at async KL (index-CKGf8daB.js:48:43284)
+    at async index-CKGf8daB.js:342:132265
+    at async index-CKGf8daB.js:342:132639
+KL @ index-CKGf8daB.js:48
+await in KL
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+Bp @ index-CKGf8daB.js:40
+rc @ index-CKGf8daB.js:40
+(anonymous) @ index-CKGf8daB.js:40
+b @ index-CKGf8daB.js:25
+N @ index-CKGf8daB.js:25Understand this error
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-CKGf8daB.js:48 
+            
+            
+           GET https://9e84c8d9-791a-422a-9486-d5d7938b3f08.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-CKGf8daB.js:48
+KL @ index-CKGf8daB.js:48
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+Bp @ index-CKGf8daB.js:40
+rc @ index-CKGf8daB.js:40
+(anonymous) @ index-CKGf8daB.js:40
+b @ index-CKGf8daB.js:25
+N @ index-CKGf8daB.js:25Understand this error
+index-CKGf8daB.js:48 ユーザーは未ログイン状態です
+index-CKGf8daB.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-CKGf8daB.js:48:44025)
+    at async KL (index-CKGf8daB.js:48:43284)
+    at async index-CKGf8daB.js:342:132265
+    at async index-CKGf8daB.js:342:132639
+KL @ index-CKGf8daB.js:48
+await in KL
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+Bp @ index-CKGf8daB.js:40
+rc @ index-CKGf8daB.js:40
+(anonymous) @ index-CKGf8daB.js:40
+b @ index-CKGf8daB.js:25
+N @ index-CKGf8daB.js:25Understand this error
+index-CKGf8daB.js:342 ログイン試行: rei.abekura@leverages.jp
+index-CKGf8daB.js:48 API POST リクエスト: /api/auth/login データあり
+index-CKGf8daB.js:342 ログイン成功: {message: 'ログインに成功しました', user: {…}}
+index-CKGf8daB.js:342 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-CKGf8daB.js:48 API GET リクエスト: /api/auth/me データなし
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-CKGf8daB.js:48 
+            
+            
+           GET https://9e84c8d9-791a-422a-9486-d5d7938b3f08.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-CKGf8daB.js:48
+KL @ index-CKGf8daB.js:48
+(anonymous) @ index-CKGf8daB.js:342
+i @ index-CKGf8daB.js:342
+await in i
+(anonymous) @ index-CKGf8daB.js:342
+await in (anonymous)
+H6 @ index-CKGf8daB.js:37
+X6 @ index-CKGf8daB.js:37
+K6 @ index-CKGf8daB.js:37
+x2 @ index-CKGf8daB.js:37
+B4 @ index-CKGf8daB.js:37
+(anonymous) @ index-CKGf8daB.js:37
+N1 @ index-CKGf8daB.js:40
+c4 @ index-CKGf8daB.js:37
+Qm @ index-CKGf8daB.js:37
+r1 @ index-CKGf8daB.js:37
+u5 @ index-CKGf8daB.js:37Understand this error
+index-CKGf8daB.js:48 ユーザーは未ログイン状態です
+index-CKGf8daB.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-CKGf8daB.js:48:44025)
+    at async KL (index-CKGf8daB.js:48:43284)
+    at async index-CKGf8daB.js:342:132265
+    at async i (index-CKGf8daB.js:342:177697)
+    at async index-CKGf8daB.js:342:23914
+KL @ index-CKGf8daB.js:48
+await in KL
+(anonymous) @ index-CKGf8daB.js:342
+i @ index-CKGf8daB.js:342
+await in i
+(anonymous) @ index-CKGf8daB.js:342
+await in (anonymous)
+H6 @ index-CKGf8daB.js:37
+X6 @ index-CKGf8daB.js:37
+K6 @ index-CKGf8daB.js:37
+x2 @ index-CKGf8daB.js:37
+B4 @ index-CKGf8daB.js:37
+(anonymous) @ index-CKGf8daB.js:37
+N1 @ index-CKGf8daB.js:40
+c4 @ index-CKGf8daB.js:37
+Qm @ index-CKGf8daB.js:37
+r1 @ index-CKGf8daB.js:37
+u5 @ index-CKGf8daB.js:37Understand this error
+index-CKGf8daB.js:342 ホーム画面への遷移準備中...
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-CKGf8daB.js:342 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-CKGf8daB.js:48 API GET リクエスト: /api/auth/me データなし
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-CKGf8daB.js:48 
+            
+            
+           GET https://9e84c8d9-791a-422a-9486-d5d7938b3f08.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-CKGf8daB.js:48
+KL @ index-CKGf8daB.js:48
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+Bp @ index-CKGf8daB.js:40
+rc @ index-CKGf8daB.js:40
+G2 @ index-CKGf8daB.js:40
+lo @ index-CKGf8daB.js:38
+bj @ index-CKGf8daB.js:40
+go @ index-CKGf8daB.js:40
+DN @ index-CKGf8daB.js:40
+b @ index-CKGf8daB.js:25
+N @ index-CKGf8daB.js:25Understand this error
+index-CKGf8daB.js:48 ユーザーは未ログイン状態です
+index-CKGf8daB.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-CKGf8daB.js:48:44025)
+    at async KL (index-CKGf8daB.js:48:43284)
+    at async index-CKGf8daB.js:342:132265
+    at async index-CKGf8daB.js:342:132639
+KL @ index-CKGf8daB.js:48
+await in KL
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+Bp @ index-CKGf8daB.js:40
+rc @ index-CKGf8daB.js:40
+G2 @ index-CKGf8daB.js:40
+lo @ index-CKGf8daB.js:38
+bj @ index-CKGf8daB.js:40
+go @ index-CKGf8daB.js:40
+DN @ index-CKGf8daB.js:40
+b @ index-CKGf8daB.js:25
+N @ index-CKGf8daB.js:25Understand this error
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-CKGf8daB.js:342 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-CKGf8daB.js:48 API GET リクエスト: /api/auth/me データなし
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/'}
+index-CKGf8daB.js:48 
+            
+            
+           GET https://9e84c8d9-791a-422a-9486-d5d7938b3f08.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-CKGf8daB.js:48
+KL @ index-CKGf8daB.js:48
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+Bp @ index-CKGf8daB.js:40
+rc @ index-CKGf8daB.js:40
+(anonymous) @ index-CKGf8daB.js:40
+b @ index-CKGf8daB.js:25
+N @ index-CKGf8daB.js:25Understand this error
+index-CKGf8daB.js:48 ユーザーは未ログイン状態です
+index-CKGf8daB.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-CKGf8daB.js:48:44025)
+    at async KL (index-CKGf8daB.js:48:43284)
+    at async index-CKGf8daB.js:342:132265
+    at async index-CKGf8daB.js:342:132639
+KL @ index-CKGf8daB.js:48
+await in KL
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+(anonymous) @ index-CKGf8daB.js:342
+Bp @ index-CKGf8daB.js:40
+rc @ index-CKGf8daB.js:40
+(anonymous) @ index-CKGf8daB.js:40
+b @ index-CKGf8daB.js:25
+N @ index-CKGf8daB.js:25Understand this error
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/'}
+index-CKGf8daB.js:476 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}

@@ -20,21 +20,22 @@ import {
 
 // 認証ミドルウェア
 const authenticate = async (req: Request, res: Response, next: Function) => {
-  console.log("認証チェック開始");
-  console.log("セッションID:", req.sessionID);
-  console.log("セッション全体:", req.session);
+  console.log("🔐 認証チェック開始");
+  console.log("🆔 リクエストURL:", req.method, req.path);
+  console.log("🔑 セッションID:", req.sessionID);
+  console.log("📋 セッション全体:", JSON.stringify(req.session, null, 2));
   
   // セッションからユーザーIDを取得
   const userId = req.session.userId;
-  console.log("セッションから取得したユーザーID:", userId);
+  console.log("👤 セッションから取得したユーザーID:", userId);
   
   if (!userId) {
-    console.log("認証失敗 - ユーザーIDがセッションに存在しません");
+    console.log("❌ 認証失敗 - ユーザーIDがセッションに存在しません");
     return res.status(401).json({ message: "認証が必要です" });
   }
 
   try {
-    console.log("ユーザー情報取得試行 - ユーザーID:", userId);
+    console.log("🔍 ユーザー情報取得試行 - ユーザーID:", userId);
     // ユーザー情報を取得
     const user = await storage.getUser(userId);
     if (!user) {
@@ -96,43 +97,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 認証関連API
   app.post("/api/auth/login", async (req, res) => {
     try {
-      console.log("ログイン試行 - リクエストボディ:", req.body);
+      console.log("🔐 ログイン試行開始");
+      console.log("📝 リクエストボディ:", JSON.stringify(req.body, null, 2));
+      
       const data = loginSchema.parse(req.body);
+      console.log("✅ バリデーション成功 - メール:", data.email);
+      
       const user = await storage.authenticateUser(data.email, data.password);
       
       if (!user) {
-        console.log("認証失敗 - ユーザーが見つからない:", data.email);
+        console.log("❌ 認証失敗 - ユーザーが見つからない:", data.email);
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       
+      console.log("👤 認証成功 - ユーザー:", user.name, "(ID:", user.id, ")");
+      
       // ユーザーIDをセッションに保存
-      console.log("セッション保存前 - セッションID:", req.sessionID);
-      console.log("セッション保存前 - セッション内容:", req.session);
+      console.log("📊 セッション保存前:");
+      console.log("  - セッションID:", req.sessionID);
+      console.log("  - セッション内容:", JSON.stringify(req.session, null, 2));
       
       req.session.userId = user.id;
+      console.log("💾 セッションにユーザーID設定:", user.id);
       
       // セッション保存を明示的に実行
       await new Promise((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
-            console.error("セッション保存エラー:", err);
+            console.error("💥 セッション保存エラー:", err);
             reject(err);
           } else {
-            console.log("セッション保存成功 - ユーザーID:", user.id);
-            console.log("セッション保存後 - セッション内容:", req.session);
+            console.log("✅ セッション保存成功!");
+            console.log("📊 セッション保存後:");
+            console.log("  - セッションID:", req.sessionID);
+            console.log("  - セッション内容:", JSON.stringify(req.session, null, 2));
             resolve(null);
           }
         });
       });
       
       const { password, ...userWithoutPassword } = user;
+      console.log("🎉 ログイン処理完了 - レスポンス送信");
       
       return res.json({ message: "ログインに成功しました", user: userWithoutPassword });
     } catch (error) {
       if (error instanceof z.ZodError) {
         return handleZodError(error, res);
       }
-      console.error("ログインエラー:", error);
+      console.error("💥 ログインエラー:", error);
       return res.status(500).json({ message: "ログイン処理中にエラーが発生しました" });
     }
   });
