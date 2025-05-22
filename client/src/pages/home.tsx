@@ -126,7 +126,17 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               )}
             </Avatar>
             <div>
-              <div className="font-medium">{card.sender.displayName || card.sender.name}</div>
+              <button 
+                className="font-medium text-left hover:text-[#3990EA] transition-colors"
+                onClick={() => setShowSenderDepartment(!showSenderDepartment)}
+              >
+                {card.sender.displayName || card.sender.name}
+              </button>
+              {showSenderDepartment && card.sender.department && (
+                <div className="text-xs text-gray-500 mt-1 break-words">
+                  {card.sender.department}
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center text-xs text-gray-500">
@@ -141,7 +151,18 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         {card.recipientType === "user" && (
           <div className="flex items-center mb-3">
             <UserIcon className="h-4 w-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-600">宛先: {recipientName}</span>
+            <span className="text-sm text-gray-600">宛先: </span>
+            <button 
+              className="text-sm text-gray-600 hover:text-[#3990EA] transition-colors font-medium"
+              onClick={() => setShowRecipientDepartment(!showRecipientDepartment)}
+            >
+              {recipientName}
+            </button>
+            {showRecipientDepartment && (card.recipient as User).department && (
+              <div className="ml-2 text-xs text-gray-500 break-words">
+                ({(card.recipient as User).department})
+              </div>
+            )}
           </div>
         )}
         <p className="text-gray-800 whitespace-pre-line">{card.message}</p>
