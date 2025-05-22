@@ -474,22 +474,30 @@ export default function CardForm({ onSent }: CardFormProps) {
                     </div>
                   ) : (
                     filteredUsers.map((availableUser) => (
-                      <div key={availableUser.id} className="flex items-center space-x-2 py-1 px-1 hover:bg-gray-50 rounded-sm">
+                      <div 
+                        key={availableUser.id} 
+                        className="flex items-center space-x-2 py-2 px-2 hover:bg-blue-50 hover:border-l-4 hover:border-[#3990EA] rounded-sm cursor-pointer transition-all duration-200"
+                        onClick={() => toggleUserSelection(availableUser)}
+                      >
                         <Checkbox
                           id={`user-${availableUser.id}`}
                           checked={selectedRecipients.some(r => r.id === availableUser.id)}
-                          onCheckedChange={() => toggleUserSelection(availableUser)}
+                          onCheckedChange={(checked) => {
+                            // 親要素のクリックで処理するため、ここでは処理しない
+                          }}
+                          className="pointer-events-none"
                         />
-                        <label
-                          htmlFor={`user-${availableUser.id}`}
-                          className="flex items-center cursor-pointer text-sm flex-1"
-                        >
-                          <Avatar className={`bg-[#3990EA] h-6 w-6 mr-2 flex items-center justify-center`}>
+                        <div className="flex items-center text-sm flex-1">
+                          <Avatar className="h-8 w-8 mr-3">
                             {availableUser.customAvatarUrl ? (
-                              <AvatarImage src={availableUser.customAvatarUrl} alt={availableUser.name} />
+                              <AvatarImage 
+                                src={availableUser.customAvatarUrl} 
+                                alt={availableUser.displayName || availableUser.name}
+                                className="object-cover"
+                              />
                             ) : (
-                              <AvatarFallback className="text-xs text-white bg-[#3990EA]">
-                                {availableUser.name.charAt(0)}
+                              <AvatarFallback className="text-sm text-white bg-[#3990EA]">
+                                {(availableUser.displayName || availableUser.name).charAt(0)}
                               </AvatarFallback>
                             )}
                           </Avatar>
@@ -503,7 +511,7 @@ export default function CardForm({ onSent }: CardFormProps) {
                               </div>
                             )}
                           </div>
-                        </label>
+                        </div>
                       </div>
                     ))
                   )}
