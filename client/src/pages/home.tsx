@@ -352,23 +352,13 @@ export default function Home({ user }: HomeProps) {
       <div className={`md:block hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-20 transition-all duration-300 ${
         isScrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}>
-        <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-gradient-to-r from-[#3990EA] to-[#1e6bd9] hover:from-[#1e6bd9] hover:to-[#3990EA] text-white px-6 py-3 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-base font-bold border-2 border-white/20">
-              <Send className="h-5 w-5 mr-3" />
-              感謝の気持ちを伝える
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
-            </DialogHeader>
-            <CardForm onSent={() => {
-              setIsCardFormOpen(false);
-              refetch();
-            }} />
-          </DialogContent>
-        </Dialog>
+        <Button 
+          className="bg-gradient-to-r from-[#3990EA] to-[#1e6bd9] hover:from-[#1e6bd9] hover:to-[#3990EA] text-white px-6 py-3 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-base font-bold border-2 border-white/20"
+          onClick={() => setIsCardFormOpen(true)}
+        >
+          <Send className="h-5 w-5 mr-3" />
+          感謝の気持ちを伝える
+        </Button>
       </div>
 
       {/* モバイル用固定カード送信ボタン */}
