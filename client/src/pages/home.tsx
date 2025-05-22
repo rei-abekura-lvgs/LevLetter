@@ -155,11 +155,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                 {(card.recipient as User).customAvatarUrl ? (
                   <AvatarImage src={(card.recipient as User).customAvatarUrl} alt={(card.recipient as User).name} />
                 ) : (
-                  <AvatarFallback 
-                    className="text-white"
-                    style={{ backgroundColor: `var(--${(card.recipient as User).avatarColor || 'blue-500'})` }}
-                  >
-                    {getInitials((card.recipient as User).name)}
+                  <AvatarFallback className="bg-[#3990EA] flex items-center justify-center">
+                    <BearLogo size={32} />
                   </AvatarFallback>
                 )}
               </Avatar>
@@ -357,9 +354,9 @@ export default function Home({ user }: HomeProps) {
       }`}>
         <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gradient-to-r from-[#3990EA] to-[#2d7de0] hover:from-[#2d7de0] hover:to-[#1e6bd9] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium">
-              <Send className="h-4 w-4 mr-2" />
-              感謝を伝える
+            <Button className="bg-gradient-to-r from-[#3990EA] to-[#1e6bd9] hover:from-[#1e6bd9] hover:to-[#3990EA] text-white px-6 py-3 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-base font-bold border-2 border-white/20">
+              <Send className="h-5 w-5 mr-3" />
+              感謝の気持ちを伝える
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[600px]">
