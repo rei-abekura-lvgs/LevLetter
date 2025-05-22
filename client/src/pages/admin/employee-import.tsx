@@ -68,7 +68,7 @@ async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResu
   }
   
   try {
-    return await apiRequest<ImportResult>("POST", "/api/admin/employees/import", {
+    return await apiRequest<ImportResult>("POST", "/api/admin/users/import", {
       employees: employees
     });
   } catch (error) {
