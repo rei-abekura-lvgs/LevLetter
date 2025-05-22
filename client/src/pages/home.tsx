@@ -26,6 +26,7 @@ import {
 import CardForm from "@/components/card-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { BearLogo } from "@/components/bear-logo";
 
 // カードコンポーネント
 const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, currentUser: User, onRefresh?: () => void }) => {

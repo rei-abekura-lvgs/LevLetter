@@ -22,17 +22,6 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <div className="w-64 border-r bg-white h-full p-4 flex flex-col">
-      {/* ロゴエリア */}
-      <div className="mb-6 text-center">
-        <div className="flex items-center justify-center mb-2">
-          <BearLogo size={40} />
-          <h1 className="ml-3 text-xl font-bold text-[#3990EA]">
-            LevLetter
-          </h1>
-        </div>
-        <p className="text-xs text-gray-500">感謝を繋げるプラットフォーム</p>
-      </div>
-
       {user && (
         <div className="flex-1 flex flex-col">
           {/* ユーザー情報カード - レイアウト改善 */}
