@@ -22,10 +22,7 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <div className="w-64 border-r bg-white h-full p-4 flex flex-col">
-      {/* ヘッダー部分：クマアイコンとタイトル */}
-      <div className="flex items-center gap-3 mb-6">
-        <BearLogo size={40} />
-      </div>
+      
       
       {user && (
         <div className="flex-1 flex flex-col">
