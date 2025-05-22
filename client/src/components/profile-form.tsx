@@ -63,16 +63,62 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
     }
   }, [open, toast]);
   
+  // 画像を圧縮する関数
+  const compressImage = (file: File, maxWidth = 800, maxHeight = 800, quality = 0.7): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          // 画像サイズを計算
+          let width = img.width;
+          let height = img.height;
+          
+          if (width > maxWidth || height > maxHeight) {
+            const ratio = Math.min(maxWidth / width, maxHeight / height);
+            width = Math.floor(width * ratio);
+            height = Math.floor(height * ratio);
+          }
+          
+          // Canvas要素を作成して画像を描画
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = width;
+          canvas.height = height;
+          
+          if (!ctx) {
+            reject(new Error('Canvas context not available'));
+            return;
+          }
+          
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // 画像をBase64形式に変換
+          const compressedDataUrl = canvas.toDataURL(file.type, quality);
+          resolve(compressedDataUrl);
+        };
+        img.onerror = () => {
+          reject(new Error('Failed to load image'));
+        };
+      };
+      reader.onerror = () => {
+        reject(new Error('Failed to read file'));
+      };
+    });
+  };
+
   // 画像アップロード処理
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     
-    // ファイルサイズのチェック（5MB以下）
-    if (file.size > 5 * 1024 * 1024) {
+    // ファイルサイズのチェック（初期チェック、10MB以上は完全に拒否）
+    if (file.size > 10 * 1024 * 1024) {
       toast({
         title: "エラー",
-        description: "ファイルサイズは5MB以下にしてください",
+        description: "ファイルサイズが大きすぎます（最大10MB）",
         variant: "destructive",
       });
       return;
@@ -88,12 +134,48 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
       return;
     }
     
-    // プレビュー表示
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreviewImage(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    try {
+      // 画像圧縮（ファイルサイズが1MB以上の場合）
+      if (file.size > 1 * 1024 * 1024) {
+        toast({
+          title: "処理中",
+          description: "画像を最適化しています...",
+        });
+        
+        // 画像の品質を調整（サイズによって品質を変更）
+        let quality = 0.7;
+        if (file.size > 5 * 1024 * 1024) {
+          quality = 0.5; // より大きいファイルはより圧縮
+        }
+        
+        const compressedImage = await compressImage(file, 1200, 1200, quality);
+        setPreviewImage(compressedImage);
+        
+        // データサイズ表示（デバッグ用）
+        const originalSize = (file.size / 1024 / 1024).toFixed(2);
+        const compressedSize = (compressedImage.length * 0.75 / 1024 / 1024).toFixed(2);
+        console.log(`画像最適化: ${originalSize}MB → ${compressedSize}MB`);
+        
+        toast({
+          title: "画像最適化完了",
+          description: `${originalSize}MB → ${compressedSize}MB に最適化しました`,
+        });
+      } else {
+        // 小さいファイルはそのまま表示
+        const reader = new FileReader();
+        reader.onload = () => {
+          setPreviewImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      console.error("画像処理エラー:", error);
+      toast({
+        title: "エラー",
+        description: "画像の処理中にエラーが発生しました",
+        variant: "destructive",
+      });
+    }
   };
   
   // 画像アップロード送信
