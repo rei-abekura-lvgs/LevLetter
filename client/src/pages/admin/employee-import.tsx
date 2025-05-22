@@ -73,7 +73,29 @@ async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResu
     });
   } catch (error) {
     console.error('インポートAPI呼び出しエラー:', error);
-    throw error;
+    
+    // エラーレスポンスの詳細情報を取得
+    const errorMessage = error instanceof Error 
+      ? error.message 
+      : '不明なエラーが発生しました';
+    
+    // 認証エラーの場合の処理
+    if (errorMessage.includes('認証') || errorMessage.includes('401')) {
+      return {
+        success: false,
+        newUsers: 0,
+        updatedUsers: 0,
+        errors: ['認証エラー: 管理者としてログインしているか確認してください。']
+      };
+    }
+    
+    // 他のAPIエラーの場合
+    return {
+      success: false,
+      newUsers: 0,
+      updatedUsers: 0,
+      errors: [errorMessage]
+    };
   }
 }
 
@@ -338,10 +360,21 @@ export default function EmployeeImport() {
 
                 console.log('インポート対象データ件数:', validData.length);
                 
-                // APIリクエスト
-                const response = await importEmployeesData(validData);
-                
-                resolve(response as ImportResult);
+                try {
+                  // APIリクエスト
+                  const response = await importEmployeesData(validData);
+                  
+                  // 成功時のレスポンス処理
+                  resolve(response as ImportResult);
+                } catch (importError) {
+                  console.error('インポート処理中のエラー:', importError);
+                  resolve({
+                    success: false,
+                    newUsers: 0,
+                    updatedUsers: 0,
+                    errors: [(importError as Error).message || 'インポート処理中にエラーが発生しました']
+                  });
+                }
               } catch (error) {
                 console.error('Import error:', error);
                 resolve({

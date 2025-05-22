@@ -38,19 +38,23 @@ export async function getAuthenticatedUser(): Promise<User | null> {
     const token = getAuthToken();
     
     if (!token) {
+      console.debug("トークンがないため認証スキップ");
       return null;
     }
     
-    // 修正: 新しいAPIリクエスト関数を使用
+    // APIリクエスト関数を使用
     try {
       const data = await apiRequest<{user: User}>("GET", "/api/auth/me");
       console.log("認証ユーザー情報取得成功:", data);
       // /api/auth/me エンドポイントはuser属性を含むことがある
       return data.user || data as unknown as User;
     } catch (error: any) {
-      console.error("ユーザー認証エラー:", error);
+      // 401エラーの場合は静かに処理
       if (error.message && error.message.includes("401")) {
-        logout();
+        console.debug("認証エラー: ユーザーは未ログイン状態");
+        // ログアウト処理は呼び出さない（不要なリダイレクトを防ぐ）
+      } else {
+        console.error("ユーザー認証エラー:", error);
       }
       return null;
     }

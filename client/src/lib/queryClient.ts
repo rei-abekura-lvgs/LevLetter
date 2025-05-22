@@ -34,19 +34,35 @@ export async function apiRequest<T>(
     body: data ? JSON.stringify(data) : undefined
   };
   
+  // 認証が必要なパスへのリクエストで、トークンがない場合の早期チェック
+  if (path.includes('/api/auth/me') && !token) {
+    throw new Error('認証が必要です');
+  }
+  
   console.log(`API ${method} リクエスト:`, path, data ? "データあり" : "データなし");
   
   try {
     const response = await fetch(path, config);
     
     if (!response.ok) {
+      // 401エラーを特別に処理
+      if (response.status === 401) {
+        if (path === '/api/auth/me') {
+          // auth/meへのリクエストの401エラーはログインが必要なだけなので静かに処理
+          console.log('ユーザーは未ログイン状態です');
+          throw new Error('認証が必要です');
+        } else {
+          throw new Error('認証が必要です。ログインしてください。');
+        }
+      }
+      
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `Error: ${response.status} ${response.statusText}`);
+        throw new Error(errorData.message || `エラー: ${response.status} ${response.statusText}`);
       } else {
         const errorText = await response.text();
-        throw new Error(errorText || `Error: ${response.status} ${response.statusText}`);
+        throw new Error(errorText || `エラー: ${response.status} ${response.statusText}`);
       }
     }
     
@@ -55,10 +71,17 @@ export async function apiRequest<T>(
       return {} as T;
     }
     
-    const data = await response.json();
-    return data as T;
+    const responseData = await response.json();
+    return responseData as T;
   } catch (error) {
-    console.error(`API ${method} エラー:`, path, error);
+    // パスによって異なるエラーハンドリングを行う
+    if (path === '/api/auth/me' && error instanceof Error && error.message.includes('認証')) {
+      // 認証エラーはより静かに処理（デバッグレベルでログ）
+      console.debug(`API ${method} 認証エラー:`, path);
+    } else {
+      // それ以外のエラーは通常通りログ出力
+      console.error(`API ${method} エラー:`, path, error);
+    }
     throw error;
   }
 }
