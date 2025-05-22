@@ -401,7 +401,10 @@ export default function Home({ user }: HomeProps) {
         <div className={`flex items-center justify-between transition-all duration-300 ${
           isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
         }`}>
-          <h2 className="text-lg font-semibold text-gray-800">カードタイムライン</h2>
+          <div className="flex items-center gap-3">
+            <BearLogo size={32} />
+            <h2 className="text-lg font-semibold text-gray-800">カードタイムライン</h2>
+          </div>
           
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
