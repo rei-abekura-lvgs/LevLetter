@@ -366,8 +366,8 @@ export default function Home({ user }: HomeProps) {
       {/* タイムライン */}
       <div className="flex flex-col h-full">
         {/* ヘッダー部分 - スクロール時に隠れる */}
-        <div className={`flex items-center justify-between mb-4 transition-all duration-300 ${
-          isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0'
+        <div className={`flex items-center justify-between transition-all duration-300 ${
+          isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
         }`}>
           <h2 className="text-lg font-semibold text-gray-800">カードタイムライン</h2>
           
@@ -399,8 +399,8 @@ export default function Home({ user }: HomeProps) {
         </div>
 
         {/* サンクスカード送信ボタン - 控えめなデザイン */}
-        <div className={`mb-4 hidden md:block transition-all duration-300 ${
-          isScrolled ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
+        <div className={`hidden md:block transition-all duration-300 ${
+          isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
         }`}>
           <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
             <DialogTrigger asChild>
@@ -437,12 +437,10 @@ export default function Home({ user }: HomeProps) {
           </Dialog>
         </div>
 
-        {/* タブ切り替え */}
+        {/* タブ切り替え - 常に表示 */}
         <Tabs 
           value={activeTab} 
-          className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
-            isScrolled ? '-mt-4' : ''
-          }`} 
+          className="flex flex-col flex-1 overflow-hidden" 
           onValueChange={setActiveTab}
         >
           <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
