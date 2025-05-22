@@ -478,49 +478,64 @@ export default function CardForm({ onSent }: CardFormProps) {
                       ユーザーが見つかりません
                     </div>
                   ) : (
-                    filteredUsers.map((availableUser) => (
-                      <div 
-                        key={availableUser.id} 
-                        className="flex items-center space-x-2 py-2 px-2 hover:bg-blue-50 hover:border-l-4 hover:border-[#3990EA] rounded-sm cursor-pointer transition-all duration-200"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          toggleUserSelection(availableUser);
-                        }}
-                      >
-                        <Checkbox
-                          id={`user-${availableUser.id}`}
-                          checked={selectedRecipients.some(r => r.id === availableUser.id)}
-                          onCheckedChange={() => {}}
-                          className="mr-3 pointer-events-none"
-                        />
-                        <div className="flex items-center text-sm flex-1">
-                          <Avatar className="h-8 w-8 mr-3">
-                            {availableUser.customAvatarUrl ? (
-                              <AvatarImage 
-                                src={availableUser.customAvatarUrl} 
-                                alt={availableUser.displayName || availableUser.name}
-                                className="object-cover"
-                              />
-                            ) : (
-                              <AvatarFallback className="text-sm text-white bg-[#3990EA]">
-                                {(availableUser.displayName || availableUser.name).charAt(0)}
-                              </AvatarFallback>
-                            )}
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="font-medium text-gray-800 hover:text-[#3990EA] transition-colors">
-                              {availableUser.displayName || availableUser.name}
-                            </div>
-                            {availableUser.department && (
-                              <div className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                                {availableUser.department}
+                    filteredUsers.map((availableUser) => {
+                      const isSelected = selectedRecipients.some(r => r.id === availableUser.id);
+                      
+                      return (
+                        <div 
+                          key={availableUser.id} 
+                          className="flex items-center space-x-2 py-2 px-2 hover:bg-blue-50 hover:border-l-4 hover:border-[#3990EA] rounded-sm cursor-pointer transition-all duration-200"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            try {
+                              toggleUserSelection(availableUser);
+                            } catch (error) {
+                              console.error('ユーザー選択エラー:', error);
+                            }
+                          }}
+                        >
+                          <Checkbox
+                            id={`user-${availableUser.id}`}
+                            checked={isSelected}
+                            onCheckedChange={(checked) => {
+                              // チェックボックス直接操作時のハンドリング
+                              try {
+                                toggleUserSelection(availableUser);
+                              } catch (error) {
+                                console.error('チェックボックス選択エラー:', error);
+                              }
+                            }}
+                            className="mr-3"
+                          />
+                          <div className="flex items-center text-sm flex-1">
+                            <Avatar className="h-8 w-8 mr-3">
+                              {availableUser.customAvatarUrl ? (
+                                <AvatarImage 
+                                  src={availableUser.customAvatarUrl} 
+                                  alt={availableUser.displayName || availableUser.name}
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <AvatarFallback className="text-sm text-white bg-[#3990EA]">
+                                  {(availableUser.displayName || availableUser.name).charAt(0)}
+                                </AvatarFallback>
+                              )}
+                            </Avatar>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-800 hover:text-[#3990EA] transition-colors">
+                                {availableUser.displayName || availableUser.name}
                               </div>
-                            )}
+                              {availableUser.department && (
+                                <div className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                                  {availableUser.department}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      );
+                    })
                   )}
                 </div>
               </ScrollArea>
