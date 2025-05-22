@@ -34,6 +34,7 @@ export const cards = pgTable("cards", {
   points: integer("points").notNull().default(0), // 送信ポイント（0-140）
   createdAt: timestamp("created_at").defaultNow().notNull(),
   public: boolean("public").notNull().default(true),
+  hidden: boolean("hidden").notNull().default(false), // 管理者による非表示設定
   // 複数の受信者を保存するためのJSON形式のリスト (ID のみ)
   additionalRecipients: jsonb("additional_recipients").$type<number[]>()
 });

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { 
   Calendar, Clock, Heart, MessageSquare, RotateCcw, 
-  User as UserIcon, Send, Plus 
+  User as UserIcon, Send, Plus, Eye, EyeOff, Trash2
 } from "lucide-react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
@@ -19,9 +19,13 @@ import { getCards } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { 
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, 
+  DialogDescription
+} from "@/components/ui/dialog";
 import CardForm from "@/components/card-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 // カードコンポーネント
 const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, currentUser: User, onRefresh?: () => void }) => {
@@ -103,7 +107,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   };
 
   return (
-    <Card className="overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
+    <Card className={`overflow-hidden border border-gray-200 hover:shadow-md transition-shadow ${isHidden ? 'opacity-50' : ''}`}>
       <CardHeader className="bg-gray-50 p-4 pb-2">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
@@ -137,10 +141,65 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
           <Heart className="h-4 w-4 mr-1 text-red-400" />
           <span>{card.totalPoints || 0} いいね</span>
         </div>
-        <Button variant="ghost" size="sm" className="text-xs">
-          <MessageSquare className="h-4 w-4 mr-1" />
-          詳細
-        </Button>
+        
+        <div className="flex gap-2">
+          {/* 管理者向けのボタン */}
+          {isAdmin && (
+            <>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-xs"
+                onClick={handleHideCard}
+              >
+                {isHidden ? (
+                  <Eye className="h-4 w-4 mr-1" />
+                ) : (
+                  <EyeOff className="h-4 w-4 mr-1" />
+                )}
+                {isHidden ? '表示' : '非表示'}
+              </Button>
+              
+              <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-xs text-red-500 border-red-200 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4 mr-1" />
+                    削除
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="text-lg">カードを削除しますか？</DialogTitle>
+                    <DialogDescription>
+                      このカードを完全に削除します。この操作は元に戻せません。
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex justify-end gap-3 mt-4">
+                    <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                      キャンセル
+                    </Button>
+                    <Button 
+                      variant="destructive" 
+                      onClick={handleDeleteCard}
+                    >
+                      削除する
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+          
+          {/* 詳細ボタン */}
+          <Button variant="ghost" size="sm" className="text-xs">
+            <MessageSquare className="h-4 w-4 mr-1" />
+            詳細
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );
@@ -355,7 +414,12 @@ export default function Home({ user }: HomeProps) {
     return (
       <div className="space-y-4">
         {sortedCards.map(card => (
-          <CardItem key={`card-${card.id}`} card={card} />
+          <CardItem 
+            key={`card-${card.id}`} 
+            card={{...card, hidden: card.hidden || false}} 
+            currentUser={user}
+            onRefresh={refreshCards} 
+          />
         ))}
       </div>
     );
