@@ -32,6 +32,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserIcon, Send, X, Search, UserPlus, Filter } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BearLogo } from "@/components/bear-logo";
 
 interface CardFormProps {
   onSent?: () => void;
@@ -539,8 +540,8 @@ export default function CardForm({ onSent }: CardFormProps) {
                                   className="object-cover"
                                 />
                               ) : (
-                                <AvatarFallback className="text-sm text-white bg-[#3990EA]">
-                                  {(availableUser.displayName || availableUser.name).charAt(0)}
+                                <AvatarFallback className="p-0 border-0">
+                                  <BearLogo size={32} useTransparent={true} bgColor="bg-[#3990EA]" />
                                 </AvatarFallback>
                               )}
                             </Avatar>
