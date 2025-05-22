@@ -319,6 +319,27 @@ export default function Home({ user }: HomeProps) {
           </div>
         </div>
 
+        {/* サンクスカード送信ボタン - タイトルとタブの間に配置 */}
+        <div className="my-4 text-center">
+          <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
+            <DialogTrigger asChild>
+              <Button size="lg" className="bg-[#3990EA] hover:bg-[#3990EA]/90 text-white shadow-md px-6 py-2">
+                <Send className="h-5 w-5 mr-2" />
+                新しいサンクスカードを送る
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px]">
+              <DialogHeader>
+                <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
+              </DialogHeader>
+              <CardForm onSent={() => {
+                setIsCardFormOpen(false);
+                refetch();
+              }} />
+            </DialogContent>
+          </Dialog>
+        </div>
+
         {/* タブ切り替え */}
         <Tabs defaultValue="all" className="mb-6" onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4">
@@ -327,27 +348,6 @@ export default function Home({ user }: HomeProps) {
             <TabsTrigger value="sent">送った</TabsTrigger>
             <TabsTrigger value="liked">いいねした</TabsTrigger>
           </TabsList>
-
-          {/* サンクスカード送信ボタン - タブとカードリストの間に配置 */}
-          <div className="my-4 text-center">
-            <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
-              <DialogTrigger asChild>
-                <Button size="lg" className="bg-[#3990EA] hover:bg-[#3990EA]/90 text-white shadow-md px-6 py-2">
-                  <Send className="h-5 w-5 mr-2" />
-                  新しいサンクスカードを送る
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px]">
-                <DialogHeader>
-                  <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
-                </DialogHeader>
-                <CardForm onSent={() => {
-                  setIsCardFormOpen(false);
-                  refetch();
-                }} />
-              </DialogContent>
-            </Dialog>
-          </div>
 
           <TabsContent value="all" className="mt-4">
             {renderCardList()}
