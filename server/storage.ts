@@ -70,6 +70,7 @@ export interface IStorage {
   getCards(options?: { limit?: number; offset?: number; senderId?: number; recipientId?: number; }): Promise<CardWithRelations[]>;
   getCard(id: number): Promise<CardWithRelations | undefined>;
   createCard(card: InsertCard): Promise<Card>;
+  updateCard(id: number, card: Partial<Card>): Promise<Card>;
   deleteCard(id: number): Promise<void>;
 
   // いいね

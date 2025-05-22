@@ -587,10 +587,32 @@ export class DatabaseStorage implements IStorage {
   async createCard(insertCard: InsertCard): Promise<Card> {
     const [card] = await db
       .insert(cards)
-      .values(insertCard)
+      .values({
+        ...insertCard,
+        hidden: false // デフォルトでは表示状態
+      })
       .returning();
     
     return card;
+  }
+  
+  async updateCard(id: number, updates: Partial<Card>): Promise<Card> {
+    try {
+      const [updatedCard] = await db
+        .update(cards)
+        .set(updates)
+        .where(eq(cards.id, id))
+        .returning();
+        
+      if (!updatedCard) {
+        throw new Error(`カードが見つかりません: ${id}`);
+      }
+      
+      return updatedCard;
+    } catch (error) {
+      console.error(`カードID ${id} の更新エラー:`, error);
+      throw error;
+    }
   }
 
   async deleteCard(id: number): Promise<void> {
