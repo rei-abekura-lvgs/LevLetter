@@ -1,0 +1,819 @@
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 
+            
+            
+           GET https://913271b4-71cf-403a-9fc9-c593d1baf1ce.picard.prod.repl.run/api/auth/me 401 (Unauthorized)
+kr @ index-AQKvBYGp.js:48
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 API GET エラー: /api/auth/me Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+kr @ index-AQKvBYGp.js:48
+await in kr
+HL @ index-AQKvBYGp.js:48
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at kr (index-AQKvBYGp.js:48:43931)
+    at async HL (index-AQKvBYGp.js:48:43251)
+    at async index-AQKvBYGp.js:347:131932
+    at async index-AQKvBYGp.js:347:132166
+HL @ index-AQKvBYGp.js:48
+await in HL
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+(anonymous) @ index-AQKvBYGp.js:347
+Dp @ index-AQKvBYGp.js:40
+rc @ index-AQKvBYGp.js:40
+(anonymous) @ index-AQKvBYGp.js:40
+b @ index-AQKvBYGp.js:25
+N @ index-AQKvBYGp.js:25Understand this error
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-AQKvBYGp.js:48 API GET リクエスト: /api/auth/me データなし
+index-AQKvBYGp.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
