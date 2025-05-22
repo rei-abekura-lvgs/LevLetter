@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { User } from "@shared/schema";
 import { useAuth } from "@/context/auth-context";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { BearAvatar } from "@/components/ui/bear-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
