@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { User } from "@shared/schema";
 import { useAuth } from "@/context/auth-context";
 import { BearAvatar } from "@/components/ui/bear-avatar";
+import { BearLogo } from "@/components/bear-logo";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -68,6 +69,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
         )}
         <Link href="/">
           <div className="flex items-center space-x-2">
+            <BearLogo size={32} />
             <span className="text-xl font-bold text-primary">LevLetter</span>
           </div>
         </Link>
