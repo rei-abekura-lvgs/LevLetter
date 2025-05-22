@@ -13,7 +13,7 @@ export interface BearAvatarProps {
 export function BearAvatar({ name, color = "primary-500", className }: BearAvatarProps) {
   return (
     <Avatar className={cn("h-8 w-8", className)}>
-      <AvatarFallback className={`bg-${color}`}>
+      <AvatarFallback className="bg-[#046EB8] text-white">
         {getInitials(name)}
       </AvatarFallback>
     </Avatar>
