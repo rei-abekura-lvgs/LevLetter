@@ -184,21 +184,44 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
     
     try {
       setUploadingImage(true);
-      await uploadAvatar(user.id, previewImage);
+      console.log("画像アップロード開始...");
       
-      // キャッシュを更新
+      // アップロード実行
+      const updatedUser = await uploadAvatar(user.id, previewImage);
+      console.log("アップロード成功:", updatedUser);
+      
+      // 全てのキャッシュを更新して確実に反映させる
+      // ユーザー情報のキャッシュを更新
       queryClient.invalidateQueries({
         queryKey: ["/api/auth/me"]
       });
       
-      // カード一覧も更新（アバターが表示されている可能性があるため）
+      // ユーザー一覧を更新
+      queryClient.invalidateQueries({
+        queryKey: ["/api/users"]
+      });
+      
+      // 管理者用ユーザー一覧の更新
+      queryClient.invalidateQueries({
+        queryKey: ["/api/admin/users"]
+      });
+      
+      // カード一覧の更新（アバターが表示されているため）
       queryClient.invalidateQueries({
         queryKey: ["/api/cards"]
       });
       
+      // 強制的にすべてのキャッシュを更新
+      setTimeout(() => {
+        queryClient.refetchQueries({
+          queryKey: ["/api/auth/me"]
+        });
+      }, 500);
+      
+      // 成功通知
       toast({
         title: "アップロード完了",
-        description: "プロフィール画像を更新しました。全てのアイコンに適用されます。",
+        description: "プロフィール画像を更新しました。すべてのアイコンに適用されます。",
       });
       
       // モーダルを閉じる
@@ -206,9 +229,20 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
       setImageUploadOpen(false);
     } catch (error) {
       console.error("画像アップロードエラー:", error);
+      
+      // 詳細なエラーメッセージを表示
+      let errorMessage = "画像のアップロードに失敗しました";
+      
+      // エラーオブジェクトからメッセージを抽出
+      if (error instanceof Error) {
+        errorMessage += `: ${error.message}`;
+      } else if (typeof error === 'object' && error !== null) {
+        errorMessage += `: ${JSON.stringify(error)}`;
+      }
+      
       toast({
         title: "エラー",
-        description: "画像のアップロードに失敗しました",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -323,11 +357,24 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
               )}
             </div>
             
-            <div className="flex justify-end">
+            {previewImage && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                <div className="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  <p className="text-sm font-medium text-blue-700">
+                    「登録する」ボタンをクリックして画像を確定してください
+                  </p>
+                </div>
+              </div>
+            )}
+            
+            <div className="flex justify-center mt-4">
               <Button
                 type="button"
                 variant="outline"
-                className="mr-2"
+                className="mr-3"
                 onClick={() => {
                   setPreviewImage(null);
                   setImageUploadOpen(false);
@@ -335,29 +382,31 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
               >
                 キャンセル
               </Button>
-              <Button
-                type="button"
-                disabled={!previewImage || uploadingImage}
-                className="bg-primary-600 hover:bg-primary-700"
-                onClick={handleUploadImage}
-              >
-                {uploadingImage ? (
-                  <>
-                    登録中...
-                    <span className="ml-2">
-                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    登録する
-                    <Upload className="h-4 w-4 ml-2" />
-                  </>
-                )}
-              </Button>
+              {previewImage && (
+                <Button
+                  type="button"
+                  disabled={uploadingImage}
+                  className="bg-primary-600 hover:bg-primary-700 font-semibold px-6 py-2"
+                  onClick={handleUploadImage}
+                >
+                  {uploadingImage ? (
+                    <>
+                      登録中...
+                      <span className="ml-2">
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      登録する
+                      <Upload className="h-5 w-5 ml-2" />
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
           </div>
         </DialogContent>
