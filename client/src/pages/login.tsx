@@ -67,9 +67,8 @@ export default function Login() {
     <div className="space-y-6">
       <div className="space-y-4 text-center">
         {/* 可愛いクマのロゴ */}
-        <div className="flex items-center justify-center space-x-3">
+        <div className="flex items-center justify-center">
           <BearLogo size={80} />
-          <h1 className="text-3xl font-bold text-[#3990EA]">LevLetter</h1>
         </div>
         <div className="pt-4">
           <h2 className="text-2xl font-semibold">ログイン</h2>

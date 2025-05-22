@@ -110,63 +110,64 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   };
 
   return (
-    <Card className={`overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 ${isHidden ? 'opacity-50' : ''}`}>
+    <Card className={`border border-gray-200 bg-white mb-4 ${isHidden ? 'opacity-50' : ''}`}>
       <CardContent className="p-4">
-        {/* トップ部分：送信者と日時 */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-2">
-            <Avatar className="h-8 w-8">
-              {card.sender.customAvatarUrl ? (
-                <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
-              ) : (
-                <AvatarFallback 
-                  className="text-white text-xs"
-                  style={{ backgroundColor: `var(--${card.sender.avatarColor || 'blue-500'})` }}
-                >
-                  {getInitials(card.sender.name)}
-                </AvatarFallback>
-              )}
-            </Avatar>
-            <div>
+        {/* 左上：送信者アバターと名前、日時 */}
+        <div className="flex items-center gap-3 mb-3">
+          <Avatar className="h-12 w-12">
+            {card.sender.customAvatarUrl ? (
+              <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
+            ) : (
+              <AvatarFallback 
+                className="text-white"
+                style={{ backgroundColor: `var(--${card.sender.avatarColor || 'blue-500'})` }}
+              >
+                {getInitials(card.sender.name)}
+              </AvatarFallback>
+            )}
+          </Avatar>
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
               <button 
-                className="font-medium text-sm text-gray-700 hover:text-[#3990EA] transition-colors"
+                className="font-medium text-gray-900 hover:text-[#3990EA] transition-colors"
                 onClick={() => setShowSenderDepartment(!showSenderDepartment)}
               >
                 {card.sender.displayName || card.sender.name}
               </button>
-              {showSenderDepartment && card.sender.department && (
-                <div className="text-xs text-gray-500 mt-1 break-words">
-                  {card.sender.department}
-                </div>
-              )}
+              <span className="text-gray-500 text-sm">@{card.sender.name.replace(/\s+/g, '').toLowerCase()}</span>
+              <span className="text-gray-400 text-sm">{formattedDate.replace('年', '/').replace('月', '/').replace('日', '')} {formattedTime}</span>
             </div>
-          </div>
-          <div className="text-xs text-gray-400">
-            {formattedDate} {formattedTime}
+            {showSenderDepartment && card.sender.department && (
+              <div className="text-xs text-gray-500 mt-1">
+                {card.sender.department}
+              </div>
+            )}
           </div>
         </div>
 
         {/* メッセージ部分 */}
-        <div className="mb-4">
-          <p className="text-gray-800 whitespace-pre-line leading-relaxed">{card.message}</p>
+        <div className="mb-4 pl-16">
+          <p className="text-gray-900 leading-relaxed whitespace-pre-line">{card.message}</p>
         </div>
 
-        {/* ボトム部分：受信者とポイント */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {/* いいねボタンエリア */}
+        {/* 下部：いいねボタンとアクション */}
+        <div className="flex items-center justify-between pl-16">
+          <div className="flex items-center gap-4">
+            {/* いいねアイコン */}
             <div className="flex items-center gap-1">
-              <Heart className="h-4 w-4 text-gray-400" />
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+                <Heart className="h-4 w-4 text-gray-500" />
+              </div>
               <span className="text-sm text-gray-600">{card.likes.length}</span>
             </div>
             
-            {/* 管理者向けのボタン */}
+            {/* 管理者ボタン */}
             {isAdmin && (
-              <div className="flex gap-1">
+              <>
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-xs h-7 px-2"
+                  className="text-xs"
                   onClick={handleHideCard}
                 >
                   {isHidden ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
@@ -177,16 +178,16 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-xs h-7 px-2 text-red-500 hover:bg-red-50"
+                      className="text-xs text-red-500"
                     >
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle className="text-lg">カードを削除しますか？</DialogTitle>
+                      <DialogTitle>カードを削除しますか？</DialogTitle>
                       <DialogDescription>
-                        このカードを完全に削除します。この操作は元に戻せません。
+                        この操作は元に戻せません。
                       </DialogDescription>
                     </DialogHeader>
                     <div className="flex justify-end gap-3 mt-4">
@@ -202,50 +203,44 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     </div>
                   </DialogContent>
                 </Dialog>
-              </div>
+              </>
             )}
           </div>
 
-          {/* 右側：受信者とポイント */}
-          <div className="flex items-center gap-3">
-            {/* ポイント表示 */}
-            <div className="flex items-center gap-1">
-              <div className="bg-[#3990EA] text-white rounded-full px-2 py-1 text-xs font-medium">
+          {/* 右側：受信者情報とポイント */}
+          {card.recipientType === "user" && (
+            <div className="flex items-center gap-3">
+              {/* ポイント表示 */}
+              <div className="bg-[#4ECDC4] text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-sm">
                 +{card.points}
               </div>
-            </div>
-            
-            {/* 受信者アバターと名前 */}
-            {card.recipientType === "user" && (
-              <div className="flex items-center gap-2">
-                <Avatar className="h-10 w-10">
-                  {(card.recipient as User).customAvatarUrl ? (
-                    <AvatarImage src={(card.recipient as User).customAvatarUrl} alt={(card.recipient as User).name} />
-                  ) : (
-                    <AvatarFallback 
-                      className="text-white text-sm"
-                      style={{ backgroundColor: `var(--${(card.recipient as User).avatarColor || 'blue-500'})` }}
-                    >
-                      {getInitials((card.recipient as User).name)}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
-                <div className="text-right">
-                  <button 
-                    className="font-medium text-sm text-gray-700 hover:text-[#3990EA] transition-colors block"
-                    onClick={() => setShowRecipientDepartment(!showRecipientDepartment)}
-                  >
-                    {(card.recipient as User).displayName || (card.recipient as User).name}
-                  </button>
-                  {showRecipientDepartment && (card.recipient as User).department && (
-                    <div className="text-xs text-gray-500 mt-1 break-words">
-                      {(card.recipient as User).department}
-                    </div>
-                  )}
+              
+              {/* 受信者情報 */}
+              <div className="text-right">
+                <div className="font-medium text-gray-900 text-sm">
+                  {(card.recipient as User).displayName || (card.recipient as User).name}
                 </div>
+                {showRecipientDepartment && (card.recipient as User).department && (
+                  <div className="text-xs text-gray-500">
+                    {(card.recipient as User).department}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+              
+              <Avatar className="h-12 w-12">
+                {(card.recipient as User).customAvatarUrl ? (
+                  <AvatarImage src={(card.recipient as User).customAvatarUrl} alt={(card.recipient as User).name} />
+                ) : (
+                  <AvatarFallback 
+                    className="text-white"
+                    style={{ backgroundColor: `var(--${(card.recipient as User).avatarColor || 'blue-500'})` }}
+                  >
+                    {getInitials((card.recipient as User).name)}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -417,7 +412,6 @@ export default function Home({ user }: HomeProps) {
           isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
         }`}>
           <div className="flex items-center gap-3">
-            <BearLogo size={32} />
             <h2 className="text-lg font-semibold text-gray-800">カードタイムライン</h2>
           </div>
           
