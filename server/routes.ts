@@ -186,6 +186,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.json({ message: "ログアウトに成功しました" });
     });
   });
+  
+  // メールアドレス検証API
+  app.get("/api/auth/verify-email", async (req, res) => {
+    try {
+      const { email } = req.query;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ message: "有効なメールアドレスを指定してください" });
+      }
+      
+      console.log(`メールアドレス検証リクエスト: ${email}`);
+      
+      // メールアドレスが事前登録されているか確認
+      const user = await storage.getUserByEmail(email);
+      
+      // 特定のメールアドレスを許可リストに追加（テスト用）
+      // 実運用では、このような直接的なハードコーディングではなく、
+      // デーダベースやコンフィグから読み込む形式にすることをお勧めします
+      const allowedEmails = [
+        "kota.makino@leverages.jp",
+        "admin@example.com"
+      ];
+      
+      if (user) {
+        // ユーザーが存在する場合
+        return res.json({
+          exists: true,
+          userExists: true,
+          hasPassword: !!user.password,
+          message: user.password 
+            ? "このメールアドレスは既に登録されています。ログインしてください。" 
+            : "このメールアドレスは事前登録されています。続けてパスワードを設定してください。"
+        });
+      } else if (allowedEmails.includes(email)) {
+        // 許可リストに含まれる場合
+        return res.json({
+          exists: true,
+          userExists: false,
+          hasPassword: false,
+          message: "このメールアドレスは事前登録されています。続けてパスワードを設定してください。"
+        });
+      } else {
+        // 未登録のメールアドレス
+        return res.json({
+          exists: false,
+          userExists: false,
+          hasPassword: false,
+          message: "このメールアドレスは管理者によって事前登録されていません。"
+        });
+      }
+    } catch (error) {
+      console.error("メールアドレス検証エラー:", error);
+      return res.status(500).json({ message: "メールアドレスの検証中にエラーが発生しました" });
+    }
+  });
 
   app.get("/api/auth/me", authenticate, (req, res) => {
     try {

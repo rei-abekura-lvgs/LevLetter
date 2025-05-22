@@ -24,12 +24,18 @@ import CardForm from "@/components/card-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // カードコンポーネント
-const CardItem = ({ card }: { card: CardWithRelations }) => {
+const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, currentUser: User, onRefresh?: () => void }) => {
   const formattedDate = format(new Date(card.createdAt), 'yyyy年MM月dd日', { locale: ja });
   const formattedTime = format(new Date(card.createdAt), 'HH:mm', { locale: ja });
   const recipientName = card.recipientType === "user" 
     ? (card.recipient as User).displayName || (card.recipient as User).name
     : "チーム";
+  const { toast } = useToast();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(card.hidden || false);
+  
+  // 管理者かどうかを確認
+  const isAdmin = currentUser?.isAdmin || false;
 
   // ユーザーアバターのイニシャルを作成
   const getInitials = (name: string) => {
@@ -38,6 +44,62 @@ const CardItem = ({ card }: { card: CardWithRelations }) => {
       .map(n => n[0])
       .join("")
       .toUpperCase();
+  };
+  
+  // カードを非表示にする処理
+  const handleHideCard = async () => {
+    try {
+      const response = await fetch(`/api/cards/${card.id}/visibility`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hidden: !isHidden })
+      });
+      
+      if (!response.ok) {
+        throw new Error('カードの表示状態の更新に失敗しました');
+      }
+      
+      setIsHidden(!isHidden);
+      toast({
+        title: !isHidden ? "カードを非表示にしました" : "カードを表示状態に戻しました",
+        description: "正常に更新されました",
+      });
+    } catch (error) {
+      console.error('カード表示状態更新エラー:', error);
+      toast({
+        title: "エラー",
+        description: `カードの表示状態を更新できませんでした: ${error}`,
+        variant: "destructive",
+      });
+    }
+  };
+  
+  // カードを削除する処理
+  const handleDeleteCard = async () => {
+    try {
+      const response = await fetch(`/api/cards/${card.id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('カードの削除に失敗しました');
+      }
+      
+      toast({
+        title: "カードを削除しました",
+        description: "カードは完全に削除されました",
+      });
+      
+      setIsDeleteDialogOpen(false);
+      if (onRefresh) onRefresh();
+    } catch (error) {
+      console.error('カード削除エラー:', error);
+      toast({
+        title: "エラー",
+        description: `カードを削除できませんでした: ${error}`,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -151,6 +213,26 @@ export default function Home({ user }: HomeProps) {
           <DialogTrigger asChild>
             <Button size="lg" className="rounded-full h-14 w-14 shadow-lg">
               <Plus size={24} />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
+            </DialogHeader>
+            <CardForm onSent={() => {
+              setIsCardFormOpen(false);
+              refetch();
+            }} />
+          </DialogContent>
+        </Dialog>
+      </div>
+      {/* 中央上部のカード作成ボタン */}
+      <div className="mb-6 text-center">
+        <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
+          <DialogTrigger asChild>
+            <Button size="lg" className="bg-[#3990EA] hover:bg-[#3990EA]/90 text-white shadow-md px-6 py-2">
+              <Send className="h-5 w-5 mr-2" />
+              新しいサンクスカードを送る
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[600px]">
