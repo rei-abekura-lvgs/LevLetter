@@ -134,7 +134,6 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               >
                 {card.sender.displayName || card.sender.name}
               </button>
-              <span className="text-gray-500 text-sm">@{card.sender.name.replace(/\s+/g, '').toLowerCase()}</span>
               <span className="text-gray-400 text-sm">{formattedDate.replace('年', '/').replace('月', '/').replace('日', '')} {formattedTime}</span>
             </div>
             {showSenderDepartment && card.sender.department && (
