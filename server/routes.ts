@@ -707,6 +707,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "いいねの作成に失敗しました" });
     }
   });
+  
+  // カード削除API
+  app.delete("/api/cards/:id", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.id);
+      const user = (req as any).user;
+      
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+      
+      // カードの存在確認
+      const card = await storage.getCard(cardId);
+      
+      if (!card) {
+        return res.status(404).json({ message: "カードが見つかりません" });
+      }
+      
+      // 管理者または送信者のみ削除可能
+      if (card.senderId !== user.id && !user.isAdmin) {
+        return res.status(403).json({ message: "このカードを削除する権限がありません" });
+      }
+      
+      await storage.deleteCard(cardId);
+      
+      return res.json({ message: "カードを削除しました" });
+    } catch (error) {
+      console.error("カード削除エラー:", error);
+      return res.status(500).json({ message: "カードの削除に失敗しました" });
+    }
+  });
+  
+  // カード表示状態更新API（管理者のみ）
+  app.patch("/api/cards/:id/visibility", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.id);
+      const user = (req as any).user;
+      const { hidden } = req.body;
+      
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+      
+      if (typeof hidden !== 'boolean') {
+        return res.status(400).json({ message: "無効なリクエストです。'hidden'フィールドはboolean型である必要があります" });
+      }
+      
+      // カードの存在確認
+      const card = await storage.getCard(cardId);
+      
+      if (!card) {
+        return res.status(404).json({ message: "カードが見つかりません" });
+      }
+      
+      // 管理者権限チェック
+      if (!user.isAdmin) {
+        return res.status(403).json({ message: "この操作を行う権限がありません" });
+      }
+      
+      // カードの表示状態を更新
+      // カードORM実装によってはこの部分の実装方法が異なる場合があります
+      await storage.updateCard(cardId, { hidden });
+      
+      return res.json({ 
+        message: hidden ? "カードを非表示にしました" : "カードを表示状態に戻しました",
+        success: true
+      });
+    } catch (error) {
+      console.error("カード表示状態更新エラー:", error);
+      return res.status(500).json({ message: "カード表示状態の更新に失敗しました" });
+    }
+  });
 
   // 統計情報API
   app.get("/api/stats", authenticate, async (req, res) => {
