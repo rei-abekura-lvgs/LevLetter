@@ -22,7 +22,10 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <div className="w-64 border-r bg-white h-full p-4 flex flex-col">
-      
+      {/* ヘッダー部分：タイトルのみ */}
+      <div className="flex items-center justify-center mb-6">
+        <h1 className="text-2xl font-bold text-[#3990EA]">LevLetter</h1>
+      </div>
       
       {user && (
         <div className="flex-1 flex flex-col">
@@ -36,8 +39,8 @@ export default function Sidebar({ user }: SidebarProps) {
                   className="h-16 w-16 rounded-full object-cover border border-[#3990EA] mb-3 shadow-sm"
                 />
               ) : (
-                <div className={`h-16 w-16 rounded-full bg-[#3990EA] flex items-center justify-center text-white text-xl font-semibold mb-3 shadow-sm`}>
-                  {user.displayName?.[0] || user.name[0]}
+                <div className="h-16 w-16 rounded-full bg-[#3990EA] flex items-center justify-center mb-3 shadow-sm">
+                  <BearLogo size={50} />
                 </div>
               )}
               <div className="w-full">

@@ -118,11 +118,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             {card.sender.customAvatarUrl ? (
               <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
             ) : (
-              <AvatarFallback 
-                className="text-white"
-                style={{ backgroundColor: `var(--${card.sender.avatarColor || 'blue-500'})` }}
-              >
-                {getInitials(card.sender.name)}
+              <AvatarFallback className="bg-[#3990EA] flex items-center justify-center">
+                <BearLogo size={32} />
               </AvatarFallback>
             )}
           </Avatar>
