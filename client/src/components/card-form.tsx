@@ -129,11 +129,16 @@ export default function CardForm({ onSent }: CardFormProps) {
 
   // ユーザー選択の処理
   const toggleUserSelection = (selectedUser: User) => {
+    console.log(`ユーザー選択切り替え: ${selectedUser.name} (ID: ${selectedUser.id})`);
+    console.log(`現在の選択状況:`, selectedRecipients.map(r => `${r.name}(${r.id})`));
+    
     if (selectedRecipients.some(r => r.id === selectedUser.id)) {
       // すでに選択されている場合は削除
+      console.log(`ユーザー ${selectedUser.name} を選択から除外`);
       setSelectedRecipients(prev => prev.filter(r => r.id !== selectedUser.id));
     } else {
       // 選択されていない場合は追加
+      console.log(`ユーザー ${selectedUser.name} を選択に追加`);
       setSelectedRecipients(prev => [...prev, selectedUser]);
     }
   };
@@ -486,8 +491,8 @@ export default function CardForm({ onSent }: CardFormProps) {
                         <Checkbox
                           id={`user-${availableUser.id}`}
                           checked={selectedRecipients.some(r => r.id === availableUser.id)}
-                          onCheckedChange={() => {}} 
-                          className="pointer-events-none"
+                          onCheckedChange={() => {}}
+                          className="mr-3 pointer-events-none"
                         />
                         <div className="flex items-center text-sm flex-1">
                           <Avatar className="h-8 w-8 mr-3">
