@@ -213,6 +213,8 @@ export default function Home({ user }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
   const [isCardFormOpen, setIsCardFormOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("all");
+  const [isScrolled, setIsScrolled] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // APIからカードデータを取得
   const {
@@ -264,8 +266,47 @@ export default function Home({ user }: HomeProps) {
     refetch();
   };
 
+  // スクロール検知
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContainerRef.current) {
+        const scrollTop = scrollContainerRef.current.scrollTop;
+        setIsScrolled(scrollTop > 100); // 100px以上スクロールしたら小さくする
+      }
+    };
+
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
   return (
     <div className="h-full flex flex-col">
+      {/* スクロール時のコンパクト感謝ボタン（上部固定） */}
+      <div className={`md:block hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-20 transition-all duration-300 ${
+        isScrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
+      }`}>
+        <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
+          <DialogTrigger asChild>
+            <Button className="bg-gradient-to-r from-[#3990EA] to-[#2d7de0] hover:from-[#2d7de0] hover:to-[#1e6bd9] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium">
+              <Send className="h-4 w-4 mr-2" />
+              感謝を伝える
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
+            </DialogHeader>
+            <CardForm onSent={() => {
+              setIsCardFormOpen(false);
+              refetch();
+            }} />
+          </DialogContent>
+        </Dialog>
+      </div>
+
       {/* モバイル用固定カード送信ボタン */}
       <div className="md:hidden fixed right-6 bottom-6 z-10">
         <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
@@ -370,25 +411,25 @@ export default function Home({ user }: HomeProps) {
           </TabsList>
 
           <TabsContent value="all" className="flex-1 overflow-hidden mt-4">
-            <div className="h-full overflow-y-auto">
+            <div ref={scrollContainerRef} className="h-full overflow-y-auto">
               {renderCardList()}
             </div>
           </TabsContent>
           
           <TabsContent value="received" className="flex-1 overflow-hidden mt-4">
-            <div className="h-full overflow-y-auto">
+            <div ref={scrollContainerRef} className="h-full overflow-y-auto">
               {renderCardList()}
             </div>
           </TabsContent>
           
           <TabsContent value="sent" className="flex-1 overflow-hidden mt-4">
-            <div className="h-full overflow-y-auto">
+            <div ref={scrollContainerRef} className="h-full overflow-y-auto">
               {renderCardList()}
             </div>
           </TabsContent>
           
           <TabsContent value="liked" className="flex-1 overflow-hidden mt-4">
-            <div className="h-full overflow-y-auto">
+            <div ref={scrollContainerRef} className="h-full overflow-y-auto">
               {renderCardList()}
             </div>
           </TabsContent>
