@@ -627,12 +627,25 @@ export class MemStorage implements IStorage {
       message: insertCard.message,
       points: insertCard.points || 0, // ポイントを保存
       public: insertCard.public !== undefined ? insertCard.public : true,
+      hidden: false, // デフォルトでは表示状態
       additionalRecipients: insertCard.additionalRecipients || null,
       createdAt: now
     };
 
     this.cards.set(id, card);
     return card;
+  }
+  
+  async updateCard(id: number, updates: Partial<Card>): Promise<Card> {
+    if (!this.cards.has(id)) {
+      throw new Error(`カードID ${id} が見つかりません`);
+    }
+    
+    const existingCard = this.cards.get(id)!;
+    const updatedCard = { ...existingCard, ...updates };
+    
+    this.cards.set(id, updatedCard);
+    return updatedCard;
   }
 
   async deleteCard(id: number): Promise<void> {
