@@ -20,7 +20,7 @@ export default function Sidebar({ user }: SidebarProps) {
   };
 
   return (
-    <div className="w-64 border-r bg-white min-h-screen p-4 flex flex-col">
+    <div className="w-64 border-r bg-white h-full p-4 flex flex-col">
       {user && (
         <div className="flex-1 flex flex-col">
           {/* ユーザー情報カード - レイアウト改善 */}

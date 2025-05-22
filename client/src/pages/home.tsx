@@ -265,9 +265,9 @@ export default function Home({ user }: HomeProps) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 md:pb-6">
-      {/* 固定カード送信ボタン */}
-      <div className="fixed right-6 bottom-6 z-10">
+    <div className="h-full flex flex-col">
+      {/* モバイル用固定カード送信ボタン */}
+      <div className="md:hidden fixed right-6 bottom-6 z-10">
         <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
           <DialogTrigger asChild>
             <Button size="lg" className="rounded-full h-14 w-14 shadow-lg">
@@ -286,9 +286,8 @@ export default function Home({ user }: HomeProps) {
         </Dialog>
       </div>
 
-      
       {/* タイムライン */}
-      <div>
+      <div className="flex flex-col h-full">{/* ヘッダー部分 - 固定 */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800">カードタイムライン</h2>
           
@@ -319,26 +318,29 @@ export default function Home({ user }: HomeProps) {
           </div>
         </div>
 
-        {/* サンクスカード送信ボタン - テキストボックス風デザイン */}
-        <div className="my-4">
+        {/* サンクスカード送信ボタン - より目立つデザイン */}
+        <div className="my-6 hidden md:block">
           <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
             <DialogTrigger asChild>
-              <div className="group cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg">
-                <div className="bg-white border-2 border-gray-200 rounded-xl p-4 shadow-sm hover:border-[#3990EA] hover:bg-blue-50/30 transition-all duration-200">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#3990EA] rounded-full flex items-center justify-center group-hover:bg-[#2d7de0] transition-colors duration-200">
-                      <Send className="h-5 w-5 text-white" />
+              <div className="group cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:shadow-xl">
+                <div className="bg-gradient-to-r from-[#3990EA] to-[#2d7de0] border-2 border-[#3990EA] rounded-2xl p-5 shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                  {/* 背景のきらめき効果 */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  
+                  <div className="flex items-center gap-4 relative z-10">
+                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                      <Send className="h-6 w-6 text-[#3990EA]" />
                     </div>
                     <div className="flex-1">
-                      <div className="text-gray-600 text-sm font-medium group-hover:text-[#3990EA] transition-colors duration-200">
-                        感謝の気持ちを伝えよう
+                      <div className="text-white text-base font-semibold mb-1">
+                        感謝の気持ちを伝えよう ✨
                       </div>
-                      <div className="text-gray-400 text-xs mt-1 group-hover:text-gray-500 transition-colors duration-200">
-                        クリックして新しいサンクスカードを作成...
+                      <div className="text-blue-100 text-sm">
+                        クリックして新しいサンクスカードを作成
                       </div>
                     </div>
-                    <div className="text-gray-300 group-hover:text-[#3990EA] transition-colors duration-200">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="text-white/80 group-hover:text-white transition-colors duration-200">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                       </svg>
                     </div>
