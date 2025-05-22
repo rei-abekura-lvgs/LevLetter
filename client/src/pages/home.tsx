@@ -373,23 +373,27 @@ export default function Home({ user }: HomeProps) {
 
       {/* モバイル用固定カード送信ボタン */}
       <div className="md:hidden fixed right-6 bottom-6 z-10">
-        <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
-          <DialogTrigger asChild>
-            <Button size="lg" className="rounded-full h-14 w-14 shadow-lg">
-              <Plus size={24} />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-sm">
-            <DialogHeader>
-              <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
-            </DialogHeader>
-            <CardForm onSent={() => {
-              setIsCardFormOpen(false);
-              refetch();
-            }} />
-          </DialogContent>
-        </Dialog>
+        <Button 
+          size="lg" 
+          className="rounded-full h-14 w-14 shadow-lg bg-gradient-to-r from-[#3990EA] to-[#1e6bd9] hover:from-[#1e6bd9] hover:to-[#3990EA]"
+          onClick={() => setIsCardFormOpen(true)}
+        >
+          <Plus size={24} />
+        </Button>
       </div>
+
+      {/* 統一されたCardFormダイアログ */}
+      <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-sm">
+          <DialogHeader>
+            <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
+          </DialogHeader>
+          <CardForm onSent={() => {
+            setIsCardFormOpen(false);
+            refetch();
+          }} />
+        </DialogContent>
+      </Dialog>
 
       {/* タイムライン */}
       <div className="flex flex-col h-full">
@@ -432,39 +436,26 @@ export default function Home({ user }: HomeProps) {
         <div className={`hidden md:block transition-all duration-300 ${
           isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
         }`}>
-          <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
-            <DialogTrigger asChild>
-              <div className="group cursor-pointer transition-all duration-200">
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-[#3990EA] rounded-full flex items-center justify-center">
-                      <Send className="h-4 w-4 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-gray-700 text-sm font-medium">
-                        感謝の気持ちを伝える
-                      </div>
-                      <div className="text-gray-500 text-xs">
-                        新しいサンクスカードを作成
-                      </div>
-                    </div>
-                    <div className="text-gray-400">
-                      <Plus className="w-4 h-4" />
-                    </div>
+          <div className="group cursor-pointer transition-all duration-200" onClick={() => setIsCardFormOpen(true)}>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-[#3990EA] rounded-full flex items-center justify-center">
+                  <Send className="h-4 w-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-gray-700 text-sm font-medium">
+                    感謝の気持ちを伝える
+                  </div>
+                  <div className="text-gray-500 text-xs">
+                    新しいサンクスカードを作成
                   </div>
                 </div>
+                <div className="text-gray-400">
+                  <Plus className="w-4 h-4" />
+                </div>
               </div>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-sm">
-              <DialogHeader>
-                <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
-              </DialogHeader>
-              <CardForm onSent={() => {
-                setIsCardFormOpen(false);
-                refetch();
-              }} />
-            </DialogContent>
-          </Dialog>
+            </div>
+          </div>
         </div>
 
         {/* タブ切り替え - 常に表示 */}
