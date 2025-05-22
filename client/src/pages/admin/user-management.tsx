@@ -53,6 +53,9 @@ export default function UserManagement() {
   const { data: users = [], isLoading } = useQuery<User[]>({
     queryKey: ["/api/admin/users"],
     enabled: true,
+    refetchOnWindowFocus: true,
+    staleTime: 0, // データが常に新鮮になるように
+    refetchInterval: 5000, // 5秒ごとに更新
   });
   
   // 部署一覧を取得
@@ -247,35 +250,36 @@ export default function UserManagement() {
           <div className="py-8 text-center text-muted-foreground">読み込み中...</div>
         ) : (
           <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[50px]">
-                    <Checkbox 
-                      checked={selectedUsers.length > 0 && selectedUsers.length === filteredUsers.filter((u: any) => u.email !== "rei.abekura@leverages.jp").length}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          // すべてのユーザーを選択（管理者アカウントは除外）
-                          const nonAdminUsers = filteredUsers
-                            .filter((user: any) => user.email !== "rei.abekura@leverages.jp")
-                            .map((user: any) => user.id);
-                          setSelectedUsers(nonAdminUsers);
-                        } else {
-                          // すべての選択を解除
-                          setSelectedUsers([]);
-                        }
-                      }}
-                    />
-                  </TableHead>
-                  <TableHead>名前</TableHead>
-                  <TableHead>メールアドレス</TableHead>
-                  <TableHead>部署</TableHead>
-                  <TableHead>ステータス</TableHead>
-                  <TableHead>作成日</TableHead>
-                  <TableHead className="w-[80px]"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <div className="max-h-[600px] overflow-y-auto">
+              <Table>
+                <TableHeader className="sticky top-0 bg-background z-10">
+                  <TableRow>
+                    <TableHead className="w-[50px]">
+                      <Checkbox 
+                        checked={selectedUsers.length > 0 && selectedUsers.length === filteredUsers.filter((u: any) => u.email !== "rei.abekura@leverages.jp").length}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            // すべてのユーザーを選択（管理者アカウントは除外）
+                            const nonAdminUsers = filteredUsers
+                              .filter((user: any) => user.email !== "rei.abekura@leverages.jp")
+                              .map((user: any) => user.id);
+                            setSelectedUsers(nonAdminUsers);
+                          } else {
+                            // すべての選択を解除
+                            setSelectedUsers([]);
+                          }
+                        }}
+                      />
+                    </TableHead>
+                    <TableHead>名前</TableHead>
+                    <TableHead>メールアドレス</TableHead>
+                    <TableHead>部署</TableHead>
+                    <TableHead>ステータス</TableHead>
+                    <TableHead>作成日</TableHead>
+                    <TableHead className="w-[80px]"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                 {filteredUsers.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
@@ -419,8 +423,9 @@ export default function UserManagement() {
                     </TableRow>
                   ))
                 )}
-              </TableBody>
-            </Table>
+                </TableBody>
+              </Table>
+            </div>
           </div>
         )}
       </CardContent>
