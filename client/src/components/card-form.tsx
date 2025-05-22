@@ -474,30 +474,38 @@ export default function CardForm({ onSent }: CardFormProps) {
                     </div>
                   ) : (
                     filteredUsers.map((availableUser) => (
-                      <div key={availableUser.id} className="flex items-center space-x-2 py-1 px-1 hover:bg-gray-50 rounded-sm">
+                      <div 
+                        key={availableUser.id} 
+                        className="flex items-center space-x-2 py-2 px-2 hover:bg-blue-50 hover:border-l-4 hover:border-[#3990EA] rounded-sm cursor-pointer transition-all duration-200"
+                        onClick={() => toggleUserSelection(availableUser)}
+                      >
                         <Checkbox
                           id={`user-${availableUser.id}`}
                           checked={selectedRecipients.some(r => r.id === availableUser.id)}
                           onCheckedChange={() => toggleUserSelection(availableUser)}
+                          className="pointer-events-none"
                         />
-                        <label
-                          htmlFor={`user-${availableUser.id}`}
-                          className="flex items-center cursor-pointer text-sm flex-1"
-                        >
-                          <Avatar className={`bg-${availableUser.avatarColor || 'blue-500'} h-6 w-6 mr-2`}>
-                            <AvatarFallback className="text-xs">
-                              {availableUser.name.charAt(0)}
-                            </AvatarFallback>
+                        <div className="flex items-center cursor-pointer text-sm flex-1">
+                          <Avatar className={`bg-[#3990EA] h-6 w-6 mr-2 flex items-center justify-center`}>
+                            {availableUser.customAvatarUrl ? (
+                              <AvatarImage src={availableUser.customAvatarUrl} alt={availableUser.name} />
+                            ) : (
+                              <AvatarFallback className="text-xs text-white bg-[#3990EA]">
+                                {availableUser.name.charAt(0)}
+                              </AvatarFallback>
+                            )}
                           </Avatar>
                           <div className="flex-1">
-                            <div className="font-medium">{availableUser.displayName || availableUser.name}</div>
+                            <div className="font-medium text-gray-800 hover:text-[#3990EA] transition-colors">
+                              {availableUser.displayName || availableUser.name}
+                            </div>
                             {availableUser.department && (
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
                                 {availableUser.department}
                               </div>
                             )}
                           </div>
-                        </label>
+                        </div>
                       </div>
                     ))
                   )}
@@ -533,18 +541,45 @@ export default function CardForm({ onSent }: CardFormProps) {
           <div>
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-sm font-medium">ポイント付与</h3>
-              <span className="text-lg font-bold text-primary">
+              <span className="text-lg font-bold text-[#3990EA]">
                 {form.watch("points")} PT
               </span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="140"
-              step="5"
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-              {...form.register("points", { valueAsNumber: true })}
-            />
+            
+            {/* 現在のポイント情報 */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+              <div className="flex justify-between items-center text-sm">
+                <div>
+                  <span className="text-gray-600">現在のポイント：</span>
+                  <span className="font-semibold text-gray-800">{user?.weeklyPoints || 0} PT</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">送信後：</span>
+                  <span className="font-semibold text-[#3990EA]">
+                    {(user?.weeklyPoints || 0) - (form.watch("points") * selectedRecipients.length)} PT
+                  </span>
+                </div>
+              </div>
+              {selectedRecipients.length > 1 && (
+                <div className="text-xs text-gray-500 mt-1">
+                  {selectedRecipients.length}人に送信するため、{form.watch("points") * selectedRecipients.length} PT消費
+                </div>
+              )}
+            </div>
+            <div className="relative">
+              <input
+                type="range"
+                min="0"
+                max="140"
+                step="5"
+                className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-gradient"
+                style={{
+                  background: `linear-gradient(to right, #3990EA 0%, #3990EA ${(form.watch("points") / 140) * 100}%, #e5e7eb ${(form.watch("points") / 140) * 100}%, #e5e7eb 100%)`
+                }}
+                {...form.register("points", { valueAsNumber: true })}
+              />
+
+            </div>
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>0 PT</span>
               <span>140 PT</span>
