@@ -144,13 +144,39 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
           </div>
         </div>
 
-        {/* メッセージ部分 */}
-        <div className="mb-4 pl-16">
-          <p className="text-gray-900 leading-relaxed whitespace-pre-line">{card.message}</p>
+        {/* メッセージと受信者情報を含む中央部分 */}
+        <div className="relative mb-4 pl-16 pr-32">
+          <p className="text-gray-900 leading-relaxed whitespace-pre-line max-w-[80%]">{card.message}</p>
+          
+          {/* 受信者情報 - 右端中央に固定 */}
+          {card.recipientType === "user" && (
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end">
+              <div className="bg-[#4ECDC4] text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-sm mb-2">
+                +{card.points}
+              </div>
+              <Avatar className="h-12 w-12">
+                {(card.recipient as User).customAvatarUrl ? (
+                  <AvatarImage src={(card.recipient as User).customAvatarUrl} alt={(card.recipient as User).name} />
+                ) : (
+                  <AvatarFallback 
+                    className="text-white"
+                    style={{ backgroundColor: `var(--${(card.recipient as User).avatarColor || 'blue-500'})` }}
+                  >
+                    {getInitials((card.recipient as User).name)}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+              <div className="text-right mt-2">
+                <div className="font-medium text-gray-900 text-sm">
+                  {(card.recipient as User).displayName || (card.recipient as User).name}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 下部：いいねボタンとアクション */}
-        <div className="flex items-center justify-between pl-16">
+        <div className="flex items-center pl-16">
           <div className="flex items-center gap-4">
             {/* いいねアイコン */}
             <div className="flex items-center gap-1">
@@ -206,40 +232,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             )}
           </div>
 
-          {/* 右側：受信者情報とポイント */}
-          {card.recipientType === "user" && (
-            <div className="flex items-center gap-3">
-              {/* ポイント表示 */}
-              <div className="bg-[#4ECDC4] text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-sm">
-                +{card.points}
-              </div>
-              
-              {/* 受信者情報 */}
-              <div className="text-right">
-                <div className="font-medium text-gray-900 text-sm">
-                  {(card.recipient as User).displayName || (card.recipient as User).name}
-                </div>
-                {showRecipientDepartment && (card.recipient as User).department && (
-                  <div className="text-xs text-gray-500">
-                    {(card.recipient as User).department}
-                  </div>
-                )}
-              </div>
-              
-              <Avatar className="h-12 w-12">
-                {(card.recipient as User).customAvatarUrl ? (
-                  <AvatarImage src={(card.recipient as User).customAvatarUrl} alt={(card.recipient as User).name} />
-                ) : (
-                  <AvatarFallback 
-                    className="text-white"
-                    style={{ backgroundColor: `var(--${(card.recipient as User).avatarColor || 'blue-500'})` }}
-                  >
-                    {getInitials((card.recipient as User).name)}
-                  </AvatarFallback>
-                )}
-              </Avatar>
-            </div>
-          )}
+          
         </div>
       </CardContent>
     </Card>
