@@ -493,8 +493,8 @@ export default function CardForm({ onSent }: CardFormProps) {
                     filteredUsers.map((availableUser) => {
                       const isSelected = selectedRecipients.some(r => r.id === availableUser.id);
                       
-                      // ユーザークリック時のハンドラー（チェックボックスを除く）
-                      const handleUserClick = useCallback((e: React.MouseEvent) => {
+                      // ユーザークリック時のハンドラー（フック外で定義）
+                      const handleUserClick = (e: React.MouseEvent) => {
                         e.preventDefault();
                         e.stopPropagation();
                         try {
@@ -507,7 +507,7 @@ export default function CardForm({ onSent }: CardFormProps) {
                             variant: "destructive"
                           });
                         }
-                      }, [availableUser, toggleUserSelection, toast]);
+                      };
                       
                       return (
                         <div 
