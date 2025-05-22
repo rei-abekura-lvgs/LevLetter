@@ -649,9 +649,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         weeklyPoints: sender.weeklyPoints - data.points
       });
 
+      // 受信者にポイントを付与
+      if (data.recipientType === "user") {
+        const recipient = await storage.getUser(parseInt(data.recipientId.toString()));
+        if (recipient) {
+          await storage.updateUser(recipient.id, {
+            totalPointsReceived: recipient.totalPointsReceived + data.points
+          });
+        }
+      }
+
       // 複数ユーザー宛ての場合の処理
       if (data.additionalRecipients && data.additionalRecipients.length > 0) {
-        // 追加の受信者へのポイント分配は既にストレージ層で処理される想定
+        for (const additionalRecipientId of data.additionalRecipients) {
+          const additionalRecipient = await storage.getUser(additionalRecipientId);
+          if (additionalRecipient) {
+            await storage.updateUser(additionalRecipient.id, {
+              totalPointsReceived: additionalRecipient.totalPointsReceived + data.points
+            });
+          }
+        }
       }
 
       return res.status(201).json({ message: "カードが作成されました", card });
