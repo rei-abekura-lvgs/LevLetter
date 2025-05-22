@@ -191,9 +191,14 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
         queryKey: ["/api/auth/me"]
       });
       
+      // カード一覧も更新（アバターが表示されている可能性があるため）
+      queryClient.invalidateQueries({
+        queryKey: ["/api/cards"]
+      });
+      
       toast({
         title: "アップロード完了",
-        description: "プロフィール画像を更新しました",
+        description: "プロフィール画像を更新しました。全てのアイコンに適用されます。",
       });
       
       // モーダルを閉じる
@@ -295,10 +300,15 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                 </div>
               ) : (
                 <div className="relative mb-4">
+                  <div className="border border-gray-200 rounded-lg p-3 mb-4 bg-gray-50">
+                    <p className="text-sm text-gray-700 text-center mb-1">この画像は全てのアイコンで使用されます</p>
+                    <p className="text-xs text-gray-500 text-center">「登録」ボタンをクリックして確定してください</p>
+                  </div>
+                  
                   <img 
                     src={previewImage} 
                     alt="プレビュー" 
-                    className="w-full max-h-60 object-contain rounded-lg" 
+                    className="w-full max-h-60 object-contain rounded-lg border border-gray-200" 
                   />
                   <Button
                     type="button"
@@ -333,7 +343,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
               >
                 {uploadingImage ? (
                   <>
-                    アップロード中...
+                    登録中...
                     <span className="ml-2">
                       <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -343,7 +353,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                   </>
                 ) : (
                   <>
-                    アップロード
+                    登録する
                     <Upload className="h-4 w-4 ml-2" />
                   </>
                 )}
