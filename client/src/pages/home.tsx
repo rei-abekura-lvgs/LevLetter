@@ -215,6 +215,8 @@ export default function Home({ user }: HomeProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   // APIからカードデータを取得
   const {
@@ -282,6 +284,39 @@ export default function Home({ user }: HomeProps) {
       return () => container.removeEventListener('scroll', handleScroll);
     }
   }, []);
+
+  // スワイプ機能
+  const minSwipeDistance = 50;
+  const tabs = ["all", "received", "sent", "liked"];
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    const currentIndex = tabs.indexOf(activeTab);
+    
+    if (isLeftSwipe && currentIndex < tabs.length - 1) {
+      // 左スワイプ（次のタブ）
+      setActiveTab(tabs[currentIndex + 1]);
+    }
+    
+    if (isRightSwipe && currentIndex > 0) {
+      // 右スワイプ（前のタブ）
+      setActiveTab(tabs[currentIndex - 1]);
+    }
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -403,7 +438,13 @@ export default function Home({ user }: HomeProps) {
         </div>
 
         {/* タブ切り替え */}
-        <Tabs defaultValue="all" className="flex flex-col flex-1 overflow-hidden" onValueChange={setActiveTab}>
+        <Tabs 
+          value={activeTab} 
+          className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
+            isScrolled ? '-mt-4' : ''
+          }`} 
+          onValueChange={setActiveTab}
+        >
           <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
             <TabsTrigger value="all">全て</TabsTrigger>
             <TabsTrigger value="received">受け取った</TabsTrigger>
@@ -411,29 +452,36 @@ export default function Home({ user }: HomeProps) {
             <TabsTrigger value="liked">いいねした</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="all" className="flex-1 overflow-hidden mt-4">
-            <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-              {renderCardList()}
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="received" className="flex-1 overflow-hidden mt-4">
-            <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-              {renderCardList()}
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="sent" className="flex-1 overflow-hidden mt-4">
-            <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-              {renderCardList()}
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="liked" className="flex-1 overflow-hidden mt-4">
-            <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-              {renderCardList()}
-            </div>
-          </TabsContent>
+          <div 
+            className="flex-1 overflow-hidden mt-4"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            <TabsContent value="all" className="h-full overflow-hidden">
+              <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+                {renderCardList()}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="received" className="h-full overflow-hidden">
+              <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+                {renderCardList()}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="sent" className="h-full overflow-hidden">
+              <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+                {renderCardList()}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="liked" className="h-full overflow-hidden">
+              <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+                {renderCardList()}
+              </div>
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
     </div>
