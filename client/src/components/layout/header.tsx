@@ -112,12 +112,12 @@ export default function Header({ toggleSidebar }: HeaderProps) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback className={`bg-${user.avatarColor}`}>
-                      {getInitials(user.name)}
-                    </AvatarFallback>
-                  </Avatar>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0 overflow-hidden">
+                  <BearAvatar 
+                    userName={user.name}
+                    color={user.avatarColor}
+                    className="h-8 w-8"
+                  />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">

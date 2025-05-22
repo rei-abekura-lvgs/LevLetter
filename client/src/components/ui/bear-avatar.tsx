@@ -1,12 +1,44 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback } from './avatar';
+import * as AvatarPrimitive from "@radix-ui/react-avatar";
 
 interface BearAvatarProps {
   userName: string;
   color?: string;
   className?: string;
 }
+
+// カスタムアバタールートコンポーネント
+const BearAvatarRoot = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Root
+    ref={ref}
+    className={cn(
+      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+      className
+    )}
+    {...props}
+  />
+));
+BearAvatarRoot.displayName = "BearAvatarRoot";
+
+// カスタムアバタフォールバックコンポーネント
+const BearAvatarFallback = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Fallback>,
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Fallback
+    ref={ref}
+    className={cn(
+      "flex h-full w-full items-center justify-center rounded-full bg-muted",
+      className
+    )}
+    {...props}
+  />
+));
+BearAvatarFallback.displayName = "BearAvatarFallback";
 
 export function BearAvatar({ userName, color, className }: BearAvatarProps) {
   // ユーザー名のイニシャルをフォールバックとして使用
@@ -19,8 +51,11 @@ export function BearAvatar({ userName, color, className }: BearAvatarProps) {
       .slice(0, 2);
   };
 
+  // 背景色の処理（tailwindのクラス名または直接のカラーコード）
+  const bgColor = color?.startsWith('#') ? color : (color || "#C6E4D4");
+
   return (
-    <Avatar className={cn(className)}>
+    <BearAvatarRoot className={cn(className)}>
       <div className="w-full h-full flex items-center justify-center">
         <svg
           width="100%"
@@ -31,7 +66,7 @@ export function BearAvatar({ userName, color, className }: BearAvatarProps) {
           className="absolute inset-0"
         >
           {/* 背景色 */}
-          <rect width="200" height="200" rx="100" fill={color || "#C6E4D4"} />
+          <rect width="200" height="200" rx="100" fill={bgColor} />
           
           {/* クマの顔 */}
           <g transform="translate(30, 30) scale(0.7)">
@@ -60,9 +95,9 @@ export function BearAvatar({ userName, color, className }: BearAvatarProps) {
       </div>
       
       {/* イニシャルのフォールバック（SVGが表示できない場合） */}
-      <AvatarFallback style={{ backgroundColor: color }}>
+      <BearAvatarFallback style={{ backgroundColor: bgColor }}>
         {getInitials(userName)}
-      </AvatarFallback>
-    </Avatar>
+      </BearAvatarFallback>
+    </BearAvatarRoot>
   );
 }
