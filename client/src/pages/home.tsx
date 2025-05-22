@@ -110,16 +110,17 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   };
 
   return (
-    <Card className={`overflow-hidden border border-gray-200 hover:shadow-md transition-shadow ${isHidden ? 'opacity-50' : ''}`}>
-      <CardHeader className="bg-gray-50 p-4 pb-2">
-        <div className="flex justify-between items-center">
+    <Card className={`overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 ${isHidden ? 'opacity-50' : ''}`}>
+      <CardContent className="p-4">
+        {/* トップ部分：送信者と日時 */}
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <Avatar className="h-8 w-8">
               {card.sender.customAvatarUrl ? (
                 <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
               ) : (
                 <AvatarFallback 
-                  className="text-white"
+                  className="text-white text-xs"
                   style={{ backgroundColor: `var(--${card.sender.avatarColor || 'blue-500'})` }}
                 >
                   {getInitials(card.sender.name)}
@@ -128,7 +129,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             </Avatar>
             <div>
               <button 
-                className="font-medium text-left hover:text-[#3990EA] transition-colors"
+                className="font-medium text-sm text-gray-700 hover:text-[#3990EA] transition-colors"
                 onClick={() => setShowSenderDepartment(!showSenderDepartment)}
               >
                 {card.sender.displayName || card.sender.name}
@@ -140,99 +141,113 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               )}
             </div>
           </div>
-          <div className="flex items-center text-xs text-gray-500">
-            <Calendar className="h-3 w-3 mr-1" />
-            <span>{formattedDate}</span>
-            <Clock className="h-3 w-3 ml-2 mr-1" />
-            <span>{formattedTime}</span>
+          <div className="text-xs text-gray-400">
+            {formattedDate} {formattedTime}
           </div>
         </div>
-      </CardHeader>
-      <CardContent className="p-4">
-        {card.recipientType === "user" && (
-          <div className="flex items-center mb-3">
-            <UserIcon className="h-4 w-4 mr-2 text-gray-400" />
-            <span className="text-sm text-gray-600">宛先: </span>
-            <button 
-              className="text-sm text-gray-600 hover:text-[#3990EA] transition-colors font-medium"
-              onClick={() => setShowRecipientDepartment(!showRecipientDepartment)}
-            >
-              {recipientName}
-            </button>
-            {showRecipientDepartment && (card.recipient as User).department && (
-              <div className="ml-2 text-xs text-gray-500 break-words">
-                ({(card.recipient as User).department})
+
+        {/* メッセージ部分 */}
+        <div className="mb-4">
+          <p className="text-gray-800 whitespace-pre-line leading-relaxed">{card.message}</p>
+        </div>
+
+        {/* ボトム部分：受信者とポイント */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {/* いいねボタンエリア */}
+            <div className="flex items-center gap-1">
+              <Heart className="h-4 w-4 text-gray-400" />
+              <span className="text-sm text-gray-600">{card.likes.length}</span>
+            </div>
+            
+            {/* 管理者向けのボタン */}
+            {isAdmin && (
+              <div className="flex gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-xs h-7 px-2"
+                  onClick={handleHideCard}
+                >
+                  {isHidden ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                </Button>
+                
+                <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-xs h-7 px-2 text-red-500 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="text-lg">カードを削除しますか？</DialogTitle>
+                      <DialogDescription>
+                        このカードを完全に削除します。この操作は元に戻せません。
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-end gap-3 mt-4">
+                      <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                        キャンセル
+                      </Button>
+                      <Button 
+                        variant="destructive" 
+                        onClick={handleDeleteCard}
+                      >
+                        削除する
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             )}
           </div>
-        )}
-        <p className="text-gray-800 whitespace-pre-line">{card.message}</p>
-      </CardContent>
-      <CardFooter className="bg-gray-50 px-4 py-2 flex justify-between items-center">
-        <div className="flex items-center text-sm">
-          <Heart className="h-4 w-4 mr-1 text-red-400" />
-          <span>{card.totalPoints || 0} いいね</span>
-        </div>
-        
-        <div className="flex gap-2">
-          {/* 管理者向けのボタン */}
-          {isAdmin && (
-            <>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-xs"
-                onClick={handleHideCard}
-              >
-                {isHidden ? (
-                  <Eye className="h-4 w-4 mr-1" />
-                ) : (
-                  <EyeOff className="h-4 w-4 mr-1" />
-                )}
-                {isHidden ? '表示' : '非表示'}
-              </Button>
-              
-              <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-xs text-red-500 border-red-200 hover:bg-red-50"
-                  >
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    削除
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle className="text-lg">カードを削除しますか？</DialogTitle>
-                    <DialogDescription>
-                      このカードを完全に削除します。この操作は元に戻せません。
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex justify-end gap-3 mt-4">
-                    <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-                      キャンセル
-                    </Button>
-                    <Button 
-                      variant="destructive" 
-                      onClick={handleDeleteCard}
+
+          {/* 右側：受信者とポイント */}
+          <div className="flex items-center gap-3">
+            {/* ポイント表示 */}
+            <div className="flex items-center gap-1">
+              <div className="bg-[#3990EA] text-white rounded-full px-2 py-1 text-xs font-medium">
+                +{card.points}
+              </div>
+            </div>
+            
+            {/* 受信者アバターと名前 */}
+            {card.recipientType === "user" && (
+              <div className="flex items-center gap-2">
+                <Avatar className="h-10 w-10">
+                  {(card.recipient as User).customAvatarUrl ? (
+                    <AvatarImage src={(card.recipient as User).customAvatarUrl} alt={(card.recipient as User).name} />
+                  ) : (
+                    <AvatarFallback 
+                      className="text-white text-sm"
+                      style={{ backgroundColor: `var(--${(card.recipient as User).avatarColor || 'blue-500'})` }}
                     >
-                      削除する
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </>
-          )}
-          
-          {/* 詳細ボタン */}
-          <Button variant="ghost" size="sm" className="text-xs">
-            <MessageSquare className="h-4 w-4 mr-1" />
-            詳細
-          </Button>
+                      {getInitials((card.recipient as User).name)}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                <div className="text-right">
+                  <button 
+                    className="font-medium text-sm text-gray-700 hover:text-[#3990EA] transition-colors block"
+                    onClick={() => setShowRecipientDepartment(!showRecipientDepartment)}
+                  >
+                    {(card.recipient as User).displayName || (card.recipient as User).name}
+                  </button>
+                  {showRecipientDepartment && (card.recipient as User).department && (
+                    <div className="text-xs text-gray-500 mt-1 break-words">
+                      {(card.recipient as User).department}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </CardFooter>
+      </CardContent>
     </Card>
   );
 };
