@@ -295,7 +295,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 管理者用API
+  // 管理者用API - ユーザー一覧取得
+  app.get("/api/admin/users", authenticate, checkAdmin, async (req, res) => {
+    try {
+      console.log("管理者ユーザー一覧API呼び出し");
+      const users = await storage.getUsers();
+      
+      // パスワードフィールドを除外
+      const sanitizedUsers = users.map(user => {
+        const { password, ...userWithoutPassword } = user;
+        return userWithoutPassword;
+      });
+      
+      return res.json(sanitizedUsers);
+    } catch (error) {
+      console.error("管理者ユーザー一覧取得エラー:", error);
+      return res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
+    }
+  });
+  
+  // 管理者用API - 部署一覧取得
+  app.get("/api/admin/departments", authenticate, checkAdmin, async (req, res) => {
+    try {
+      console.log("管理者部署一覧API呼び出し");
+      const departments = await storage.getDepartments();
+      return res.json(departments);
+    } catch (error) {
+      console.error("管理者部署一覧取得エラー:", error);
+      return res.status(500).json({ message: "部署情報の取得に失敗しました" });
+    }
+  });
+  
+  // 管理者用API - ユーザー一括削除
   app.post("/api/admin/users/bulk-delete", authenticate, checkAdmin, async (req, res) => {
     try {
       const { userIds } = req.body;
