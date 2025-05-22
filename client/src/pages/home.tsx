@@ -319,14 +319,32 @@ export default function Home({ user }: HomeProps) {
           </div>
         </div>
 
-        {/* サンクスカード送信ボタン - タイトルとタブの間に配置 */}
-        <div className="my-4 text-center">
+        {/* サンクスカード送信ボタン - テキストボックス風デザイン */}
+        <div className="my-4">
           <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
             <DialogTrigger asChild>
-              <Button size="lg" className="bg-[#3990EA] hover:bg-[#3990EA]/90 text-white shadow-md px-6 py-2">
-                <Send className="h-5 w-5 mr-2" />
-                新しいサンクスカードを送る
-              </Button>
+              <div className="group cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg">
+                <div className="bg-white border-2 border-gray-200 rounded-xl p-4 shadow-sm hover:border-[#3990EA] hover:bg-blue-50/30 transition-all duration-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-[#3990EA] rounded-full flex items-center justify-center group-hover:bg-[#2d7de0] transition-colors duration-200">
+                      <Send className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-gray-600 text-sm font-medium group-hover:text-[#3990EA] transition-colors duration-200">
+                        感謝の気持ちを伝えよう
+                      </div>
+                      <div className="text-gray-400 text-xs mt-1 group-hover:text-gray-500 transition-colors duration-200">
+                        クリックして新しいサンクスカードを作成...
+                      </div>
+                    </div>
+                    <div className="text-gray-300 group-hover:text-[#3990EA] transition-colors duration-200">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
               <DialogHeader>
