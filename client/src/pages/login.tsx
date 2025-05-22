@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { BearLogo } from "@/components/bear-logo";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -64,11 +65,21 @@ export default function Login() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">ログイン</h1>
-        <p className="text-muted-foreground">
-          アカウント情報を入力してログインしてください
-        </p>
+      <div className="space-y-4 text-center">
+        {/* 可愛いクマのロゴ */}
+        <div className="flex flex-col items-center space-y-3">
+          <BearLogo size={80} />
+          <div>
+            <h1 className="text-3xl font-bold text-[#3990EA]">LevLetter</h1>
+            <p className="text-sm text-gray-600 mt-1">感謝を繋げるプラットフォーム</p>
+          </div>
+        </div>
+        <div className="pt-4">
+          <h2 className="text-2xl font-semibold">ログイン</h2>
+          <p className="text-muted-foreground">
+            アカウント情報を入力してログインしてください
+          </p>
+        </div>
       </div>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
