@@ -266,12 +266,13 @@ export default function Home({ user }: HomeProps) {
     refetch();
   };
 
-  // スクロール検知
+  // スクロール検知 - カード2-3枚分でヘッダーを隠す
   useEffect(() => {
     const handleScroll = () => {
       if (scrollContainerRef.current) {
         const scrollTop = scrollContainerRef.current.scrollTop;
-        setIsScrolled(scrollTop > 100); // 100px以上スクロールしたら小さくする
+        // カード2-3枚分の高さ（約400-500px）でヘッダー部分を隠す
+        setIsScrolled(scrollTop > 450);
       }
     };
 
@@ -328,8 +329,11 @@ export default function Home({ user }: HomeProps) {
       </div>
 
       {/* タイムライン */}
-      <div className="flex flex-col h-full">{/* ヘッダー部分 - 固定 */}
-        <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col h-full">
+        {/* ヘッダー部分 - スクロール時に隠れる */}
+        <div className={`flex items-center justify-between mb-4 transition-all duration-300 ${
+          isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0'
+        }`}>
           <h2 className="text-lg font-semibold text-gray-800">カードタイムライン</h2>
           
           <div className="flex items-center gap-2">
@@ -359,31 +363,28 @@ export default function Home({ user }: HomeProps) {
           </div>
         </div>
 
-        {/* サンクスカード送信ボタン - より目立つデザイン */}
-        <div className="mb-4 hidden md:block">
+        {/* サンクスカード送信ボタン - 控えめなデザイン */}
+        <div className={`mb-4 hidden md:block transition-all duration-300 ${
+          isScrolled ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
+        }`}>
           <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
             <DialogTrigger asChild>
-              <div className="group cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:shadow-xl">
-                <div className="bg-gradient-to-r from-[#3990EA] to-[#2d7de0] border-2 border-[#3990EA] rounded-2xl p-5 shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
-                  {/* 背景のきらめき効果 */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                  
-                  <div className="flex items-center gap-4 relative z-10">
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                      <Send className="h-6 w-6 text-[#3990EA]" />
+              <div className="group cursor-pointer transition-all duration-200">
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-[#3990EA] rounded-full flex items-center justify-center">
+                      <Send className="h-4 w-4 text-white" />
                     </div>
                     <div className="flex-1">
-                      <div className="text-white text-base font-semibold mb-1">
-                        感謝の気持ちを伝えよう ✨
+                      <div className="text-gray-700 text-sm font-medium">
+                        感謝の気持ちを伝える
                       </div>
-                      <div className="text-blue-100 text-sm">
-                        クリックして新しいサンクスカードを作成
+                      <div className="text-gray-500 text-xs">
+                        新しいサンクスカードを作成
                       </div>
                     </div>
-                    <div className="text-white/80 group-hover:text-white transition-colors duration-200">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
+                    <div className="text-gray-400">
+                      <Plus className="w-4 h-4" />
                     </div>
                   </div>
                 </div>
