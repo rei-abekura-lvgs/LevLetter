@@ -1,7 +1,7 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/context/auth-context";
-import { Award, Gift, TrendingUp, LogOut } from "lucide-react";
+import { Award, Gift, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
 import { Progress } from "@/components/ui/progress";
@@ -84,15 +84,7 @@ export default function Sidebar({ user }: SidebarProps) {
             </div>
           </div>
           
-          <div className="mt-6">
-            <button
-              onClick={handleLogout}
-              className="flex w-full items-center gap-3 px-4 py-3 rounded-md text-red-500 hover:bg-red-50 transition-colors"
-            >
-              <LogOut className="h-5 w-5" />
-              <span>ログアウト</span>
-            </button>
-          </div>
+
         </div>
       )}
     </div>

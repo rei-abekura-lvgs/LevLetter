@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CardWithRelations, User } from "@shared/schema";
 import { Button } from "@/components/ui/button";
@@ -319,7 +319,7 @@ export default function Home({ user }: HomeProps) {
         </div>
 
         {/* サンクスカード送信ボタン - より目立つデザイン */}
-        <div className="my-6 hidden md:block">
+        <div className="mb-4 hidden md:block">
           <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
             <DialogTrigger asChild>
               <div className="group cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:shadow-xl">
