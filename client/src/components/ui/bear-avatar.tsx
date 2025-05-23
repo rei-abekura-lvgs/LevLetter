@@ -12,7 +12,6 @@ export interface BearAvatarProps {
 }
 
 export function BearAvatar({ name, color = "primary-500", className }: BearAvatarProps) {
-  console.log("BearAvatar rendering:", { name, color, className });
   return (
     <Avatar className={cn("h-8 w-8", className)}>
       <AvatarFallback className="p-0 border-0">

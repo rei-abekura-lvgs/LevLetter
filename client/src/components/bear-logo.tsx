@@ -14,8 +14,7 @@ export function BearLogo({
   useDefaultIcon?: boolean;
   bgColor?: string; 
 }) {
-  console.log("BearLogo rendering:", { size, useTransparent, useDefaultIcon, bgColor });
-  console.log("bearDefaultIcon path:", bearDefaultIcon);
+
   
   // 新しいデフォルトアイコンを使用
   if (useDefaultIcon) {
