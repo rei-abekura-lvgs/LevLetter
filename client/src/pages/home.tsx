@@ -118,8 +118,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             {card.sender.customAvatarUrl ? (
               <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
             ) : (
-              <AvatarFallback className="bg-[#3990EA] flex items-center justify-center">
-                <BearLogo size={32} />
+              <AvatarFallback className="bg-transparent flex items-center justify-center">
+                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
               </AvatarFallback>
             )}
           </Avatar>
@@ -151,11 +151,6 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               {/* 複数受信者の場合は横に並べて表示（一部重複OK） */}
               {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
                 <div className="relative">
-                  {/* 全体のポイントバッジ - 右上に表示 */}
-                  <div className="absolute -top-2 -right-2 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2 z-10">
-                    {card.points}
-                  </div>
-                  
                   {/* 受信者アバターを横に並べる（重複OK） */}
                   <div className="flex items-center -space-x-3">
                     {/* メイン受信者 */}
@@ -176,7 +171,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                       <div key={user.id} className="relative">
                         <Avatar className="h-20 w-20 border-2 border-white">
                           {user.customAvatarUrl ? (
-                            <AvatarImage src={user.customAvatarUrl} alt={user.name} />
+                            <AvatarImage src={user.customAvatarUrl || undefined} alt={user.name} />
                           ) : (
                             <AvatarFallback className="bg-transparent flex items-center justify-center">
                               <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
@@ -187,13 +182,24 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     ))}
                   </div>
                   
-                  {/* 受信者名を下に表示 */}
-                  <div className="text-center mt-2">
-                    <span className="text-sm font-medium text-gray-800">
-                      {(card.recipient as User).displayName || (card.recipient as User).name}
-                      {card.additionalRecipientUsers.length > 0 && 
-                        ` + ${card.additionalRecipientUsers.length}人`}
+                  {/* 全体のポイントバッジ - 右下に配置 */}
+                  <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2 z-10">
+                    {card.points}
+                  </div>
+                  
+                  {/* 受信者名を下に表示（ホバーで全員表示） */}
+                  <div className="text-center mt-2 group relative">
+                    <span className="text-sm font-medium text-gray-800 cursor-pointer">
+                      {(card.recipient as User).displayName || (card.recipient as User).name} + {card.additionalRecipientUsers.length}人
                     </span>
+                    
+                    {/* ホバー時の全員表示 */}
+                    <div className="absolute bottom-full right-0 mb-2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
+                      {(card.recipient as User).displayName || (card.recipient as User).name}
+                      {card.additionalRecipientUsers.map((user: User) => (
+                        <span key={user.id}>, {user.displayName || user.name}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ) : (
