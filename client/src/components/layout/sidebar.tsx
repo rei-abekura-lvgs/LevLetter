@@ -22,10 +22,7 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <div className="w-64 border-r bg-white h-full p-4 flex flex-col">
-      {/* ヘッダー部分：タイトルのみ */}
-      <div className="flex items-center justify-center mb-6">
-        <h1 className="text-2xl font-bold text-[#3990EA]">LevLetter</h1>
-      </div>
+
       
       {user && (
         <div className="flex-1 flex flex-col">

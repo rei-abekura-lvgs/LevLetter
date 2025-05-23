@@ -67,12 +67,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             <Menu className="h-5 w-5" />
           </Button>
         )}
-        <Link href="/">
-          <div className="flex items-center space-x-2">
-            <BearLogo size={32} />
-            <span className="text-xl font-bold text-primary">LevLetter</span>
-          </div>
-        </Link>
+
       </div>
 
       <div className="flex items-center space-x-4">
@@ -115,9 +110,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
                       className="h-full w-full rounded-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center rounded-full bg-[#3990EA] text-white font-medium">
-                      {user.displayName?.[0] || user.name[0]}
-                    </div>
+                    <BearLogo size={36} useTransparent={true} bgColor="bg-[#3990EA]" />
                   )}
                 </Button>
               </DropdownMenuTrigger>
