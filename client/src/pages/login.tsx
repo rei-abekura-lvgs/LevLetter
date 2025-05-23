@@ -41,8 +41,12 @@ export default function Login() {
         description: "LevLetterへようこそ！",
       });
       
-      // ページをリロードして認証状態を確実に更新
-      window.location.href = "/";
+      console.log("ログイン成功後、ページをリロード中...");
+      
+      // ページを完全にリロードして認証状態を確実に反映
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
