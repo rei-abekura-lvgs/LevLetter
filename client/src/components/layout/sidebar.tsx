@@ -83,7 +83,7 @@ export default function Sidebar({ user }: SidebarProps) {
                   <TrendingUp className="h-4 w-4 mr-2 text-green-500" />
                   今週の獲得
                 </div>
-                <span className="text-lg font-bold text-green-500">{user.weeklyPointsReceived || 0} PT</span>
+                <span className="text-lg font-bold text-green-500">{user.weeklyPoints || 0} PT</span>
               </div>
             </div>
             

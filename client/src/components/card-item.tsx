@@ -121,7 +121,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                         </Avatar>
                         {/* ポイントバッジ */}
                         <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
-                          {Math.floor((card.points || 0) / (1 + card.additionalRecipientUsers.length))}
+                          {Math.floor((card.points || 0) / (1 + (card.additionalRecipientUsers?.length || 0)))}
                         </div>
                       </div>
                       <span className="text-sm font-medium text-gray-800">{user.displayName || user.name}</span>
