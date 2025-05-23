@@ -168,6 +168,15 @@ export const profileUpdateSchema = z.object({
   customAvatarUrl: z.string().nullable().optional()
 });
 
+export const passwordChangeSchema = z.object({
+  currentPassword: z.string().min(1, { message: "現在のパスワードを入力してください" }),
+  newPassword: z.string().min(6, { message: "新しいパスワードは6文字以上で入力してください" }),
+  confirmPassword: z.string().min(1, { message: "パスワード確認を入力してください" })
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "パスワードが一致しません",
+  path: ["confirmPassword"]
+});
+
 // 型定義
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -198,3 +207,4 @@ export type RegisterRequest = z.infer<typeof registerSchema>;
 export type ProfileUpdateRequest = z.infer<typeof profileUpdateSchema>;
 export type CardFormRequest = z.infer<typeof cardFormSchema>;
 export type LikeFormRequest = z.infer<typeof likeFormSchema>;
+export type PasswordChangeRequest = z.infer<typeof passwordChangeSchema>;
