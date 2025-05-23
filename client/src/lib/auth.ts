@@ -38,12 +38,14 @@ export async function register(formData: {
 
 export async function getAuthenticatedUser(): Promise<User | null> {
   try {
+    console.log("🔍 認証ユーザー情報取得開始...");
     // セッション方式なのでトークンチェックは不要
     try {
       const data = await apiRequest<User>("GET", "/api/auth/me");
-      console.log("認証ユーザー情報取得成功:", data);
+      console.log("✅ 認証ユーザー情報取得成功:", data);
       return data;
     } catch (error: any) {
+      console.error("❌ 認証ユーザー情報取得エラー:", error);
       // 401エラーの場合は静かに処理
       if (error.message && error.message.includes("401")) {
         console.debug("認証エラー: ユーザーは未ログイン状態");
