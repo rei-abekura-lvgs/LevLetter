@@ -94,43 +94,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return res.status(500).json({ message: "バリデーション処理中にエラーが発生しました" });
   };
 
-  // 🎯 新しい認証システム - 完全に再構築されたログインAPI
+  // 認証関連API
   app.post("/api/auth/login", async (req, res) => {
     try {
-      console.log("🚀 【新システム】ログイン処理開始 - 完全再構築版");
-      console.log("📧 受信データ:", JSON.stringify(req.body, null, 2));
+      console.log("🔐 ログイン試行開始");
+      console.log("📝 リクエストボディ:", JSON.stringify(req.body, null, 2));
       
       const data = loginSchema.parse(req.body);
-      console.log("✅ 【新システム】バリデーション完了 - Email:", data.email);
+      console.log("✅ バリデーション成功 - メール:", data.email);
       
-      // 🔗 直接データベース接続で確実な認証
-      console.log("🔗 【新システム】データベース直接接続開始");
-      const { db } = await import("./db");
-      const { users } = await import("../shared/schema");
-      const { eq } = await import("drizzle-orm");
-      const { hashPassword } = await import("./storage");
+      const user = await storage.authenticateUser(data.email, data.password);
       
-      console.log("🔍 【新システム】データベース検索実行中...");
-      const [foundUser] = await db.select().from(users).where(eq(users.email, data.email.toLowerCase()));
-      console.log("📊 【新システム】検索完了:", foundUser ? `✅ ユーザー発見! ID=${foundUser.id}, Name=${foundUser.name}` : "❌ ユーザー未発見");
-      
-      if (!foundUser || !foundUser.password) {
-        console.log("🚫 【新システム】認証エラー - ユーザーまたはパスワード情報なし");
+      if (!user) {
+        console.log("❌ 認証失敗 - ユーザーが見つからない:", data.email);
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       
-      const providedPasswordHash = hashPassword(data.password);
-      const passwordMatch = foundUser.password === providedPasswordHash;
-      console.log("🔑 【新システム】パスワード照合結果:", passwordMatch ? "✅ 一致" : "❌ 不一致");
-      console.log("🔑 【新システム】提供されたハッシュ:", providedPasswordHash.substring(0, 20) + "...");
-      console.log("🔑 【新システム】保存されたハッシュ:", foundUser.password.substring(0, 20) + "...");
-      
-      if (!passwordMatch) {
-        console.log("🚫 【新システム】パスワード認証失敗");
-        return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
-      }
-
-      console.log("🎉 【新システム】認証成功! ユーザー:", foundUser.name, "(ID:", foundUser.id, ")");
+      console.log("👤 認証成功 - ユーザー:", user.name, "(ID:", user.id, ")");
       
       // ユーザーIDをセッションに保存
       console.log("📊 セッション保存前:");
@@ -302,22 +282,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/auth/me", async (req, res) => {
+  app.get("/api/auth/me", authenticate, (req, res) => {
     try {
-      console.log("認証情報取得 - セッション確認");
-      const userId = req.session.userId;
-      console.log("セッションからユーザーID取得:", userId);
+      console.log("認証情報取得 - 認証済みユーザー確認");
+      // パスワードフィールドを除外
+      const user = (req as any).user;
+      console.log("取得したユーザー情報:", user ? `${user.name} (ID: ${user.id})` : "null");
       
-      if (!userId) {
-        console.log("認証情報取得エラー - セッションにユーザーIDが存在しません");
-        return res.status(401).json({ message: "認証が必要です" });
-      }
-      
-      // データベースからユーザー情報を取得
-      const user = await storage.getUser(userId);
       if (!user) {
-        console.log("認証情報取得エラー - ユーザーが見つかりません");
-        return res.status(401).json({ message: "ユーザーが見つかりません" });
+        console.log("認証情報取得エラー - ユーザー情報がリクエストに存在しません");
+        return res.status(401).json({ message: "認証が必要です" });
       }
       
       const { password, ...userWithoutPassword } = user;
@@ -330,7 +304,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ユーザー関連API
-  app.get("/api/users", async (req, res) => {
+  app.get("/api/users", authenticate, async (req, res) => {
     try {
       const users = await storage.getUsers();
       // パスワードフィールドを除外
@@ -546,16 +520,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // 既存ユーザーの確認
           const existingUser = await storage.getUserByEmail(employee.email);
           
-          // 部署情報の設定（未設定の場合は"その他"）
-          const department = employee.department || "その他";
+          // 部署情報の設定（新形式対応）
+          let department, department1, department2, department3, department4, department5, department6;
+          
+          // 新しいCSV形式（階層が分割済み）の場合
+          if (employee.所属階層１ || employee.所属階層２ || employee.所属階層３ || employee.所属階層４ || employee.所属階層５) {
+            department1 = employee.所属階層１ || null;
+            department2 = employee.所属階層２ || null;
+            department3 = employee.所属階層３ || null;
+            department4 = employee.所属階層４ || null;
+            department5 = employee.所属階層５ || null;
+            department6 = null; // 新形式では6階層目はなし
+            
+            // 表示用の統合部署名を作成
+            const parts = [department1, department2, department3, department4, department5].filter(Boolean);
+            department = parts.join('/') || "その他";
+          } else {
+            // 従来形式（スラッシュ区切り）の場合
+            department = employee.department || "その他";
+            const departmentParts = department.split('/').map((part: string) => part.trim());
+            department1 = departmentParts[0] || null;
+            department2 = departmentParts[1] || null;
+            department3 = departmentParts[2] || null;
+            department4 = departmentParts[3] || null;
+            department5 = departmentParts[4] || null;
+            department6 = departmentParts[5] || null;
+          }
           
           if (existingUser) {
             // 既存ユーザーの更新（パスワードは維持）
             await storage.updateUser(existingUser.id, {
               name: employee.name,
-              displayName: employee.displayName || null,
+              displayName: employee.displayName || employee.職場氏名 || null,
               department,
-              employeeId: employee.employeeId || null,
+              department1,
+              department2,
+              department3,
+              department4,
+              department5,
+              department6,
+              employeeId: employee.employeeId || employee.社員番号 || null,
             });
             results.updatedUsers++;
           } else {
@@ -563,11 +567,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await storage.createUser({
               email: employee.email,
               name: employee.name,
-              displayName: employee.displayName || null,
+              displayName: employee.displayName || employee.職場氏名 || null,
               department,
-              employeeId: employee.employeeId || null,
+              department1,
+              department2,
+              department3,
+              department4,
+              department5,
+              department6,
+              employeeId: employee.employeeId || employee.社員番号 || null,
               password: null, // パスワードなし = 初回登録が必要
-              passwordInitialized: false,
               isAdmin: false,
               isActive: true,
               cognitoSub: null,
@@ -641,7 +650,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // カード関連API
-  app.get("/api/cards", async (req, res) => {
+  app.get("/api/cards", authenticate, async (req, res) => {
     try {
       const { limit = 50, offset = 0, sender, recipient, view } = req.query;
       const currentUser = (req as any).user;

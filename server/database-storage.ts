@@ -146,21 +146,28 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    console.log(`🔍 getUserByEmail called with: ${email}`);
-    try {
-      const [user] = await db
-        .select()
-        .from(users)
-        .where(eq(users.email, email.toLowerCase()));
-      console.log(`📝 Database query result:`, user ? `Found user ID ${user.id}` : 'No user found');
-      return user;
-    } catch (error) {
-      console.error(`❌ Database error in getUserByEmail:`, error);
-      return undefined;
-    }
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email.toLowerCase()));
+    return user;
   }
 
+  async getUserByCognitoSub(cognitoSub: string): Promise<User | undefined> {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.cognitoSub, cognitoSub));
+    return user;
+  }
 
+  async getUserByGoogleId(googleId: string): Promise<User | undefined> {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.googleId, googleId));
+    return user;
+  }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     // パスワードがある場合はハッシュ化
@@ -207,19 +214,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async authenticateUser(email: string, password: string): Promise<User | null> {
-    console.log(`🔑 authenticateUser called with email: ${email}`);
-    
     const user = await this.getUserByEmail(email);
-    console.log(`👤 getUserByEmail result:`, user ? `Found user ID ${user.id}` : 'No user found');
-    
     if (!user || !user.password) {
-      console.log(`❌ Authentication failed: ${!user ? 'User not found' : 'User has no password'}`);
       return null;
     }
 
     const hashedPassword = hashPassword(password);
-    console.log(`🔐 Password comparison: provided hash vs stored hash match = ${user.password === hashedPassword}`);
-    
     return user.password === hashedPassword ? user : null;
   }
 

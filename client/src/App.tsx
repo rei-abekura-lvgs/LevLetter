@@ -1,54 +1,59 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Switch, Route, Router } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
+import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
-import Profile from "@/pages/profile";
-import MyCards from "@/pages/my-cards";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
-import UserManagement from "@/pages/admin/user-management";
-import DepartmentManagement from "@/pages/admin/department-management";
-import EmployeeImport from "@/pages/admin/employee-import";
-import NotFound from "@/pages/not-found";
+import Profile from "@/pages/profile";
+import ForgotPassword from "@/pages/forgot-password";
+import ResetPassword from "@/pages/reset-password";
+import Settings from "@/pages/settings";
+import AdminDashboard from "@/pages/admin";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
-import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider, useAuth } from "@/context/auth-context";
-import { useEffect } from "react";
-import { useLocation } from "wouter";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      queryFn: async ({ queryKey }) => {
-        const res = await fetch(queryKey[0] as string);
-        if (!res.ok) {
-          throw new Error(`Failed to fetch ${queryKey[0]}`);
-        }
-        return res.json();
-      },
-    },
-  },
-});
+import { useEffect, useState } from "react";
 
 function AppRoutes() {
-  const { user, loading, isAuthenticated } = useAuth();
+  const { user, loading, isAuthenticated, fetchUser } = useAuth();
   const [location, setLocation] = useLocation();
   
-  // 認証状態によるリダイレクト処理
+  // 初期認証処理とナビゲーション制御
   useEffect(() => {
-    const publicRoutes = ['/login', '/register'];
+    // 保護されたルートとパブリックルートの定義
+    const publicRoutes = ['/login', '/register', '/forgot-password'];
     
+    // 認証状態によるリダイレクト処理
     if (!loading) {
+      // パスワードリセット画面は特別扱い（reset-passwordから始まる場合は未認証でもアクセスを許可）
+      if (location.startsWith('/reset-password')) {
+        // リセット画面はリダイレクトしない
+        return;
+      }
+      
       // 認証済みかつログイン関連ページにいる場合はホームへリダイレクト
       if (isAuthenticated && publicRoutes.includes(location)) {
         setLocation('/');
-      }
+      } 
       // 未認証かつ保護されたページにいる場合はログインへリダイレクト
       else if (!isAuthenticated && !publicRoutes.includes(location)) {
         setLocation('/login');
       }
     }
   }, [isAuthenticated, loading, location, setLocation]);
+  
+  // デバッグ用ログ
+  useEffect(() => {
+    console.log("アプリ状態:", { 
+      認証済み: isAuthenticated, 
+      ユーザー: user ? user.name : '未ログイン', 
+      読込中: loading,
+      現在のパス: location
+    });
+  }, [isAuthenticated, user, loading, location]);
 
   // ローディング表示
   if (loading) {
@@ -60,59 +65,70 @@ function AppRoutes() {
     );
   }
 
-  return (
-    <Switch>
-      {/* 認証されていない場合のルート */}
-      {!isAuthenticated ? (
-        <>
-          <Route path="/login">
-            <AuthLayout>
-              <Login />
-            </AuthLayout>
+  // 認証状態に基づいたルーティング
+  if (isAuthenticated && user) {
+    // 認証済み状態のルーティング
+    return (
+      <MainLayout>
+        <Switch>
+          <Route path="/profile">
+            <Profile user={user} />
           </Route>
-          <Route path="/register">
-            <AuthLayout>
-              <Register />
-            </AuthLayout>
+          <Route path="/settings">
+            <Settings />
           </Route>
-          {/* デフォルトはログインページにリダイレクト */}
-          <Route>
-            <AuthLayout>
-              <Login />
-            </AuthLayout>
-          </Route>
-        </>
-      ) : (
-        /* 認証されている場合のルート */
-        <MainLayout>
-          <Switch>
-            <Route path="/" component={() => <Home user={user!} />} />
-            <Route path="/profile" component={() => <Profile user={user!} />} />
-            <Route path="/my-cards" component={() => <MyCards user={user!} />} />
-            {user?.isAdmin && (
-              <>
-                <Route path="/admin/user-management" component={() => <UserManagement />} />
-                <Route path="/admin/department-management" component={() => <DepartmentManagement />} />
-                <Route path="/admin/employee-import" component={() => <EmployeeImport />} />
-              </>
+          <Route path="/admin">
+            {user.isAdmin ? (
+              <AdminDashboard />
+            ) : (
+              <Home user={user} />
             )}
-            <Route component={NotFound} />
-          </Switch>
-        </MainLayout>
-      )}
-    </Switch>
-  );
+          </Route>
+          <Route path="/">
+            <Home user={user} />
+          </Route>
+          <Route path="*">
+            <Home user={user} />
+          </Route>
+        </Switch>
+      </MainLayout>
+    );
+  } else {
+    // 未認証状態のルーティング
+    return (
+      <AuthLayout>
+        <Switch>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/forgot-password">
+            <ForgotPassword />
+          </Route>
+          <Route path="/reset-password">
+            <ResetPassword />
+          </Route>
+          <Route path="/reset-password/:token">
+            <ResetPassword />
+          </Route>
+          <Route path="*">
+            <Login />
+          </Route>
+        </Switch>
+      </AuthLayout>
+    );
+  }
 }
 
 function App() {
+  // QueryClientProviderがルートレベルに配置され、すべてのコンポーネントにQueryClientを提供します
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router>
-          <AppRoutes />
+      <TooltipProvider>
+        <AuthProvider>
           <Toaster />
-        </Router>
-      </AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

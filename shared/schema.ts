@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, serial, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -14,6 +14,7 @@ export const users = pgTable("users", {
   department3: text("department3"), // 部
   department4: text("department4"), // 課・グループ
   department5: text("department5"), // チーム・係
+  department6: text("department6"), // サブチーム・担当
   avatarColor: text("avatar_color").notNull().default("primary-500"),
   customAvatarUrl: text("custom_avatar_url"), // カスタムアバター画像のURL
   weeklyPoints: integer("weekly_points").notNull().default(500),
@@ -22,8 +23,8 @@ export const users = pgTable("users", {
   isAdmin: boolean("is_admin").notNull().default(false),
   isActive: boolean("is_active").notNull().default(true),
   password: text("password"),
-
-
+  cognitoSub: text("cognito_sub").unique(),
+  googleId: text("google_id").unique(),
   employeeId: text("employee_id").unique(), // 従業員番号（既存ユーザーはnull許容）
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
@@ -81,6 +82,17 @@ export const teamMembers = pgTable("team_members", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// 部署階層管理テーブル
+export const departmentsHierarchy = pgTable("departments_hierarchy", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  level: integer("level").notNull(), // 1-5の階層レベル
+  parentId: integer("parent_id").references(() => departmentsHierarchy.id, { onDelete: "cascade" }),
+  sortOrder: integer("sort_order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Zodスキーマ
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -111,6 +123,12 @@ export const insertTeamMemberSchema = createInsertSchema(teamMembers).omit({
 export const insertDepartmentSchema = createInsertSchema(departments).omit({
   id: true,
   createdAt: true
+});
+
+export const insertDepartmentHierarchySchema = createInsertSchema(departmentsHierarchy).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
 });
 
 // カスタムスキーマ
