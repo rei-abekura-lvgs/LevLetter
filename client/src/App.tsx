@@ -12,6 +12,7 @@ import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
 import Settings from "@/pages/settings";
 import AdminDashboard from "@/pages/admin";
+import NewAuth from "@/pages/new-auth";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context";
@@ -109,6 +110,9 @@ function AppRoutes() {
           </Route>
           <Route path="/reset-password/:token">
             <ResetPassword />
+          </Route>
+          <Route path="/new-auth">
+            <NewAuth />
           </Route>
           <Route path="*">
             <Login />

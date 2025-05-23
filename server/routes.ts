@@ -99,24 +99,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return res.status(500).json({ message: "バリデーション処理中にエラーが発生しました" });
   };
 
-  // 新しいシンプル認証API
-  app.post("/api/auth/simple-login", async (req, res) => {
+  // 🆕 新しい認証システム - 新規登録
+  app.post("/api/auth/register", async (req, res) => {
     try {
-      console.log("🔥 新シンプルログイン開始");
-      const { email, password } = req.body;
+      const validatedData = registerSchema.parse(req.body);
+      const user = await AuthService.register(
+        validatedData.email,
+        validatedData.password,
+        validatedData.name,
+        validatedData.department
+      );
       
-      const user = await storage.authenticateUser(email, password);
-      if (!user) {
-        return res.status(401).json({ message: "認証に失敗しました" });
+      res.status(201).json({ 
+        message: "アカウントが作成されました。メール認証を確認してください。",
+        user: { id: user.id, email: user.email, name: user.name }
+      });
+    } catch (error: any) {
+      if (error.message === 'このメールアドレスは既に登録されています') {
+        return res.status(409).json({ message: error.message });
       }
+      handleZodError(error, res);
+    }
+  });
+
+  // 🆕 新しい認証システム - ログイン
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const validatedData = loginSchema.parse(req.body);
+      const user = await AuthService.login(validatedData.email, validatedData.password);
       
+      // セッションにユーザーIDを設定
       req.session.userId = user.id;
       
-      // セッションを強制保存
       req.session.save(() => {
         console.log("✅ 新ログイン成功:", user.name);
         res.json({ message: "ログイン成功", user });
       });
+    } catch (error: any) {
+      console.error("ログインエラー:", error);
+      res.status(401).json({ message: error.message || "ログインに失敗しました" });
+    }
+  });
+
+  // 🆕 新しい認証システム - メール認証
+  app.post("/api/auth/verify-email", async (req, res) => {
+    try {
+      const validatedData = verifyEmailSchema.parse(req.body);
+      const user = await AuthService.verifyEmail(validatedData.token);
+      
+      res.json({ message: "メール認証が完了しました", user });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || "メール認証に失敗しました" });
+    }
+  });
+
+  // 🆕 新しい認証システム - パスワードリセット要求
+  app.post("/api/auth/password-reset-request", async (req, res) => {
+    try {
+      const validatedData = resetPasswordRequestSchema.parse(req.body);
+      await AuthService.requestPasswordReset(validatedData.email);
+      
+      res.json({ message: "パスワードリセットメールを送信しました" });
+    } catch (error: any) {
+      handleZodError(error, res);
+    }
+  });
+
+  // 🆕 新しい認証システム - パスワードリセット実行
+  app.post("/api/auth/password-reset", async (req, res) => {
+    try {
+      const validatedData = resetPasswordSchema.parse(req.body);
+      const user = await AuthService.resetPassword(validatedData.token, validatedData.password);
+      
+      res.json({ message: "パスワードがリセットされました", user });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || "パスワードリセットに失敗しました" });
+    }
+  });
+
+  // 🆕 新しい認証システム - パスワード変更
+  app.post("/api/auth/change-password", authenticate, async (req: any, res) => {
+    try {
+      const validatedData = changePasswordSchema.parse(req.body);
+      await AuthService.changePassword(
+        req.user.id,
+        validatedData.currentPassword,
+        validatedData.newPassword
+      );
+      
+      res.json({ message: "パスワードが変更されました" });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message || "パスワード変更に失敗しました" });
+    }
+  });
+
+  // 🆕 新しい認証システム - ログアウト
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy(() => {
+      res.json({ message: "ログアウトしました" });
+    });
+  });
+
+  // 🆕 新しい認証システム - 現在のユーザー情報取得
+  app.get("/api/auth/me", authenticate, async (req: any, res) => {
+    try {
+      res.json(req.user);
     } catch (error) {
       console.error("新ログインエラー:", error);
       res.status(500).json({ message: "サーバーエラー" });
