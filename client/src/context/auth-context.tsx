@@ -19,7 +19,7 @@ interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   fetchUser: () => Promise<User | null>;
-  logout: () => void;
+  logout: () => Promise<void>;
   authError: string | null;
 }
 
@@ -92,15 +92,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [isRequesting, loading, isAuthenticated]);
   
-  // ログアウト処理
-  const logout = useCallback(() => {
-    // ユーザー情報をクリア
-    setUser(null);
-    setAuthError(null);
-    // ローカルストレージからトークン削除
-    logoutUtil();
-    // ログインページへリダイレクト
-    setLocation("/login");
+  // ログアウト処理（セッションベース認証対応）
+  const logout = useCallback(async () => {
+    try {
+      // サーバーサイドのログアウト処理
+      await logoutUtil();
+      // ユーザー情報をクリア
+      setUser(null);
+      setAuthError(null);
+      // ログインページへリダイレクト
+      setLocation("/login");
+    } catch (error) {
+      console.error("ログアウトエラー:", error);
+      // エラーが発生してもローカル状態はクリア
+      setUser(null);
+      setAuthError(null);
+      setLocation("/login");
+    }
   }, [setLocation]);
 
   // 初回マウント時に認証情報を取得（セッションベース認証）
