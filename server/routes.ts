@@ -94,40 +94,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return res.status(500).json({ message: "バリデーション処理中にエラーが発生しました" });
   };
 
-  // 認証関連API
+  // 🎯 新しい認証システム - 完全に再構築されたログインAPI
   app.post("/api/auth/login", async (req, res) => {
     try {
-      console.log("🔐 ログイン試行開始");
-      console.log("📝 リクエストボディ:", JSON.stringify(req.body, null, 2));
+      console.log("🚀 【新システム】ログイン処理開始 - 完全再構築版");
+      console.log("📧 受信データ:", JSON.stringify(req.body, null, 2));
       
       const data = loginSchema.parse(req.body);
-      console.log("✅ バリデーション成功 - メール:", data.email);
+      console.log("✅ 【新システム】バリデーション完了 - Email:", data.email);
       
-      // 直接データベースクエリでユーザー認証を実行
-      console.log("🔧 直接データベース認証を実行");
+      // 🔗 直接データベース接続で確実な認証
+      console.log("🔗 【新システム】データベース直接接続開始");
       const { db } = await import("./db");
       const { users } = await import("../shared/schema");
       const { eq } = await import("drizzle-orm");
       const { hashPassword } = await import("./storage");
       
-      const [user] = await db.select().from(users).where(eq(users.email, data.email.toLowerCase()));
-      console.log("📋 データベース検索結果:", user ? `ユーザー発見 ID:${user.id}` : "ユーザーなし");
+      console.log("🔍 【新システム】データベース検索実行中...");
+      const [foundUser] = await db.select().from(users).where(eq(users.email, data.email.toLowerCase()));
+      console.log("📊 【新システム】検索完了:", foundUser ? `✅ ユーザー発見! ID=${foundUser.id}, Name=${foundUser.name}` : "❌ ユーザー未発見");
       
-      if (!user || !user.password) {
-        console.log("❌ 認証失敗 - ユーザーまたはパスワードなし");
+      if (!foundUser || !foundUser.password) {
+        console.log("🚫 【新システム】認証エラー - ユーザーまたはパスワード情報なし");
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       
-      const hashedPassword = hashPassword(data.password);
-      console.log("🔐 パスワード照合:", user.password === hashedPassword ? "成功" : "失敗");
+      const providedPasswordHash = hashPassword(data.password);
+      const passwordMatch = foundUser.password === providedPasswordHash;
+      console.log("🔑 【新システム】パスワード照合結果:", passwordMatch ? "✅ 一致" : "❌ 不一致");
+      console.log("🔑 【新システム】提供されたハッシュ:", providedPasswordHash.substring(0, 20) + "...");
+      console.log("🔑 【新システム】保存されたハッシュ:", foundUser.password.substring(0, 20) + "...");
       
-      if (user.password !== hashedPassword) {
-        console.log("❌ パスワード不一致");
+      if (!passwordMatch) {
+        console.log("🚫 【新システム】パスワード認証失敗");
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
 
-      
-      console.log("👤 認証成功 - ユーザー:", user.name, "(ID:", user.id, ")");
+      console.log("🎉 【新システム】認証成功! ユーザー:", foundUser.name, "(ID:", foundUser.id, ")");
       
       // ユーザーIDをセッションに保存
       console.log("📊 セッション保存前:");
