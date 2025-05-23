@@ -153,15 +153,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async getUserByCognitoSub(cognitoSub: string): Promise<User | undefined> {
-    // cognitoSubカラムが存在しないため、undefined を返す
-    return undefined;
-  }
 
-  async getUserByGoogleId(googleId: string): Promise<User | undefined> {
-    // googleIdカラムが存在しないため、undefined を返す
-    return undefined;
-  }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     // パスワードがある場合はハッシュ化
