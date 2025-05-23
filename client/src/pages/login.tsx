@@ -41,13 +41,11 @@ export default function Login() {
         description: "LevLetterへようこそ！",
       });
 
-      // 認証コンテキストを更新（ユーザー情報を再取得）
-      const userData = await fetchUser();
-      console.log("認証情報更新完了:", userData);
-
       // 画面遷移の準備
       console.log("ホーム画面への遷移準備中...");
-      setLocation("/");
+      
+      // ページ全体をリロードして認証状態を確実に反映
+      window.location.href = "/";
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
