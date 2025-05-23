@@ -15,8 +15,13 @@ import {
   loginSchema, 
   cardFormSchema, 
   profileUpdateSchema, 
-  likeFormSchema
+  likeFormSchema,
+  resetPasswordRequestSchema,
+  resetPasswordSchema,
+  changePasswordSchema,
+  verifyEmailSchema
 } from "@shared/schema";
+import { AuthService } from "./services/auth-service";
 
 // 認証ミドルウェア
 const authenticate = async (req: Request, res: Response, next: Function) => {

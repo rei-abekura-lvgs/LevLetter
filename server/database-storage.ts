@@ -153,11 +153,20 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async getUserByCognitoSub(cognitoSub: string): Promise<User | undefined> {
+  // 新しい認証メソッド
+  async getUserByEmailVerificationToken(token: string): Promise<User | undefined> {
     const [user] = await db
       .select()
       .from(users)
-      .where(eq(users.cognitoSub, cognitoSub));
+      .where(eq(users.emailVerificationToken, token));
+    return user;
+  }
+
+  async getUserByPasswordResetToken(token: string): Promise<User | undefined> {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.passwordResetToken, token));
     return user;
   }
 
