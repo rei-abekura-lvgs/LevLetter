@@ -305,65 +305,47 @@ export default function UserManagement() {
                         )}
                       </TableCell>
                       <TableCell className="font-medium">
-                        {user.name}
-                        {user.isAdmin && (
-                          <Badge variant="outline" className="ml-2 bg-amber-50 text-amber-600 border-amber-200">
-                            <ShieldCheck className="h-3 w-3 mr-1" />管理者
-                          </Badge>
-                        )}
+                        <div className="flex items-center gap-3">
+                          <BearAvatar 
+                            name={user.name}
+                            className="h-6 w-6"
+                          />
+                          <div className="flex flex-col">
+                            <span>{user.name}</span>
+                            {user.isAdmin && (
+                              <Badge variant="outline" className="w-fit bg-amber-50 text-amber-600 border-amber-200">
+                                <ShieldCheck className="h-3 w-3 mr-1" />管理者
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>
-                        {user.department ? (
-                          <div className="max-w-md text-xs">
-                            {(() => {
-                              // 文字列として部署名を処理
-                              const deptString = String(user.department);
-                              
-                              // 部署名を階層に分割（スラッシュで区切られている場合）
-                              const hierarchyLevels = deptString.split('/');
-                              
-                              if (hierarchyLevels.length > 0) {
-                                return (
-                                  <div className="space-y-0.5">
-                                    {hierarchyLevels.map((level, index) => (
-                                      <div key={index} className={`${index > 0 ? `pl-${index * 4}` : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
-                                        {level.trim()}
-                                      </div>
-                                    ))}
-                                  </div>
-                                );
-                              }
-                              
-                              // 部署IDかどうかを確認
-                              const deptId = Number(user.department);
-                              if (!isNaN(deptId)) {
-                                // 部署情報を取得
-                                const dept = departments.find((d: any) => d.id === deptId);
-                                if (dept) {
-                                  // 部署名を階層に分割
-                                  const deptLevels = dept.name ? dept.name.split('/') : [];
-                                  
-                                  return (
-                                    <div className="space-y-0.5">
-                                      {deptLevels.map((level, index) => (
-                                        <div key={index} className={`${index > 0 ? `pl-${index * 4}` : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
-                                          {level.trim()}
-                                        </div>
-                                      ))}
-                                      {deptLevels.length === 0 && <div className="text-gray-400">（部署なし）</div>}
-                                    </div>
-                                  );
-                                }
-                              }
-                              
-                              // どちらにも該当しない場合はそのまま表示
-                              return deptString;
-                            })()}
-                          </div>
-                        ) : (
-                          "未設定"
-                        )}
+                        <div className="max-w-md text-xs space-y-0.5">
+                          {user.department1 && (
+                            <div className="text-emerald-700 font-medium">{user.department1}</div>
+                          )}
+                          {user.department2 && (
+                            <div className="pl-2 text-emerald-600">{user.department2}</div>
+                          )}
+                          {user.department3 && (
+                            <div className="pl-4 text-emerald-600">{user.department3}</div>
+                          )}
+                          {user.department4 && (
+                            <div className="pl-6 text-emerald-600">{user.department4}</div>
+                          )}
+                          {user.department5 && (
+                            <div className="pl-8 text-emerald-600">{user.department5}</div>
+                          )}
+                          {/* 後方互換性のため従来の部署も表示 */}
+                          {!user.department1 && !user.department2 && !user.department3 && !user.department4 && !user.department5 && user.department && (
+                            <div className="text-emerald-600">{user.department}</div>
+                          )}
+                          {!user.department1 && !user.department2 && !user.department3 && !user.department4 && !user.department5 && !user.department && (
+                            <div className="text-gray-400">（部署未設定）</div>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         {user.isActive ? (
