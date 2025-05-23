@@ -149,6 +149,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 認証状態確認エンドポイント
+  app.get("/api/auth/me", authenticate, async (req: Request, res: Response) => {
+    try {
+      const user = (req as any).user;
+      console.log("✅ 認証ユーザー情報返送:", user.name, "(ID:", user.id, ")");
+      
+      const { password, ...userWithoutPassword } = user;
+      return res.json(userWithoutPassword);
+    } catch (error) {
+      console.error("💥 認証ユーザー情報取得エラー:", error);
+      return res.status(500).json({ message: "ユーザー情報の取得に失敗しました" });
+    }
+  });
+
   app.post("/api/auth/register", async (req, res) => {
     try {
       console.log("リクエストボディ:", req.body);

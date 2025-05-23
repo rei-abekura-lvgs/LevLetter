@@ -1,0 +1,112 @@
+
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=3a746fa8:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=3a746fa8:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=3a746fa8:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=3a746fa8:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=3a746fa8:18109:11)
+getAuthenticatedUser @ auth.ts:48
+await in getAuthenticatedUser
+(anonymous) @ auth-context.tsx:115
+initAuth @ auth-context.tsx:161
+(anonymous) @ auth-context.tsx:172
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=3a746fa8:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=3a746fa8:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=3a746fa8:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=3a746fa8:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=3a746fa8:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=3a746fa8:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=3a746fa8:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=3a746fa8:19328
+workLoop @ chunk-RPCDYKBN.js?v=3a746fa8:197
+flushWork @ chunk-RPCDYKBN.js?v=3a746fa8:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3a746fa8:384Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=3a746fa8:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=3a746fa8:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=3a746fa8:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=3a746fa8:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=3a746fa8:18109:11)
+getAuthenticatedUser @ auth.ts:54
+await in getAuthenticatedUser
+(anonymous) @ auth-context.tsx:115
+initAuth @ auth-context.tsx:161
+(anonymous) @ auth-context.tsx:172
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=3a746fa8:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=3a746fa8:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=3a746fa8:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=3a746fa8:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=3a746fa8:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=3a746fa8:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=3a746fa8:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=3a746fa8:19328
+workLoop @ chunk-RPCDYKBN.js?v=3a746fa8:197
+flushWork @ chunk-RPCDYKBN.js?v=3a746fa8:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3a746fa8:384Understand this error
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=3a746fa8:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=3a746fa8:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=3a746fa8:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=3a746fa8:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=3a746fa8:18109:11)
+getAuthenticatedUser @ auth.ts:48
+await in getAuthenticatedUser
+(anonymous) @ auth-context.tsx:115
+initAuth @ auth-context.tsx:161
+(anonymous) @ auth-context.tsx:172
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=3a746fa8:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=3a746fa8:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=3a746fa8:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=3a746fa8:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=3a746fa8:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=3a746fa8:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=3a746fa8:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=3a746fa8:19328
+workLoop @ chunk-RPCDYKBN.js?v=3a746fa8:197
+flushWork @ chunk-RPCDYKBN.js?v=3a746fa8:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3a746fa8:384Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=3a746fa8:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=3a746fa8:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=3a746fa8:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=3a746fa8:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=3a746fa8:18109:11)
+getAuthenticatedUser @ auth.ts:54
+await in getAuthenticatedUser
+(anonymous) @ auth-context.tsx:115
+initAuth @ auth-context.tsx:161
+(anonymous) @ auth-context.tsx:172
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=3a746fa8:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=3a746fa8:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=3a746fa8:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=3a746fa8:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=3a746fa8:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=3a746fa8:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=3a746fa8:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=3a746fa8:19328
+workLoop @ chunk-RPCDYKBN.js?v=3a746fa8:197
+flushWork @ chunk-RPCDYKBN.js?v=3a746fa8:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=3a746fa8:384Understand this error
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+5Unchecked runtime.lastError: The message port closed before a response was received.Understand this error

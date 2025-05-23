@@ -1,0 +1,161 @@
+
+> rest-express@1.0.0 dev
+10:43:12 AM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+10:43:34 AM [vite] hmr update /src/pages/login.tsx, /src/index.css?v=NqVvbCro5g_ws8TIZmUmo
+🔐 ログイン試行開始
+📝 リクエストボディ: {
+  "email": "rei.abekura@leverages.jp",
+  "password": "00000000"
+}
+✅ バリデーション成功 - メール: rei.abekura@leverages.jp
+👤 認証成功 - ユーザー: 阿部倉 怜 (ID: 5 )
+📊 セッション保存前:
+  - セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+  - セッション内容: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-05-30T10:44:47.876Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  }
+}
+💾 セッションにユーザーID設定: 5
+✅ セッション保存成功!
+📊 セッション保存後:
+  - セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+  - セッション内容: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-05-30T10:44:47.876Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+🎉 ログイン処理完了 - レスポンス送信
+10:44:50 AM [express] POST /api/auth/login 200 in 2640ms :: {"message":"ログインに成功しました","user":{"id":5,"…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-05-30T10:44:47.876Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+🔐 ログイン試行開始
+📝 リクエストボディ: {
+  "email": "rei.abekura@leverages.jp",
+  "password": "00000000"
+}
+✅ バリデーション成功 - メール: rei.abekura@leverages.jp
+👤 認証成功 - ユーザー: 阿部倉 怜 (ID: 5 )
+📊 セッション保存前:
+  - セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+  - セッション内容: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-05-30T10:44:59.295Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+💾 セッションにユーザーID設定: 5
+✅ セッション保存成功!
+📊 セッション保存後:
+  - セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+  - セッション内容: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-05-30T10:44:59.295Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+🎉 ログイン処理完了 - レスポンス送信
+10:45:03 AM [express] POST /api/auth/login 200 in 178ms :: {"message":"ログインに成功しました","user":{"id":5,"e…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-05-30T10:45:03.539Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+10:45:04 AM [express] GET /api/cards 200 in 418ms :: [{"id":43,"senderId":5,"recipientId":223,"recipi…
+10:46:06 AM [vite] hmr update /src/context/auth-context.tsx?v=NqVvbCro5g_ws8TIZmUmo, /src/index.css?v=NqVvbCro5g_ws8TIZmUmo
+10:46:07 AM [vite] hmr invalidate /src/context/auth-context.tsx?v=NqVvbCro5g_ws8TIZmUmo Could not Fast Refresh ("AuthContext" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+10:46:07 AM [vite] page reload src/context/auth-context.tsx
+10:46:15 AM [vite] hmr update /src/context/auth-context.tsx?v=NqVvbCro5g_ws8TIZmUmo, /src/index.css?v=NqVvbCro5g_ws8TIZmUmo
+10:46:16 AM [vite] hmr invalidate /src/context/auth-context.tsx?v=NqVvbCro5g_ws8TIZmUmo Could not Fast Refresh ("AuthContext" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+10:46:16 AM [vite] page reload src/context/auth-context.tsx
+🔐 ログイン試行開始
+📝 リクエストボディ: {
+  "email": "rei.abekura@leverages.jp",
+  "password": "00000000"
+}
+✅ バリデーション成功 - メール: rei.abekura@leverages.jp
+👤 認証成功 - ユーザー: 阿部倉 怜 (ID: 5 )
+📊 セッション保存前:
+  - セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+  - セッション内容: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-05-30T10:46:30.726Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+💾 セッションにユーザーID設定: 5
+✅ セッション保存成功!
+📊 セッション保存後:
+  - セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+  - セッション内容: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-05-30T10:46:30.726Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+🎉 ログイン処理完了 - レスポンス送信
+10:46:46 AM [express] POST /api/auth/login 200 in 2583ms :: {"message":"ログインに成功しました","user":{"id":5,"…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 0hpjghxAyppVEqkD9LjgvWyQrk1I0hBW
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-05-30T10:46:46.458Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
