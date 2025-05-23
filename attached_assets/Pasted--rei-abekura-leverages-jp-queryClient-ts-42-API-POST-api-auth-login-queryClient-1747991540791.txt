@@ -1,0 +1,200 @@
+ログイン試行: rei.abekura@leverages.jp
+queryClient.ts:42 API POST リクエスト: /api/auth/login データあり
+queryClient.ts:45 
+            
+            
+           POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/login 401 (Unauthorized)
+apiRequest @ queryClient.ts:45
+login @ auth.ts:13
+onSubmit @ login.tsx:35
+(anonymous) @ chunk-4BFJKWC4.js?v=0c0f9e17:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=0c0f9e17:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=0c0f9e17:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=0c0f9e17:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=0c0f9e17:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=0c0f9e17:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=0c0f9e17:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=0c0f9e17:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=0c0f9e17:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=0c0f9e17:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=0c0f9e17:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=0c0f9e17:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=0c0f9e17:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=0c0f9e17:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5449Understand this error
+queryClient.ts:83 API POST エラー: /api/auth/login Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+    at async chunk-4BFJKWC4.js?v=0c0f9e17:1465:9
+apiRequest @ queryClient.ts:83
+await in apiRequest
+login @ auth.ts:13
+onSubmit @ login.tsx:35
+(anonymous) @ chunk-4BFJKWC4.js?v=0c0f9e17:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=0c0f9e17:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=0c0f9e17:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=0c0f9e17:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=0c0f9e17:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=0c0f9e17:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=0c0f9e17:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=0c0f9e17:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=0c0f9e17:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=0c0f9e17:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=0c0f9e17:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=0c0f9e17:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=0c0f9e17:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=0c0f9e17:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5449Understand this error
+auth.ts:20 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+    at async chunk-4BFJKWC4.js?v=0c0f9e17:1465:9
+login @ auth.ts:20
+await in login
+onSubmit @ login.tsx:35
+(anonymous) @ chunk-4BFJKWC4.js?v=0c0f9e17:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=0c0f9e17:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=0c0f9e17:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=0c0f9e17:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=0c0f9e17:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=0c0f9e17:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=0c0f9e17:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=0c0f9e17:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=0c0f9e17:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=0c0f9e17:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=0c0f9e17:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=0c0f9e17:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=0c0f9e17:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=0c0f9e17:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5449Understand this error
+login.tsx:56 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at login (auth.ts:21:11)
+    at async onSubmit (login.tsx:35:24)
+    at async chunk-4BFJKWC4.js?v=0c0f9e17:1465:9
+onSubmit @ login.tsx:56
+await in onSubmit
+(anonymous) @ chunk-4BFJKWC4.js?v=0c0f9e17:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=0c0f9e17:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=0c0f9e17:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=0c0f9e17:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=0c0f9e17:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=0c0f9e17:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=0c0f9e17:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=0c0f9e17:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=0c0f9e17:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=0c0f9e17:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=0c0f9e17:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=0c0f9e17:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=0c0f9e17:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=0c0f9e17:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5449Understand this error
+login.tsx:34 ログイン試行: rei.abekura@leverages.jp
+queryClient.ts:42 API POST リクエスト: /api/auth/login データあり
+queryClient.ts:45 
+            
+            
+           POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/login 401 (Unauthorized)
+apiRequest @ queryClient.ts:45
+login @ auth.ts:13
+onSubmit @ login.tsx:35
+(anonymous) @ chunk-4BFJKWC4.js?v=0c0f9e17:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=0c0f9e17:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=0c0f9e17:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=0c0f9e17:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=0c0f9e17:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=0c0f9e17:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=0c0f9e17:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=0c0f9e17:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=0c0f9e17:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=0c0f9e17:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=0c0f9e17:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=0c0f9e17:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=0c0f9e17:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=0c0f9e17:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5449Understand this error
+queryClient.ts:83 API POST エラー: /api/auth/login Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+    at async chunk-4BFJKWC4.js?v=0c0f9e17:1465:9
+apiRequest @ queryClient.ts:83
+await in apiRequest
+login @ auth.ts:13
+onSubmit @ login.tsx:35
+(anonymous) @ chunk-4BFJKWC4.js?v=0c0f9e17:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=0c0f9e17:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=0c0f9e17:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=0c0f9e17:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=0c0f9e17:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=0c0f9e17:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=0c0f9e17:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=0c0f9e17:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=0c0f9e17:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=0c0f9e17:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=0c0f9e17:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=0c0f9e17:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=0c0f9e17:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=0c0f9e17:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5449Understand this error
+auth.ts:20 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+    at async chunk-4BFJKWC4.js?v=0c0f9e17:1465:9
+login @ auth.ts:20
+await in login
+onSubmit @ login.tsx:35
+(anonymous) @ chunk-4BFJKWC4.js?v=0c0f9e17:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=0c0f9e17:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=0c0f9e17:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=0c0f9e17:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=0c0f9e17:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=0c0f9e17:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=0c0f9e17:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=0c0f9e17:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=0c0f9e17:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=0c0f9e17:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=0c0f9e17:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=0c0f9e17:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=0c0f9e17:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=0c0f9e17:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5449Understand this error
+login.tsx:56 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at login (auth.ts:21:11)
+    at async onSubmit (login.tsx:35:24)
+    at async chunk-4BFJKWC4.js?v=0c0f9e17:1465:9
+onSubmit @ login.tsx:56
+await in onSubmit
+(anonymous) @ chunk-4BFJKWC4.js?v=0c0f9e17:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=0c0f9e17:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=0c0f9e17:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=0c0f9e17:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=0c0f9e17:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=0c0f9e17:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=0c0f9e17:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=0c0f9e17:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=0c0f9e17:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=0c0f9e17:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=0c0f9e17:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=0c0f9e17:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=0c0f9e17:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=0c0f9e17:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=0c0f9e17:5449Understand this error
