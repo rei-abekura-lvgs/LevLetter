@@ -14,11 +14,11 @@ import Settings from "@/pages/settings";
 import AdminDashboard from "@/pages/admin";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
-import { AuthProvider, useAuth } from "@/context/auth-context";
+import { AuthProvider, useAuth } from "@/context/auth-context-new";
 import { useEffect, useState } from "react";
 
 function AppRoutes() {
-  const { user, loading, isAuthenticated, fetchUser } = useAuth();
+  const { user, isLoading, isAuthenticated } = useAuth();
   const [location, setLocation] = useLocation();
   
   // 初期認証処理とナビゲーション制御
