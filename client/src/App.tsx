@@ -27,7 +27,7 @@ function AppRoutes() {
     const publicRoutes = ['/login', '/register', '/forgot-password'];
     
     // 認証状態によるリダイレクト処理
-    if (!loading) {
+    if (!isLoading) {
       // パスワードリセット画面は特別扱い（reset-passwordから始まる場合は未認証でもアクセスを許可）
       if (location.startsWith('/reset-password')) {
         // リセット画面はリダイレクトしない
@@ -43,20 +43,20 @@ function AppRoutes() {
         setLocation('/login');
       }
     }
-  }, [isAuthenticated, loading, location, setLocation]);
+  }, [isAuthenticated, isLoading, location, setLocation]);
   
   // デバッグ用ログ
   useEffect(() => {
     console.log("アプリ状態:", { 
       認証済み: isAuthenticated, 
       ユーザー: user ? user.name : '未ログイン', 
-      読込中: loading,
+      読込中: isLoading,
       現在のパス: location
     });
-  }, [isAuthenticated, user, loading, location]);
+  }, [isAuthenticated, user, isLoading, location]);
 
   // ローディング表示
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent mb-4"></div>
