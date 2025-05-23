@@ -1,6 +1,6 @@
 import { apiRequest } from "./queryClient";
 import { 
-  CardFormRequest, LikeFormRequest, ProfileUpdateRequest,
+  CardFormRequest, LikeFormRequest, ProfileUpdateRequest, PasswordChangeRequest,
   CardWithRelations, Card, Like, User
 } from "@shared/schema";
 

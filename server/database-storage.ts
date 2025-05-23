@@ -216,6 +216,37 @@ export class DatabaseStorage implements IStorage {
     return updatedUser;
   }
 
+  async changePassword(userId: number, currentPassword: string, newPassword: string): Promise<void> {
+    console.log("🔑 パスワード変更開始 - ユーザーID:", userId);
+    
+    // 現在のパスワードを確認
+    const user = await this.getUser(userId);
+    if (!user) {
+      throw new Error("ユーザーが見つかりません");
+    }
+    
+    console.log("🔍 現在のパスワード確認:", {
+      入力: currentPassword,
+      保存: user.password,
+      一致: user.password === currentPassword
+    });
+    
+    if (user.password !== currentPassword) {
+      throw new Error("現在のパスワードが正しくありません");
+    }
+    
+    // 新しいパスワードに更新
+    await db
+      .update(users)
+      .set({ 
+        password: newPassword,
+        updatedAt: new Date() 
+      })
+      .where(eq(users.id, userId));
+    
+    console.log("✅ パスワード変更完了 - ユーザーID:", userId);
+  }
+
   async authenticateUser(email: string, password: string): Promise<User | null> {
     const user = await this.getUserByEmail(email);
     if (!user || !user.password) {

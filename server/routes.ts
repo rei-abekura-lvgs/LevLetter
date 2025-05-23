@@ -15,7 +15,8 @@ import {
   loginSchema, 
   cardFormSchema, 
   profileUpdateSchema, 
-  likeFormSchema
+  likeFormSchema,
+  passwordChangeSchema
 } from "@shared/schema";
 
 // 認証ミドルウェア
@@ -239,6 +240,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       return res.json({ message: "ログアウトに成功しました" });
     });
+  });
+
+  // パスワード変更API
+  app.post("/api/auth/change-password", authenticate, async (req: any, res) => {
+    try {
+      console.log("🔑 パスワード変更API呼び出し - ユーザーID:", req.userId);
+      
+      const data = passwordChangeSchema.parse(req.body);
+      
+      await storage.changePassword(req.userId, data.currentPassword, data.newPassword);
+      
+      console.log("✅ パスワード変更成功 - ユーザーID:", req.userId);
+      return res.json({ message: "パスワードが正常に変更されました" });
+      
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return handleZodError(error, res);
+      }
+      
+      console.error("パスワード変更エラー:", error);
+      
+      // エラーメッセージの詳細化
+      let errorMessage = "パスワード変更に失敗しました";
+      if (error instanceof Error) {
+        if (error.message.includes("現在のパスワード")) {
+          errorMessage = error.message;
+        }
+      }
+      
+      return res.status(400).json({ message: errorMessage });
+    }
   });
   
   // メールアドレス検証API
