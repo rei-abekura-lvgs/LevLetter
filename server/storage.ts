@@ -9,6 +9,7 @@ import {
   type CardWithRelations
 } from "@shared/schema";
 import * as crypto from "crypto";
+import bcrypt from "bcrypt";
 
 const DEFAULT_AVATAR_COLORS = [
   "primary-500", "secondary-500", "green-500", "yellow-500", 
@@ -29,7 +30,11 @@ function getInitials(name: string): string {
 }
 
 export function hashPassword(password: string): string {
-  return crypto.createHash('sha256').update(password).digest('hex');
+  return bcrypt.hashSync(password, 10);
+}
+
+export function verifyPassword(password: string, hashedPassword: string): boolean {
+  return bcrypt.compareSync(password, hashedPassword);
 }
 
 export interface IStorage {
