@@ -8,7 +8,12 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
   displayName: text("display_name"),
-  department: text("department"),
+  department: text("department"), // 後方互換性のため残す
+  department1: text("department1"), // 事業部・会社
+  department2: text("department2"), // 本部
+  department3: text("department3"), // 部
+  department4: text("department4"), // 課・グループ
+  department5: text("department5"), // チーム・係
   avatarColor: text("avatar_color").notNull().default("primary-500"),
   customAvatarUrl: text("custom_avatar_url"), // カスタムアバター画像のURL
   weeklyPoints: integer("weekly_points").notNull().default(500),
@@ -136,7 +141,12 @@ export const likeFormSchema = z.object({
 
 export const profileUpdateSchema = z.object({
   displayName: z.string().min(1, { message: "表示名を入力してください" }),
-  department: z.string().nullable().optional(),
+  department: z.string().nullable().optional(), // 後方互換性
+  department1: z.string().nullable().optional(), // 事業部・会社
+  department2: z.string().nullable().optional(), // 本部
+  department3: z.string().nullable().optional(), // 部
+  department4: z.string().nullable().optional(), // 課・グループ
+  department5: z.string().nullable().optional(), // チーム・係
   customAvatarUrl: z.string().nullable().optional()
 });
 

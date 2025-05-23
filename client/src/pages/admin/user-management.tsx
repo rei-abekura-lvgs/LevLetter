@@ -41,6 +41,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Search, MoreHorizontal, ShieldCheck, Shield, UserCog } from "lucide-react";
 import { format } from "date-fns";
+import { BearAvatar } from "@/components/ui/bear-avatar";
 
 export default function UserManagement() {
   const { toast } = useToast();
