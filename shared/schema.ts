@@ -25,7 +25,7 @@ export const users = pgTable("users", {
   password: text("password"),
   cognitoSub: text("cognito_sub").unique(),
   googleId: text("google_id").unique(),
-  employeeId: text("employee_id").unique(), // 従業員番号（既存ユーザーはnull許容）
+  employeeId: text("employee_id"), // 従業員番号（既存ユーザーはnull許容）
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
@@ -181,6 +181,8 @@ export type TeamMember = typeof teamMembers.$inferSelect;
 export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
 export type Department = typeof departments.$inferSelect;
 export type InsertDepartment = z.infer<typeof insertDepartmentSchema>;
+export type DepartmentHierarchy = typeof departmentsHierarchy.$inferSelect;
+export type InsertDepartmentHierarchy = z.infer<typeof insertDepartmentHierarchySchema>;
 
 // カスタム型
 export type CardWithRelations = Card & {
