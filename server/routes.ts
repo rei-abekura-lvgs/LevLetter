@@ -304,7 +304,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ユーザー関連API
-  app.get("/api/users", authenticate, async (req, res) => {
+  app.get("/api/users", async (req, res) => {
     try {
       const users = await storage.getUsers();
       // パスワードフィールドを除外
@@ -615,7 +615,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // カード関連API
-  app.get("/api/cards", authenticate, async (req, res) => {
+  app.get("/api/cards", async (req, res) => {
     try {
       const { limit = 50, offset = 0, sender, recipient, view } = req.query;
       const currentUser = (req as any).user;
