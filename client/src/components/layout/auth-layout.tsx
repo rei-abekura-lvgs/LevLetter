@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { BearLogo } from "@/components/bear-logo";
 
 interface AuthLayoutProps {
   children: ReactNode;
