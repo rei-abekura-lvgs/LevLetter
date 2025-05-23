@@ -66,16 +66,7 @@ export default function Login() {
   return (
     <div className="space-y-6">
       <div className="space-y-4">
-        {/* タイトルとロゴを左側に配置 */}
-        <div className="flex items-center gap-3">
-          <div>
-            <h1 className="text-3xl font-bold text-[#3990EA]">LevLetter</h1>
-          </div>
-          <div className="ml-2">
-            <BearLogo size={50} useTransparent={true} bgColor="bg-[#3990EA]" />
-          </div>
-        </div>
-        <div className="text-center pt-6">
+        <div className="text-center">
           <h2 className="text-2xl font-semibold">ログイン</h2>
           <p className="text-muted-foreground">
             アカウント情報を入力してログインしてください
