@@ -14,6 +14,11 @@ export function LikeButton({ card, currentUser, onRefresh }: LikeButtonProps) {
   const [isLiking, setIsLiking] = useState(false);
   const { toast } = useToast();
 
+  // 自分のカードまたは自分宛のカードかどうかをチェック
+  const isOwnCard = card.senderId === currentUser.id;
+  const isReceivedCard = card.recipientId === currentUser.id || 
+    (card.additionalRecipients && card.additionalRecipients.includes(currentUser.id));
+
   // 現在のユーザーがこのカードにいいねした総ポイント数を計算
   const userLikePoints = card.likes
     .filter(like => like.user.id === currentUser.id)
@@ -21,7 +26,7 @@ export function LikeButton({ card, currentUser, onRefresh }: LikeButtonProps) {
 
   // 最大30ptまでいいねできる（2ptずつ）
   const maxLikePoints = 30;
-  const canLike = userLikePoints < maxLikePoints;
+  const canLike = !isOwnCard && !isReceivedCard && userLikePoints < maxLikePoints;
   const remainingLikes = Math.floor((maxLikePoints - userLikePoints) / 2);
 
   // 総いいね数（全ユーザーのいいね数）
@@ -76,7 +81,11 @@ export function LikeButton({ card, currentUser, onRefresh }: LikeButtonProps) {
             : "bg-gray-100 text-gray-400 cursor-not-allowed"
         }`}
         title={
-          canLike 
+          isOwnCard 
+            ? "自分のカードにはいいねできません"
+            : isReceivedCard
+            ? "自分宛のカードにはいいねできません"
+            : canLike 
             ? `いいねする（2pt消費、残り${remainingLikes}回）`
             : "いいね上限に達しました（30pt）"
         }

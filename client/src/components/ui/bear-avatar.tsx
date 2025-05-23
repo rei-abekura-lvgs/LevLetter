@@ -15,7 +15,7 @@ export function BearAvatar({ name, color = "primary-500", className }: BearAvata
   return (
     <Avatar className={cn("h-8 w-8", className)}>
       <AvatarFallback className="p-0 border-0">
-        <BearLogo size={32} useTransparent={true} bgColor="bg-[#3990EA]" />
+        <BearLogo size={32} useDefaultIcon={true} />
       </AvatarFallback>
     </Avatar>
   )
