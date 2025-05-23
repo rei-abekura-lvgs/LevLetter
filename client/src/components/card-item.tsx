@@ -26,6 +26,12 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
       ? (card.recipient as any).name 
       : (card.recipient as User).displayName || (card.recipient as User).name;
 
+  // 全ての受信者を配列として取得
+  const allRecipients = [
+    card.recipient as User,
+    ...(card.additionalRecipientUsers || [])
+  ];
+
   // ユーザーのイニシャルを取得
   const getInitials = (name: string) => {
     return name
