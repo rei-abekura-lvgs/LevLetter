@@ -61,7 +61,15 @@ export async function getAuthenticatedUser(): Promise<User | null> {
   }
 }
 
-export function logout(): void {
+export async function logout(): Promise<void> {
+  try {
+    // サーバー側のセッションを削除
+    await apiRequest("POST", "/api/auth/logout");
+  } catch (error) {
+    console.error("ログアウトAPIエラー:", error);
+    // APIエラーがあってもローカルの処理は続行
+  }
+  // ローカルストレージからトークンを削除（念のため）
   localStorage.removeItem(TOKEN_KEY);
 }
 

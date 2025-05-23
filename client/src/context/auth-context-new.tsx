@@ -96,11 +96,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   // ログアウト処理
-  const logout = () => {
+  const logout = async () => {
     console.log("🚪 ログアウト処理開始");
+    try {
+      // サーバー側のセッションを削除
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include", // セッションクッキーを含める
+      });
+      console.log("✅ サーバー側ログアウト完了");
+    } catch (error) {
+      console.error("❌ サーバー側ログアウトエラー:", error);
+      // エラーがあってもクライアント側の処理は続行
+    }
+    
     setUser(null);
     setError(null);
-    // セッション破棄はサーバー側で行う
     setLocation("/login");
   };
 

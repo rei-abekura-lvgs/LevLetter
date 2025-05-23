@@ -15,8 +15,8 @@ export default function Sidebar({ user }: SidebarProps) {
   const [location] = useLocation();
   const { user: authUser } = useAuth();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     window.location.href = "/login";
   };
 
