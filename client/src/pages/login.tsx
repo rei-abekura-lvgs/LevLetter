@@ -15,10 +15,10 @@ import { BearLogo } from "@/components/bear-logo";
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const [, setLocation] = useLocation();
   const { fetchUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [location, setLocation] = useLocation();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -34,28 +34,28 @@ export default function Login() {
       console.log("ログイン試行:", data.email);
       const response = await login(data.email, data.password);
       console.log("ログイン成功:", response);
-      
+
       // 成功メッセージを表示
       toast({
         title: "ログイン成功",
         description: "LevLetterへようこそ！",
       });
-      
+
       // 認証コンテキストを更新（ユーザー情報を再取得）
       const userData = await fetchUser();
       console.log("認証情報更新完了:", userData);
-      
+
       // 画面遷移の準備
       console.log("ホーム画面への遷移準備中...");
-      
-      // ページ全体をリロードして認証状態を確実に反映
-      window.location.href = "/";
-      
+      setLocation("/");
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
         title: "ログインエラー",
-        description: error instanceof Error ? error.message : "ログインに失敗しました。もう一度お試しください。",
+        description:
+          error instanceof Error
+            ? error.message
+            : "ログインに失敗しました。もう一度お試しください。",
         variant: "destructive",
       });
       setIsLoading(false);
@@ -83,24 +83,27 @@ export default function Login() {
             {...form.register("email")}
           />
           {form.formState.errors.email && (
-            <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
+            <p className="text-sm text-red-500">
+              {form.formState.errors.email.message}
+            </p>
           )}
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">パスワード</Label>
-            <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+            <Link
+              href="/forgot-password"
+              className="text-sm text-primary hover:underline"
+            >
               パスワードをお忘れですか？
             </Link>
           </div>
-          <Input
-            id="password"
-            type="password"
-            {...form.register("password")}
-          />
+          <Input id="password" type="password" {...form.register("password")} />
           {form.formState.errors.password && (
-            <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
+            <p className="text-sm text-red-500">
+              {form.formState.errors.password.message}
+            </p>
           )}
         </div>
 
@@ -111,7 +114,9 @@ export default function Login() {
 
       <div className="text-center text-sm">
         アカウントをお持ちでないですか？{" "}
-        <Link href="/register" className="text-primary hover:underline">新規登録</Link>
+        <Link href="/register" className="text-primary hover:underline">
+          新規登録
+        </Link>
       </div>
     </div>
   );
