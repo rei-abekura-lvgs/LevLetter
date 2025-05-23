@@ -282,16 +282,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/auth/me", authenticate, (req, res) => {
+  app.get("/api/auth/me", async (req, res) => {
     try {
-      console.log("認証情報取得 - 認証済みユーザー確認");
-      // パスワードフィールドを除外
-      const user = (req as any).user;
-      console.log("取得したユーザー情報:", user ? `${user.name} (ID: ${user.id})` : "null");
+      console.log("認証情報取得 - セッション確認");
+      const userId = req.session.userId;
+      console.log("セッションからユーザーID取得:", userId);
       
-      if (!user) {
-        console.log("認証情報取得エラー - ユーザー情報がリクエストに存在しません");
+      if (!userId) {
+        console.log("認証情報取得エラー - セッションにユーザーIDが存在しません");
         return res.status(401).json({ message: "認証が必要です" });
+      }
+      
+      // データベースからユーザー情報を取得
+      const user = await storage.getUser(userId);
+      if (!user) {
+        console.log("認証情報取得エラー - ユーザーが見つかりません");
+        return res.status(401).json({ message: "ユーザーが見つかりません" });
       }
       
       const { password, ...userWithoutPassword } = user;
