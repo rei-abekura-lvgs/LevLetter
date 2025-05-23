@@ -44,12 +44,6 @@ export default function MobileNav({ user }: MobileNavProps) {
 
   return (
     <>
-      <div className="flex items-center justify-between p-4 border-b">
-        <h1 className="text-2xl font-bold text-primary">LevLetter</h1>
-        <button onClick={toggleMenu} className="p-2">
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
 
       {isOpen && (
         <div className="fixed inset-0 bg-background z-50 pt-16">
