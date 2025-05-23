@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileUpdateSchema } from "@shared/schema";
+import { profileUpdateSchema, passwordChangeSchema } from "@shared/schema";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { User } from "@shared/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProfile, getDepartments, uploadAvatar } from "@/lib/api";
+import { updateProfile, getDepartments, uploadAvatar, changePassword } from "@/lib/api";
 import { Coins, HeartIcon, Camera, Upload, X } from "lucide-react";
 import {
   Select,
@@ -41,6 +41,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
   const [uploadingImage, setUploadingImage] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
 
   // 部署一覧を取得
   useEffect(() => {
@@ -282,6 +283,45 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
       });
     }
   });
+
+  // パスワード変更フォーム
+  const passwordForm = useForm({
+    resolver: zodResolver(passwordChangeSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: ""
+    }
+  });
+
+  const changePasswordMutation = useMutation({
+    mutationFn: changePassword,
+    onSuccess: () => {
+      toast({
+        title: "パスワード変更完了",
+        description: "パスワードが正常に変更されました。",
+      });
+      
+      // フォームをリセット
+      passwordForm.reset();
+      setShowPasswordChange(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "エラー",
+        description: `パスワード変更に失敗しました: ${error instanceof Error ? error.message : "不明なエラー"}`,
+        variant: "destructive"
+      });
+    }
+  });
+
+  const onPasswordSubmit = (data: { currentPassword: string; newPassword: string; confirmPassword: string }) => {
+    changePasswordMutation.mutate({
+      currentPassword: data.currentPassword,
+      newPassword: data.newPassword,
+      confirmPassword: data.confirmPassword
+    });
+  };
 
   const onSubmit = (data: { displayName: string }) => {
     // 部署変更は無効化されたので、表示名のみ更新

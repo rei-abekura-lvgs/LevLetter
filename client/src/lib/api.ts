@@ -82,6 +82,22 @@ export async function uploadAvatar(id: number, imageData: string) {
   }
 }
 
+// パスワード変更
+export async function changePassword(data: PasswordChangeRequest) {
+  try {
+    const result = await apiRequest<{message: string}>(
+      "POST", 
+      "/api/auth/change-password", 
+      data
+    );
+    console.log("パスワード変更成功:", result);
+    return result;
+  } catch (error) {
+    console.error("パスワード変更エラー:", error);
+    throw error;
+  }
+}
+
 // チーム関連
 export async function getTeams() {
   try {
