@@ -78,6 +78,13 @@ export interface IStorage {
   getLike(cardId: number, userId: number): Promise<Like | undefined>;
   createLike(like: InsertLike): Promise<Like>;
   deleteLike(id: number): Promise<void>;
+
+  // 部署階層
+  getDepartmentHierarchies(): Promise<DepartmentHierarchy[]>;
+  getDepartmentHierarchy(id: number): Promise<DepartmentHierarchy | undefined>;
+  createDepartmentHierarchy(hierarchy: InsertDepartmentHierarchy): Promise<DepartmentHierarchy>;
+  updateDepartmentHierarchy(id: number, hierarchy: Partial<DepartmentHierarchy>): Promise<DepartmentHierarchy>;
+  deleteDepartmentHierarchy(id: number): Promise<void>;
 }
 
 export class MemStorage implements IStorage {

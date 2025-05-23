@@ -1,11 +1,12 @@
 import {
-  users, teams, cards, likes, teamMembers, departments,
+  users, teams, cards, likes, teamMembers, departments, departmentsHierarchy,
   type User, type InsertUser,
   type Card, type InsertCard,
   type Like, type InsertLike,
   type Team, type InsertTeam,
   type TeamMember, type InsertTeamMember,
   type Department, type InsertDepartment,
+  type DepartmentHierarchy, type InsertDepartmentHierarchy,
   type CardWithRelations
 } from "@shared/schema";
 import { db } from "./db";
