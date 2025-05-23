@@ -558,6 +558,80 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                 </div>
               </div>
             </div>
+
+            {/* パスワード変更セクション */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-medium text-gray-700">パスワード変更</h4>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowPasswordChange(!showPasswordChange)}
+                  className="text-xs"
+                >
+                  {showPasswordChange ? 'キャンセル' : 'パスワードを変更'}
+                </Button>
+              </div>
+              
+              {showPasswordChange && (
+                <Form {...passwordForm}>
+                  <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
+                    <FormField
+                      control={passwordForm.control}
+                      name="currentPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>現在のパスワード</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="password" placeholder="現在のパスワードを入力" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={passwordForm.control}
+                      name="newPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>新しいパスワード</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="password" placeholder="新しいパスワードを入力" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={passwordForm.control}
+                      name="confirmPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>パスワード確認</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="password" placeholder="新しいパスワードを再入力" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <div className="flex justify-end pt-2">
+                      <Button
+                        type="submit"
+                        disabled={changePasswordMutation.isPending}
+                        className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                      >
+                        {changePasswordMutation.isPending ? 'パスワード変更中...' : 'パスワードを変更'}
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              )}
+            </div>
             
             <div className="flex justify-end">
               <DialogClose asChild>
