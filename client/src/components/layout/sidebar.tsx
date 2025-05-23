@@ -65,13 +65,25 @@ export default function Sidebar({ user }: SidebarProps) {
             </div>
             
             {/* 累計獲得ポイント */}
-            <div className="bg-white p-4 rounded-md border">
+            <div className="bg-white p-4 rounded-md border space-y-3">
+              <div className="text-sm font-medium text-gray-700 mb-2">累計獲得ポイント</div>
+              
+              {/* 過去累計 */}
               <div className="flex justify-between items-center">
-                <div className="flex items-center text-sm font-medium">
-                  <Award className="h-5 w-5 mr-2 text-amber-500" />
-                  累計獲得ポイント
+                <div className="flex items-center text-sm">
+                  <Award className="h-4 w-4 mr-2 text-amber-500" />
+                  過去累計
                 </div>
-                <span className="text-xl font-bold text-amber-500">{user.totalPointsReceived} PT</span>
+                <span className="text-lg font-bold text-amber-500">{user.totalPointsReceived} PT</span>
+              </div>
+              
+              {/* 週間累計 */}
+              <div className="flex justify-between items-center">
+                <div className="flex items-center text-sm">
+                  <TrendingUp className="h-4 w-4 mr-2 text-green-500" />
+                  今週の獲得
+                </div>
+                <span className="text-lg font-bold text-green-500">{user.weeklyPointsReceived || 0} PT</span>
               </div>
             </div>
             

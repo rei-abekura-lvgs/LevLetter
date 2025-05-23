@@ -63,39 +63,73 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
 
       {/* カード内容 */}
       <div className="mb-4">
-        <div className="text-sm text-gray-600 mb-1">
-          <div className="font-medium flex justify-between items-center">
-            <div>
-              {/* メイン受信者 */}
-              <span>{recipientName}</span>
-              
-              {/* 追加の受信者がいれば表示 */}
-              {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 && (
-                <>
-                  <span>、</span>
-                  {card.additionalRecipientUsers.map((user, index) => (
-                    <span key={user.id}>
-                      {user.displayName || user.name}
-                      {index < card.additionalRecipientUsers!.length - 1 ? "、" : ""}
-                    </span>
-                  ))}
-                </>
-              )}
-              <span> さんへ</span>
+        <div className="text-sm text-gray-600 mb-3">
+          <div className="font-medium mb-2">
+            <span className="text-gray-800"> さんへ</span>
+          </div>
+          
+          {/* 受信者のアバターとポイント表示 */}
+          <div className="flex flex-wrap gap-3">
+            {/* メイン受信者 */}
+            <div className="relative">
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <Avatar className="h-12 w-12">
+                    {card.recipientType === "user" && (card.recipient as User).customAvatarUrl ? (
+                      <AvatarImage 
+                        src={(card.recipient as User).customAvatarUrl!} 
+                        alt={recipientName}
+                        className="object-cover"
+                      />
+                    ) : (
+                      <AvatarFallback className="p-0 border-0">
+                        <BearLogo size={48} useTransparent={true} bgColor="bg-[#3990EA]" />
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
+                  {/* ポイントバッジ */}
+                  <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                    {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 
+                      ? Math.floor((card.points || 0) / (1 + card.additionalRecipientUsers.length))
+                      : (card.points || 0)
+                    }
+                  </div>
+                </div>
+                <span className="text-sm font-medium text-gray-800">{recipientName}</span>
+              </div>
             </div>
             
-            {/* ポイント表示 */}
-            <div className={`px-2 py-1 rounded-md text-xs font-bold flex items-center ${card.points > 0 ? 'bg-primary-50 text-primary-700' : 'bg-gray-100 text-gray-500'}`}>
-              {/* 複数の受信者がいる場合は按分されたポイントを表示 */}
-              {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
-                <>
-                  <span>{Math.floor((card.points || 0) / (1 + card.additionalRecipientUsers.length))} PT</span>
-                  <span className="text-xs text-gray-500 ml-1">/ 人</span>
-                </>
-              ) : (
-                <span>{card.points || 0} PT</span>
-              )}
-            </div>
+            {/* 追加の受信者がいれば表示 */}
+            {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 && (
+              <>
+                {card.additionalRecipientUsers.map((user) => (
+                  <div key={user.id} className="relative">
+                    <div className="flex items-center gap-2">
+                      <div className="relative">
+                        <Avatar className="h-12 w-12">
+                          {user.customAvatarUrl ? (
+                            <AvatarImage 
+                              src={user.customAvatarUrl} 
+                              alt={user.displayName || user.name}
+                              className="object-cover"
+                            />
+                          ) : (
+                            <AvatarFallback className="p-0 border-0">
+                              <BearLogo size={48} useTransparent={true} bgColor="bg-[#3990EA]" />
+                            </AvatarFallback>
+                          )}
+                        </Avatar>
+                        {/* ポイントバッジ */}
+                        <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                          {Math.floor((card.points || 0) / (1 + card.additionalRecipientUsers.length))}
+                        </div>
+                      </div>
+                      <span className="text-sm font-medium text-gray-800">{user.displayName || user.name}</span>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </div>
         <p className="whitespace-pre-line">{card.message}</p>

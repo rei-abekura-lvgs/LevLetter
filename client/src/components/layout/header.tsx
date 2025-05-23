@@ -67,7 +67,9 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             <Menu className="h-5 w-5" />
           </Button>
         )}
-
+        <Link href="/">
+          <span className="text-xl font-bold text-primary">LevLetter</span>
+        </Link>
       </div>
 
       <div className="flex items-center space-x-4">
