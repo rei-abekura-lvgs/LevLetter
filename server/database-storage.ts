@@ -1,12 +1,11 @@
 import {
-  users, teams, cards, likes, teamMembers, departments, departmentsHierarchy,
+  users, teams, cards, likes, teamMembers, departments,
   type User, type InsertUser,
   type Card, type InsertCard,
   type Like, type InsertLike,
   type Team, type InsertTeam,
   type TeamMember, type InsertTeamMember,
   type Department, type InsertDepartment,
-  type DepartmentHierarchy, type InsertDepartmentHierarchy,
   type CardWithRelations
 } from "@shared/schema";
 import { db } from "./db";
@@ -23,7 +22,7 @@ function getRandomAvatarColor(): string {
   return DEFAULT_AVATAR_COLORS[randomIndex];
 }
 
-import { IStorage, hashPassword, verifyPassword } from "./storage";
+import { IStorage, hashPassword } from "./storage";
 
 export class DatabaseStorage implements IStorage {
   // ユーザー物理削除（開発用）
@@ -147,12 +146,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    console.log("🔍 データベースユーザー検索:", email);
     const [user] = await db
       .select()
       .from(users)
-      .where(eq(users.email, email));
-    console.log("📋 検索結果:", user ? `見つかりました (ID: ${user.id})` : "見つかりませんでした");
+      .where(eq(users.email, email.toLowerCase()));
     return user;
   }
 
@@ -216,37 +213,14 @@ export class DatabaseStorage implements IStorage {
     return updatedUser;
   }
 
-  async changePassword(userId: number, currentPassword: string, newPassword: string): Promise<void> {
-    // 現在のパスワードを確認
-    const user = await this.getUser(userId);
-    if (!user) {
-      throw new Error("ユーザーが見つかりません");
-    }
-    
-    if (user.password !== currentPassword) {
-      throw new Error("現在のパスワードが正しくありません");
-    }
-    
-    // 新しいパスワードに更新
-    await db
-      .update(users)
-      .set({ 
-        password: newPassword,
-        updatedAt: new Date() 
-      })
-      .where(eq(users.id, userId));
-    
-    console.log("✅ パスワード変更完了 - ユーザーID:", userId);
-  }
-
   async authenticateUser(email: string, password: string): Promise<User | null> {
     const user = await this.getUserByEmail(email);
     if (!user || !user.password) {
       return null;
     }
 
-    // シンプルなパスワード検証（デモ用）
-    return user.password === password ? user : null;
+    const hashedPassword = hashPassword(password);
+    return user.password === hashedPassword ? user : null;
   }
 
   async resetUserWeeklyPoints(): Promise<void> {

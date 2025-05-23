@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileUpdateSchema, passwordChangeSchema } from "@shared/schema";
+import { profileUpdateSchema } from "@shared/schema";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { User } from "@shared/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProfile, getDepartments, uploadAvatar, changePassword } from "@/lib/api";
+import { updateProfile, getDepartments, uploadAvatar } from "@/lib/api";
 import { Coins, HeartIcon, Camera, Upload, X } from "lucide-react";
 import {
   Select,
@@ -41,7 +41,6 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
   const [uploadingImage, setUploadingImage] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [showPasswordChange, setShowPasswordChange] = useState(false);
 
   // 部署一覧を取得
   useEffect(() => {
@@ -284,45 +283,6 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
     }
   });
 
-  // パスワード変更フォーム
-  const passwordForm = useForm({
-    resolver: zodResolver(passwordChangeSchema),
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: ""
-    }
-  });
-
-  const changePasswordMutation = useMutation({
-    mutationFn: changePassword,
-    onSuccess: () => {
-      toast({
-        title: "パスワード変更完了",
-        description: "パスワードが正常に変更されました。",
-      });
-      
-      // フォームをリセット
-      passwordForm.reset();
-      setShowPasswordChange(false);
-    },
-    onError: (error) => {
-      toast({
-        title: "エラー",
-        description: `パスワード変更に失敗しました: ${error instanceof Error ? error.message : "不明なエラー"}`,
-        variant: "destructive"
-      });
-    }
-  });
-
-  const onPasswordSubmit = (data: { currentPassword: string; newPassword: string; confirmPassword: string }) => {
-    changePasswordMutation.mutate({
-      currentPassword: data.currentPassword,
-      newPassword: data.newPassword,
-      confirmPassword: data.confirmPassword
-    });
-  };
-
   const onSubmit = (data: { displayName: string }) => {
     // 部署変更は無効化されたので、表示名のみ更新
     console.log("送信データ:", data);
@@ -535,79 +495,28 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
                 </FormItem>
               </form>
             </Form>
-
-            {/* パスワード変更セクション */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-sm font-medium text-gray-700">パスワード変更</h4>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowPasswordChange(!showPasswordChange)}
-                  className="text-xs"
-                >
-                  {showPasswordChange ? 'キャンセル' : 'パスワードを変更'}
-                </Button>
-              </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg mb-6">
+              <h4 className="text-sm font-medium text-gray-700 mb-3">ポイント情報</h4>
               
-              {showPasswordChange && (
-                <Form {...passwordForm}>
-                  <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
-                    <FormField
-                      control={passwordForm.control}
-                      name="currentPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>現在のパスワード</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="password" placeholder="現在のパスワードを入力" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={passwordForm.control}
-                      name="newPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>新しいパスワード</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="password" placeholder="新しいパスワードを入力" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={passwordForm.control}
-                      name="confirmPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>パスワード確認</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="password" placeholder="新しいパスワードを再入力" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <div className="flex justify-end pt-2">
-                      <Button
-                        type="submit"
-                        disabled={changePasswordMutation.isPending}
-                        className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                      >
-                        {changePasswordMutation.isPending ? 'パスワード変更中...' : 'パスワードを変更'}
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              )}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white p-3 rounded-md border border-gray-200">
+                  <div className="text-xs text-gray-500 mb-1">今週の残りポイント</div>
+                  <div className="flex items-center">
+                    <Coins className="h-4 w-4 text-yellow-500 mr-1" />
+                    <span className="text-lg font-semibold text-gray-800">{user.weeklyPoints}</span>
+                    <span className="text-sm text-gray-500 ml-1">/500</span>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-3 rounded-md border border-gray-200">
+                  <div className="text-xs text-gray-500 mb-1">累計獲得ポイント</div>
+                  <div className="flex items-center">
+                    <HeartIcon className="h-4 w-4 text-accent-500 mr-1 fill-current" />
+                    <span className="text-lg font-semibold text-gray-800">{user.totalPointsReceived.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <div className="flex justify-end">

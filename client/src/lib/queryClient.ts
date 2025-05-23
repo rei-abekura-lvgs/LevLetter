@@ -15,22 +15,29 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-// API リクエスト関数（セッションベース認証対応）
+// API リクエスト関数
 export async function apiRequest<T>(
   method: string,
   path: string,
   data?: any
 ): Promise<T> {
+  const token = getAuthToken();
+  
   const headers: HeadersInit = {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Authorization": token ? `Bearer ${token}` : ""
   };
   
   const config: RequestInit = {
     method,
     headers,
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: 'include' // セッションクッキーを含める
+    body: data ? JSON.stringify(data) : undefined
   };
+  
+  // 認証が必要なパスへのリクエストで、トークンがない場合の早期チェック
+  if (path.includes('/api/auth/me') && !token) {
+    throw new Error('認証が必要です');
+  }
   
   console.log(`API ${method} リクエスト:`, path, data ? "データあり" : "データなし");
   

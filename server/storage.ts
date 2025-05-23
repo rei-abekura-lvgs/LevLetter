@@ -9,7 +9,6 @@ import {
   type CardWithRelations
 } from "@shared/schema";
 import * as crypto from "crypto";
-import bcrypt from "bcrypt";
 
 const DEFAULT_AVATAR_COLORS = [
   "primary-500", "secondary-500", "green-500", "yellow-500", 
@@ -30,11 +29,7 @@ function getInitials(name: string): string {
 }
 
 export function hashPassword(password: string): string {
-  return bcrypt.hashSync(password, 10);
-}
-
-export function verifyPassword(password: string, hashedPassword: string): boolean {
-  return bcrypt.compareSync(password, hashedPassword);
+  return crypto.createHash('sha256').update(password).digest('hex');
 }
 
 export interface IStorage {
@@ -83,13 +78,6 @@ export interface IStorage {
   getLike(cardId: number, userId: number): Promise<Like | undefined>;
   createLike(like: InsertLike): Promise<Like>;
   deleteLike(id: number): Promise<void>;
-
-  // 部署階層
-  getDepartmentHierarchies(): Promise<DepartmentHierarchy[]>;
-  getDepartmentHierarchy(id: number): Promise<DepartmentHierarchy | undefined>;
-  createDepartmentHierarchy(hierarchy: InsertDepartmentHierarchy): Promise<DepartmentHierarchy>;
-  updateDepartmentHierarchy(id: number, hierarchy: Partial<DepartmentHierarchy>): Promise<DepartmentHierarchy>;
-  deleteDepartmentHierarchy(id: number): Promise<void>;
 }
 
 export class MemStorage implements IStorage {

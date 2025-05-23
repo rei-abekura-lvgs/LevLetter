@@ -15,8 +15,7 @@ import {
   loginSchema, 
   cardFormSchema, 
   profileUpdateSchema, 
-  likeFormSchema,
-  passwordChangeSchema
+  likeFormSchema
 } from "@shared/schema";
 
 // 認証ミドルウェア
@@ -46,7 +45,6 @@ const authenticate = async (req: Request, res: Response, next: Function) => {
 
     // リクエストオブジェクトにユーザー情報を付与
     (req as any).user = user;
-    (req as any).userId = userId;
     next();
   } catch (error) {
     console.error("認証エラー:", error);
@@ -105,24 +103,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const data = loginSchema.parse(req.body);
       console.log("✅ バリデーション成功 - メール:", data.email);
       
-      // データベースから直接ユーザーを検索
-      console.log("🔍 ユーザー検索開始:", data.email);
-      const user = await storage.getUserByEmail(data.email);
-      console.log("📋 ユーザー検索結果:", user ? `見つかりました (ID: ${user.id}, パスワード: ${user.password})` : "見つかりませんでした");
+      const user = await storage.authenticateUser(data.email, data.password);
       
       if (!user) {
-        console.log("❌ ユーザーが存在しません:", data.email);
-        return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
-      }
-      
-      console.log("🔑 パスワード比較:", {
-        入力: data.password,
-        保存: user.password,
-        一致: user.password === data.password
-      });
-      
-      if (user.password !== data.password) {
-        console.log("❌ パスワードが一致しません");
+        console.log("❌ 認証失敗 - ユーザーが見つからない:", data.email);
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       
@@ -241,43 +225,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       return res.json({ message: "ログアウトに成功しました" });
     });
-  });
-
-  // パスワード変更API
-  app.post("/api/auth/change-password", authenticate, async (req: any, res) => {
-    try {
-      // セッションから直接ユーザーIDを取得
-      const userId = req.session.userId;
-      
-      if (!userId) {
-        return res.status(401).json({ message: "認証が必要です" });
-      }
-      
-      const data = passwordChangeSchema.parse(req.body);
-      
-      await storage.changePassword(userId, data.currentPassword, data.newPassword);
-      
-      return res.json({ message: "パスワードが正常に変更されました" });
-      
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return handleZodError(error, res);
-      }
-      
-      console.error("パスワード変更エラー:", error);
-      
-      // エラーメッセージの詳細化
-      let errorMessage = "パスワード変更に失敗しました";
-      if (error instanceof Error) {
-        if (error.message.includes("現在のパスワード")) {
-          errorMessage = error.message;
-        } else if (error.message.includes("ユーザーが見つかりません")) {
-          errorMessage = "ユーザー情報が見つかりません";
-        }
-      }
-      
-      return res.status(400).json({ message: errorMessage });
-    }
   });
   
   // メールアドレス検証API

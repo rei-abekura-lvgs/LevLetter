@@ -1,6 +1,6 @@
 import { apiRequest } from "./queryClient";
 import { 
-  CardFormRequest, LikeFormRequest, ProfileUpdateRequest, PasswordChangeRequest,
+  CardFormRequest, LikeFormRequest, ProfileUpdateRequest,
   CardWithRelations, Card, Like, User
 } from "@shared/schema";
 
@@ -78,22 +78,6 @@ export async function uploadAvatar(id: number, imageData: string) {
     return result.user;
   } catch (error) {
     console.error("アバターアップロードエラー:", error);
-    throw error;
-  }
-}
-
-// パスワード変更
-export async function changePassword(data: PasswordChangeRequest) {
-  try {
-    const result = await apiRequest<{message: string}>(
-      "POST", 
-      "/api/auth/change-password", 
-      data
-    );
-    console.log("パスワード変更成功:", result);
-    return result;
-  } catch (error) {
-    console.error("パスワード変更エラー:", error);
     throw error;
   }
 }
