@@ -103,22 +103,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const data = loginSchema.parse(req.body);
       console.log("✅ バリデーション成功 - メール:", data.email);
       
-      // デバッグ用：まずユーザーの存在確認
-      const existingUser = await storage.getUserByEmail(data.email);
-      console.log("🔍 ユーザー検索結果:", existingUser ? `見つかりました (ID: ${existingUser.id})` : "見つかりませんでした");
+      // シンプルな認証処理
+      const user = await storage.getUserByEmail(data.email);
       
-      if (existingUser) {
-        console.log("🔑 パスワード確認:", {
-          入力パスワード: data.password,
-          保存パスワード: existingUser.password,
-          一致: existingUser.password === data.password
-        });
-      }
-      
-      const user = await storage.authenticateUser(data.email, data.password);
-      
-      if (!user) {
-        console.log("❌ 認証失敗 - ユーザーが見つからない:", data.email);
+      if (!user || user.password !== data.password) {
+        console.log("❌ ログイン失敗:", data.email);
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       
