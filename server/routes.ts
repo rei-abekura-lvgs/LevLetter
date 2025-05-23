@@ -46,6 +46,7 @@ const authenticate = async (req: Request, res: Response, next: Function) => {
 
     // リクエストオブジェクトにユーザー情報を付与
     (req as any).user = user;
+    (req as any).userId = userId;
     next();
   } catch (error) {
     console.error("認証エラー:", error);
