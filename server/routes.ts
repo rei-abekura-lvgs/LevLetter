@@ -103,6 +103,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const data = loginSchema.parse(req.body);
       console.log("✅ バリデーション成功 - メール:", data.email);
       
+      // デバッグ用：まずユーザーの存在確認
+      const existingUser = await storage.getUserByEmail(data.email);
+      console.log("🔍 ユーザー検索結果:", existingUser ? `見つかりました (ID: ${existingUser.id})` : "見つかりませんでした");
+      
+      if (existingUser) {
+        console.log("🔑 パスワード確認:", {
+          入力パスワード: data.password,
+          保存パスワード: existingUser.password,
+          一致: existingUser.password === data.password
+        });
+      }
+      
       const user = await storage.authenticateUser(data.email, data.password);
       
       if (!user) {
