@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/context/auth-context-new";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -28,12 +28,12 @@ import DepartmentManagement from "./department-management";
 import EmployeeImport from "./employee-import";
 
 export default function AdminDashboard() {
-  const { user, isAuthenticated, loading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [_, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("users");
 
   // 認証・権限チェック
-  if (loading) {
+  if (isLoading) {
     return <div className="p-8 text-center text-muted-foreground">読み込み中...</div>;
   }
 

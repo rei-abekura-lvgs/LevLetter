@@ -78,18 +78,11 @@ function AppRoutes() {
             <Settings />
           </Route>
           <Route path="/admin">
-            {(() => {
-              console.log("管理者画面チェック:", { 
-                ユーザー名: user.name, 
-                管理者フラグ: user.isAdmin,
-                ユーザー全情報: user 
-              });
-              return user.isAdmin ? (
-                <AdminDashboard />
-              ) : (
-                <Home user={user} />
-              );
-            })()}
+            {user.isAdmin ? (
+              <AdminDashboard />
+            ) : (
+              <Home user={user} />
+            )}
           </Route>
           <Route path="/">
             <Home user={user} />
