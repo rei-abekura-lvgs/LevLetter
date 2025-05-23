@@ -51,36 +51,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const lastAuthAttempt = useRef<number>(0);
   const authCooldown = 5000; // 5秒のクールダウン
   
-  // ユーザー情報の取得 - 改善版
+  // ユーザー情報の取得 - セッションベース認証対応
   const fetchUser = useCallback(async (): Promise<User | null> => {
     // すでにリクエスト中の場合は中止
     if (isRequesting) {
       return user;
-    }
-    
-    // ユーザーが既に認証済みの場合
-    if (user) {
-      return user;
-    }
-    
-    // トークンがない場合は中止
-    const token = getAuthToken();
-    if (!token) {
-      // 明示的にエラーを設定せず、ただnullを返す
-      setUser(null);
-      return null;
-    }
-    
-    // 試行回数が上限に達しているかチェック
-    if (authAttemptCount.current >= maxAuthAttempts) {
-      // 最後の試行から十分な時間が経過しているか確認
-      const now = Date.now();
-      if (now - lastAuthAttempt.current < authCooldown) {
-        return user; // クールダウン中は何もしない
-      }
-      
-      // クールダウン後はカウンターをリセット
-      authAttemptCount.current = 0;
     }
     
     // リクエスト状態の更新
@@ -88,10 +63,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setLoading(true);
     
     try {
-      // 試行回数を増加
-      authAttemptCount.current++;
-      lastAuthAttempt.current = Date.now();
-      
       // デバッグログ
       console.log("アプリ状態:", {
         "認証済み": isAuthenticated,
@@ -100,30 +71,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
         "現在のパス": window.location.pathname
       });
       
-      // APIからユーザー情報取得
+      // セッションベース認証：常にAPIからユーザー情報取得を試行
       const userData = await getAuthenticatedUser();
       
       if (userData) {
         setUser(userData);
         setAuthError(null);
-        authAttemptCount.current = 0; // 成功したらカウンターをリセット
         return userData;
       } else {
         setUser(null);
-        setAuthError("ユーザー情報を取得できませんでした");
         return null;
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "認証中にエラーが発生しました";
       console.error("認証エラー:", error);
       setUser(null);
-      setAuthError(errorMessage);
       return null;
     } finally {
       setLoading(false);
       setIsRequesting(false);
     }
-  }, [user, isRequesting, loading, isAuthenticated]);
+  }, [isRequesting, loading, isAuthenticated]);
   
   // ログアウト処理
   const logout = useCallback(() => {
@@ -136,21 +103,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setLocation("/login");
   }, [setLocation]);
 
-  // 初回マウント時に認証情報を取得
+  // 初回マウント時に認証情報を取得（セッションベース認証）
   useEffect(() => {
     let isMounted = true;
     
     const initAuth = async () => {
       try {
-        // 認証情報の初期化
-        const token = getAuthToken();
-        if (!token) {
-          if (isMounted) {
-            setLoading(false);
-          }
-          return;
-        }
-        
+        // セッションベース認証：常にユーザー情報の取得を試行
         if (!user && isMounted) {
           await fetchUser();
         }
