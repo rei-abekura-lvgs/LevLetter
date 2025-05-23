@@ -23,9 +23,13 @@ export const users = pgTable("users", {
   isAdmin: boolean("is_admin").notNull().default(false),
   isActive: boolean("is_active").notNull().default(true),
   password: text("password"),
-  cognitoSub: text("cognito_sub").unique(),
   googleId: text("google_id").unique(),
   employeeId: text("employee_id"), // 従業員番号（既存ユーザーはnull許容）
+  // 新しい認証機能
+  emailVerified: boolean("email_verified").notNull().default(false),
+  emailVerificationToken: text("email_verification_token"),
+  passwordResetToken: text("password_reset_token"),
+  passwordResetExpires: timestamp("password_reset_expires"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
@@ -137,11 +141,29 @@ export const loginSchema = z.object({
   password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" })
 });
 
-export const registerSchema = insertUserSchema.pick({
-  email: true,
-  password: true
-}).extend({
-  password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" })
+export const registerSchema = z.object({
+  email: z.string().email("有効なメールアドレスを入力してください"),
+  password: z.string().min(8, "パスワードは8文字以上で入力してください"),
+  name: z.string().min(1, "名前を入力してください"),
+  department: z.string().optional(),
+});
+
+export const resetPasswordRequestSchema = z.object({
+  email: z.string().email("有効なメールアドレスを入力してください"),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "トークンが必要です"),
+  password: z.string().min(8, "パスワードは8文字以上で入力してください"),
+});
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "現在のパスワードを入力してください"),
+  newPassword: z.string().min(8, "新しいパスワードは8文字以上で入力してください"),
+});
+
+export const verifyEmailSchema = z.object({
+  token: z.string().min(1, "認証トークンが必要です"),
 });
 
 export const cardFormSchema = z.object({
