@@ -1,0 +1,85 @@
+Failed to load resource: the server responded with a status of 401 ()Understand this error
+index-Dd96Ab_a.js:332 ログイン試行: rei.abekura@leverages.jp
+index-Dd96Ab_a.js:328 API POST リクエスト: /api/auth/login データあり
+index-Dd96Ab_a.js:328 
+            
+            
+           POST https://eaf4fa49-701d-48e0-9245-b9e5a2ea25ed.picard.prod.repl.run/api/auth/login 401 (Unauthorized)
+Pr @ index-Dd96Ab_a.js:328
+KV @ index-Dd96Ab_a.js:328
+i @ index-Dd96Ab_a.js:332
+(anonymous) @ index-Dd96Ab_a.js:332
+await in (anonymous)
+pM @ index-Dd96Ab_a.js:37
+gM @ index-Dd96Ab_a.js:37
+vM @ index-Dd96Ab_a.js:37
+Qw @ index-Dd96Ab_a.js:37
+v4 @ index-Dd96Ab_a.js:37
+(anonymous) @ index-Dd96Ab_a.js:37
+p1 @ index-Dd96Ab_a.js:40
+WC @ index-Dd96Ab_a.js:37
+Vp @ index-Dd96Ab_a.js:37
+zv @ index-Dd96Ab_a.js:37
+IM @ index-Dd96Ab_a.js:37Understand this error
+index-Dd96Ab_a.js:328 API POST エラー: /api/auth/login Error: 認証が必要です。ログインしてください。
+    at Pr (index-Dd96Ab_a.js:328:29525)
+    at async KV (index-Dd96Ab_a.js:328:28683)
+    at async i (index-Dd96Ab_a.js:332:211383)
+    at async index-Dd96Ab_a.js:332:23914
+Pr @ index-Dd96Ab_a.js:328
+await in Pr
+KV @ index-Dd96Ab_a.js:328
+i @ index-Dd96Ab_a.js:332
+(anonymous) @ index-Dd96Ab_a.js:332
+await in (anonymous)
+pM @ index-Dd96Ab_a.js:37
+gM @ index-Dd96Ab_a.js:37
+vM @ index-Dd96Ab_a.js:37
+Qw @ index-Dd96Ab_a.js:37
+v4 @ index-Dd96Ab_a.js:37
+(anonymous) @ index-Dd96Ab_a.js:37
+p1 @ index-Dd96Ab_a.js:40
+WC @ index-Dd96Ab_a.js:37
+Vp @ index-Dd96Ab_a.js:37
+zv @ index-Dd96Ab_a.js:37
+IM @ index-Dd96Ab_a.js:37Understand this error
+index-Dd96Ab_a.js:328 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at Pr (index-Dd96Ab_a.js:328:29525)
+    at async KV (index-Dd96Ab_a.js:328:28683)
+    at async i (index-Dd96Ab_a.js:332:211383)
+    at async index-Dd96Ab_a.js:332:23914
+KV @ index-Dd96Ab_a.js:328
+await in KV
+i @ index-Dd96Ab_a.js:332
+(anonymous) @ index-Dd96Ab_a.js:332
+await in (anonymous)
+pM @ index-Dd96Ab_a.js:37
+gM @ index-Dd96Ab_a.js:37
+vM @ index-Dd96Ab_a.js:37
+Qw @ index-Dd96Ab_a.js:37
+v4 @ index-Dd96Ab_a.js:37
+(anonymous) @ index-Dd96Ab_a.js:37
+p1 @ index-Dd96Ab_a.js:40
+WC @ index-Dd96Ab_a.js:37
+Vp @ index-Dd96Ab_a.js:37
+zv @ index-Dd96Ab_a.js:37
+IM @ index-Dd96Ab_a.js:37Understand this error
+index-Dd96Ab_a.js:332 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at KV (index-Dd96Ab_a.js:328:28798)
+    at async i (index-Dd96Ab_a.js:332:211383)
+    at async index-Dd96Ab_a.js:332:23914
+i @ index-Dd96Ab_a.js:332
+await in i
+(anonymous) @ index-Dd96Ab_a.js:332
+await in (anonymous)
+pM @ index-Dd96Ab_a.js:37
+gM @ index-Dd96Ab_a.js:37
+vM @ index-Dd96Ab_a.js:37
+Qw @ index-Dd96Ab_a.js:37
+v4 @ index-Dd96Ab_a.js:37
+(anonymous) @ index-Dd96Ab_a.js:37
+p1 @ index-Dd96Ab_a.js:40
+WC @ index-Dd96Ab_a.js:37
+Vp @ index-Dd96Ab_a.js:37
+zv @ index-Dd96Ab_a.js:37
+IM @ index-Dd96Ab_a.js:37Understand this error

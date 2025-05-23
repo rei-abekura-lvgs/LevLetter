@@ -103,12 +103,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const data = loginSchema.parse(req.body);
       console.log("✅ バリデーション成功 - メール:", data.email);
       
-      const user = await storage.authenticateUser(data.email, data.password);
+      // 直接データベースクエリでユーザー認証を実行
+      console.log("🔧 直接データベース認証を実行");
+      const { db } = await import("./db");
+      const { users } = await import("../shared/schema");
+      const { eq } = await import("drizzle-orm");
+      const { hashPassword } = await import("./storage");
       
-      if (!user) {
-        console.log("❌ 認証失敗 - ユーザーが見つからない:", data.email);
+      const [user] = await db.select().from(users).where(eq(users.email, data.email.toLowerCase()));
+      console.log("📋 データベース検索結果:", user ? `ユーザー発見 ID:${user.id}` : "ユーザーなし");
+      
+      if (!user || !user.password) {
+        console.log("❌ 認証失敗 - ユーザーまたはパスワードなし");
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
+      
+      const hashedPassword = hashPassword(data.password);
+      console.log("🔐 パスワード照合:", user.password === hashedPassword ? "成功" : "失敗");
+      
+      if (user.password !== hashedPassword) {
+        console.log("❌ パスワード不一致");
+        return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
+      }
+
       
       console.log("👤 認証成功 - ユーザー:", user.name, "(ID:", user.id, ")");
       
