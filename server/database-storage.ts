@@ -154,19 +154,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByCognitoSub(cognitoSub: string): Promise<User | undefined> {
-    const [user] = await db
-      .select()
-      .from(users)
-      .where(eq(users.cognitoSub, cognitoSub));
-    return user;
+    // cognitoSubカラムが存在しないため、undefined を返す
+    return undefined;
   }
 
   async getUserByGoogleId(googleId: string): Promise<User | undefined> {
-    const [user] = await db
-      .select()
-      .from(users)
-      .where(eq(users.googleId, googleId));
-    return user;
+    // googleIdカラムが存在しないため、undefined を返す
+    return undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {

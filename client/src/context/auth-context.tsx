@@ -1,7 +1,5 @@
-import { createContext, useContext, ReactNode, useState, useEffect, useCallback, useRef } from "react";
+import { createContext, useContext, ReactNode, useState, useEffect, useCallback } from "react";
 import { User } from "@shared/schema";
-import { getAuthenticatedUser, getAuthToken, logout as logoutUtil } from "@/lib/auth";
-import { useLocation } from "wouter";
 
 // デフォルト値
 const defaultAuthContext = {
@@ -35,162 +33,95 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [, setLocation] = useLocation();
 
-  // 認証状態
-  const isAuthenticated = !!user;
-
-  // リクエスト中かどうかを追跡
-  const [isRequesting, setIsRequesting] = useState(false);
-  
-  // 認証試行回数を追跡
-  const authAttemptCount = useRef(0);
-  const maxAuthAttempts = 3;
-  
-  // 最後の認証時刻を追跡
-  const lastAuthAttempt = useRef<number>(0);
-  const authCooldown = 5000; // 5秒のクールダウン
-  
-  // ユーザー情報の取得 - 改善版
+  // 認証状態を確認する関数
   const fetchUser = useCallback(async (): Promise<User | null> => {
-    // すでにリクエスト中の場合は中止
-    if (isRequesting) {
-      return user;
-    }
-    
-    // ユーザーが既に認証済みの場合
-    if (user) {
-      return user;
-    }
-    
-    // トークンがない場合は中止
-    const token = getAuthToken();
-    if (!token) {
-      // 明示的にエラーを設定せず、ただnullを返す
-      setUser(null);
-      return null;
-    }
-    
-    // 試行回数が上限に達しているかチェック
-    if (authAttemptCount.current >= maxAuthAttempts) {
-      // 最後の試行から十分な時間が経過しているか確認
-      const now = Date.now();
-      if (now - lastAuthAttempt.current < authCooldown) {
-        return user; // クールダウン中は何もしない
-      }
-      
-      // クールダウン後はカウンターをリセット
-      authAttemptCount.current = 0;
-    }
-    
-    // リクエスト状態の更新
-    setIsRequesting(true);
-    setLoading(true);
-    
     try {
-      // 試行回数を増加
-      authAttemptCount.current++;
-      lastAuthAttempt.current = Date.now();
-      
-      // デバッグログ
-      console.log("アプリ状態:", {
-        "認証済み": isAuthenticated,
-        "ユーザー": user && typeof user === 'object' ? (user.name || "名前なし") : "未ログイン",
-        "読込中": loading,
-        "現在のパス": window.location.pathname
+      const response = await fetch("/api/auth/me", {
+        credentials: 'include'
       });
       
-      // APIからユーザー情報取得
-      const userData = await getAuthenticatedUser();
-      
-      if (userData) {
+      if (response.ok) {
+        const userData = await response.json();
         setUser(userData);
         setAuthError(null);
-        authAttemptCount.current = 0; // 成功したらカウンターをリセット
         return userData;
       } else {
         setUser(null);
-        setAuthError("ユーザー情報を取得できませんでした");
         return null;
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "認証中にエラーが発生しました";
-      console.error("認証エラー:", error);
+      console.error("認証確認エラー:", error);
       setUser(null);
-      setAuthError(errorMessage);
+      setAuthError("認証の確認に失敗しました");
       return null;
-    } finally {
-      setLoading(false);
-      setIsRequesting(false);
     }
-  }, [user, isRequesting, loading, isAuthenticated]);
-  
-  // ログアウト処理
-  const logout = useCallback(() => {
-    // ユーザー情報をクリア
-    setUser(null);
-    setAuthError(null);
-    // ローカルストレージからトークン削除
-    logoutUtil();
-    // ログインページへリダイレクト
-    setLocation("/login");
-  }, [setLocation]);
+  }, []);
 
-  // 初回マウント時に認証情報を取得
+  // ログアウト処理
+  const logout = useCallback(async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: 'include'
+      });
+      setUser(null);
+      setAuthError(null);
+    } catch (error) {
+      console.error("ログアウトエラー:", error);
+      setAuthError("ログアウトに失敗しました");
+    }
+  }, []);
+
+  // 初期認証チェック
   useEffect(() => {
-    let isMounted = true;
+    let mounted = true;
     
-    const initAuth = async () => {
+    const checkAuth = async () => {
+      setLoading(true);
       try {
-        // 認証情報の初期化
-        const token = getAuthToken();
-        if (!token) {
-          if (isMounted) {
-            setLoading(false);
-          }
-          return;
-        }
-        
-        if (!user && isMounted) {
-          await fetchUser();
-        }
+        await fetchUser();
       } catch (error) {
-        console.error("初期認証エラー:", error);
-        if (isMounted) {
-          setAuthError("認証の初期化に失敗しました");
+        console.error("初期認証チェックエラー:", error);
+      } finally {
+        if (mounted) {
           setLoading(false);
         }
       }
     };
-    
-    initAuth();
-    
-    return () => {
-      isMounted = false;
-    };
-  }, [fetchUser, user]);
 
-  // コンテキスト値
-  const value: AuthContextType = {
+    checkAuth();
+
+    return () => {
+      mounted = false;
+    };
+  }, [fetchUser]);
+
+  const isAuthenticated = !!user;
+
+  const contextValue: AuthContextType = {
     user,
     loading,
     isAuthenticated,
     fetchUser,
     logout,
-    authError
+    authError,
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
+// useAuth カスタムフック
+export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuthはAuthProviderの中で使用する必要があります");
+  
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
+  
   return context;
 }
