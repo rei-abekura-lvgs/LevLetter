@@ -35,8 +35,10 @@ export default function Login() {
       const response = await login(data.email, data.password);
       console.log("ログイン成功:", response);
       
-      // 認証コンテキストを更新（ユーザー情報を再取得）
-      await fetchUser();
+      // ユーザー情報を直接設定
+      if (response.user) {
+        setUser(response.user);
+      }
       
       // 成功メッセージを表示
       toast({
@@ -47,11 +49,8 @@ export default function Login() {
       // 画面遷移の準備
       console.log("ホーム画面への遷移準備中...");
       
-      // 少し遅延させてからページ遷移する（ステート更新が完了するのを待つ）
-      setTimeout(() => {
-        // SPAルーティングを使用して画面遷移
-        setLocation("/");
-      }, 300);
+      // すぐに画面遷移
+      setLocation("/");
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({

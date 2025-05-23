@@ -10,6 +10,7 @@ const defaultAuthContext = {
   isAuthenticated: false,
   logout: () => {},
   fetchUser: async () => null as User | null,
+  setUser: () => {},
   authError: null as string | null,
 };
 
@@ -19,6 +20,7 @@ interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   fetchUser: () => Promise<User | null>;
+  setUser: (user: User | null) => void;
   logout: () => void;
   authError: string | null;
 }
@@ -176,6 +178,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     loading,
     isAuthenticated,
     fetchUser,
+    setUser,
     logout,
     authError
   };
