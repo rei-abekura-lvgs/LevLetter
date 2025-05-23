@@ -520,23 +520,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // 既存ユーザーの確認
           const existingUser = await storage.getUserByEmail(employee.email);
           
-          // 部署情報の設定と階層分割
-          const department = employee.department || "その他";
-          const departmentParts = department.split('/').map(part => part.trim());
+          // 部署情報の設定（新形式対応）
+          let department, department1, department2, department3, department4, department5, department6;
+          
+          // 新しいCSV形式（階層が分割済み）の場合
+          if (employee.所属階層１ || employee.所属階層２ || employee.所属階層３ || employee.所属階層４ || employee.所属階層５) {
+            department1 = employee.所属階層１ || null;
+            department2 = employee.所属階層２ || null;
+            department3 = employee.所属階層３ || null;
+            department4 = employee.所属階層４ || null;
+            department5 = employee.所属階層５ || null;
+            department6 = null; // 新形式では6階層目はなし
+            
+            // 表示用の統合部署名を作成
+            const parts = [department1, department2, department3, department4, department5].filter(Boolean);
+            department = parts.join('/') || "その他";
+          } else {
+            // 従来形式（スラッシュ区切り）の場合
+            department = employee.department || "その他";
+            const departmentParts = department.split('/').map((part: string) => part.trim());
+            department1 = departmentParts[0] || null;
+            department2 = departmentParts[1] || null;
+            department3 = departmentParts[2] || null;
+            department4 = departmentParts[3] || null;
+            department5 = departmentParts[4] || null;
+            department6 = departmentParts[5] || null;
+          }
           
           if (existingUser) {
             // 既存ユーザーの更新（パスワードは維持）
             await storage.updateUser(existingUser.id, {
               name: employee.name,
-              displayName: employee.displayName || null,
+              displayName: employee.displayName || employee.職場氏名 || null,
               department,
-              department1: departmentParts[0] || null,
-              department2: departmentParts[1] || null,
-              department3: departmentParts[2] || null,
-              department4: departmentParts[3] || null,
-              department5: departmentParts[4] || null,
-              department6: departmentParts[5] || null,
-              employeeId: employee.employeeId || null,
+              department1,
+              department2,
+              department3,
+              department4,
+              department5,
+              department6,
+              employeeId: employee.employeeId || employee.社員番号 || null,
             });
             results.updatedUsers++;
           } else {
@@ -544,15 +567,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await storage.createUser({
               email: employee.email,
               name: employee.name,
-              displayName: employee.displayName || null,
+              displayName: employee.displayName || employee.職場氏名 || null,
               department,
-              department1: departmentParts[0] || null,
-              department2: departmentParts[1] || null,
-              department3: departmentParts[2] || null,
-              department4: departmentParts[3] || null,
-              department5: departmentParts[4] || null,
-              department6: departmentParts[5] || null,
-              employeeId: employee.employeeId || null,
+              department1,
+              department2,
+              department3,
+              department4,
+              department5,
+              department6,
+              employeeId: employee.employeeId || employee.社員番号 || null,
               password: null, // パスワードなし = 初回登録が必要
               isAdmin: false,
               isActive: true,
