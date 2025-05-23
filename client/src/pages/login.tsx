@@ -35,11 +35,6 @@ export default function Login() {
       const response = await login(data.email, data.password);
       console.log("ログイン成功:", response);
       
-      // ユーザー情報を直接設定
-      if (response.user) {
-        setUser(response.user);
-      }
-      
       // 成功メッセージを表示
       toast({
         title: "ログイン成功",
@@ -49,8 +44,8 @@ export default function Login() {
       // 画面遷移の準備
       console.log("ホーム画面への遷移準備中...");
       
-      // すぐに画面遷移
-      setLocation("/");
+      // ページをリロードして認証状態を確実に更新
+      window.location.href = "/";
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
