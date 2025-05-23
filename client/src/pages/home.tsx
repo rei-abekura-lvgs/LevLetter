@@ -18,6 +18,7 @@ import { ja } from "date-fns/locale";
 import { getCards } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { LikeButton } from "@/components/like-button";
 import { Badge } from "@/components/ui/badge";
 import { 
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, 

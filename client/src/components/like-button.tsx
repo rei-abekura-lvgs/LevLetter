@@ -32,13 +32,21 @@ export function LikeButton({ card, currentUser, onRefresh }: LikeButtonProps) {
 
     setIsLiking(true);
     try {
-      await apiRequest("/api/cards/like", {
+      const response = await fetch("/api/cards/like", {
         method: "POST",
-        body: {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           cardId: card.id,
           points: 2 // 常に2ptずつ
-        }
+        })
       });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "いいねに失敗しました");
+      }
 
       toast({
         description: "いいねしました！（2pt消費）"
