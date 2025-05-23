@@ -148,23 +148,76 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
           {/* 受信者情報 - 右端中央に固定 */}
           {card.recipientType === "user" && (
             <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end">
-              <div className="bg-[#4ECDC4] text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-sm mb-2">
-                +{card.points}
-              </div>
-              <Avatar className="h-12 w-12">
-                {(card.recipient as User).customAvatarUrl ? (
-                  <AvatarImage src={(card.recipient as User).customAvatarUrl} alt={(card.recipient as User).name} />
-                ) : (
-                  <AvatarFallback className="bg-[#3990EA] flex items-center justify-center">
-                    <BearLogo size={32} />
-                  </AvatarFallback>
-                )}
-              </Avatar>
-              <div className="text-right mt-2">
-                <div className="font-medium text-gray-900 text-sm">
-                  {(card.recipient as User).displayName || (card.recipient as User).name}
+              {/* 複数受信者の場合は全員表示 */}
+              {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
+                <div className="flex flex-col gap-3">
+                  {/* メイン受信者 */}
+                  <div className="flex flex-col items-center">
+                    <div className="relative">
+                      <Avatar className="h-16 w-16">
+                        {(card.recipient as User).customAvatarUrl ? (
+                          <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
+                        ) : (
+                          <AvatarFallback className="bg-[#3990EA] flex items-center justify-center">
+                            <BearLogo size={48} />
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                      {/* ポイントバッジ */}
+                      <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                        {Math.floor((card.points || 0) / (1 + (card.additionalRecipientUsers?.length || 0)))}
+                      </div>
+                    </div>
+                    <span className="text-sm font-medium text-gray-800 mt-1">
+                      {(card.recipient as User).displayName || (card.recipient as User).name}
+                    </span>
+                  </div>
+                  
+                  {/* 追加受信者 */}
+                  {card.additionalRecipientUsers.map((user: User) => (
+                    <div key={user.id} className="flex flex-col items-center">
+                      <div className="relative">
+                        <Avatar className="h-16 w-16">
+                          {user.customAvatarUrl ? (
+                            <AvatarImage src={user.customAvatarUrl} alt={user.name} />
+                          ) : (
+                            <AvatarFallback className="bg-[#3990EA] flex items-center justify-center">
+                              <BearLogo size={48} />
+                            </AvatarFallback>
+                          )}
+                        </Avatar>
+                        {/* ポイントバッジ */}
+                        <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                          {Math.floor((card.points || 0) / (1 + (card.additionalRecipientUsers?.length || 0)))}
+                        </div>
+                      </div>
+                      <span className="text-sm font-medium text-gray-800 mt-1">{user.displayName || user.name}</span>
+                    </div>
+                  ))}
                 </div>
-              </div>
+              ) : (
+                /* 単一受信者 */
+                <div className="flex flex-col items-center">
+                  <div className="relative">
+                    <Avatar className="h-16 w-16">
+                      {(card.recipient as User).customAvatarUrl ? (
+                        <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
+                      ) : (
+                        <AvatarFallback className="bg-[#3990EA] flex items-center justify-center">
+                          <BearLogo size={48} />
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    {/* ポイントバッジ */}
+                    <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                      {card.points}
+                    </div>
+                  </div>
+                  <span className="text-sm font-medium text-gray-800 mt-1">
+                    {(card.recipient as User).displayName || (card.recipient as User).name}
+                  </span>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -376,7 +429,7 @@ export default function Home({ user }: HomeProps) {
       <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
         <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-sm">
           <DialogHeader>
-            <DialogTitle className="text-xl">新しいサンクスカードを送る</DialogTitle>
+            <DialogTitle className="text-xl">サンクスカードを送る</DialogTitle>
           </DialogHeader>
           <CardForm onSent={() => {
             setIsCardFormOpen(false);
