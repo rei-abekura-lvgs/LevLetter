@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { cardFormSchema, User } from "@shared/schema";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/context/auth-context-new";
 import { createCard, getUsers } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
