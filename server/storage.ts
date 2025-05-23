@@ -37,13 +37,13 @@ export interface IStorage {
   getUsers(): Promise<User[]>;
   getUser(id: number): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
-  getUserByEmailVerificationToken(token: string): Promise<User | undefined>;
-  getUserByPasswordResetToken(token: string): Promise<User | undefined>;
+  getUserByCognitoSub(cognitoSub: string): Promise<User | undefined>;
   getUserByGoogleId(googleId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, user: Partial<User>): Promise<User>;
   authenticateUser(email: string, password: string): Promise<User | null>;
   resetUserWeeklyPoints(): Promise<void>;
+  deleteUser(id: number): Promise<void>; // 開発用：ユーザー物理削除
   deleteUser(id: number): Promise<void>; // 開発用：ユーザー物理削除
 
   // チーム

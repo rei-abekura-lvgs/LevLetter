@@ -63,7 +63,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return user;
     }
     
-    // セッションベース認証なので、トークンチェックは不要
+    // トークンがない場合は中止
+    const token = getAuthToken();
+    if (!token) {
+      // 明示的にエラーを設定せず、ただnullを返す
+      setUser(null);
+      return null;
+    }
     
     // 試行回数が上限に達しているかチェック
     if (authAttemptCount.current >= maxAuthAttempts) {
@@ -94,33 +100,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
         "現在のパス": window.location.pathname
       });
       
-      // セッションベースでユーザー情報を取得
-      console.log("セッション認証チェック中...");
+      // APIからユーザー情報取得
       const userData = await getAuthenticatedUser();
       
       if (userData) {
-        console.log("認証成功:", userData.name);
         setUser(userData);
         setAuthError(null);
-        authAttemptCount.current = 0;
+        authAttemptCount.current = 0; // 成功したらカウンターをリセット
         return userData;
       } else {
-        console.log("未認証状態");
         setUser(null);
-        setAuthError(null); // 未認証は正常な状態なのでエラーメッセージなし
+        setAuthError("ユーザー情報を取得できませんでした");
         return null;
       }
     } catch (error) {
-      console.error("認証チェックエラー:", error);
+      const errorMessage = error instanceof Error ? error.message : "認証中にエラーが発生しました";
+      console.error("認証エラー:", error);
       setUser(null);
-      
-      // 401/403は正常な未認証状態
-      const errorMessage = error instanceof Error ? error.message : "";
-      if (errorMessage.includes("401") || errorMessage.includes("403")) {
-        setAuthError(null); // 未認証は正常状態
-      } else {
-        setAuthError("システムエラーが発生しました");
-      }
+      setAuthError(errorMessage);
       return null;
     } finally {
       setLoading(false);

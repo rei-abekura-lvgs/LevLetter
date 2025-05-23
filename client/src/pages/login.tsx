@@ -35,16 +35,23 @@ export default function Login() {
       const response = await login(data.email, data.password);
       console.log("ログイン成功:", response);
       
+      // 認証コンテキストを更新（ユーザー情報を再取得）
+      await fetchUser();
+      
       // 成功メッセージを表示
       toast({
         title: "ログイン成功",
         description: "LevLetterへようこそ！",
       });
       
-      console.log("ログイン成功後、ページをリロード中...");
+      // 画面遷移の準備
+      console.log("ホーム画面への遷移準備中...");
       
-      // 即座にページ遷移を実行
-      window.location.replace("/");
+      // 少し遅延させてからページ遷移する（ステート更新が完了するのを待つ）
+      setTimeout(() => {
+        // SPAルーティングを使用して画面遷移
+        setLocation("/");
+      }, 300);
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({

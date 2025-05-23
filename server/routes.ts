@@ -15,13 +15,8 @@ import {
   loginSchema, 
   cardFormSchema, 
   profileUpdateSchema, 
-  likeFormSchema,
-  resetPasswordRequestSchema,
-  resetPasswordSchema,
-  changePasswordSchema,
-  verifyEmailSchema
+  likeFormSchema
 } from "@shared/schema";
-import { AuthService } from "./services/auth-service";
 
 // 認証ミドルウェア
 const authenticate = async (req: Request, res: Response, next: Function) => {
@@ -99,141 +94,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return res.status(500).json({ message: "バリデーション処理中にエラーが発生しました" });
   };
 
-  // 🆕 新しい認証システム - 新規登録
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const validatedData = registerSchema.parse(req.body);
-      const user = await AuthService.register(
-        validatedData.email,
-        validatedData.password,
-        validatedData.name,
-        validatedData.department
-      );
-      
-      res.status(201).json({ 
-        message: "アカウントが作成されました。メール認証を確認してください。",
-        user: { id: user.id, email: user.email, name: user.name }
-      });
-    } catch (error: any) {
-      if (error.message === 'このメールアドレスは既に登録されています') {
-        return res.status(409).json({ message: error.message });
-      }
-      handleZodError(error, res);
-    }
-  });
-
-  // 🆕 新しい認証システム - ログイン
-  app.post("/api/auth/login", async (req, res) => {
-    try {
-      const validatedData = loginSchema.parse(req.body);
-      const user = await AuthService.login(validatedData.email, validatedData.password);
-      
-      // セッションにユーザーIDを設定
-      req.session.userId = user.id;
-      
-      req.session.save(() => {
-        console.log("✅ 新ログイン成功:", user.name);
-        res.json({ message: "ログイン成功", user });
-      });
-    } catch (error: any) {
-      console.error("ログインエラー:", error);
-      res.status(401).json({ message: error.message || "ログインに失敗しました" });
-    }
-  });
-
-  // 🆕 新しい認証システム - メール認証
-  app.post("/api/auth/verify-email", async (req, res) => {
-    try {
-      const validatedData = verifyEmailSchema.parse(req.body);
-      const user = await AuthService.verifyEmail(validatedData.token);
-      
-      res.json({ message: "メール認証が完了しました", user });
-    } catch (error: any) {
-      res.status(400).json({ message: error.message || "メール認証に失敗しました" });
-    }
-  });
-
-  // 🆕 新しい認証システム - パスワードリセット要求
-  app.post("/api/auth/password-reset-request", async (req, res) => {
-    try {
-      const validatedData = resetPasswordRequestSchema.parse(req.body);
-      await AuthService.requestPasswordReset(validatedData.email);
-      
-      res.json({ message: "パスワードリセットメールを送信しました" });
-    } catch (error: any) {
-      handleZodError(error, res);
-    }
-  });
-
-  // 🆕 新しい認証システム - パスワードリセット実行
-  app.post("/api/auth/password-reset", async (req, res) => {
-    try {
-      const validatedData = resetPasswordSchema.parse(req.body);
-      const user = await AuthService.resetPassword(validatedData.token, validatedData.password);
-      
-      res.json({ message: "パスワードがリセットされました", user });
-    } catch (error: any) {
-      res.status(400).json({ message: error.message || "パスワードリセットに失敗しました" });
-    }
-  });
-
-  // 🆕 新しい認証システム - パスワード変更
-  app.post("/api/auth/change-password", authenticate, async (req: any, res) => {
-    try {
-      const validatedData = changePasswordSchema.parse(req.body);
-      await AuthService.changePassword(
-        req.user.id,
-        validatedData.currentPassword,
-        validatedData.newPassword
-      );
-      
-      res.json({ message: "パスワードが変更されました" });
-    } catch (error: any) {
-      res.status(400).json({ message: error.message || "パスワード変更に失敗しました" });
-    }
-  });
-
-  // 🆕 新しい認証システム - ログアウト
-  app.post("/api/auth/logout", (req, res) => {
-    req.session.destroy(() => {
-      res.json({ message: "ログアウトしました" });
-    });
-  });
-
-  // 🆕 新しい認証システム - 現在のユーザー情報取得
-  app.get("/api/auth/me", authenticate, async (req: any, res) => {
-    try {
-      res.json(req.user);
-    } catch (error) {
-      console.error("新ログインエラー:", error);
-      res.status(500).json({ message: "サーバーエラー" });
-    }
-  });
-
-  app.get("/api/auth/simple-me", async (req, res) => {
-    try {
-      if (!req.session.userId) {
-        return res.status(401).json({ message: "未認証" });
-      }
-      
-      const user = await storage.getUser(req.session.userId);
-      if (!user) {
-        return res.status(401).json({ message: "ユーザー不明" });
-      }
-      
-      res.json({ user });
-    } catch (error) {
-      res.status(500).json({ message: "エラー" });
-    }
-  });
-
-  app.post("/api/auth/simple-logout", (req, res) => {
-    req.session.destroy(() => {
-      res.json({ message: "ログアウト完了" });
-    });
-  });
-
-  // 既存認証API
+  // 認証関連API
   app.post("/api/auth/login", async (req, res) => {
     try {
       console.log("🔐 ログイン試行開始");
@@ -659,46 +520,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // 既存ユーザーの確認
           const existingUser = await storage.getUserByEmail(employee.email);
           
-          // 部署情報の設定（新形式対応）
-          let department, department1, department2, department3, department4, department5, department6;
-          
-          // 新しいCSV形式（階層が分割済み）の場合
-          if (employee.所属階層１ || employee.所属階層２ || employee.所属階層３ || employee.所属階層４ || employee.所属階層５) {
-            department1 = employee.所属階層１ || null;
-            department2 = employee.所属階層２ || null;
-            department3 = employee.所属階層３ || null;
-            department4 = employee.所属階層４ || null;
-            department5 = employee.所属階層５ || null;
-            department6 = null; // 新形式では6階層目はなし
-            
-            // 表示用の統合部署名を作成
-            const parts = [department1, department2, department3, department4, department5].filter(Boolean);
-            department = parts.join('/') || "その他";
-          } else {
-            // 従来形式（スラッシュ区切り）の場合
-            department = employee.department || "その他";
-            const departmentParts = department.split('/').map((part: string) => part.trim());
-            department1 = departmentParts[0] || null;
-            department2 = departmentParts[1] || null;
-            department3 = departmentParts[2] || null;
-            department4 = departmentParts[3] || null;
-            department5 = departmentParts[4] || null;
-            department6 = departmentParts[5] || null;
-          }
+          // 部署情報の設定（未設定の場合は"その他"）
+          const department = employee.department || "その他";
           
           if (existingUser) {
             // 既存ユーザーの更新（パスワードは維持）
             await storage.updateUser(existingUser.id, {
               name: employee.name,
-              displayName: employee.displayName || employee.職場氏名 || null,
+              displayName: employee.displayName || null,
               department,
-              department1,
-              department2,
-              department3,
-              department4,
-              department5,
-              department6,
-              employeeId: employee.employeeId || employee.社員番号 || null,
+              employeeId: employee.employeeId || null,
             });
             results.updatedUsers++;
           } else {
@@ -706,16 +537,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await storage.createUser({
               email: employee.email,
               name: employee.name,
-              displayName: employee.displayName || employee.職場氏名 || null,
+              displayName: employee.displayName || null,
               department,
-              department1,
-              department2,
-              department3,
-              department4,
-              department5,
-              department6,
-              employeeId: employee.employeeId || employee.社員番号 || null,
+              employeeId: employee.employeeId || null,
               password: null, // パスワードなし = 初回登録が必要
+              passwordInitialized: false,
               isAdmin: false,
               isActive: true,
               cognitoSub: null,

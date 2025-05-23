@@ -1,4 +1,4 @@
-import { pgTable, text, varchar, serial, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -14,7 +14,6 @@ export const users = pgTable("users", {
   department3: text("department3"), // 部
   department4: text("department4"), // 課・グループ
   department5: text("department5"), // チーム・係
-  department6: text("department6"), // サブチーム・担当
   avatarColor: text("avatar_color").notNull().default("primary-500"),
   customAvatarUrl: text("custom_avatar_url"), // カスタムアバター画像のURL
   weeklyPoints: integer("weekly_points").notNull().default(500),
@@ -23,13 +22,9 @@ export const users = pgTable("users", {
   isAdmin: boolean("is_admin").notNull().default(false),
   isActive: boolean("is_active").notNull().default(true),
   password: text("password"),
+  cognitoSub: text("cognito_sub").unique(),
   googleId: text("google_id").unique(),
-  employeeId: text("employee_id"), // 従業員番号（既存ユーザーはnull許容）
-  // 新しい認証機能
-  emailVerified: boolean("email_verified").notNull().default(false),
-  emailVerificationToken: text("email_verification_token"),
-  passwordResetToken: text("password_reset_token"),
-  passwordResetExpires: timestamp("password_reset_expires"),
+  employeeId: text("employee_id").unique(), // 従業員番号（既存ユーザーはnull許容）
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
@@ -86,17 +81,6 @@ export const teamMembers = pgTable("team_members", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// 部署階層管理テーブル
-export const departmentsHierarchy = pgTable("departments_hierarchy", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  level: integer("level").notNull(), // 1-5の階層レベル
-  parentId: integer("parent_id").references(() => departmentsHierarchy.id, { onDelete: "cascade" }),
-  sortOrder: integer("sort_order").default(0),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
 // Zodスキーマ
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -129,41 +113,17 @@ export const insertDepartmentSchema = createInsertSchema(departments).omit({
   createdAt: true
 });
 
-export const insertDepartmentHierarchySchema = createInsertSchema(departmentsHierarchy).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true
-});
-
 // カスタムスキーマ
 export const loginSchema = z.object({
   email: z.string().email({ message: "有効なメールアドレスを入力してください" }),
   password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" })
 });
 
-export const registerSchema = z.object({
-  email: z.string().email("有効なメールアドレスを入力してください"),
-  password: z.string().min(8, "パスワードは8文字以上で入力してください"),
-  name: z.string().min(1, "名前を入力してください"),
-  department: z.string().optional(),
-});
-
-export const resetPasswordRequestSchema = z.object({
-  email: z.string().email("有効なメールアドレスを入力してください"),
-});
-
-export const resetPasswordSchema = z.object({
-  token: z.string().min(1, "トークンが必要です"),
-  password: z.string().min(8, "パスワードは8文字以上で入力してください"),
-});
-
-export const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1, "現在のパスワードを入力してください"),
-  newPassword: z.string().min(8, "新しいパスワードは8文字以上で入力してください"),
-});
-
-export const verifyEmailSchema = z.object({
-  token: z.string().min(1, "認証トークンが必要です"),
+export const registerSchema = insertUserSchema.pick({
+  email: true,
+  password: true
+}).extend({
+  password: z.string().min(6, { message: "パスワードは6文字以上で入力してください" })
 });
 
 export const cardFormSchema = z.object({
@@ -203,8 +163,6 @@ export type TeamMember = typeof teamMembers.$inferSelect;
 export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
 export type Department = typeof departments.$inferSelect;
 export type InsertDepartment = z.infer<typeof insertDepartmentSchema>;
-export type DepartmentHierarchy = typeof departmentsHierarchy.$inferSelect;
-export type InsertDepartmentHierarchy = z.infer<typeof insertDepartmentHierarchySchema>;
 
 // カスタム型
 export type CardWithRelations = Card & {
