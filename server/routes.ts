@@ -108,6 +108,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!user || user.password !== data.password) {
         console.log("❌ ログイン失敗:", data.email);
+      console.log("📝 入力パスワード:", data.password);
+      console.log("👤 取得ユーザー:", user ? `見つかりました (パスワード: ${user.password})` : "見つかりませんでした");
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       

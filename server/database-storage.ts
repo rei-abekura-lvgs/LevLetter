@@ -147,10 +147,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
+    console.log("🔍 データベースユーザー検索:", email);
     const [user] = await db
       .select()
       .from(users)
-      .where(eq(users.email, email.toLowerCase()));
+      .where(eq(users.email, email));
+    console.log("📋 検索結果:", user ? `見つかりました (ID: ${user.id})` : "見つかりませんでした");
     return user;
   }
 
