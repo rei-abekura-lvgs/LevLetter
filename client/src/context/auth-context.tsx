@@ -1,11 +1,24 @@
-import { createContext, useContext, ReactNode, useState, useEffect, useCallback, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { User } from "@shared/schema";
-import { getAuthenticatedUser, getAuthToken, logout as logoutUtil } from "@/lib/auth";
+import {
+  getAuthenticatedUser,
+  getAuthToken,
+  logout as logoutUtil,
+} from "@/lib/auth";
 import { useLocation } from "wouter";
 
 // デフォルト値
 const defaultAuthContext = {
   user: null as User | null,
+  setUser: () => {},
   loading: false,
   isAuthenticated: false,
   logout: () => {},
@@ -16,6 +29,7 @@ const defaultAuthContext = {
 // コンテキスト型
 interface AuthContextType {
   user: User | null;
+  setUser: any;
   loading: boolean;
   isAuthenticated: boolean;
   fetchUser: () => Promise<User | null>;
@@ -42,27 +56,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // リクエスト中かどうかを追跡
   const [isRequesting, setIsRequesting] = useState(false);
-  
+
   // 認証試行回数を追跡
   const authAttemptCount = useRef(0);
   const maxAuthAttempts = 3;
-  
+
   // 最後の認証時刻を追跡
   const lastAuthAttempt = useRef<number>(0);
   const authCooldown = 5000; // 5秒のクールダウン
-  
+
   // ユーザー情報の取得 - 改善版
   const fetchUser = useCallback(async (): Promise<User | null> => {
     // すでにリクエスト中の場合は中止
     if (isRequesting) {
       return user;
     }
-    
+
     // ユーザーが既に認証済みの場合
     if (user) {
       return user;
     }
-    
+
     // トークンがない場合は中止
     const token = getAuthToken();
     if (!token) {
@@ -70,7 +84,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(null);
       return null;
     }
-    
+
     // 試行回数が上限に達しているかチェック
     if (authAttemptCount.current >= maxAuthAttempts) {
       // 最後の試行から十分な時間が経過しているか確認
@@ -78,31 +92,34 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (now - lastAuthAttempt.current < authCooldown) {
         return user; // クールダウン中は何もしない
       }
-      
+
       // クールダウン後はカウンターをリセット
       authAttemptCount.current = 0;
     }
-    
+
     // リクエスト状態の更新
     setIsRequesting(true);
     setLoading(true);
-    
+
     try {
       // 試行回数を増加
       authAttemptCount.current++;
       lastAuthAttempt.current = Date.now();
-      
+
       // デバッグログ
       console.log("アプリ状態:", {
-        "認証済み": isAuthenticated,
-        "ユーザー": user && typeof user === 'object' ? (user.name || "名前なし") : "未ログイン",
-        "読込中": loading,
-        "現在のパス": window.location.pathname
+        認証済み: isAuthenticated,
+        ユーザー:
+          user && typeof user === "object"
+            ? user.name || "名前なし"
+            : "未ログイン",
+        読込中: loading,
+        現在のパス: window.location.pathname,
       });
-      
+
       // APIからユーザー情報取得
       const userData = await getAuthenticatedUser();
-      
+
       if (userData) {
         setUser(userData);
         setAuthError(null);
@@ -114,7 +131,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return null;
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "認証中にエラーが発生しました";
+      const errorMessage =
+        error instanceof Error ? error.message : "認証中にエラーが発生しました";
       console.error("認証エラー:", error);
       setUser(null);
       setAuthError(errorMessage);
@@ -124,7 +142,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setIsRequesting(false);
     }
   }, [user, isRequesting, loading, isAuthenticated]);
-  
+
   // ログアウト処理
   const logout = useCallback(() => {
     // ユーザー情報をクリア
@@ -139,7 +157,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // 初回マウント時に認証情報を取得
   useEffect(() => {
     let isMounted = true;
-    
+
     const initAuth = async () => {
       try {
         // 認証情報の初期化
@@ -150,7 +168,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           }
           return;
         }
-        
+
         if (!user && isMounted) {
           await fetchUser();
         }
@@ -162,9 +180,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       }
     };
-    
+
     initAuth();
-    
+
     return () => {
       isMounted = false;
     };
@@ -173,18 +191,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // コンテキスト値
   const value: AuthContextType = {
     user,
+    setUser,
     loading,
     isAuthenticated,
     fetchUser,
     logout,
-    authError
+    authError,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

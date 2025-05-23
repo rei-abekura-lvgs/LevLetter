@@ -15,7 +15,7 @@ import { BearLogo } from "@/components/bear-logo";
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const { fetchUser } = useAuth();
+  const { fetchUser, setUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [location, setLocation] = useLocation();
@@ -41,11 +41,17 @@ export default function Login() {
         description: "LevLetterへようこそ！",
       });
 
+      // 認証コンテキストにユーザー情報を直接設定
+      setUser(response.user);
+      console.log("認証情報更新完了:", response.user);
+
       // 画面遷移の準備
       console.log("ホーム画面への遷移準備中...");
       
-      // ページ全体をリロードして認証状態を確実に反映
-      window.location.href = "/";
+      // 少し遅延してから確実に遷移
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 200);
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
