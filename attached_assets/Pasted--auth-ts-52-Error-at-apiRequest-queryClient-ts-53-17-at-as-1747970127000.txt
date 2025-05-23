@@ -1,0 +1,57 @@
+ザーは未ログイン状態です
+auth.ts:52 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:53:17)
+    at async getAuthenticatedUser (auth.ts:43:20)
+    at async auth-context.tsx:104:24
+    at async initAuth (auth-context.tsx:155:11)
+App.tsx:50 アプリ状態: 
+Object
+auth-context.tsx:96 アプリ状態: 
+Object
+queryClient.ts:42 API GET リクエスト: /api/auth/me データなし
+App.tsx:50 アプリ状態: 
+Object
+api/auth/me:1 
+ Failed to load resource: the server responded with a status of 401 (Unauthorized)
+queryClient.ts:52 ユーザーは未ログイン状態です
+auth.ts:52 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:53:17)
+    at async getAuthenticatedUser (auth.ts:43:20)
+    at async auth-context.tsx:104:24
+    at async initAuth (auth-context.tsx:155:11)
+auth-context.tsx:96 アプリ状態: 
+Object
+queryClient.ts:42 API GET リクエスト: /api/auth/me データなし
+api/auth/me:1 
+ Failed to load resource: the server responded with a status of 401 (Unauthorized)
+queryClient.ts:52 ユーザーは未ログイン状態です
+auth.ts:52 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:53:17)
+    at async getAuthenticatedUser (auth.ts:43:20)
+    at async auth-context.tsx:104:24
+    at async initAuth (auth-context.tsx:155:11)
+App.tsx:50 アプリ状態: 
+Object
+api/auth/me:1 
+ Failed to load resource: the server responded with a status of 401 (Unauthorized)
+queryClient.ts:52 ユーザーは未ログイン状態です
+auth.ts:52 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:53:17)
+    at async getAuthenticatedUser (auth.ts:43:20)
+    at async auth-context.tsx:104:24
+    at async initAuth (auth-context.tsx:155:11)
+login.tsx:34 ログイン試行: rei.abekura@leverages.jp
+queryClient.ts:42 API POST リクエスト: /api/auth/login データあり
+queryClient.ts:45 
+ POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/login 500 (Internal Server Error)
+queryClient.ts:83 API POST エラー: /api/auth/login Error: ログイン処理中にエラーが発生しました
+    at apiRequest (queryClient.ts:62:15)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+auth.ts:20 ログインエラー: Error: ログイン処理中にエラーが発生しました
+    at apiRequest (queryClient.ts:62:15)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+login.tsx:56 ログインエラー: Error: ログイン処理中にエラーが発生しました
+    at login (auth.ts:21:11)
+    at async onSubmit (login.tsx:35:24)
