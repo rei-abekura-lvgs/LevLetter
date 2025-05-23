@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { BearLogo } from "@/components/bear-logo";
+import { queryClient } from "@/lib/queryClient";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -35,6 +36,10 @@ export default function Login() {
       const response = await login(data.email, data.password);
       console.log("ログイン成功:", response);
       
+      // React Queryキャッシュを強制リセット
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+      queryClient.removeQueries({ queryKey: ["/api/auth/me"] });
+      
       // 認証コンテキストを更新（ユーザー情報を再取得）
       await fetchUser();
       
@@ -44,14 +49,8 @@ export default function Login() {
         description: "LevLetterへようこそ！",
       });
       
-      // 画面遷移の準備
-      console.log("ホーム画面への遷移準備中...");
-      
-      // 少し遅延させてからページ遷移する（ステート更新が完了するのを待つ）
-      setTimeout(() => {
-        // SPAルーティングを使用して画面遷移
-        setLocation("/");
-      }, 300);
+      // 即座に画面遷移
+      setLocation("/");
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
@@ -59,6 +58,7 @@ export default function Login() {
         description: error instanceof Error ? error.message : "ログインに失敗しました。もう一度お試しください。",
         variant: "destructive",
       });
+    } finally {
       setIsLoading(false);
     }
   }
