@@ -247,12 +247,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/change-password", authenticate, async (req: any, res) => {
     try {
       console.log("🔑 パスワード変更API呼び出し - ユーザーID:", req.userId);
+      console.log("🔑 パスワード変更API呼び出し - セッションユーザーID:", req.session.userId);
+      console.log("🔑 パスワード変更API呼び出し - ユーザーオブジェクト:", req.user);
+      
+      const userId = req.userId || req.session.userId;
+      console.log("🔑 使用するユーザーID:", userId);
       
       const data = passwordChangeSchema.parse(req.body);
       
-      await storage.changePassword(req.userId, data.currentPassword, data.newPassword);
+      await storage.changePassword(userId, data.currentPassword, data.newPassword);
       
-      console.log("✅ パスワード変更成功 - ユーザーID:", req.userId);
+      console.log("✅ パスワード変更成功 - ユーザーID:", userId);
       return res.json({ message: "パスワードが正常に変更されました" });
       
     } catch (error) {
