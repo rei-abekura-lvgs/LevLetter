@@ -246,18 +246,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // パスワード変更API
   app.post("/api/auth/change-password", authenticate, async (req: any, res) => {
     try {
-      console.log("🔑 パスワード変更API呼び出し - ユーザーID:", req.userId);
-      console.log("🔑 パスワード変更API呼び出し - セッションユーザーID:", req.session.userId);
-      console.log("🔑 パスワード変更API呼び出し - ユーザーオブジェクト:", req.user);
+      // セッションから直接ユーザーIDを取得
+      const userId = req.session.userId;
       
-      const userId = req.userId || req.session.userId;
-      console.log("🔑 使用するユーザーID:", userId);
+      if (!userId) {
+        return res.status(401).json({ message: "認証が必要です" });
+      }
       
       const data = passwordChangeSchema.parse(req.body);
       
       await storage.changePassword(userId, data.currentPassword, data.newPassword);
       
-      console.log("✅ パスワード変更成功 - ユーザーID:", userId);
       return res.json({ message: "パスワードが正常に変更されました" });
       
     } catch (error) {
@@ -272,6 +271,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof Error) {
         if (error.message.includes("現在のパスワード")) {
           errorMessage = error.message;
+        } else if (error.message.includes("ユーザーが見つかりません")) {
+          errorMessage = "ユーザー情報が見つかりません";
         }
       }
       
