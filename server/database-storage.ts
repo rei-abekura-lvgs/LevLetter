@@ -217,19 +217,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async changePassword(userId: number, currentPassword: string, newPassword: string): Promise<void> {
-    console.log("🔑 パスワード変更開始 - ユーザーID:", userId);
-    
     // 現在のパスワードを確認
     const user = await this.getUser(userId);
     if (!user) {
       throw new Error("ユーザーが見つかりません");
     }
-    
-    console.log("🔍 現在のパスワード確認:", {
-      入力: currentPassword,
-      保存: user.password,
-      一致: user.password === currentPassword
-    });
     
     if (user.password !== currentPassword) {
       throw new Error("現在のパスワードが正しくありません");
