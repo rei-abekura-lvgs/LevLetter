@@ -1,4 +1,4 @@
-import { pgTable, text, varchar, serial, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, timestamp, jsonb, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -82,17 +82,6 @@ export const teamMembers = pgTable("team_members", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// 部署階層管理テーブル
-export const departmentsHierarchy = pgTable("departments_hierarchy", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  level: integer("level").notNull(), // 1-5の階層レベル
-  parentId: integer("parent_id").references(() => departmentsHierarchy.id, { onDelete: "cascade" }),
-  sortOrder: integer("sort_order").default(0),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
 // Zodスキーマ
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -123,12 +112,6 @@ export const insertTeamMemberSchema = createInsertSchema(teamMembers).omit({
 export const insertDepartmentSchema = createInsertSchema(departments).omit({
   id: true,
   createdAt: true
-});
-
-export const insertDepartmentHierarchySchema = createInsertSchema(departmentsHierarchy).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true
 });
 
 // カスタムスキーマ
