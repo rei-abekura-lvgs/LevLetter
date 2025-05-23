@@ -207,12 +207,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async authenticateUser(email: string, password: string): Promise<User | null> {
+    console.log(`🔑 authenticateUser called with email: ${email}`);
+    
     const user = await this.getUserByEmail(email);
+    console.log(`👤 getUserByEmail result:`, user ? `Found user ID ${user.id}` : 'No user found');
+    
     if (!user || !user.password) {
+      console.log(`❌ Authentication failed: ${!user ? 'User not found' : 'User has no password'}`);
       return null;
     }
 
     const hashedPassword = hashPassword(password);
+    console.log(`🔐 Password comparison: provided hash vs stored hash match = ${user.password === hashedPassword}`);
+    
     return user.password === hashedPassword ? user : null;
   }
 
