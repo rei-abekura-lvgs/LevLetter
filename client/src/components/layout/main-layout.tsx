@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/context/auth-context-new";
 import Sidebar from "./sidebar";
 import MobileNav from "./mobile-nav";
 import Header from "./header";
