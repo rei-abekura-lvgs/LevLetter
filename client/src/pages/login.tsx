@@ -35,6 +35,9 @@ export default function Login() {
       const response = await login(data.email, data.password);
       console.log("ログイン成功:", response);
       
+      // 認証コンテキストを更新（ユーザー情報を再取得）
+      await fetchUser();
+      
       // 成功メッセージを表示
       toast({
         title: "ログイン成功",
@@ -44,8 +47,11 @@ export default function Login() {
       // 画面遷移の準備
       console.log("ホーム画面への遷移準備中...");
       
-      // ページをリロードして認証状態を確実に更新
-      window.location.href = "/";
+      // 少し遅延させてからページ遷移する（ステート更新が完了するのを待つ）
+      setTimeout(() => {
+        // SPAルーティングを使用して画面遷移
+        setLocation("/");
+      }, 300);
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({

@@ -119,7 +119,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
             ) : (
               <AvatarFallback className="bg-transparent flex items-center justify-center">
-                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
+                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
               </AvatarFallback>
             )}
           </Avatar>
@@ -152,7 +152,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
                 <div className="relative">
                   {/* 受信者アバターを横に並べる（重複OK） */}
-                  <div className="flex items-center -space-x-3 relative">
+                  <div className="flex items-center -space-x-3">
                     {/* メイン受信者 */}
                     <div className="relative">
                       <Avatar className="h-20 w-20 border-2 border-white">
@@ -160,7 +160,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                           <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
                         ) : (
                           <AvatarFallback className="bg-transparent flex items-center justify-center">
-                            <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
+                            <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
                           </AvatarFallback>
                         )}
                       </Avatar>
@@ -174,17 +174,17 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                             <AvatarImage src={user.customAvatarUrl || undefined} alt={user.name} />
                           ) : (
                             <AvatarFallback className="bg-transparent flex items-center justify-center">
-                              <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
+                              <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
                             </AvatarFallback>
                           )}
                         </Avatar>
                       </div>
                     ))}
-                    
-                    {/* 全体のポイントバッジ - 最後のアバターの右下に配置 */}
-                    <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2 z-10">
-                      {card.points}
-                    </div>
+                  </div>
+                  
+                  {/* 全体のポイントバッジ - 右下に配置 */}
+                  <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2 z-10">
+                    {card.points}
                   </div>
                   
                   {/* 受信者名を下に表示（ホバーで全員表示） */}
@@ -211,7 +211,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                         <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
                       ) : (
                         <AvatarFallback className="bg-transparent flex items-center justify-center">
-                          <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
+                          <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
                         </AvatarFallback>
                       )}
                     </Avatar>
