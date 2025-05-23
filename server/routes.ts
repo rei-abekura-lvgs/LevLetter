@@ -94,7 +94,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return res.status(500).json({ message: "バリデーション処理中にエラーが発生しました" });
   };
 
-  // 認証関連API
+  // 新しいシンプル認証API
+  app.post("/api/auth/simple-login", async (req, res) => {
+    try {
+      console.log("🔥 新シンプルログイン開始");
+      const { email, password } = req.body;
+      
+      const user = await storage.authenticateUser(email, password);
+      if (!user) {
+        return res.status(401).json({ message: "認証に失敗しました" });
+      }
+      
+      req.session.userId = user.id;
+      
+      // セッションを強制保存
+      req.session.save(() => {
+        console.log("✅ 新ログイン成功:", user.name);
+        res.json({ message: "ログイン成功", user });
+      });
+    } catch (error) {
+      console.error("新ログインエラー:", error);
+      res.status(500).json({ message: "サーバーエラー" });
+    }
+  });
+
+  app.get("/api/auth/simple-me", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "未認証" });
+      }
+      
+      const user = await storage.getUser(req.session.userId);
+      if (!user) {
+        return res.status(401).json({ message: "ユーザー不明" });
+      }
+      
+      res.json({ user });
+    } catch (error) {
+      res.status(500).json({ message: "エラー" });
+    }
+  });
+
+  app.post("/api/auth/simple-logout", (req, res) => {
+    req.session.destroy(() => {
+      res.json({ message: "ログアウト完了" });
+    });
+  });
+
+  // 既存認証API
   app.post("/api/auth/login", async (req, res) => {
     try {
       console.log("🔐 ログイン試行開始");

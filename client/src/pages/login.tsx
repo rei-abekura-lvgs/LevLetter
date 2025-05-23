@@ -43,10 +43,8 @@ export default function Login() {
       
       console.log("ログイン成功後、ページをリロード中...");
       
-      // ページを完全にリロードして認証状態を確実に反映
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 500);
+      // 即座にページ遷移を実行
+      window.location.replace("/");
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
