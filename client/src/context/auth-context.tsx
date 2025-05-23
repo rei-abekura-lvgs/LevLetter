@@ -77,13 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return user;
     }
 
-    // トークンがない場合は中止
-    const token = getAuthToken();
-    if (!token) {
-      // 明示的にエラーを設定せず、ただnullを返す
-      setUser(null);
-      return null;
-    }
+    // セッションベースの認証なので、トークンチェックをスキップ
 
     // 試行回数が上限に達しているかチェック
     if (authAttemptCount.current >= maxAuthAttempts) {
@@ -160,22 +154,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const initAuth = async () => {
       try {
-        // 認証情報の初期化
-        const token = getAuthToken();
-        if (!token) {
-          if (isMounted) {
-            setLoading(false);
-          }
-          return;
-        }
-
+        console.log("🔄 認証初期化開始...");
+        
+        // セッションベースの認証なので、直接APIから認証情報を取得
         if (!user && isMounted) {
-          await fetchUser();
+          const userData = await fetchUser();
+          console.log("🔄 初期認証結果:", userData ? userData.name : "認証失敗");
         }
       } catch (error) {
         console.error("初期認証エラー:", error);
         if (isMounted) {
-          setAuthError("認証の初期化に失敗しました");
           setLoading(false);
         }
       }
