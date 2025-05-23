@@ -520,9 +520,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // 既存ユーザーの確認
           const existingUser = await storage.getUserByEmail(employee.email);
           
-          // 部署情報の設定と階層分割
+          // 部署情報の設定（未設定の場合は"その他"）
           const department = employee.department || "その他";
-          const departmentParts = department.split('/').map(part => part.trim());
           
           if (existingUser) {
             // 既存ユーザーの更新（パスワードは維持）
@@ -530,12 +529,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
               name: employee.name,
               displayName: employee.displayName || null,
               department,
-              department1: departmentParts[0] || null,
-              department2: departmentParts[1] || null,
-              department3: departmentParts[2] || null,
-              department4: departmentParts[3] || null,
-              department5: departmentParts[4] || null,
-              department6: departmentParts[5] || null,
               employeeId: employee.employeeId || null,
             });
             results.updatedUsers++;
@@ -546,14 +539,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
               name: employee.name,
               displayName: employee.displayName || null,
               department,
-              department1: departmentParts[0] || null,
-              department2: departmentParts[1] || null,
-              department3: departmentParts[2] || null,
-              department4: departmentParts[3] || null,
-              department5: departmentParts[4] || null,
-              department6: departmentParts[5] || null,
               employeeId: employee.employeeId || null,
               password: null, // パスワードなし = 初回登録が必要
+              passwordInitialized: false,
               isAdmin: false,
               isActive: true,
               cognitoSub: null,
@@ -755,93 +743,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("いいね取得エラー:", error);
       return res.status(500).json({ message: "いいね情報の取得に失敗しました" });
-    }
-  });
-
-  // カードにいいねを追加するAPI
-  app.post("/api/cards/like", authenticate, async (req, res) => {
-    try {
-      const { cardId, points = 2 } = req.body;
-      const currentUser = (req as any).user;
-
-      if (!cardId || points !== 2) {
-        return res.status(400).json({ message: "無効なリクエストです" });
-      }
-
-      // カードの存在確認
-      const card = await storage.getCard(cardId);
-      if (!card) {
-        return res.status(404).json({ message: "カードが見つかりません" });
-      }
-
-      // 自分のカードにはいいねできない
-      if (card.senderId === currentUser.id) {
-        return res.status(400).json({ message: "自分のカードにはいいねできません" });
-      }
-
-      // ポイント残高チェック
-      if (currentUser.weeklyPoints < points) {
-        return res.status(400).json({ message: "ポイント残高が不足しています" });
-      }
-
-      // 現在のユーザーがこのカードにいいねした総ポイント数を計算
-      const userLikePoints = card.likes
-        .filter(like => like.user.id === currentUser.id)
-        .reduce((total, like) => total + (like.points || 2), 0);
-
-      // 最大30ptまでいいねできる
-      if (userLikePoints >= 30) {
-        return res.status(400).json({ message: "いいね上限に達しました（30pt）" });
-      }
-
-      // いいね作成
-      const like = await storage.createLike({
-        cardId,
-        userId: currentUser.id,
-        points
-      });
-
-      // いいねした人のポイント消費（2pt）
-      await storage.updateUser(currentUser.id, {
-        weeklyPoints: currentUser.weeklyPoints - points
-      });
-
-      // 送信者に1pt付与
-      const sender = await storage.getUser(card.senderId);
-      if (sender) {
-        await storage.updateUser(sender.id, {
-          totalPointsReceived: sender.totalPointsReceived + 1
-        });
-      }
-
-      // 受信者に1pt付与
-      if (card.recipientType === "user") {
-        const recipient = await storage.getUser(card.recipientId);
-        if (recipient) {
-          await storage.updateUser(recipient.id, {
-            totalPointsReceived: recipient.totalPointsReceived + 1
-          });
-        }
-      }
-
-      // 追加受信者がいる場合も1ptずつ付与
-      if (card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0) {
-        for (const additionalRecipient of card.additionalRecipientUsers) {
-          await storage.updateUser(additionalRecipient.id, {
-            totalPointsReceived: additionalRecipient.totalPointsReceived + 1
-          });
-        }
-      }
-
-      return res.status(201).json({ 
-        message: "いいねしました！", 
-        like,
-        pointsConsumed: points,
-        pointsAwarded: card.additionalRecipientUsers ? 1 + card.additionalRecipientUsers.length + 1 : 2
-      });
-    } catch (error) {
-      console.error("いいね作成エラー:", error);
-      return res.status(500).json({ message: "いいねの作成に失敗しました" });
     }
   });
 

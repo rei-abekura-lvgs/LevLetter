@@ -18,7 +18,6 @@ import { ja } from "date-fns/locale";
 import { getCards } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LikeButton } from "@/components/like-button";
 import { Badge } from "@/components/ui/badge";
 import { 
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, 
@@ -119,7 +118,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             {card.sender.customAvatarUrl ? (
               <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
             ) : (
-              <AvatarFallback className="bg-[#3990EA]/20 flex items-center justify-center">
+              <AvatarFallback className="bg-transparent flex items-center justify-center">
                 <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
               </AvatarFallback>
             )}
@@ -149,76 +148,44 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
           {/* 受信者情報 - 右端中央に固定 */}
           {card.recipientType === "user" && (
             <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end">
-              {/* 複数受信者の場合は省略表示 */}
+              {/* 複数受信者の場合は横に並べて表示（一部重複OK） */}
               {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
                 <div className="relative">
-                  {/* アバター数に応じてサイズ調整 */}
-                  {card.additionalRecipientUsers.length >= 3 ? (
-                    /* 4人以上の場合：小さいアバターで省略表示 */
-                    <div className="flex items-center -space-x-2 relative">
-                      <div className="relative">
-                        <Avatar className="h-12 w-12 border-2 border-white">
-                          {(card.recipient as User).customAvatarUrl ? (
-                            <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
-                          ) : (
-                            <AvatarFallback className="bg-[#3990EA]/20 flex items-center justify-center">
-                              <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-8 h-8 object-contain" />
-                            </AvatarFallback>
-                          )}
-                        </Avatar>
-                      </div>
-                      <div className="relative">
-                        <Avatar className="h-12 w-12 border-2 border-white">
-                          {card.additionalRecipientUsers[0].customAvatarUrl ? (
-                            <AvatarImage src={card.additionalRecipientUsers[0].customAvatarUrl || undefined} alt={card.additionalRecipientUsers[0].name} />
-                          ) : (
-                            <AvatarFallback className="bg-[#3990EA]/20 flex items-center justify-center">
-                              <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-8 h-8 object-contain" />
-                            </AvatarFallback>
-                          )}
-                        </Avatar>
-                      </div>
-                      <div className="h-12 w-12 border-2 border-white rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">
-                        +{card.additionalRecipientUsers.length}
-                      </div>
-                      {/* ポイントバッジ */}
-                      <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[28px] h-6 flex items-center justify-center px-2 z-10">
-                        {card.points}pt
-                      </div>
+                  {/* 受信者アバターを横に並べる（重複OK） */}
+                  <div className="flex items-center -space-x-3 relative">
+                    {/* メイン受信者 */}
+                    <div className="relative">
+                      <Avatar className="h-20 w-20 border-2 border-white">
+                        {(card.recipient as User).customAvatarUrl ? (
+                          <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
+                        ) : (
+                          <AvatarFallback className="bg-transparent flex items-center justify-center">
+                            <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
                     </div>
-                  ) : (
-                    /* 3人以下の場合：通常サイズで全表示 */
-                    <div className="flex items-center -space-x-3 relative">
-                      <div className="relative">
-                        <Avatar className="h-16 w-16 border-2 border-white">
-                          {(card.recipient as User).customAvatarUrl ? (
-                            <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
+                    
+                    {/* 追加受信者 */}
+                    {card.additionalRecipientUsers.map((user: User, index: number) => (
+                      <div key={user.id} className="relative">
+                        <Avatar className="h-20 w-20 border-2 border-white">
+                          {user.customAvatarUrl ? (
+                            <AvatarImage src={user.customAvatarUrl || undefined} alt={user.name} />
                           ) : (
-                            <AvatarFallback className="bg-[#3990EA]/20 flex items-center justify-center">
-                              <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-12 h-12 object-contain" />
+                            <AvatarFallback className="bg-transparent flex items-center justify-center">
+                              <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
                             </AvatarFallback>
                           )}
                         </Avatar>
                       </div>
-                      {card.additionalRecipientUsers.map((user: User, index: number) => (
-                        <div key={user.id} className="relative">
-                          <Avatar className="h-16 w-16 border-2 border-white">
-                            {user.customAvatarUrl ? (
-                              <AvatarImage src={user.customAvatarUrl || undefined} alt={user.name} />
-                            ) : (
-                              <AvatarFallback className="bg-[#3990EA]/20 flex items-center justify-center">
-                                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-12 h-12 object-contain" />
-                              </AvatarFallback>
-                            )}
-                          </Avatar>
-                        </div>
-                      ))}
-                      {/* ポイントバッジ */}
-                      <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[28px] h-6 flex items-center justify-center px-2 z-10">
-                        {card.points}pt
-                      </div>
+                    ))}
+                    
+                    {/* 全体のポイントバッジ - 最後のアバターの右下に配置 */}
+                    <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2 z-10">
+                      {card.points}
                     </div>
-                  )}
+                  </div>
                   
                   {/* 受信者名を下に表示（ホバーで全員表示） */}
                   <div className="text-center mt-2 group relative">
@@ -243,14 +210,14 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                       {(card.recipient as User).customAvatarUrl ? (
                         <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
                       ) : (
-                        <AvatarFallback className="bg-[#3990EA]/20 flex items-center justify-center">
+                        <AvatarFallback className="bg-transparent flex items-center justify-center">
                           <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_52_25.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
                         </AvatarFallback>
                       )}
                     </Avatar>
                     {/* ポイントバッジ - 右下に配置 */}
-                    <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[28px] h-6 flex items-center justify-center px-2">
-                      {card.points}pt
+                    <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2">
+                      {card.points}
                     </div>
                   </div>
                   <div className="text-center mt-2">
@@ -267,12 +234,13 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         {/* 下部：いいねボタンとアクション */}
         <div className="flex items-center pl-16">
           <div className="flex items-center gap-4">
-            {/* いいねボタン */}
-            <LikeButton 
-              card={card} 
-              currentUser={currentUser}
-              onRefresh={onRefresh}
-            />
+            {/* いいねアイコン */}
+            <div className="flex items-center gap-1">
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
+                <Heart className="h-4 w-4 text-gray-500" />
+              </div>
+              <span className="text-sm text-gray-600">{card.likes.length}</span>
+            </div>
             
             {/* 管理者ボタン */}
             {isAdmin && (
