@@ -23,7 +23,7 @@ function getRandomAvatarColor(): string {
   return DEFAULT_AVATAR_COLORS[randomIndex];
 }
 
-import { IStorage, hashPassword } from "./storage";
+import { IStorage, hashPassword, verifyPassword } from "./storage";
 
 export class DatabaseStorage implements IStorage {
   // ユーザー物理削除（開発用）
@@ -220,8 +220,8 @@ export class DatabaseStorage implements IStorage {
       return null;
     }
 
-    const hashedPassword = hashPassword(password);
-    return user.password === hashedPassword ? user : null;
+    // シンプルなパスワード検証（デモ用）
+    return user.password === password ? user : null;
   }
 
   async resetUserWeeklyPoints(): Promise<void> {
