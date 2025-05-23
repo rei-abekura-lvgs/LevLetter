@@ -1,6 +1,6 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/context/auth-context-new";
 import { Award, Gift, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
