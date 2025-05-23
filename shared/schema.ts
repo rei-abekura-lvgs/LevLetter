@@ -14,6 +14,7 @@ export const users = pgTable("users", {
   department3: text("department3"), // 部
   department4: text("department4"), // 課・グループ
   department5: text("department5"), // チーム・係
+  department6: text("department6"), // サブチーム・担当
   avatarColor: text("avatar_color").notNull().default("primary-500"),
   customAvatarUrl: text("custom_avatar_url"), // カスタムアバター画像のURL
   weeklyPoints: integer("weekly_points").notNull().default(500),

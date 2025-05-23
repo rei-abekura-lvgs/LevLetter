@@ -520,8 +520,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // 既存ユーザーの確認
           const existingUser = await storage.getUserByEmail(employee.email);
           
-          // 部署情報の設定（未設定の場合は"その他"）
+          // 部署情報の設定と階層分割
           const department = employee.department || "その他";
+          const departmentParts = department.split('/').map(part => part.trim());
           
           if (existingUser) {
             // 既存ユーザーの更新（パスワードは維持）
@@ -529,6 +530,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
               name: employee.name,
               displayName: employee.displayName || null,
               department,
+              department1: departmentParts[0] || null,
+              department2: departmentParts[1] || null,
+              department3: departmentParts[2] || null,
+              department4: departmentParts[3] || null,
+              department5: departmentParts[4] || null,
+              department6: departmentParts[5] || null,
               employeeId: employee.employeeId || null,
             });
             results.updatedUsers++;
@@ -539,9 +546,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
               name: employee.name,
               displayName: employee.displayName || null,
               department,
+              department1: departmentParts[0] || null,
+              department2: departmentParts[1] || null,
+              department3: departmentParts[2] || null,
+              department4: departmentParts[3] || null,
+              department5: departmentParts[4] || null,
+              department6: departmentParts[5] || null,
               employeeId: employee.employeeId || null,
               password: null, // パスワードなし = 初回登録が必要
-              passwordInitialized: false,
               isAdmin: false,
               isActive: true,
               cognitoSub: null,

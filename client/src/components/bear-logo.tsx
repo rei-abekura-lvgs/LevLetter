@@ -14,6 +14,9 @@ export function BearLogo({
   useDefaultIcon?: boolean;
   bgColor?: string; 
 }) {
+  console.log("BearLogo rendering:", { size, useTransparent, useDefaultIcon, bgColor });
+  console.log("bearDefaultIcon path:", bearDefaultIcon);
+  
   // 新しいデフォルトアイコンを使用
   if (useDefaultIcon) {
     return (
@@ -23,6 +26,8 @@ export function BearLogo({
         width={size} 
         height={size}
         className="object-contain rounded-full"
+        onError={(e) => console.error("Bear default icon failed to load:", e)}
+        onLoad={() => console.log("Bear default icon loaded successfully")}
       />
     );
   }
