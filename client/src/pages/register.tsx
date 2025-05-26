@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { apiRequest } from "@/lib/queryClient";
 import { InfoIcon, CheckCircle, XCircle } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // バリデーションルールを拡張
 const extendedRegisterSchema = z.object({
@@ -26,6 +27,14 @@ const extendedRegisterSchema = z.object({
 
 type RegisterFormValues = z.infer<typeof extendedRegisterSchema>;
 
+interface GoogleAuthInfo {
+  cognitoSub: string;
+  email: string;
+  name: string;
+  familyName?: string;
+  picture?: string;
+}
+
 export default function Register() {
   const [, setLocation] = useLocation();
   const { fetchUser } = useAuth();
@@ -33,6 +42,8 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [emailVerified, setEmailVerified] = useState<boolean | null>(null);
   const [verifyingEmail, setVerifyingEmail] = useState(false);
+  const [googleAuthInfo, setGoogleAuthInfo] = useState<GoogleAuthInfo | null>(null);
+  const [isGoogleMode, setIsGoogleMode] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(extendedRegisterSchema),
@@ -42,6 +53,35 @@ export default function Register() {
       confirmPassword: "",
     },
   });
+
+  // URLパラメータをチェックしてGoogle認証情報を取得
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isGoogleAuth = urlParams.get('google') === 'true';
+    
+    if (isGoogleAuth) {
+      setIsGoogleMode(true);
+      // Google認証情報を取得
+      const fetchGoogleAuthInfo = async () => {
+        try {
+          const response = await fetch('/api/auth/google-pending');
+          if (response.ok) {
+            const authInfo = await response.json();
+            setGoogleAuthInfo(authInfo);
+            // フォームにGoogle情報を自動入力
+            form.setValue('email', authInfo.email);
+            console.log("✅ Google認証情報を取得:", authInfo);
+          } else {
+            console.log("❌ Google認証情報が見つかりません");
+          }
+        } catch (error) {
+          console.error("Google認証情報取得エラー:", error);
+        }
+      };
+      
+      fetchGoogleAuthInfo();
+    }
+  }, [form]);
 
   // メール検証の状態管理
   const [verificationStatus, setVerificationStatus] = useState<{

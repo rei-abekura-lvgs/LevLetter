@@ -186,6 +186,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Google認証の一時情報を取得
+  app.get('/api/auth/google-pending', async (req: Request, res: Response) => {
+    try {
+      const pendingAuth = req.session.pendingGoogleAuth;
+      if (!pendingAuth) {
+        return res.status(404).json({ message: "Google認証情報が見つかりません" });
+      }
+      console.log("📤 Google認証情報を送信:", pendingAuth.email);
+      res.json(pendingAuth);
+    } catch (error) {
+      console.error("Error fetching Google auth info:", error);
+      res.status(500).json({ message: "Google認証情報の取得に失敗しました" });
+    }
+  });
+
   // 認証関連API
   app.post("/api/auth/login", async (req, res) => {
     try {
