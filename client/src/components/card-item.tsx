@@ -123,17 +123,27 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
         <div className="flex items-center space-x-2">
           <Dialog open={isLikeDialogOpen} onOpenChange={setIsLikeDialogOpen}>
             <DialogTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className={`flex items-center ${userLike ? 'text-red-500' : 'text-gray-600'}`}
-                title={card.likes.length > 0 ? `いいねした人: ${card.likes.map(like => like.user.displayName || like.user.name).join(', ')}` : 'まだいいねはありません'}
-              >
-                <Heart 
-                  className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
-                />
-                <span>{card.likes.reduce((total, like) => total + (like.points || 2), 0)}pt</span>
-              </Button>
+              <div className="relative">
+                {/* いいねした人の名前表示 */}
+                {card.likes.length > 0 && (
+                  <div className="absolute bottom-full left-0 mb-1 bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10 shadow-lg max-w-xs">
+                    いいね！
+                    <div className="text-xs opacity-80">
+                      {card.likes.map(like => like.user.displayName || like.user.name).join(', ')}
+                    </div>
+                  </div>
+                )}
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`flex items-center ${userLike ? 'text-red-500' : 'text-gray-600'}`}
+                >
+                  <Heart 
+                    className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
+                  />
+                  <span>{card.likes.reduce((total, like) => total + (like.points || 2), 0)}pt</span>
+                </Button>
+              </div>
             </DialogTrigger>
             <DialogContent>
               <LikeForm 
