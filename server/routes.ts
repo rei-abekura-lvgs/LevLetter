@@ -99,6 +99,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/auth/google", async (req: Request, res: Response) => {
     try {
       console.log("🌐 Google認証開始");
+      
+      // 必要な環境変数の確認
+      if (!process.env.AWS_COGNITO_DOMAIN || !process.env.AWS_COGNITO_CLIENT_ID) {
+        console.error("❌ AWS Cognito設定が不完全です");
+        return res.redirect('/login?error=config_error');
+      }
+      
       const redirectUri = getRedirectUri(req);
       const authUrl = generateGoogleAuthUrl(redirectUri);
       console.log("🔗 リダイレクトURI:", redirectUri);
@@ -106,7 +113,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.redirect(authUrl);
     } catch (error) {
       console.error("❌ Google認証開始エラー:", error);
-      res.status(500).json({ message: "認証開始に失敗しました" });
+      res.redirect('/login?error=auth_start_failed');
     }
   });
 
