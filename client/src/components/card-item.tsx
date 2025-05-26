@@ -114,16 +114,21 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
         <div className="flex items-center space-x-2">
           <Dialog open={isLikeDialogOpen} onOpenChange={setIsLikeDialogOpen}>
             <DialogTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className={`flex items-center ${userLike ? 'text-red-500' : 'text-gray-600'}`}
+              <div 
+                className="relative"
+                title={card.likes.length > 0 ? `いいねした人: ${card.likes.map(like => like.user.displayName || like.user.name).join(', ')}` : 'まだいいねはありません'}
               >
-                <Heart 
-                  className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
-                />
-                <span>{card.likes.length * 2}pt</span>
-              </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`flex items-center ${userLike ? 'text-red-500' : 'text-gray-600'}`}
+                >
+                  <Heart 
+                    className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
+                  />
+                  <span>{card.likes.length * 2}pt</span>
+                </Button>
+              </div>
             </DialogTrigger>
             <DialogContent>
               <LikeForm 
