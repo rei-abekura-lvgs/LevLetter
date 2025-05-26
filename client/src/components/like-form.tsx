@@ -21,7 +21,7 @@ interface LikeFormProps {
 
 type LikeFormValues = z.infer<typeof likeFormSchema>;
 
-export default function LikeForm({ cardId, onClose }: LikeFormProps) {
+export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -37,6 +37,17 @@ export default function LikeForm({ cardId, onClose }: LikeFormProps) {
 
   async function onSubmit(data: LikeFormValues) {
     if (!user) return;
+
+    // すでにいいねしている場合は何もしない
+    if (hasLiked) {
+      toast({
+        title: "すでにいいね済みです",
+        description: "このカードにはすでにいいねをしています",
+        variant: "destructive",
+      });
+      onClose();
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -69,36 +80,32 @@ export default function LikeForm({ cardId, onClose }: LikeFormProps) {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <DialogHeader>
-        <DialogTitle>
-          {hasLiked ? "いいねを取り消す" : "いいねする"}
-        </DialogTitle>
+        <DialogTitle>いいねする</DialogTitle>
         <DialogDescription>
-          {hasLiked
-            ? "このカードへのいいねとポイントを取り消します。"
-            : "このカードにいいねしてポイントを贈りましょう！"}
+          このカードにいいねしてポイントを贈りましょう！
         </DialogDescription>
       </DialogHeader>
 
-      {!hasLiked && (
+      {!hasLiked ? (
         <div className="py-6">
           <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                ポイント: {form.watch("points")}
-              </label>
-              <Slider
-                className="mt-2"
-                defaultValue={[10]}
-                max={Math.min(100, user?.weeklyPoints || 100)}
-                min={0}
-                step={5}
-                onValueChange={(value) => form.setValue("points", value[0])}
-              />
+            <div className="text-center">
+              <div className="text-2xl font-bold text-[#3990EA] mb-2">2pt</div>
+              <div className="text-sm text-gray-600">
+                いいね1回につき2ポイント消費<br />
+                送信者と受信者それぞれに1ポイントずつ贈られます
+              </div>
             </div>
 
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500 text-center">
               残りポイント: {user?.weeklyPoints || 0} ポイント
             </div>
+          </div>
+        </div>
+      ) : (
+        <div className="py-6 text-center">
+          <div className="text-green-600 font-medium">
+            ✓ すでにいいね済みです
           </div>
         </div>
       )}
@@ -112,28 +119,24 @@ export default function LikeForm({ cardId, onClose }: LikeFormProps) {
         >
           キャンセル
         </Button>
-        <Button
-          type="submit"
-          disabled={isSubmitting || (user?.weeklyPoints === 0 && !hasLiked)}
-          className={hasLiked ? "bg-red-500 hover:bg-red-600" : ""}
-        >
-          {isSubmitting ? (
-            <span className="flex items-center">
-              <span className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
-              処理中...
-            </span>
-          ) : hasLiked ? (
-            <span className="flex items-center">
-              <Heart className="mr-2 h-4 w-4" />
-              いいねを取り消す
-            </span>
-          ) : (
-            <span className="flex items-center">
-              <Heart className="mr-2 h-4 w-4" />
-              いいねする
-            </span>
-          )}
-        </Button>
+        {!hasLiked && (
+          <Button
+            type="submit"
+            disabled={isSubmitting || (user?.weeklyPoints && user.weeklyPoints < 2)}
+          >
+            {isSubmitting ? (
+              <span className="flex items-center">
+                <span className="animate-spin mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                処理中...
+              </span>
+            ) : (
+              <span className="flex items-center">
+                <Heart className="mr-2 h-4 w-4" />
+                いいねする（2pt）
+              </span>
+            )}
+          </Button>
+        )}
       </DialogFooter>
     </form>
   );
