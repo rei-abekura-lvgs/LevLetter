@@ -145,7 +145,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!user) {
         console.log("❌ 従業員データベースに未登録:", cognitoUser.email);
-        return res.redirect('/login?error=employee_not_found');
+        console.log("🔄 新規ユーザー登録プロセス開始");
+        
+        // セッションにGoogle認証情報を一時保存
+        req.session.pendingGoogleAuth = {
+          cognitoSub: cognitoUser.id,
+          email: cognitoUser.email,
+          name: cognitoUser.name,
+          familyName: cognitoUser.familyName,
+          picture: cognitoUser.picture
+        };
+        
+        console.log("💾 Google認証情報をセッションに保存");
+        return res.redirect('/register?google=true');
       }
       
       console.log("✅ 従業員データベース照合成功:", user.email);
