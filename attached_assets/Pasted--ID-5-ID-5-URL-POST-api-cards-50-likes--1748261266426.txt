@@ -1,0 +1,147 @@
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/50/likes
+🔑 セッションID: H3PYXzGVtJoIg67TC2zeAsSpEoDvg4q_
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:07:40.084Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+いいね作成エラー: error: duplicate key value violates unique constraint "likes_card_id_user_id_key"
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.createLike (/home/runner/workspace/server/database-storage.ts:708:20)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1074:20) {
+  length: 228,
+  severity: 'ERROR',
+  code: '23505',
+  detail: 'Key (card_id, user_id)=(50, 5) already exists.',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'likes',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'likes_card_id_user_id_key',
+  file: 'nbtinsert.c',
+  line: '666',
+  routine: '_bt_check_unique'
+}
+12:07:40 PM [express] POST /api/cards/50/likes 500 in 413ms :: {"message":"いいねの作成に失敗しました"}
+いいね作成エラー: error: duplicate key value violates unique constraint "likes_card_id_user_id_key"
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.createLike (/home/runner/workspace/server/database-storage.ts:708:20)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1074:20) {
+  length: 228,
+  severity: 'ERROR',
+  code: '23505',
+  detail: 'Key (card_id, user_id)=(50, 5) already exists.',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'likes',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'likes_card_id_user_id_key',
+  file: 'nbtinsert.c',
+  line: '666',
+  routine: '_bt_check_unique'
+}
+12:07:41 PM [express] POST /api/cards/50/likes 500 in 473ms :: {"message":"いいねの作成に失敗しました"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/50/likes
+🔑 セッションID: H3PYXzGVtJoIg67TC2zeAsSpEoDvg4q_
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:07:41.025Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/50/likes
+🔑 セッションID: H3PYXzGVtJoIg67TC2zeAsSpEoDvg4q_
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:07:41.025Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+いいね作成エラー: error: duplicate key value violates unique constraint "likes_card_id_user_id_key"
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.createLike (/home/runner/workspace/server/database-storage.ts:708:20)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1074:20) {
+  length: 228,
+  severity: 'ERROR',
+  code: '23505',
+  detail: 'Key (card_id, user_id)=(50, 5) already exists.',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'likes',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'likes_card_id_user_id_key',
+  file: 'nbtinsert.c',
+  line: '666',
+  routine: '_bt_check_unique'
+}
+12:07:41 PM [express] POST /api/cards/50/likes 500 in 427ms :: {"message":"いいねの作成に失敗しました"}
+いいね作成エラー: error: duplicate key value violates unique constraint "likes_card_id_user_id_key"
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.createLike (/home/runner/workspace/server/database-storage.ts:708:20)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1074:20) {
+  length: 228,
+  severity: 'ERROR',
+  code: '23505',
+  detail: 'Key (card_id, user_id)=(50, 5) already exists.',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'likes',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'likes_card_id_user_id_key',
+  file: 'nbtinsert.c',
+  line: '666',
+  routine: '_bt_check_unique'
+}
+12:07:41 PM [express] POST /api/cards/50/likes 500 in 435ms :: {"message":"いいねの作成に失敗しました"}

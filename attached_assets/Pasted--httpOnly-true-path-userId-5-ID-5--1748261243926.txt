@@ -1,0 +1,75 @@
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:06:59 PM [express] DELETE /api/cards/48/likes 200 in 2ms
+12:06:59 PM [express] GET /api/cards 304 in 441ms :: [{"id":71,"senderId":5,"recipientId":269,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: H3PYXzGVtJoIg67TC2zeAsSpEoDvg4q_
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:06:59.818Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:07:00 PM [express] GET /api/cards 304 in 436ms :: [{"id":71,"senderId":5,"recipientId":269,"recipi…
+12:07:02 PM [express] DELETE /api/cards/48/likes 200 in 3ms
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: H3PYXzGVtJoIg67TC2zeAsSpEoDvg4q_
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:07:02.122Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:07:02 PM [express] GET /api/cards 304 in 451ms :: [{"id":71,"senderId":5,"recipientId":269,"recipi…
+12:07:03 PM [express] DELETE /api/cards/48/likes 200 in 3ms
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: H3PYXzGVtJoIg67TC2zeAsSpEoDvg4q_
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:07:03.443Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:07:04 PM [express] GET /api/cards 304 in 471ms :: [{"id":71,"senderId":5,"recipientId":269,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: H3PYXzGVtJoIg67TC2zeAsSpEoDvg4q_
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:07:04.077Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:07:13 PM [express] GET /api/cards 304 in 434ms :: [{"id":71,"senderId":5,"recipientId":269,"recipi…
