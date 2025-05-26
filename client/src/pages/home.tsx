@@ -45,6 +45,37 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   // 管理者かどうかを確認
   const isAdmin = currentUser?.isAdmin || false;
 
+  // いいね機能のハンドラ
+  const handleLike = async (cardId: number, isAlreadyLiked: boolean) => {
+    try {
+      const method = isAlreadyLiked ? 'DELETE' : 'POST';
+      const response = await fetch(`/api/cards/${cardId}/likes`, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('いいね処理に失敗しました');
+      }
+
+      toast({
+        title: isAlreadyLiked ? "いいねを取り消しました" : "いいねしました！",
+        description: isAlreadyLiked ? "" : "カードにいいねを送りました",
+      });
+
+      if (onRefresh) onRefresh();
+    } catch (error) {
+      console.error('いいねエラー:', error);
+      toast({
+        title: "エラー",
+        description: `いいね処理に失敗しました: ${error}`,
+        variant: "destructive",
+      });
+    }
+  };
+
   // ユーザーアバターのイニシャルを作成
   const getInitials = (name: string) => {
     return name
@@ -234,11 +265,45 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         <div className="flex items-center pl-16">
           <div className="flex items-center gap-4">
             {/* いいねアイコン */}
-            <div className="flex items-center gap-1">
-              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
-                <Heart className="h-4 w-4 text-gray-500" />
-              </div>
+            <div className="flex items-center gap-1 group relative">
+              {(() => {
+                // 送信者と受信者以外がいいねできる
+                const allRecipients = card.additionalRecipients 
+                  ? [card.recipient as User, ...(card.additionalRecipients as User[])] 
+                  : [card.recipient as User];
+                const isRecipient = allRecipients.some(r => r.id === currentUser?.id);
+                const isSender = card.sender.id === currentUser?.id;
+                const canLike = !isSender && !isRecipient;
+                const userLiked = card.likes.some(like => like.user.id === currentUser?.id);
+                
+                return (
+                  <div 
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                      canLike 
+                        ? 'bg-gray-100 hover:bg-pink-100 cursor-pointer' 
+                        : 'bg-gray-50 cursor-not-allowed opacity-50'
+                    }`}
+                    onClick={canLike ? () => handleLike(card.id, userLiked) : undefined}
+                  >
+                    <Heart className={`h-4 w-4 ${userLiked ? 'text-pink-500 fill-pink-500' : 'text-gray-500'}`} />
+                  </div>
+                );
+              })()}
+              
               <span className="text-sm text-gray-600">{card.likes.length}</span>
+              
+              {/* ホバー時のいいねユーザー表示 */}
+              {card.likes.length > 0 && (
+                <div className="absolute bottom-full left-0 mb-2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
+                  <div className="font-medium mb-1">いいね！</div>
+                  {card.likes.map((like, index) => (
+                    <div key={like.id}>
+                      {index > 0 && ", "}
+                      {like.user.displayName || like.user.name}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             
             {/* 管理者ボタン */}

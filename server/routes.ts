@@ -1038,6 +1038,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // カード別いいね機能 - いいねする
+  app.post("/api/cards/:cardId/likes", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.cardId);
+      const user = (req as any).user;
+
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+
+      // カードの存在確認
+      const card = await storage.getCard(cardId);
+      if (!card) {
+        return res.status(404).json({ message: "カードが見つかりません" });
+      }
+
+      // 送信者と受信者はいいねできない
+      const allRecipients = card.additionalRecipients 
+        ? [card.recipient as any, ...card.additionalRecipients] 
+        : [card.recipient as any];
+      const isRecipient = allRecipients.some((r: any) => r.id === user.id);
+      const isSender = card.sender.id === user.id;
+      
+      if (isSender || isRecipient) {
+        return res.status(403).json({ message: "送信者と受信者はいいねできません" });
+      }
+
+      // 既にいいねしているか確認
+      const existingLike = await storage.getLike(cardId, user.id);
+      if (existingLike) {
+        return res.status(400).json({ message: "既にいいねしています" });
+      }
+
+      const like = await storage.createLike({
+        cardId: cardId,
+        userId: user.id,
+      });
+
+      return res.status(201).json({ message: "いいねしました", like });
+    } catch (error) {
+      console.error("いいね作成エラー:", error);
+      return res.status(500).json({ message: "いいねの作成に失敗しました" });
+    }
+  });
+
+  // カード別いいね機能 - いいねを取り消す
+  app.delete("/api/cards/:cardId/likes", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.cardId);
+      const user = (req as any).user;
+
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+
+      // 既存のいいねを確認
+      const existingLike = await storage.getLike(cardId, user.id);
+      if (!existingLike) {
+        return res.status(404).json({ message: "いいねが見つかりません" });
+      }
+
+      await storage.deleteLike(existingLike.id);
+
+      return res.status(200).json({ message: "いいねを取り消しました" });
+    } catch (error) {
+      console.error("いいね削除エラー:", error);
+      return res.status(500).json({ message: "いいねの削除に失敗しました" });
+    }
+  });
+
   app.post("/api/likes", authenticate, async (req, res) => {
     try {
       const data = likeFormSchema.parse(req.body);
