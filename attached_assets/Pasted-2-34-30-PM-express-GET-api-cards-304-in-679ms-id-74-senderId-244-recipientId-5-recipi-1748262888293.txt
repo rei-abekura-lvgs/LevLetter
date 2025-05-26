@@ -1,0 +1,155 @@
+2:34:30 PM [express] GET /api/cards 304 in 679ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+12:34:35 PM [express] DELETE /api/cards/48/likes 200 in 5ms
+12:34:35 PM [express] DELETE /api/cards/48/likes 200 in 5ms
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:35.527Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:34:35 PM [express] DELETE /api/cards/48/likes 200 in 6ms
+12:34:35 PM [express] DELETE /api/cards/48/likes 200 in 4ms
+12:34:36 PM [express] DELETE /api/cards/48/likes 200 in 4ms
+12:34:36 PM [express] GET /api/cards 304 in 485ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:36.032Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:34:36 PM [express] DELETE /api/cards/48/likes 200 in 8ms
+12:34:36 PM [express] GET /api/cards 304 in 485ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:36.670Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:34:36 PM [express] DELETE /api/cards/48/likes 200 in 4ms
+12:34:37 PM [express] DELETE /api/cards/48/likes 200 in 3ms
+12:34:37 PM [express] DELETE /api/cards/48/likes 200 in 3ms
+12:34:37 PM [express] DELETE /api/cards/48/likes 200 in 16ms
+12:34:37 PM [express] GET /api/cards 304 in 486ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:37.397Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:34:38 PM [express] GET /api/cards 304 in 491ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:38.043Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:38.043Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:34:38 PM [express] GET /api/cards 304 in 651ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+12:34:39 PM [express] GET /api/cards 304 in 908ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:39.103Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:34:39 PM [express] GET /api/cards 304 in 534ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:39.794Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:34:40 PM [express] GET /api/cards 304 in 516ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: TUN1VBPv3i_cTMg7nLi9_kuhqigs7Zfm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T12:34:40.469Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+12:34:41 PM [express] GET /api/cards 304 in 529ms :: [{"id":74,"senderId":244,"recipientId":5,"recipi…
