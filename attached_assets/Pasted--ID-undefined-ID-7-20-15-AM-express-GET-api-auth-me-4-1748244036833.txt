@@ -1,0 +1,49 @@
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+7:20:15 AM [express] GET /api/auth/me 401 in 1ms :: {"message":"認証が必要です"}
+Token exchange failed: {"error":"invalid_client"}
+❌ Google認証コールバックエラー: Error: トークン交換に失敗しました
+    at exchangeCodeForTokens (/home/runner/workspace/server/cognito-auth.ts:68:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:135:22)
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: sazxq2gIV93IsmiQ8rx_XYKQIgPCVsdZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-02T07:20:17.617Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+7:20:17 AM [express] GET /api/auth/me 401 in 1ms :: {"message":"認証が必要です"}
+🌐 Google認証開始
+🔗 リダイレクトURI: https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/auth/callback
+🔗 認証URL: https://ap-northeast-1fdmrl4gwu.auth.ap-northeast-1.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=https%3A%2F%2F39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev%2Fauth%2Fcallback&response_type=code&client_id=36e7s3i07u3r5t819b9ka9koqq&scope=email+openid+profile
+7:20:20 AM [express] GET /api/auth/google 302 in 1ms
+🔄 Google認証コールバック処理開始
+🔑 認証コード受信: fe3f2797-2e8b-489b-b4d8-df3790481b0a
+Token exchange failed: {"error":"invalid_client"}
+❌ Google認証コールバックエラー: Error: トークン交換に失敗しました
+    at exchangeCodeForTokens (/home/runner/workspace/server/cognito-auth.ts:68:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:135:22)
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: x-tecHLzAlL8rziASzToS6qAAiatS3Ge
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-02T07:20:23.617Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+7:20:23 AM [express] GET /api/auth/me 401 in 1ms :: {"message":"認証が必要です"}

@@ -44,6 +44,13 @@ export function generateGoogleAuthUrl(redirectUri: string): string {
 export async function exchangeCodeForTokens(code: string, redirectUri: string) {
   const domain = process.env.AWS_COGNITO_DOMAIN;
   const clientId = process.env.AWS_COGNITO_CLIENT_ID;
+  const clientSecret = process.env.AWS_COGNITO_CLIENT_SECRET;
+
+  console.log("🔄 トークン交換開始...");
+  console.log("  - ドメイン:", domain);
+  console.log("  - クライアントID:", clientId);
+  console.log("  - クライアントシークレット存在:", !!clientSecret);
+  console.log("  - リダイレクトURI:", redirectUri);
 
   const tokenEndpoint = `https://${domain}/oauth2/token`;
   
@@ -54,21 +61,37 @@ export async function exchangeCodeForTokens(code: string, redirectUri: string) {
     redirect_uri: redirectUri,
   });
 
+  // クライアントシークレットが存在する場合、Basic認証ヘッダーを追加
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  if (clientSecret) {
+    const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+    headers['Authorization'] = `Basic ${credentials}`;
+    console.log("🔐 Basic認証ヘッダーを追加");
+  }
+
+  console.log("📤 トークンエンドポイントへリクエスト:", tokenEndpoint);
+
   const response = await fetch(tokenEndpoint, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    headers,
     body: params.toString(),
   });
 
   if (!response.ok) {
     const error = await response.text();
-    console.error('Token exchange failed:', error);
+    console.error("❌ トークン交換失敗:");
+    console.error("  - ステータス:", response.status);
+    console.error("  - エラー詳細:", error);
     throw new Error('トークン交換に失敗しました');
   }
 
-  return await response.json();
+  const tokens = await response.json();
+  console.log("✅ トークン交換成功");
+  
+  return tokens;
 }
 
 /**
