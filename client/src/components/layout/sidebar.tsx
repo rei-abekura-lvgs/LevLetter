@@ -11,9 +11,9 @@ interface SidebarProps {
   user: User | null;
 }
 
-export default function Sidebar({ user }: SidebarProps) {
+export default function Sidebar({ user: propUser }: SidebarProps) {
   const [location] = useLocation();
-  const { user: authUser } = useAuth();
+  const { user } = useAuth(); // 認証コンテキストから直接取得（楽観的更新対応）
 
   const handleLogout = async () => {
     await logout();
