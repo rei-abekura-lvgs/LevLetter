@@ -49,9 +49,13 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   // いいね機能のハンドラ（複数回いいね可能、2pt固定）
   const handleLike = async (cardId: number) => {
     try {
+      console.log('🎯 いいねボタン押下開始 - カードID:', cardId);
+      console.log('👤 現在のユーザー利用可能ポイント:', currentUser?.weeklyPoints);
+
       // 楽観的更新：まず画面上のデータを即座に変更
       queryClient.setQueryData(['/api/cards'], (oldData: any) => {
         if (!oldData) return oldData;
+        console.log('📝 カードデータ楽観的更新開始');
         return oldData.map((card: any) => {
           if (card.id === cardId) {
             // 新しいいいねを追加（2ptの価値で）
@@ -61,10 +65,13 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               points: 2, // 常に2pt
               user: currentUser 
             };
-            return {
+            console.log('💖 新しいいいね追加:', newLike);
+            const updatedCard = {
               ...card,
               likes: [...(card.likes || []), newLike]
             };
+            console.log('📊 更新後のいいね数:', updatedCard.likes.length);
+            return updatedCard;
           }
           return card;
         });
@@ -72,10 +79,15 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
       // ユーザーの利用可能ポイントも即座に減らす
       queryClient.setQueryData(['/api/auth/me'], (oldData: any) => {
-        if (!oldData || oldData.weeklyPoints < 2) return oldData;
+        if (!oldData || oldData.weeklyPoints < 2) {
+          console.log('⚠️ ポイント不足または認証データなし');
+          return oldData;
+        }
+        const newWeeklyPoints = oldData.weeklyPoints - 2;
+        console.log('💰 ポイント楽観的更新:', oldData.weeklyPoints, '→', newWeeklyPoints);
         return {
           ...oldData,
-          weeklyPoints: oldData.weeklyPoints - 2
+          weeklyPoints: newWeeklyPoints
         };
       });
 
@@ -83,8 +95,10 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
       toast({
         title: "いいねしました！",
       });
+      console.log('✅ トースト表示完了');
 
       // バックグラウンドでサーバーに送信
+      console.log('🌐 サーバーへの送信開始');
       const response = await fetch(`/api/cards/${cardId}/likes`, {
         method: 'POST',
         headers: {
@@ -97,14 +111,16 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         throw new Error(errorData.message || 'いいね処理に失敗しました');
       }
 
+      console.log('🎉 サーバー送信成功 - 正確なデータで更新');
       // 成功したら正確なデータで更新
       queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
       queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
       if (onRefresh) onRefresh();
     } catch (error) {
-      console.error('いいねエラー:', error);
+      console.error('❌ いいねエラー:', error);
       
       // エラーの場合は楽観的更新をロールバック
+      console.log('🔄 楽観的更新をロールバック');
       queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
       queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
       
