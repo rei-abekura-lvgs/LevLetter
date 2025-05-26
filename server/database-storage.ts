@@ -676,21 +676,94 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createLike(insertLike: InsertLike): Promise<Like> {
-    // 既存のいいねを確認
-    const existingLike = await this.getLike(insertLike.cardId, insertLike.userId);
-    if (existingLike) {
-      throw new Error(`User ${insertLike.userId} has already liked card ${insertLike.cardId}`);
+    // カード情報を取得
+    const card = await this.getCard(insertLike.cardId);
+    if (!card) {
+      throw new Error(`Card with ID ${insertLike.cardId} not found`);
     }
+
+    // いいねクリックユーザーの情報を取得
+    const user = await this.getUser(insertLike.userId);
+    if (!user) {
+      throw new Error(`User with ID ${insertLike.userId} not found`);
+    }
+
+    // ポイント不足チェック（2ポイント必要）
+    if (user.weeklyPoints < 2) {
+      throw new Error("ポイントが不足しています");
+    }
+
+    // カードの現在のいいね数をチェック（50回制限）
+    const currentLikes = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(likes)
+      .where(eq(likes.cardId, insertLike.cardId));
     
-    // いいねを追加（ポイント計算は無し）
+    const likeCount = currentLikes[0]?.count || 0;
+    if (likeCount >= 50) {
+      throw new Error("このカードは最大いいね数に達しています");
+    }
+
+    // いいねを追加（2ポイント）
     const [like] = await db
       .insert(likes)
       .values({
         cardId: insertLike.cardId,
         userId: insertLike.userId,
-        points: 0
+        points: 2
       })
       .returning();
+
+    // ユーザーから2ポイント消費
+    await db
+      .update(users)
+      .set({
+        weeklyPoints: user.weeklyPoints - 2
+      })
+      .where(eq(users.id, insertLike.userId));
+
+    // 送信者に1ポイント追加
+    const sender = await this.getUser(card.senderId);
+    if (sender) {
+      await db
+        .update(users)
+        .set({
+          weeklyPoints: sender.weeklyPoints + 1
+        })
+        .where(eq(users.id, card.senderId));
+    }
+
+    // 受信者にポイント配分
+    if (card.recipientType === "user") {
+      // 単一受信者の場合：1ポイント
+      const recipient = await this.getUser(card.recipientId);
+      if (recipient) {
+        await db
+          .update(users)
+          .set({
+            totalPointsReceived: recipient.totalPointsReceived + 1
+          })
+          .where(eq(users.id, card.recipientId));
+      }
+    }
+
+    // 追加受信者がいる場合：1ポイントを人数で分割
+    if (card.additionalRecipients && card.additionalRecipients.length > 0) {
+      const totalRecipients = card.additionalRecipients.length + (card.recipientType === "user" ? 1 : 0);
+      const pointsPerRecipient = 1 / totalRecipients;
+
+      for (const recipientId of card.additionalRecipients) {
+        const additionalRecipient = await this.getUser(recipientId);
+        if (additionalRecipient) {
+          await db
+            .update(users)
+            .set({
+              totalPointsReceived: additionalRecipient.totalPointsReceived + pointsPerRecipient
+            })
+            .where(eq(users.id, recipientId));
+        }
+      }
+    }
     
     return like;
   }

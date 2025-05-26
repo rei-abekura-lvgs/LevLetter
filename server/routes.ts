@@ -1074,12 +1074,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const like = await storage.createLike({
         cardId: cardId,
         userId: user.id,
-        points: 0, // いいねでは0ポイント
+        points: 2, // 新仕様：2ポイント消費
       });
 
       return res.status(201).json({ message: "いいねしました", like });
     } catch (error) {
       console.error("いいね作成エラー:", error);
+      
+      // エラーメッセージを詳細に分類
+      if (error.message === "ポイントが不足しています") {
+        return res.status(400).json({ message: "ポイントが不足しています（2pt必要）" });
+      }
+      if (error.message === "このカードは最大いいね数に達しています") {
+        return res.status(400).json({ message: "このカードは最大いいね数（50回）に達しています" });
+      }
+      
       return res.status(500).json({ message: "いいねの作成に失敗しました" });
     }
   });
