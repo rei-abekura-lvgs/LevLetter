@@ -112,9 +112,6 @@ export default function Login() {
       <div className="space-y-4">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">ログイン</h2>
-          <p className="text-muted-foreground">
-            Googleアカウントでの簡単ログインを推奨しています
-          </p>
         </div>
       </div>
 
