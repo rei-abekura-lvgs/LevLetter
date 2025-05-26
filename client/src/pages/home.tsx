@@ -307,6 +307,25 @@ export default function Home({ user }: HomeProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const { toast } = useToast();
+
+  // URLパラメータから成功メッセージを読み取り
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const successMessage = urlParams.get('success');
+    
+    if (successMessage) {
+      toast({
+        title: "✅ 成功",
+        description: decodeURIComponent(successMessage),
+        duration: 4000,
+      });
+      
+      // URLからパラメータを削除（履歴を残さない）
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [toast]);
 
   // APIからカードデータを取得
   const {
