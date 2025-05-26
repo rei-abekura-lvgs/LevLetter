@@ -132,35 +132,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const cognitoUser = decodeIdToken(tokens.id_token);
       console.log("👤 Cognitoユーザー情報:", cognitoUser);
       
-      // データベースでユーザーを検索または作成
+      // 従業員データベースとの照合チェック
+      console.log("🔍 従業員データベース照合開始:", cognitoUser.email);
       let user = await storage.getUserByEmail(cognitoUser.email);
       
       if (!user) {
-        console.log("👤 新規ユーザー作成:", cognitoUser.email);
-        // 新規ユーザーを作成
-        user = await storage.createUser({
-          name: cognitoUser.name,
-          email: cognitoUser.email,
-          displayName: cognitoUser.name,
-          department: null,
-          avatarColor: getRandomColor(),
-          customAvatarUrl: cognitoUser.picture || null,
-          weeklyPoints: 100,
-          totalPointsReceived: 0,
-          totalPointsSent: 0,
-          cardsSent: 0,
-          cardsReceived: 0,
-          likesGiven: 0,
-          likesReceived: 0,
-          profileImageUrl: cognitoUser.picture || null,
+        console.log("❌ 従業員データベースに未登録:", cognitoUser.email);
+        return res.redirect('/login?error=employee_not_found');
+      }
+      
+      console.log("✅ 従業員データベース照合成功:", user.email);
+      
+      // 既存従業員のGoogle認証情報を更新
+      if (!user.cognitoSub) {
+        console.log("🔄 Cognito ID更新:", user.id);
+        await storage.updateUser(user.id, { 
           cognitoSub: cognitoUser.id,
+          profileImageUrl: cognitoUser.picture || user.profileImageUrl
         });
+        user = await storage.getUser(user.id); // 更新後のユーザー情報を再取得
       } else {
-        console.log("👤 既存ユーザーでログイン:", user.email);
-        // 既存ユーザーのCognito IDを更新
-        if (!user.cognitoSub) {
-          await storage.updateUser(user.id, { cognitoSub: cognitoUser.id });
-        }
+        console.log("👤 既存Google認証ユーザーでログイン:", user.email);
       }
       
       // セッションにユーザーIDを保存

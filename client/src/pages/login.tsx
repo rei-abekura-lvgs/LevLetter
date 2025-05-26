@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useLocation } from "wouter";
@@ -19,6 +19,27 @@ export default function Login() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [location, setLocation] = useLocation();
+  
+  // URLパラメータからエラーをチェック
+  const urlParams = new URLSearchParams(window.location.search);
+  const error = urlParams.get('error');
+
+  // エラーメッセージの表示
+  React.useEffect(() => {
+    if (error === 'employee_not_found') {
+      toast({
+        title: "認証エラー",
+        description: "このメールアドレスは従業員として登録されていません。管理者にお問い合わせください。",
+        variant: "destructive",
+      });
+    } else if (error === 'auth_failed') {
+      toast({
+        title: "認証エラー",
+        description: "Google認証に失敗しました。もう一度お試しください。",
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
