@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { BearLogo } from "@/components/bear-logo";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -18,6 +19,7 @@ export default function Login() {
   const { fetchUser, setUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [showEmailPassword, setShowEmailPassword] = useState(false);
   const [location, setLocation] = useLocation();
   
   // URLパラメータからエラーをチェック
@@ -145,53 +147,72 @@ export default function Login() {
         Googleでログイン（推奨）
       </Button>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">または、メール・パスワードでログイン</span>
-        </div>
-      </div>
-
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">メールアドレス</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="example@company.com"
-            {...form.register("email")}
-          />
-          {form.formState.errors.email && (
-            <p className="text-sm text-red-500">
-              {form.formState.errors.email.message}
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">パスワード</Label>
-            <Link
-              href="/forgot-password"
-              className="text-sm text-primary hover:underline"
-            >
-              パスワードをお忘れですか？
-            </Link>
-          </div>
-          <Input id="password" type="password" {...form.register("password")} />
-          {form.formState.errors.password && (
-            <p className="text-sm text-red-500">
-              {form.formState.errors.password.message}
-            </p>
-          )}
-        </div>
-
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "ログイン中..." : "ログイン"}
+      {/* メール・パスワードログイン展開セクション */}
+      <div className="space-y-4">
+        {/* 展開ボタン */}
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full flex items-center justify-center gap-2 text-muted-foreground"
+          onClick={() => setShowEmailPassword(!showEmailPassword)}
+        >
+          メール・パスワードでログイン
+          {showEmailPassword ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </Button>
-      </form>
+
+        {/* 展開可能なフォーム */}
+        {showEmailPassword && (
+          <>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">メール・パスワードでログイン</span>
+              </div>
+            </div>
+
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">メールアドレス</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="example@company.com"
+                  {...form.register("email")}
+                />
+                {form.formState.errors.email && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.email.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">パスワード</Label>
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-primary hover:underline"
+                  >
+                    パスワードをお忘れですか？
+                  </Link>
+                </div>
+                <Input id="password" type="password" {...form.register("password")} />
+                {form.formState.errors.password && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "ログイン中..." : "ログイン"}
+              </Button>
+            </form>
+          </>
+        )}
+      </div>
 
 
 
