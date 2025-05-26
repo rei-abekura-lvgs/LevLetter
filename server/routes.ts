@@ -178,8 +178,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       req.session.userId = user.id;
       console.log("💾 セッション保存:", { userId: user.id, sessionId: req.sessionID });
       
-      // メインページにリダイレクト
-      res.redirect('/');
+      // ログイン成功メッセージと共にメインページにリダイレクト
+      res.redirect('/?message=google_login_success');
     } catch (error) {
       console.error("❌ Google認証コールバックエラー:", error);
       res.redirect('/login?error=auth_failed');
