@@ -25,11 +25,15 @@ export async function sendEmail({
   subject,
   htmlContent,
   textContent,
-  from = process.env.DEFAULT_FROM_EMAIL || "rei.abekura@leverages.jp"
+  from = process.env.SES_FROM_EMAIL || "rei.abekura@leverages.jp"
 }: EmailParams): Promise<boolean> {
   try {
     // 送信情報をログに表示（デバッグ用）
-    console.log(`メール送信試行 - 宛先: ${to}, 件名: ${subject}`);
+    console.log(`📧 メール送信試行:`);
+    console.log(`   - 宛先: ${to}`);
+    console.log(`   - 件名: ${subject}`);
+    console.log(`   - 送信元: ${from}`);
+    console.log(`   - AWS リージョン: ${process.env.AWS_REGION}`);
     
     const command = new SendEmailCommand({
       Destination: {
@@ -55,10 +59,14 @@ export async function sendEmail({
     });
 
     const response = await ses.send(command);
-    console.log("メール送信成功:", response.MessageId);
+    console.log("✅ メール送信成功:", response.MessageId);
     return true;
   } catch (error) {
-    console.error("メール送信エラー:", error);
+    console.error("❌ AWS SES メール送信エラー詳細:");
+    console.error("   - エラーコード:", (error as any).name);
+    console.error("   - エラーメッセージ:", (error as any).message);
+    console.error("   - HTTPステータス:", (error as any)?.$metadata?.httpStatusCode);
+    console.error("   - 詳細情報:", error);
     return false;
   }
 }
