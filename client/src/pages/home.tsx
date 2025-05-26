@@ -115,11 +115,18 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         {/* 左上：送信者アバターと名前、日時 */}
         <div className="flex items-center gap-3 mb-3">
           <Avatar className="h-12 w-12">
+            {/* Google認証ユーザーは画像、メール認証はクマアイコン */}
             {card.sender.customAvatarUrl ? (
               <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
-            ) : (
+            ) : card.sender.cognitoSub && !card.sender.customAvatarUrl ? (
+              /* メール認証の場合はクマアイコン */
               <AvatarFallback className="bg-transparent flex items-center justify-center">
                 <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
+              </AvatarFallback>
+            ) : (
+              /* その他の場合は頭文字 */
+              <AvatarFallback className="bg-blue-500 text-white font-bold text-sm">
+                {card.sender.name.charAt(0)}
               </AvatarFallback>
             )}
           </Avatar>
@@ -157,7 +164,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                 const displayRecipients = allRecipients.slice(0, maxDisplayCount);
                 const remainingCount = allRecipients.length - maxDisplayCount;
                 const isMultiple = allRecipients.length > 1;
-                const avatarSize = isMultiple ? "h-12 w-12" : "h-16 w-16"; // 複数人の場合は小さく、単独は大きく
+                const avatarSize = isMultiple ? "h-14 w-14" : "h-20 w-20"; // 複数人の場合は小さく、単独は大きく
                 
                 return (
                   <div className="relative">
@@ -166,13 +173,13 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                       {displayRecipients.map((user: User, index: number) => (
                         <div key={user.id} className="relative">
                           <Avatar className={`${avatarSize} border-2 border-white`}>
-                            {/* Google認証ユーザーは画像、メール認証はクマアイコンまたは頭文字 */}
+                            {/* Google認証ユーザーは画像、メール認証はクマアイコン */}
                             {user.customAvatarUrl ? (
                               <AvatarImage src={user.customAvatarUrl} alt={user.name} />
-                            ) : user.cognitoSub ? (
+                            ) : user.cognitoSub && !user.customAvatarUrl ? (
                               /* メール認証の場合はクマアイコン */
                               <AvatarFallback className="bg-transparent flex items-center justify-center">
-                                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className={`${isMultiple ? 'w-10 h-10' : 'w-14 h-14'} object-contain`} />
+                                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className={`${isMultiple ? 'w-12 h-12' : 'w-16 h-16'} object-contain`} />
                               </AvatarFallback>
                             ) : (
                               /* その他の場合は頭文字 */
@@ -186,7 +193,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                           
                           {/* 各アバターの右下にポイントバッジ（単独の場合のみ） */}
                           {!isMultiple && (
-                            <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 z-10" style={{ fontSize: '10px' }}>
+                            <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-1 z-10" style={{ fontSize: '15pt' }}>
                               {card.points}
                             </div>
                           )}
@@ -203,7 +210,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     
                     {/* 複数人の場合は全体の右下にポイントバッジ */}
                     {isMultiple && (
-                      <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 z-10" style={{ fontSize: '10px' }}>
+                      <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-1 z-10" style={{ fontSize: '15pt' }}>
                         {card.points}
                       </div>
                     )}
