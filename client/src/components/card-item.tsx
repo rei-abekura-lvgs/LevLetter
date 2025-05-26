@@ -122,7 +122,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                 <Heart 
                   className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
                 />
-                <span>{card.likes.length * 2}</span>
+                <span>{card.likes.length * 2}pt</span>
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -136,7 +136,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
 
           <Button variant="ghost" size="sm" className="text-gray-600">
             <MessageSquare className="h-5 w-5 mr-1" />
-            <span>{card.likes.length * 2}</span>
+            <span>{card.likes.length * 2}pt</span>
           </Button>
         </div>
 

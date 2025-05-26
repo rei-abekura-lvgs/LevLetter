@@ -56,7 +56,7 @@ export default function Sidebar({ user }: SidebarProps) {
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center text-sm font-medium">
                   <Gift className="h-5 w-5 mr-2 text-primary" />
-                  今週の付与可能ポイント
+                  今週の利用可能ポイント
                 </div>
                 <span className="text-xl font-bold text-primary">{user.weeklyPoints} PT</span>
               </div>
