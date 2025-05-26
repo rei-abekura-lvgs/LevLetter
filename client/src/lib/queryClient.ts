@@ -71,8 +71,21 @@ export async function apiRequest<T>(
       return {} as T;
     }
     
-    const responseData = await response.json();
-    return responseData as T;
+    // Content-Typeを確認してJSONレスポンスかどうかを判定
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const responseData = await response.json();
+      return responseData as T;
+    } else {
+      // JSONでない場合（HTMLエラーページなど）はテキストとして取得
+      const responseText = await response.text();
+      console.warn(`非JSON レスポンス受信:`, path, responseText.substring(0, 200));
+      // 成功ステータスの場合は空のオブジェクトを返す
+      if (response.status >= 200 && response.status < 300) {
+        return { message: "成功" } as T;
+      }
+      throw new Error(`予期しないレスポンス形式: ${response.status}`);
+    }
   } catch (error) {
     // パスによって異なるエラーハンドリングを行う
     if (path === '/api/auth/me' && error instanceof Error && error.message.includes('認証')) {
