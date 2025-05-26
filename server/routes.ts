@@ -1093,31 +1093,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // いいねの取り消し機能は削除されました（50回まで何度でも押せる仕様）
-
-  app.post("/api/likes", authenticate, async (req, res) => {
+  // いいね機能：複数回可能、最大50回まで、2pt固定
+  app.post("/api/cards/:id/likes", authenticate, async (req, res) => {
     try {
-      const data = likeFormSchema.parse(req.body);
+      const cardId = parseInt(req.params.id);
       const user = (req as any).user;
 
-      // 既にいいねしているか確認
-      const existingLike = await storage.getLike(data.cardId, user.id);
-      if (existingLike) {
-        return res.status(400).json({ message: "既にいいねしています" });
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
       }
 
+      // カードの取得
+      const card = await storage.getCard(cardId);
+      if (!card) {
+        return res.status(404).json({ message: "カードが見つかりません" });
+      }
+
+      // 送受信者は自分のカードにいいねできない
+      const isRecipient = card.recipientId === user.id || 
+        (card.additionalRecipients && card.additionalRecipients.includes(user.id));
+      const isSender = card.senderId === user.id;
+      
+      if (isSender || isRecipient) {
+        return res.status(400).json({ message: "自分が関わるカードにはいいねできません" });
+      }
+
+      // カードの現在のいいね数を確認（50回上限）
+      const currentLikes = await storage.getLikesForCard(cardId);
+      if (currentLikes.length >= 50) {
+        return res.status(400).json({ message: "このカードは既に50回のいいねに達しました" });
+      }
+
+      // ポイントチェック：2pt未満でも名前は表示される
+      const pointsToDeduct = user.weeklyPoints >= 2 ? 2 : 0;
+      
+      // いいねを作成
       const like = await storage.createLike({
-        cardId: data.cardId,
+        cardId: cardId,
         userId: user.id,
-        comment: data.comment || null,
-        points: data.points || 0,
+        points: pointsToDeduct,
       });
 
-      return res.status(201).json({ message: "いいねが作成されました", like });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return handleZodError(error, res);
+      // ポイントを消費した場合のみポイント処理
+      if (pointsToDeduct > 0) {
+        // ユーザーのポイントを2pt減らす
+        await storage.updateUser(user.id, {
+          weeklyPoints: user.weeklyPoints - 2
+        });
+
+        // 送信者に1pt追加
+        const sender = await storage.getUser(card.senderId);
+        if (sender) {
+          await storage.updateUser(card.senderId, {
+            totalPointsReceived: sender.totalPointsReceived + 1
+          });
+        }
+
+        // 受信者（複数の場合はランダム選択）に1pt追加
+        let recipients = [card.recipientId];
+        if (card.additionalRecipients && card.additionalRecipients.length > 0) {
+          recipients = [...recipients, ...card.additionalRecipients];
+        }
+        const randomRecipient = recipients[Math.floor(Math.random() * recipients.length)];
+        const recipient = await storage.getUser(randomRecipient);
+        if (recipient) {
+          await storage.updateUser(randomRecipient, {
+            totalPointsReceived: recipient.totalPointsReceived + 1
+          });
+        }
       }
+
+      const message = pointsToDeduct > 0 
+        ? "いいねしました！2ポイント消費して、送信者と受信者それぞれに1ポイントずつ贈られました"
+        : "いいねしました！ポイントが不足していますが、いいねは記録されました";
+
+      return res.status(201).json({ message, like, pointsDeducted: pointsToDeduct });
+    } catch (error) {
       console.error("いいね作成エラー:", error);
       return res.status(500).json({ message: "いいねの作成に失敗しました" });
     }
