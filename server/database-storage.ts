@@ -214,13 +214,28 @@ export class DatabaseStorage implements IStorage {
   }
 
   async authenticateUser(email: string, password: string): Promise<User | null> {
+    console.log(`🔍 認証試行 - メール: ${email}`);
+    
     const user = await this.getUserByEmail(email);
-    if (!user || !user.password) {
+    if (!user) {
+      console.log(`❌ ユーザーが見つかりません: ${email}`);
       return null;
     }
-
+    
+    console.log(`✅ ユーザー取得成功 - ID: ${user.id}, メール: ${user.email}`);
+    
+    if (!user.password) {
+      console.log(`❌ パスワードが設定されていません: ${email}`);
+      return null;
+    }
+    
+    console.log(`🔐 パスワード検証中...`);
     const hashedPassword = hashPassword(password);
-    return user.password === hashedPassword ? user : null;
+    const isPasswordCorrect = user.password === hashedPassword;
+    
+    console.log(`🔑 パスワード検証結果: ${isPasswordCorrect ? '成功' : '失敗'}`);
+    
+    return isPasswordCorrect ? user : null;
   }
 
   async resetUserWeeklyPoints(): Promise<void> {
