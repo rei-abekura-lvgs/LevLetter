@@ -155,7 +155,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log("🔄 Cognito ID更新:", user.id);
         await storage.updateUser(user.id, { 
           cognitoSub: cognitoUser.id,
-          profileImageUrl: cognitoUser.picture || user.profileImageUrl
+          customAvatarUrl: cognitoUser.picture || user.customAvatarUrl
         });
         user = await storage.getUser(user.id); // 更新後のユーザー情報を再取得
       } else {

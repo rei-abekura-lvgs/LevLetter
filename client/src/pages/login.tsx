@@ -38,6 +38,24 @@ export default function Login() {
         description: "Google認証に失敗しました。もう一度お試しください。",
         variant: "destructive",
       });
+    } else if (error === 'config_error') {
+      toast({
+        title: "設定エラー",
+        description: "認証設定に問題があります。管理者にお問い合わせください。",
+        variant: "destructive",
+      });
+    } else if (error === 'token_exchange_failed') {
+      toast({
+        title: "認証エラー",
+        description: "トークン取得に失敗しました。もう一度お試しください。",
+        variant: "destructive",
+      });
+    } else if (error) {
+      toast({
+        title: "認証エラー",
+        description: `認証処理中にエラーが発生しました: ${error}`,
+        variant: "destructive",
+      });
     }
   }, [error, toast]);
 
