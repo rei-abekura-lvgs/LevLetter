@@ -1,0 +1,213 @@
+ セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:51:57.532Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:51:57.532Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:52:27 AM [express] POST /api/cards/48/likes 400 in 238ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:27.705Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+いいね作成エラー: error: invalid input syntax for type integer: "NaN"
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseStorage.createLike (/home/runner/workspace/server/database-storage.ts:696:9)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1074:20) {
+  length: 146,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'numutils.c',
+  line: '617',
+  routine: 'pg_strtoint32_safe'
+}
+11:52:27 AM [express] POST /api/cards/48/likes 500 in 567ms :: {"message":"いいねの作成に失敗しました"}
+11:52:27 AM [express] POST /api/cards/48/likes 400 in 157ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:27.983Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:52:28 AM [express] POST /api/cards/48/likes 400 in 151ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:28.306Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:28.306Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:52:28 AM [express] POST /api/cards/48/likes 400 in 151ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:28.569Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:52:28 AM [express] POST /api/cards/48/likes 400 in 149ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:28.710Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:28.710Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:52:28 AM [express] POST /api/cards/48/likes 400 in 299ms :: {"message":"既にいいねしています"}
+11:52:29 AM [express] POST /api/cards/48/likes 400 in 228ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:29.055Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:52:29 AM [express] POST /api/cards/48/likes 400 in 166ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:29.116Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:52:29 AM [express] POST /api/cards/48/likes 400 in 152ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799996,
+    "expires": "2025-06-02T11:52:29.255Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:52:29 AM [express] POST /api/cards/48/likes 400 in 156ms :: {"message":"既にいいねしています"}
+11:52:29 AM [express] POST /api/cards/48/likes 400 in 192ms :: {"message":"既にいいねしています"}
