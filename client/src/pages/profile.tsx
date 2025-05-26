@@ -28,10 +28,25 @@ export default function Profile({ user }: ProfileProps) {
       <Card className="mb-6">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-            <div className="flex-shrink-0">
-              <div className={`h-24 w-24 rounded-full bg-${user.avatarColor} flex items-center justify-center text-white text-xl font-semibold`}>
-                {userInitials}
-              </div>
+            <div className="flex-shrink-0 relative">
+              {user.customAvatarUrl ? (
+                <img 
+                  src={user.customAvatarUrl} 
+                  alt={user.name}
+                  className="h-24 w-24 rounded-full object-cover"
+                />
+              ) : (
+                <div className={`h-24 w-24 rounded-full bg-${user.avatarColor} flex items-center justify-center text-white text-xl font-semibold`}>
+                  {userInitials}
+                </div>
+              )}
+              <Button
+                size="sm"
+                className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full p-0 bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+                onClick={() => setShowProfileModal(true)}
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
             </div>
             
             <div className="flex-1 text-center md:text-left">
@@ -40,14 +55,6 @@ export default function Profile({ user }: ProfileProps) {
                 <p className="text-gray-600 mb-4">{user.department}</p>
               )}
               <p className="text-gray-600 mb-6">{user.email}</p>
-              
-              <Button 
-                onClick={() => setShowProfileModal(true)}
-                className="flex items-center gap-2"
-              >
-                <Edit2 className="h-4 w-4" />
-                プロフィールを編集
-              </Button>
             </div>
           </div>
         </CardContent>
