@@ -696,44 +696,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteLike(id: number): Promise<void> {
-    const [like] = await db
-      .select()
-      .from(likes)
-      .where(eq(likes.id, id));
-    
-    if (!like) {
-      throw new Error(`Like with ID ${id} not found`);
-    }
-    
-    // カードの受信者からポイントを差し引く（いいねの場合はポイント変更なし）
-    const card = await this.getCard(like.cardId);
-    if (card && card.recipientType === "user" && like.points > 0) {
-      // 現在のポイントを取得して差し引く
-      const recipient = await this.getUser(card.recipientId);
-      if (recipient) {
-        await db
-          .update(users)
-          .set({
-            totalPointsReceived: recipient.totalPointsReceived - like.points
-          })
-          .where(eq(users.id, card.recipientId));
-      }
-    }
-    
-    // 送信者のポイント残高を増やす（いいねの場合はポイント変更なし）
-    if (like.points > 0) {
-      const sender = await this.getUser(like.userId);
-      if (sender) {
-        await db
-          .update(users)
-          .set({
-            weeklyPoints: sender.weeklyPoints + like.points
-          })
-          .where(eq(users.id, like.userId));
-      }
-    }
-    
-    // いいねを削除
+    // シンプルにいいねレコードを削除するだけ
     await db
       .delete(likes)
       .where(eq(likes.id, id));
