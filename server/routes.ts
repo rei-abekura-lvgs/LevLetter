@@ -171,6 +171,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // パスワード変更
+  app.post("/api/auth/change-password", authenticate, async (req: any, res: any) => {
+    try {
+      console.log("🔐 パスワード変更試行開始");
+      console.log("🆔 ユーザーID:", req.session.userId);
+      
+      const { currentPassword, newPassword } = req.body;
+      
+      if (!currentPassword || !newPassword) {
+        console.log("❌ パスワード変更失敗 - 必要なパラメータが不足");
+        return res.status(400).json({ message: "現在のパスワードと新しいパスワードが必要です" });
+      }
+      
+      if (newPassword.length < 6) {
+        console.log("❌ パスワード変更失敗 - 新しいパスワードが短すぎる");
+        return res.status(400).json({ message: "新しいパスワードは6文字以上である必要があります" });
+      }
+      
+      // 現在のユーザー情報を取得
+      const user = await storage.getUser(req.session.userId);
+      if (!user) {
+        console.log("❌ パスワード変更失敗 - ユーザーが見つからない");
+        return res.status(404).json({ message: "ユーザーが見つかりません" });
+      }
+      
+      // 現在のパスワードを確認
+      const currentPasswordHash = hashPassword(currentPassword);
+      if (user.password !== currentPasswordHash) {
+        console.log("❌ パスワード変更失敗 - 現在のパスワードが正しくない");
+        return res.status(400).json({ message: "現在のパスワードが正しくありません" });
+      }
+      
+      // 新しいパスワードをハッシュ化
+      const newPasswordHash = hashPassword(newPassword);
+      
+      // パスワードを更新
+      await storage.updateUser(user.id, {
+        password: newPasswordHash,
+        updatedAt: new Date()
+      });
+      
+      console.log("✅ パスワード変更成功:", user.email);
+      return res.json({ message: "パスワードが正常に変更されました" });
+      
+    } catch (error) {
+      console.error("パスワード変更エラー:", error);
+      return res.status(500).json({ message: "パスワード変更処理中にエラーが発生しました" });
+    }
+  });
+
   app.post("/api/auth/register", async (req, res) => {
     try {
       console.log("リクエストボディ:", req.body);
