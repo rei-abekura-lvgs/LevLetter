@@ -30,6 +30,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BearAvatar } from "@/components/ui/bear-avatar";
 import { UserIcon, Send, X, Search, UserPlus, Filter } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BearLogo } from "@/components/bear-logo";
@@ -532,21 +533,24 @@ export default function CardForm({ onSent }: CardFormProps) {
                             className="flex items-center text-sm flex-1 cursor-pointer"
                             onClick={handleUserClick}
                           >
-                            <Avatar className="h-8 w-8 mr-3">
-                              {/* Google認証で画像がある場合は画像、それ以外はクマアイコン */}
-                              {availableUser.customAvatarUrl && availableUser.customAvatarUrl.includes('googleusercontent.com') ? (
+                            {/* Google認証で画像がある場合は画像、それ以外はクマアイコン */}
+                            {availableUser.customAvatarUrl && availableUser.customAvatarUrl.includes('googleusercontent.com') ? (
+                              <Avatar className="h-8 w-8 mr-3">
                                 <AvatarImage 
                                   src={availableUser.customAvatarUrl} 
                                   alt={availableUser.displayName || availableUser.name}
                                   className="object-cover"
                                 />
-                              ) : (
-                                /* 画像がない場合はクマアイコン */
-                                <AvatarFallback className="bg-transparent flex items-center justify-center">
-                                  <img src="/bear_icon.png" alt="" className="w-6 h-6 object-contain" />
-                                </AvatarFallback>
-                              )}
-                            </Avatar>
+                              </Avatar>
+                            ) : (
+                              /* 画像がない場合は白いクマアイコン */
+                              <div className="mr-3">
+                                <BearAvatar 
+                                  name={availableUser.displayName || availableUser.name} 
+                                  className="h-8 w-8"
+                                />
+                              </div>
+                            )}
                             <div className="flex-1">
                               <div className="font-medium text-gray-800 hover:text-[#3990EA] transition-colors">
                                 {availableUser.displayName || availableUser.name}
