@@ -92,7 +92,7 @@ export default function ResetPassword() {
       
       await apiRequest("POST", "/api/auth/password-reset", {
         token: tokenToUse,
-        password: data.password
+        newPassword: data.password
       });
       
       setIsSuccess(true);

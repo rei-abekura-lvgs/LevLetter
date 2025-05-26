@@ -1,0 +1,82 @@
+Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+queryClient.ts:83 API POST エラー: /api/auth/password-reset Error: トークンと新しいパスワードは必須です
+    at apiRequest (queryClient.ts:62:15)
+    at async onSubmit (reset-password.tsx:93:7)
+    at async chunk-4BFJKWC4.js?v=3a746fa8:1465:9
+apiRequest @ queryClient.ts:83Understand this error
+reset-password.tsx:109 パスワードリセットエラー: Error: トークンと新しいパスワードは必須です
+    at apiRequest (queryClient.ts:62:15)
+    at async onSubmit (reset-password.tsx:93:7)
+    at async chunk-4BFJKWC4.js?v=3a746fa8:1465:9
+onSubmit @ reset-password.tsx:109Understand this error
+queryClient.ts:42 API POST リクエスト: /api/auth/password-reset データあり
+queryClient.ts:45 
+            
+            
+           POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/password-reset 400 (Bad Request)
+apiRequest @ queryClient.ts:45
+onSubmit @ reset-password.tsx:93
+(anonymous) @ chunk-4BFJKWC4.js?v=3a746fa8:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=3a746fa8:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=3a746fa8:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=3a746fa8:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=3a746fa8:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=3a746fa8:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=3a746fa8:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=3a746fa8:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=3a746fa8:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=3a746fa8:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=3a746fa8:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=3a746fa8:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=3a746fa8:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=3a746fa8:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=3a746fa8:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=3a746fa8:5449Understand this error
+queryClient.ts:83 API POST エラー: /api/auth/password-reset Error: トークンと新しいパスワードは必須です
+    at apiRequest (queryClient.ts:62:15)
+    at async onSubmit (reset-password.tsx:93:7)
+    at async chunk-4BFJKWC4.js?v=3a746fa8:1465:9
+apiRequest @ queryClient.ts:83
+await in apiRequest
+onSubmit @ reset-password.tsx:93
+(anonymous) @ chunk-4BFJKWC4.js?v=3a746fa8:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=3a746fa8:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=3a746fa8:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=3a746fa8:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=3a746fa8:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=3a746fa8:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=3a746fa8:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=3a746fa8:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=3a746fa8:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=3a746fa8:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=3a746fa8:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=3a746fa8:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=3a746fa8:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=3a746fa8:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=3a746fa8:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=3a746fa8:5449Understand this error
+reset-password.tsx:109 パスワードリセットエラー: Error: トークンと新しいパスワードは必須です
+    at apiRequest (queryClient.ts:62:15)
+    at async onSubmit (reset-password.tsx:93:7)
+    at async chunk-4BFJKWC4.js?v=3a746fa8:1465:9
+onSubmit @ reset-password.tsx:109
+await in onSubmit
+(anonymous) @ chunk-4BFJKWC4.js?v=3a746fa8:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=3a746fa8:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=3a746fa8:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=3a746fa8:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=3a746fa8:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=3a746fa8:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=3a746fa8:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=3a746fa8:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=3a746fa8:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=3a746fa8:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=3a746fa8:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=3a746fa8:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=3a746fa8:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=3a746fa8:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=3a746fa8:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=3a746fa8:5449Understand this error
