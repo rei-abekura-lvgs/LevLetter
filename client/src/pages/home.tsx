@@ -45,18 +45,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   // 管理者かどうかを確認
   const isAdmin = currentUser?.isAdmin || false;
 
-  // いいね機能のハンドラ（取り消し機能なし、2pt固定）
-  const handleLike = async (cardId: number, isAlreadyLiked: boolean) => {
-    // すでにいいねしている場合は何もしない
-    if (isAlreadyLiked) {
-      toast({
-        title: "すでにいいね済みです",
-        description: "このカードにはすでにいいねをしています",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  // いいね機能のハンドラ（複数回いいね可能、2pt固定）
+  const handleLike = async (cardId: number) => {
     try {
       const response = await fetch(`/api/cards/${cardId}/likes`, {
         method: 'POST',
@@ -66,7 +56,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
       });
 
       if (!response.ok) {
-        throw new Error('いいね処理に失敗しました');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'いいね処理に失敗しました');
       }
 
       toast({
@@ -79,7 +70,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
       console.error('いいねエラー:', error);
       toast({
         title: "エラー",
-        description: `いいね処理に失敗しました: ${error}`,
+        description: `${error}`,
         variant: "destructive",
       });
     }
@@ -292,7 +283,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                         ? 'bg-gray-100 hover:bg-pink-100 cursor-pointer' 
                         : 'bg-gray-50 cursor-not-allowed opacity-50'
                     }`}
-                    onClick={canLike && !userLiked ? () => handleLike(card.id, false) : undefined}
+                    onClick={canLike ? () => handleLike(card.id) : undefined}
                   >
                     <Heart className={`h-4 w-4 ${userLiked ? 'text-pink-500 fill-pink-500' : 'text-gray-500'}`} />
                   </div>
