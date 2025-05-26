@@ -115,18 +115,13 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         {/* 左上：送信者アバターと名前、日時 */}
         <div className="flex items-center gap-3 mb-3">
           <Avatar className="h-12 w-12">
-            {/* Google認証ユーザーは画像、メール認証はクマアイコン */}
+            {/* Google認証で画像がある場合は画像、それ以外はクマアイコン */}
             {card.sender.customAvatarUrl ? (
               <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
-            ) : card.sender.cognitoSub && !card.sender.customAvatarUrl ? (
-              /* メール認証の場合はクマアイコン */
+            ) : (
+              /* 画像がない場合はクマアイコン */
               <AvatarFallback className="bg-transparent flex items-center justify-center">
                 <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
-              </AvatarFallback>
-            ) : (
-              /* その他の場合は頭文字 */
-              <AvatarFallback className="bg-blue-500 text-white font-bold text-sm">
-                {card.sender.name.charAt(0)}
               </AvatarFallback>
             )}
           </Avatar>
@@ -173,20 +168,13 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                       {displayRecipients.map((user: User, index: number) => (
                         <div key={user.id} className="relative">
                           <Avatar className={`${avatarSize} border-2 border-white`}>
-                            {/* Google認証ユーザーは画像、メール認証はクマアイコン */}
+                            {/* Google認証で画像がある場合は画像、それ以外はクマアイコン */}
                             {user.customAvatarUrl ? (
                               <AvatarImage src={user.customAvatarUrl} alt={user.name} />
-                            ) : user.cognitoSub && !user.customAvatarUrl ? (
-                              /* メール認証の場合はクマアイコン */
+                            ) : (
+                              /* 画像がない場合はクマアイコン */
                               <AvatarFallback className="bg-transparent flex items-center justify-center">
                                 <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className={`${isMultiple ? 'w-12 h-12' : 'w-16 h-16'} object-contain`} />
-                              </AvatarFallback>
-                            ) : (
-                              /* その他の場合は頭文字 */
-                              <AvatarFallback className="bg-blue-500 flex items-center justify-center">
-                                <span className={`text-white font-bold ${isMultiple ? 'text-sm' : 'text-lg'}`}>
-                                  {user.name.charAt(0)}
-                                </span>
                               </AvatarFallback>
                             )}
                           </Avatar>
@@ -194,7 +182,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                           {/* 各アバターの右下にポイントバッジ（単独の場合のみ） */}
                           {!isMultiple && (
                             <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-1 z-10" style={{ fontSize: '15pt' }}>
-                              {card.points}
+                              {card.points}pt
                             </div>
                           )}
                         </div>
@@ -211,7 +199,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     {/* 複数人の場合は全体の右下にポイントバッジ */}
                     {isMultiple && (
                       <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-1 z-10" style={{ fontSize: '15pt' }}>
-                        {card.points}
+                        {card.points}pt
                       </div>
                     )}
                     
