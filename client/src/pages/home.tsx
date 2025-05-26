@@ -156,6 +156,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                 const maxDisplayCount = 3; // 最大3つまで表示
                 const displayRecipients = allRecipients.slice(0, maxDisplayCount);
                 const remainingCount = allRecipients.length - maxDisplayCount;
+                const isMultiple = allRecipients.length > 1;
+                const avatarSize = isMultiple ? "h-12 w-12" : "h-16 w-16"; // 複数人の場合は小さく、単独は大きく
                 
                 return (
                   <div className="relative">
@@ -163,32 +165,48 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     <div className="flex items-center -space-x-2">
                       {displayRecipients.map((user: User, index: number) => (
                         <div key={user.id} className="relative">
-                          <Avatar className="h-12 w-12 border-2 border-white">
+                          <Avatar className={`${avatarSize} border-2 border-white`}>
+                            {/* Google認証ユーザーは画像、メール認証はクマアイコンまたは頭文字 */}
                             {user.customAvatarUrl ? (
-                              <AvatarImage src={user.customAvatarUrl || undefined} alt={user.name} />
+                              <AvatarImage src={user.customAvatarUrl} alt={user.name} />
+                            ) : user.cognitoSub ? (
+                              /* メール認証の場合はクマアイコン */
+                              <AvatarFallback className="bg-transparent flex items-center justify-center">
+                                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className={`${isMultiple ? 'w-10 h-10' : 'w-14 h-14'} object-contain`} />
+                              </AvatarFallback>
                             ) : (
+                              /* その他の場合は頭文字 */
                               <AvatarFallback className="bg-blue-500 flex items-center justify-center">
-                                <span className="text-white font-bold text-sm">
+                                <span className={`text-white font-bold ${isMultiple ? 'text-sm' : 'text-lg'}`}>
                                   {user.name.charAt(0)}
                                 </span>
                               </AvatarFallback>
                             )}
                           </Avatar>
+                          
+                          {/* 各アバターの右下にポイントバッジ（単独の場合のみ） */}
+                          {!isMultiple && (
+                            <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 z-10" style={{ fontSize: '10px' }}>
+                              {card.points}
+                            </div>
+                          )}
                         </div>
                       ))}
                       
                       {/* 省略表示 */}
                       {remainingCount > 0 && (
-                        <div className="h-12 w-12 bg-gray-300 rounded-full border-2 border-white flex items-center justify-center">
+                        <div className={`${avatarSize} bg-gray-300 rounded-full border-2 border-white flex items-center justify-center`}>
                           <span className="text-gray-600 text-xs font-bold">+{remainingCount}</span>
                         </div>
                       )}
                     </div>
                     
-                    {/* ポイントバッジ */}
-                    <div className="absolute -bottom-2 -right-2 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2 z-10">
-                      {card.points}
-                    </div>
+                    {/* 複数人の場合は全体の右下にポイントバッジ */}
+                    {isMultiple && (
+                      <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 z-10" style={{ fontSize: '10px' }}>
+                        {card.points}
+                      </div>
+                    )}
                     
                     {/* 受信者名 */}
                     <div className="text-center mt-3 group relative">
