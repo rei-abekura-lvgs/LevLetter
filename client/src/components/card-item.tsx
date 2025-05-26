@@ -43,10 +43,10 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-4">
+    <div className="bg-white rounded-lg shadow p-3 sm:p-4">
       {/* 送信者情報 */}
       <div className="flex items-center mb-3">
-        <Avatar className="h-10 w-10 mr-3">
+        <Avatar className="h-8 w-8 sm:h-10 sm:w-10 mr-2 sm:mr-3 flex-shrink-0">
           {card.sender.customAvatarUrl ? (
             <AvatarImage 
               src={card.sender.customAvatarUrl} 
@@ -55,57 +55,66 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
             />
           ) : (
             <AvatarFallback className="bg-transparent flex items-center justify-center">
-              <img src="/bear_icon.png" alt="" className="w-10 h-10 object-contain" />
+              <img src="/bear_icon.png" alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
             </AvatarFallback>
           )}
         </Avatar>
-        <div>
-          <div className="font-medium">{card.sender.displayName || card.sender.name}</div>
-          <div className="text-sm text-gray-500">
-            {format(new Date(card.createdAt), "yyyy年MM月dd日 HH:mm", { locale: ja })}
+        <div className="flex-1 min-w-0">
+          <div className="font-medium text-sm sm:text-base truncate">{card.sender.displayName || card.sender.name}</div>
+          <div className="text-xs sm:text-sm text-gray-500 truncate">
+            {format(new Date(card.createdAt), "MM/dd HH:mm", { locale: ja })}
           </div>
         </div>
       </div>
 
-      {/* メインコンテンツ: 左80%メッセージ、右20%アバター */}
-      <div className="flex gap-4 mb-4">
-        {/* メッセージエリア (80%) */}
-        <div className="flex-1 min-w-0">
-          <div className="text-sm text-gray-600 mb-2">
-            <span className="text-gray-800 font-medium">{recipientName}</span>
-            {allRecipients.length > 1 && (
-              <span className="text-[#3990EA] font-medium">他{allRecipients.length - 1}人</span>
-            )}
-            <span className="text-gray-600">へ</span>
-          </div>
-          <p className="whitespace-pre-line text-gray-800 leading-relaxed">{card.message}</p>
+      {/* メインコンテンツ: レスポンシブレイアウト */}
+      <div className="mb-4">
+        {/* 受信者表示 */}
+        <div className="text-xs sm:text-sm text-gray-600 mb-2 flex flex-wrap items-center gap-1">
+          <span className="text-gray-800 font-medium">{recipientName}</span>
+          {allRecipients.length > 1 && (
+            <span className="text-[#3990EA] font-medium">他{allRecipients.length - 1}人</span>
+          )}
+          <span className="text-gray-600">へ</span>
         </div>
-        
-        {/* アバターエリア (20%) */}
-        <div className="w-1/5 flex-shrink-0 relative min-h-[60px]">
-          {allRecipients.map((recipient, index) => (
-            <div 
-              key={recipient.id} 
-              className="absolute"
-              style={{
-                right: index * 8, // 8pxずつ左にずらして重ねる
-                top: index * 6,   // 6px下にずらす
-                zIndex: allRecipients.length - index, // 最初のアバターが最前面
-              }}
-            >
-              <div className="relative h-12 w-12 ring-2 ring-white shadow-md rounded-full overflow-hidden bg-red-500">
-                <div className="w-full h-full flex items-center justify-center bg-green-500">
-                  <span className="text-white text-lg font-bold">
-                    TEST
-                  </span>
+
+        {/* メッセージとアバター */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          {/* メッセージエリア */}
+          <div className="flex-1 min-w-0">
+            <p className="whitespace-pre-line text-gray-800 leading-relaxed text-sm sm:text-base">{card.message}</p>
+          </div>
+          
+          {/* アバターエリア - レスポンシブ対応 */}
+          <div className="flex sm:flex-col items-center sm:items-end justify-center sm:justify-start flex-shrink-0 relative sm:w-20">
+            {allRecipients.map((recipient, index) => (
+              <div 
+                key={recipient.id} 
+                className={`relative ${index > 0 ? '-ml-2 sm:ml-0 sm:-mt-2' : ''}`}
+                style={{
+                  zIndex: allRecipients.length - index,
+                }}
+              >
+                <Avatar className="h-10 w-10 sm:h-12 sm:w-12 ring-2 ring-white shadow-md">
+                  {recipient.customAvatarUrl ? (
+                    <AvatarImage 
+                      src={recipient.customAvatarUrl} 
+                      alt={recipient.displayName || recipient.name}
+                      className="object-cover"
+                    />
+                  ) : (
+                    <AvatarFallback className="bg-transparent flex items-center justify-center">
+                      <img src="/bear_icon.png" alt="" className="w-10 h-10 sm:w-12 sm:w-12 object-contain" />
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                {/* ポイントバッジ */}
+                <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[18px] sm:min-w-[20px] h-4 sm:h-5 flex items-center justify-center px-1 shadow-sm">
+                  {Math.floor((card.points || 0) / allRecipients.length)}pt
                 </div>
               </div>
-              {/* ポイントバッジ */}
-              <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 shadow-sm">
-                {Math.floor((card.points || 0) / allRecipients.length)}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
