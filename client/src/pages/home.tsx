@@ -18,6 +18,7 @@ import { ja } from "date-fns/locale";
 import { getCards } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import bearAvatarUrl from "@assets/ChatGPT Image 2025年5月22日 20_25_45.png";
 import { Badge } from "@/components/ui/badge";
 import { 
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, 
@@ -121,7 +122,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             ) : (
               /* 画像がない場合はクマアイコン */
               <AvatarFallback className="bg-transparent flex items-center justify-center">
-                <img src="attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
+                <img src={bearAvatarUrl} alt="Bear Avatar" className="w-10 h-10 object-contain" />
               </AvatarFallback>
             )}
           </Avatar>
@@ -174,7 +175,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                             ) : (
                               /* 画像がない場合はクマアイコン */
                               <AvatarFallback className="bg-transparent flex items-center justify-center">
-                                <img src="attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className={`${isMultiple ? 'w-12 h-12' : 'w-16 h-16'} object-contain`} />
+                                <img src={bearAvatarUrl} alt="Bear Avatar" className={`${isMultiple ? 'w-12 h-12' : 'w-16 h-16'} object-contain`} />
                               </AvatarFallback>
                             )}
                           </Avatar>
