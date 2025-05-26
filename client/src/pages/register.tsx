@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { apiRequest } from "@/lib/queryClient";
-import { InfoIcon, CheckCircle, XCircle } from "lucide-react";
+import { InfoIcon, CheckCircle, XCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // バリデーションルールを拡張
@@ -251,86 +251,14 @@ export default function Register() {
         Googleでアカウント作成（推奨）
       </Button>
 
-      {/* 区切り線とメール・パスワード登録セクション */}
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">または、メール・パスワードで登録</span>
-        </div>
-      </div>
-
-      <Alert className="bg-blue-50 border-blue-200">
-        <InfoIcon className="h-4 w-4 text-blue-500" />
-        <AlertDescription className="text-blue-700">
-          アカウント作成には管理者が事前登録したメールアドレスが必要です。
-        </AlertDescription>
-      </Alert>
-
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email" className="flex justify-between">
-            <span>メールアドレス</span>
-            {!verifyingEmail && verificationStatus.message && (
-              <span className="flex items-center text-xs">
-                {verificationStatus.canRegister || verificationStatus.isRegistered ? (
-                  <>
-                    <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
-                    <span className="text-green-600">有効なアドレス</span>
-                  </>
-                ) : (
-                  <>
-                    <XCircle className="h-3 w-3 text-red-500 mr-1" />
-                    <span className="text-red-600">無効なアドレス</span>
-                  </>
-                )}
-              </span>
-            )}
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="example@company.com"
-            {...form.register("email")}
-          />
-          {form.formState.errors.email && (
-            <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="password">パスワード</Label>
-          <Input
-            id="password"
-            type="password"
-            {...form.register("password")}
-          />
-          {form.formState.errors.password && (
-            <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="confirmPassword">パスワード（確認）</Label>
-          <Input
-            id="confirmPassword"
-            type="password"
-            {...form.register("confirmPassword")}
-          />
-          {form.formState.errors.confirmPassword && (
-            <p className="text-sm text-red-500">{form.formState.errors.confirmPassword.message}</p>
-          )}
-        </div>
-
-        <Button 
-          type="submit" 
-          className="w-full" 
-          disabled={isLoading || (!verificationStatus.canRegister && !verificationStatus.isRegistered)}
-        >
-          {isLoading ? "登録中..." : "アカウント作成"}
-        </Button>
-      </form>
+      {/* メール・パスワード登録展開セクション */}
+      <EmailPasswordToggleSection 
+        onSubmit={onSubmit}
+        form={form}
+        verificationStatus={verificationStatus}
+        verifyingEmail={verifyingEmail}
+        isLoading={isLoading}
+      />
 
 
 
