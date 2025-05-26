@@ -49,10 +49,40 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   // いいね機能のハンドラ（複数回いいね可能、2pt固定）
   const handleLike = async (cardId: number) => {
     try {
-      // 即座にUI更新（楽観的更新）
-      queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+      // 楽観的更新：まず画面上のデータを即座に変更
+      queryClient.setQueryData(['/api/cards'], (oldData: any) => {
+        if (!oldData) return oldData;
+        return oldData.map((card: any) => {
+          if (card.id === cardId) {
+            return {
+              ...card,
+              likes: [...(card.likes || []), { 
+                id: Date.now(), 
+                userId: currentUser?.id,
+                points: currentUser?.weeklyPoints >= 2 ? 2 : 0,
+                user: currentUser 
+              }]
+            };
+          }
+          return card;
+        });
+      });
 
+      // ユーザーの利用可能ポイントも即座に減らす
+      queryClient.setQueryData(['/api/auth/me'], (oldData: any) => {
+        if (!oldData || oldData.weeklyPoints < 2) return oldData;
+        return {
+          ...oldData,
+          weeklyPoints: oldData.weeklyPoints - 2
+        };
+      });
+
+      // 即座にトーストを表示
+      toast({
+        title: "いいねしました！",
+      });
+
+      // バックグラウンドでサーバーに送信
       const response = await fetch(`/api/cards/${cardId}/likes`, {
         method: 'POST',
         headers: {
@@ -65,25 +95,22 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         throw new Error(errorData.message || 'いいね処理に失敗しました');
       }
 
-      const result = await response.json();
-      
-      toast({
-        title: result.message,
-      });
-
-      // 再度データを更新
+      // 成功したら正確なデータで更新
+      queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error('いいねエラー:', error);
+      
+      // エラーの場合は楽観的更新をロールバック
+      queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+      
       toast({
         title: "エラー",
         description: `${error}`,
         variant: "destructive",
       });
-      
-      // エラーの場合は再度データを取得してロールバック
-      queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
     }
   };
 
