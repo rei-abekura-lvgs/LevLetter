@@ -142,97 +142,76 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         </div>
 
         {/* メッセージと受信者情報を含む中央部分 */}
-        <div className="relative mb-4 pl-16 pr-32">
-          <p className="text-gray-900 leading-relaxed whitespace-pre-line max-w-[80%]">{card.message}</p>
+        <div className="flex items-start gap-4 mb-4 pl-16">
+          {/* メッセージ部分 - 左側80% */}
+          <div className="flex-1 max-w-[75%]">
+            <p className="text-gray-900 leading-relaxed whitespace-pre-line">{card.message}</p>
+          </div>
           
-          {/* 受信者情報 - 右端中央に固定 */}
+          {/* 受信者情報 - 右側20% */}
           {card.recipientType === "user" && (
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end">
-              {/* 複数受信者の場合は横に並べて表示（一部重複OK） */}
-              {card.additionalRecipientUsers && card.additionalRecipientUsers.length > 0 ? (
-                <div className="relative">
-                  {/* 受信者アバターを横に並べる（重複OK） */}
-                  <div className="flex items-center -space-x-3">
-                    {/* メイン受信者 */}
-                    <div className="relative">
-                      <Avatar className="h-20 w-20 border-2 border-white">
-                        {(card.recipient as User).customAvatarUrl ? (
-                          <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
-                        ) : (
-                          <AvatarFallback className="bg-blue-500 flex items-center justify-center">
-                            <span className="text-white font-bold text-lg">
-                              {(card.recipient as User).name.charAt(0)}
-                            </span>
-                          </AvatarFallback>
-                        )}
-                      </Avatar>
-                    </div>
-                    
-                    {/* 追加受信者 */}
-                    {card.additionalRecipientUsers.map((user: User, index: number) => (
-                      <div key={user.id} className="relative">
-                        <Avatar className="h-20 w-20 border-2 border-white">
-                          {user.customAvatarUrl ? (
-                            <AvatarImage src={user.customAvatarUrl || undefined} alt={user.name} />
-                          ) : (
-                            <AvatarFallback className="bg-blue-500 flex items-center justify-center">
-                              <span className="text-white font-bold text-lg">
-                                {user.name.charAt(0)}
-                              </span>
-                            </AvatarFallback>
-                          )}
-                        </Avatar>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* 全体のポイントバッジ - 右下に配置 */}
-                  <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2 z-10">
-                    {card.points}
-                  </div>
-                  
-                  {/* 受信者名を下に表示（ホバーで全員表示） */}
-                  <div className="text-center mt-2 group relative">
-                    <span className="text-sm font-medium text-gray-800 cursor-pointer">
-                      {(card.recipient as User).displayName || (card.recipient as User).name} + {card.additionalRecipientUsers.length}人
-                    </span>
-                    
-                    {/* ホバー時の全員表示 */}
-                    <div className="absolute bottom-full right-0 mb-2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
-                      {(card.recipient as User).displayName || (card.recipient as User).name}
-                      {card.additionalRecipientUsers.map((user: User) => (
-                        <span key={user.id}>, {user.displayName || user.name}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                /* 単一受信者 */
-                <div className="relative">
+            <div className="flex-none w-[20%] flex flex-col items-end">
+              {(() => {
+                const allRecipients = [card.recipient as User, ...(card.additionalRecipientUsers || [])];
+                const maxDisplayCount = 3; // 最大3つまで表示
+                const displayRecipients = allRecipients.slice(0, maxDisplayCount);
+                const remainingCount = allRecipients.length - maxDisplayCount;
+                
+                return (
                   <div className="relative">
-                    <Avatar className="h-20 w-20">
-                      {(card.recipient as User).customAvatarUrl ? (
-                        <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
-                      ) : (
-                        <AvatarFallback className="bg-blue-500 flex items-center justify-center">
-                          <span className="text-white font-bold text-lg">
-                            {(card.recipient as User).name.charAt(0)}
-                          </span>
-                        </AvatarFallback>
+                    {/* アバター表示 */}
+                    <div className="flex items-center -space-x-2">
+                      {displayRecipients.map((user: User, index: number) => (
+                        <div key={user.id} className="relative">
+                          <Avatar className="h-12 w-12 border-2 border-white">
+                            {user.customAvatarUrl ? (
+                              <AvatarImage src={user.customAvatarUrl || undefined} alt={user.name} />
+                            ) : (
+                              <AvatarFallback className="bg-blue-500 flex items-center justify-center">
+                                <span className="text-white font-bold text-sm">
+                                  {user.name.charAt(0)}
+                                </span>
+                              </AvatarFallback>
+                            )}
+                          </Avatar>
+                        </div>
+                      ))}
+                      
+                      {/* 省略表示 */}
+                      {remainingCount > 0 && (
+                        <div className="h-12 w-12 bg-gray-300 rounded-full border-2 border-white flex items-center justify-center">
+                          <span className="text-gray-600 text-xs font-bold">+{remainingCount}</span>
+                        </div>
                       )}
-                    </Avatar>
-                    {/* ポイントバッジ - 右下に配置 */}
-                    <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2">
+                    </div>
+                    
+                    {/* ポイントバッジ */}
+                    <div className="absolute -bottom-2 -right-2 bg-[#3990EA] text-white text-sm font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-2 z-10">
                       {card.points}
                     </div>
+                    
+                    {/* 受信者名 */}
+                    <div className="text-center mt-3 group relative">
+                      <span className="text-sm font-medium text-gray-800 cursor-pointer">
+                        {(card.recipient as User).displayName || (card.recipient as User).name}
+                        {allRecipients.length > 1 && ` + ${allRecipients.length - 1}人`}
+                      </span>
+                      
+                      {/* ホバー時の全員表示 */}
+                      {allRecipients.length > 1 && (
+                        <div className="absolute bottom-full right-0 mb-2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
+                          {allRecipients.map((user: User, index) => (
+                            <span key={user.id}>
+                              {index > 0 && ", "}
+                              {user.displayName || user.name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-center mt-2">
-                    <span className="text-sm font-medium text-gray-800">
-                      {(card.recipient as User).displayName || (card.recipient as User).name}
-                    </span>
-                  </div>
-                </div>
-              )}
+                );
+              })()}
             </div>
           )}
         </div>
