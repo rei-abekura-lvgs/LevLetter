@@ -240,6 +240,117 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.json({ message: "ログアウトに成功しました" });
     });
   });
+
+  // パスワードリセット機能
+  app.post("/api/auth/password-reset-request", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "メールアドレスは必須です" });
+      }
+      
+      console.log(`🔐 パスワードリセットリクエスト受信: ${email}`);
+      
+      // メールアドレスでユーザーを検索
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        // セキュリティ上の理由から、ユーザーが存在しない場合も成功を返す
+        return res.json({ 
+          message: "パスワードリセット手順をメールで送信しました"
+        });
+      }
+      
+      try {
+        // サービスのインポート
+        const { generatePasswordResetToken } = await import('./services/token');
+        const { sendEmail, getPasswordResetEmailTemplate } = await import('./services/email');
+        
+        // リセットトークン生成
+        const resetToken = generatePasswordResetToken(user.id, user.email);
+        
+        // アプリのベースURL
+        const baseUrl = process.env.BASE_URL || `https://${req.headers.host}`;
+        const resetLink = `${baseUrl}/reset-password?token=${resetToken}`;
+        
+        console.log(`🔗 パスワードリセットリンク生成: ${resetLink}`);
+        
+        // メールテンプレート取得
+        const { html, text } = getPasswordResetEmailTemplate({
+          userName: user.name, 
+          resetLink
+        });
+        
+        // メール送信
+        const emailSent = await sendEmail({
+          to: user.email,
+          subject: 'パスワードリセットのお知らせ',
+          htmlContent: html,
+          textContent: text
+        });
+        
+        if (emailSent) {
+          console.log(`✅ パスワードリセットメール送信成功: ${user.email}`);
+        } else {
+          console.error(`❌ パスワードリセットメール送信失敗: ${user.email}`);
+        }
+        
+      } catch (error) {
+        console.error("パスワードリセットメール送信エラー:", error);
+      }
+      
+      // ユーザーの存在に関わらず、同じレスポンスを返す（セキュリティ対策）
+      return res.json({ 
+        message: "パスワードリセット手順をメールで送信しました"
+      });
+      
+    } catch (error) {
+      console.error("パスワードリセットエラー:", error);
+      return res.status(500).json({ message: "パスワードリセット処理中にエラーが発生しました" });
+    }
+  });
+
+  // パスワードリセット実行
+  app.post("/api/auth/password-reset", async (req, res) => {
+    try {
+      const { token, newPassword } = req.body;
+      
+      if (!token || !newPassword) {
+        return res.status(400).json({ message: "トークンと新しいパスワードは必須です" });
+      }
+      
+      // トークンの検証
+      const { verifyPasswordResetToken } = await import('./services/token');
+      const tokenData = verifyPasswordResetToken(token);
+      
+      if (!tokenData.valid || !tokenData.userId) {
+        return res.status(400).json({ message: "無効または期限切れのトークンです" });
+      }
+      
+      // ユーザー取得
+      const user = await storage.getUser(tokenData.userId);
+      if (!user) {
+        return res.status(404).json({ message: "ユーザーが見つかりません" });
+      }
+      
+      // パスワード更新
+      const hashedPassword = hashPassword(newPassword);
+      await storage.updateUser(user.id, {
+        password: hashedPassword,
+        passwordInitialized: true
+      });
+      
+      console.log(`✅ パスワードリセット完了: ${user.email}`);
+      
+      return res.json({ 
+        message: "パスワードが正常にリセットされました" 
+      });
+      
+    } catch (error) {
+      console.error("パスワードリセット実行エラー:", error);
+      return res.status(500).json({ message: "パスワードリセット中にエラーが発生しました" });
+    }
+  });
   
   // メールアドレス検証API
   app.get("/api/auth/verify-email", async (req, res) => {
