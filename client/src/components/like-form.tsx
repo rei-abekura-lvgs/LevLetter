@@ -21,7 +21,7 @@ interface LikeFormProps {
 
 type LikeFormValues = z.infer<typeof likeFormSchema>;
 
-export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
+export default function LikeForm({ cardId, onClose }: LikeFormProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -31,7 +31,7 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
     resolver: zodResolver(likeFormSchema),
     defaultValues: {
       cardId,
-      points: hasLiked ? 0 : 10,
+      points: 2, // 固定2ポイント
     },
   });
 
@@ -40,35 +40,25 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
 
     setIsSubmitting(true);
     try {
-      if (hasLiked) {
-        // いいねを取り消す場合
-        await apiRequest(`/api/likes?cardId=${cardId}&userId=${user.id}`, {
-          method: "DELETE",
-        });
-        toast({
-          title: "いいねを取り消しました",
-          description: "いいねとポイントを取り消しました",
-        });
-      } else {
-        // 新しくいいねする場合
-        await createLike({
-          cardId: data.cardId,
-          points: data.points,
-        });
-        toast({
-          title: "いいねしました！",
-          description: `${data.points}ポイントを送りました！`,
-        });
-      }
+      // 新しいAPI：2ポイント固定
+      await apiRequest(`/api/cards/${cardId}/likes`, {
+        method: "POST",
+      });
+      
+      toast({
+        title: "いいねしました！",
+        description: "2ポイント消費して、送信者と受信者それぞれに1ポイントずつ贈られました",
+      });
 
       // キャッシュを更新
       queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
       onClose();
     } catch (error) {
       console.error("いいねエラー:", error);
+      const errorMessage = error instanceof Error ? error.message : "操作に失敗しました";
       toast({
         title: "エラーが発生しました",
-        description: error instanceof Error ? error.message : "操作に失敗しました",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

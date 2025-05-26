@@ -1065,10 +1065,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "送信者と受信者はいいねできません" });
       }
 
-      // 既にいいねしているか確認
-      const existingLike = await storage.getLike(cardId, user.id);
-      if (existingLike) {
-        return res.status(400).json({ message: "既にいいねしています" });
+      // 50回制限チェック（重複チェックは削除）
+      const cardLikes = await storage.getLikesForCard(cardId);
+      if (cardLikes.length >= 50) {
+        throw new Error("このカードは最大いいね数に達しています");
       }
 
       const like = await storage.createLike({
@@ -1093,30 +1093,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // カード別いいね機能 - いいねを取り消す
-  app.delete("/api/cards/:cardId/likes", authenticate, async (req, res) => {
-    try {
-      const cardId = parseInt(req.params.cardId);
-      const user = (req as any).user;
-
-      if (isNaN(cardId)) {
-        return res.status(400).json({ message: "無効なカードIDです" });
-      }
-
-      // 既存のいいねを確認
-      const existingLike = await storage.getLike(cardId, user.id);
-      if (!existingLike) {
-        return res.status(404).json({ message: "いいねが見つかりません" });
-      }
-
-      await storage.deleteLike(existingLike.id);
-
-      return res.status(200).json({ message: "いいねを取り消しました" });
-    } catch (error) {
-      console.error("いいね削除エラー:", error);
-      return res.status(500).json({ message: "いいねの削除に失敗しました" });
-    }
-  });
+  // いいねの取り消し機能は削除されました（50回まで何度でも押せる仕様）
 
   app.post("/api/likes", authenticate, async (req, res) => {
     try {
