@@ -54,14 +54,16 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         if (!oldData) return oldData;
         return oldData.map((card: any) => {
           if (card.id === cardId) {
+            // 新しいいいねを追加（2ptの価値で）
+            const newLike = { 
+              id: Date.now(), 
+              userId: currentUser?.id,
+              points: 2, // 常に2pt
+              user: currentUser 
+            };
             return {
               ...card,
-              likes: [...(card.likes || []), { 
-                id: Date.now(), 
-                userId: currentUser?.id,
-                points: currentUser?.weeklyPoints >= 2 ? 2 : 0,
-                user: currentUser 
-              }]
+              likes: [...(card.likes || []), newLike]
             };
           }
           return card;
