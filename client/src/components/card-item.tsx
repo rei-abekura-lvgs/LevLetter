@@ -106,8 +106,10 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                   />
                 ) : null}
                 {!recipient.customAvatarUrl && (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <BearLogo size={48} useNewIcon={true} />
+                  <div className="w-full h-full flex items-center justify-center bg-blue-500">
+                    <span className="text-white text-xs font-bold">
+                      {recipient.name.charAt(0)}
+                    </span>
                   </div>
                 )}
               </div>
