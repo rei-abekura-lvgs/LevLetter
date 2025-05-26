@@ -93,25 +93,12 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                 zIndex: allRecipients.length - index, // 最初のアバターが最前面
               }}
             >
-              <div className="relative h-12 w-12 ring-2 ring-white shadow-md rounded-full overflow-hidden bg-white">
-                {recipient.customAvatarUrl ? (
-                  <img 
-                    src={recipient.customAvatarUrl} 
-                    alt={recipient.displayName || recipient.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // 画像読み込み失敗時は非表示にしてクマロゴを表示
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                ) : null}
-                {!recipient.customAvatarUrl && (
-                  <div className="w-full h-full flex items-center justify-center bg-blue-500">
-                    <span className="text-white text-xs font-bold">
-                      {recipient.name.charAt(0)}
-                    </span>
-                  </div>
-                )}
+              <div className="relative h-12 w-12 ring-2 ring-white shadow-md rounded-full overflow-hidden bg-red-500">
+                <div className="w-full h-full flex items-center justify-center bg-green-500">
+                  <span className="text-white text-lg font-bold">
+                    TEST
+                  </span>
+                </div>
               </div>
               {/* ポイントバッジ */}
               <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 shadow-sm">
