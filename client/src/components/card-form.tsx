@@ -533,13 +533,15 @@ export default function CardForm({ onSent }: CardFormProps) {
                             onClick={handleUserClick}
                           >
                             <Avatar className="h-8 w-8 mr-3">
-                              {availableUser.customAvatarUrl ? (
+                              {/* Google認証で画像がある場合は画像、それ以外はクマアイコン */}
+                              {availableUser.customAvatarUrl && availableUser.customAvatarUrl.includes('googleusercontent.com') ? (
                                 <AvatarImage 
                                   src={availableUser.customAvatarUrl} 
                                   alt={availableUser.displayName || availableUser.name}
                                   className="object-cover"
                                 />
                               ) : (
+                                /* 画像がない場合はクマアイコン */
                                 <AvatarFallback className="bg-transparent flex items-center justify-center">
                                   <img src="/bear_icon.png" alt="" className="w-6 h-6 object-contain" />
                                 </AvatarFallback>
