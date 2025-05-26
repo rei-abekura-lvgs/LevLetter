@@ -121,7 +121,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             ) : (
               /* 画像がない場合はクマアイコン */
               <AvatarFallback className="bg-transparent flex items-center justify-center">
-                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
+                <img src="attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-10 h-10 object-contain" />
               </AvatarFallback>
             )}
           </Avatar>
@@ -174,14 +174,14 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                             ) : (
                               /* 画像がない場合はクマアイコン */
                               <AvatarFallback className="bg-transparent flex items-center justify-center">
-                                <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className={`${isMultiple ? 'w-12 h-12' : 'w-16 h-16'} object-contain`} />
+                                <img src="attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className={`${isMultiple ? 'w-12 h-12' : 'w-16 h-16'} object-contain`} />
                               </AvatarFallback>
                             )}
                           </Avatar>
                           
                           {/* 各アバターの右下にポイントバッジ（単独の場合のみ） */}
                           {!isMultiple && (
-                            <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-1 z-10" style={{ fontSize: '15pt' }}>
+                            <div className="absolute -bottom-0.5 -right-0.5 bg-[#3990EA] text-white font-bold rounded-full min-w-[18px] h-4 flex items-center justify-center px-0.5 z-10" style={{ fontSize: '8px' }}>
                               {card.points}pt
                             </div>
                           )}
@@ -198,7 +198,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     
                     {/* 複数人の場合は全体の右下にポイントバッジ */}
                     {isMultiple && (
-                      <div className="absolute -bottom-1 -right-1 bg-[#3990EA] text-white font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-1 z-10" style={{ fontSize: '15pt' }}>
+                      <div className="absolute -bottom-0.5 -right-0.5 bg-[#3990EA] text-white font-bold rounded-full min-w-[18px] h-4 flex items-center justify-center px-0.5 z-10" style={{ fontSize: '8px' }}>
                         {card.points}pt
                       </div>
                     )}
