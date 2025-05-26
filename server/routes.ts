@@ -1074,6 +1074,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const like = await storage.createLike({
         cardId: cardId,
         userId: user.id,
+        points: 0, // いいねでは0ポイント
       });
 
       return res.status(201).json({ message: "いいねしました", like });

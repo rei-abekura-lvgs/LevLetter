@@ -44,7 +44,7 @@ export const likes = pgTable("likes", {
   id: serial("id").primaryKey(),
   cardId: integer("card_id").notNull().references(() => cards.id),
   userId: integer("user_id").notNull().references(() => users.id),
-  points: integer("points").notNull(),
+  points: integer("points").notNull().default(0), // デフォルト値を0に設定
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 

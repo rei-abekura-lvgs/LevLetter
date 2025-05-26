@@ -1,0 +1,64 @@
+home.tsx:52 
+            
+            
+           POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/cards/53/likes 500 (Internal Server Error)
+handleLike @ home.tsx:52
+CardItem.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.onClick @ home.tsx:286
+callCallback2 @ chunk-RPCDYKBN.js?v=2c26a533:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=2c26a533:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=2c26a533:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=2c26a533:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=2c26a533:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=2c26a533:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=2c26a533:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=2c26a533:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=2c26a533:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=2c26a533:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=2c26a533:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=2c26a533:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=2c26a533:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=2c26a533:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=2c26a533:5449Understand this error
+home.tsx:70 いいねエラー: Error: いいね処理に失敗しました
+    at handleLike (home.tsx:60:15)
+handleLike @ home.tsx:70
+await in handleLike
+CardItem.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.onClick @ home.tsx:286
+callCallback2 @ chunk-RPCDYKBN.js?v=2c26a533:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=2c26a533:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=2c26a533:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=2c26a533:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=2c26a533:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=2c26a533:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=2c26a533:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=2c26a533:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=2c26a533:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=2c26a533:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=2c26a533:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=2c26a533:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=2c26a533:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=2c26a533:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=2c26a533:5449Understand this error
+home.tsx:52 
+            
+            
+           POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/cards/53/likes 500 (Internal Server Error)
+handleLike @ home.tsx:52
+CardItem.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.children.jsxDEV.onClick @ home.tsx:286
+callCallback2 @ chunk-RPCDYKBN.js?v=2c26a533:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=2c26a533:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=2c26a533:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=2c26a533:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=2c26a533:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=2c26a533:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=2c26a533:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=2c26a533:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=2c26a533:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=2c26a533:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=2c26a533:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=2c26a533:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=2c26a533:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=2c26a533:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=2c26a533:5449Understand this error
+home.tsx:70 いいねエラー: Error: いいね処理に失敗しました
+    at handleLike (home.tsx:60:15)
