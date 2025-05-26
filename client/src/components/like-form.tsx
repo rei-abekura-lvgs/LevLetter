@@ -50,19 +50,54 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
     }
 
     setIsSubmitting(true);
+    
+    // 楽観的更新: カードのいいね数を即座に増加
+    queryClient.setQueryData(["/api/cards"], (oldData: any) => {
+      if (!oldData) return oldData;
+      return oldData.map((card: any) => {
+        if (card.id === cardId) {
+          console.log("💖 新しいいいね追加:", {
+            id: Date.now(),
+            userId: user.id,
+            points: 2,
+            user: user
+          });
+          const newLikes = [...card.likes, {
+            id: Date.now(),
+            userId: user.id,
+            points: 2,
+            user: user
+          }];
+          console.log("📊 更新後のいいね数:", newLikes.length);
+          return { ...card, likes: newLikes };
+        }
+        return card;
+      });
+    });
+
+    // 楽観的更新: ユーザーのポイントを即座に減少
+    queryClient.setQueryData(["/api/auth/me"], (oldData: any) => {
+      if (!oldData) return oldData;
+      const newWeeklyPoints = Math.max(0, oldData.weeklyPoints - 2);
+      console.log("💰 ユーザーポイント更新:", oldData.weeklyPoints, "→", newWeeklyPoints);
+      return { ...oldData, weeklyPoints: newWeeklyPoints };
+    });
+
     try {
-      // 新しいAPI：2ポイント固定
-      await apiRequest(`/api/cards/${cardId}/likes`, {
+      // サーバーリクエスト
+      const response = await apiRequest(`/api/cards/${cardId}/likes`, {
         method: "POST",
       });
+      console.log("🎉 サーバー送信成功 - 正確なデータで更新");
       
       toast({
         title: "いいねしました！",
         description: "2ポイント消費して、送信者と受信者それぞれに1ポイントずつ贈られました",
       });
 
-      // キャッシュを更新
+      // 正確なデータでキャッシュを更新
       queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       onClose();
     } catch (error) {
       console.error("いいねエラー:", error);
