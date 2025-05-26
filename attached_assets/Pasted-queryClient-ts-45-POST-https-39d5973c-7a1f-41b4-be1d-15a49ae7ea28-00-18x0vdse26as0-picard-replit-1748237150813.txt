@@ -1,0 +1,46 @@
+queryClient.ts:45 
+ POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/login 401 (Unauthorized)
+
+queryClient.ts:83 API POST エラー: /api/auth/login Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+auth.ts:20 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+login.tsx:56 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at login (auth.ts:21:11)
+    at async onSubmit (login.tsx:35:24)
+login.tsx:34 ログイン試行: rei.abekura@leverages.jp
+queryClient.ts:42 API POST リクエスト: /api/auth/login データあり
+queryClient.ts:45 
+ POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/login 401 (Unauthorized)
+queryClient.ts:83 API POST エラー: /api/auth/login Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+auth.ts:20 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+login.tsx:56 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at login (auth.ts:21:11)
+    at async onSubmit (login.tsx:35:24)
+login.tsx:34 ログイン試行: rei.abekura@leverages.jp
+queryClient.ts:42 API POST リクエスト: /api/auth/login データあり
+queryClient.ts:45 
+ POST https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/login 401 (Unauthorized)
+queryClient.ts:83 API POST エラー: /api/auth/login Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+auth.ts:20 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at apiRequest (queryClient.ts:55:17)
+    at async login (auth.ts:13:18)
+    at async onSubmit (login.tsx:35:24)
+login.tsx:56 ログインエラー: Error: 認証が必要です。ログインしてください。
+    at login (auth.ts:21:11)
+    at async onSubmit (login.tsx:35:24)
+﻿
+
