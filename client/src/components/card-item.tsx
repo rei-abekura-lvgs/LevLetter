@@ -123,10 +123,10 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
         <div className="flex items-center space-x-2">
           <Dialog open={isLikeDialogOpen} onOpenChange={setIsLikeDialogOpen}>
             <DialogTrigger asChild>
-              <div className="relative">
-                {/* いいねした人の名前表示 - ハートと完全に分離 */}
+              <div className="relative group">
+                {/* いいねした人の名前表示 - 右下に配置 */}
                 {card.likes.length > 0 && (
-                  <div className="absolute bottom-full left-full ml-2 mb-1 bg-gray-800 text-white text-xs rounded px-2 py-1 z-20 shadow-lg max-w-xs whitespace-normal break-words">
+                  <div className="absolute top-full left-full ml-2 mt-1 bg-gray-800 text-white text-xs rounded px-2 py-1 z-30 shadow-lg max-w-xs whitespace-normal break-words opacity-0 group-hover:opacity-100 transition-opacity">
                     いいね！
                     <div className="text-xs opacity-80 mt-1">
                       {card.likes.map(like => like.user.displayName || like.user.name).join(', ')}
