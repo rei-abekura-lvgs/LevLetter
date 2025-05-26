@@ -11,7 +11,7 @@ import { storage } from "./storage";
 import { serveStatic, log } from "./vite";
 import { hashPassword } from "./storage";
 import { generateGoogleAuthUrl, exchangeCodeForTokens, decodeIdToken, getRedirectUri } from "./cognito-auth";
-import { generateUserAvatar, generateSVGAvatar } from "./services/avatar-generator";
+
 import { 
   registerSchema, 
   loginSchema, 
