@@ -1164,7 +1164,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const message = pointsToDeduct > 0 
-        ? "いいねしました！2ポイント消費して、送信者と受信者それぞれに1ポイントずつ贈られました"
+        ? "いいねしました！"
         : "いいねしました！ポイントが不足していますが、いいねは記録されました";
 
       return res.status(201).json({ message, like, pointsDeducted: pointsToDeduct });

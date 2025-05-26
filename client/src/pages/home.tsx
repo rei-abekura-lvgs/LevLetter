@@ -48,6 +48,10 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   // いいね機能のハンドラ（複数回いいね可能、2pt固定）
   const handleLike = async (cardId: number) => {
     try {
+      // 即座にUI更新（楽観的更新）
+      queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+
       const response = await fetch(`/api/cards/${cardId}/likes`, {
         method: 'POST',
         headers: {
@@ -60,11 +64,13 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         throw new Error(errorData.message || 'いいね処理に失敗しました');
       }
 
+      const result = await response.json();
+      
       toast({
-        title: "いいねしました！",
-        description: "2ポイント消費して、送信者と受信者それぞれに1ポイントずつ贈られました",
+        title: result.message,
       });
 
+      // 再度データを更新
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error('いいねエラー:', error);
@@ -73,6 +79,10 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         description: `${error}`,
         variant: "destructive",
       });
+      
+      // エラーの場合は再度データを取得してロールバック
+      queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
     }
   };
 
