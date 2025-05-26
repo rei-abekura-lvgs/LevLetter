@@ -1,0 +1,70 @@
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'numutils.c',
+  line: '617',
+  routine: 'pg_strtoint32_safe'
+}
+11:48:54 AM [express] POST /api/cards/50/likes 500 in 684ms :: {"message":"いいねの作成に失敗しました"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/50/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T11:48:54.817Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+11:48:56 AM [express] POST /api/cards/50/likes 400 in 272ms :: {"message":"既にいいねしています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/48/likes
+🔑 セッションID: 8VOnZPGGSy690ht0q56Lai-jZ9ovp2kZ
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-02T11:48:56.141Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+いいね作成エラー: error: invalid input syntax for type integer: "NaN"
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseStorage.createLike (/home/runner/workspace/server/database-storage.ts:696:9)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1074:20) {
+  length: 146,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: "unnamed portal parameter $1 = '...'",
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'numutils.c',
+  line: '617',
+  routine: 'pg_strtoint32_safe'
+}
+11:49:08 AM [express] POST /api/cards/48/likes 500 in 519ms :: {"message":"いいねの作成に失敗しました"}

@@ -682,36 +682,15 @@ export class DatabaseStorage implements IStorage {
       throw new Error(`User ${insertLike.userId} has already liked card ${insertLike.cardId}`);
     }
     
-    // いいねを追加
+    // いいねを追加（ポイント計算は無し）
     const [like] = await db
       .insert(likes)
-      .values(insertLike)
+      .values({
+        cardId: insertLike.cardId,
+        userId: insertLike.userId,
+        points: 0
+      })
       .returning();
-    
-    // カードの受信者にポイント追加
-    const card = await this.getCard(insertLike.cardId);
-    if (card && card.recipientType === "user") {
-      const recipient = await this.getUser(card.recipientId);
-      if (recipient) {
-        await db
-          .update(users)
-          .set({
-            totalPointsReceived: recipient.totalPointsReceived + insertLike.points
-          })
-          .where(eq(users.id, card.recipientId));
-      }
-    }
-    
-    // 送信者のポイント残高を減らす
-    const sender = await this.getUser(insertLike.userId);
-    if (sender) {
-      await db
-        .update(users)
-        .set({
-          weeklyPoints: sender.weeklyPoints - insertLike.points
-        })
-        .where(eq(users.id, insertLike.userId));
-    }
     
     return like;
   }
