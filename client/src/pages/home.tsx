@@ -159,8 +159,10 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                         {(card.recipient as User).customAvatarUrl ? (
                           <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
                         ) : (
-                          <AvatarFallback className="bg-transparent flex items-center justify-center">
-                            <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
+                          <AvatarFallback className="bg-blue-500 flex items-center justify-center">
+                            <span className="text-white font-bold text-lg">
+                              {(card.recipient as User).name.charAt(0)}
+                            </span>
                           </AvatarFallback>
                         )}
                       </Avatar>
@@ -173,8 +175,10 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                           {user.customAvatarUrl ? (
                             <AvatarImage src={user.customAvatarUrl || undefined} alt={user.name} />
                           ) : (
-                            <AvatarFallback className="bg-transparent flex items-center justify-center">
-                              <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
+                            <AvatarFallback className="bg-blue-500 flex items-center justify-center">
+                              <span className="text-white font-bold text-lg">
+                                {user.name.charAt(0)}
+                              </span>
                             </AvatarFallback>
                           )}
                         </Avatar>
@@ -210,8 +214,10 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                       {(card.recipient as User).customAvatarUrl ? (
                         <AvatarImage src={(card.recipient as User).customAvatarUrl || undefined} alt={(card.recipient as User).name} />
                       ) : (
-                        <AvatarFallback className="bg-transparent flex items-center justify-center">
-                          <img src="/attached_assets/ChatGPT Image 2025年5月22日 20_25_45.png" alt="Bear Avatar" className="w-16 h-16 object-contain" />
+                        <AvatarFallback className="bg-blue-500 flex items-center justify-center">
+                          <span className="text-white font-bold text-lg">
+                            {(card.recipient as User).name.charAt(0)}
+                          </span>
                         </AvatarFallback>
                       )}
                     </Avatar>
