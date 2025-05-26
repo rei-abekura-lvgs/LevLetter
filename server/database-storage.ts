@@ -747,18 +747,18 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    // 追加受信者がいる場合：1ポイントを人数で分割（小数点は切り捨て）
+    // 追加受信者がいる場合：1ポイントを人数で分割（整数のみ）
     if (card.additionalRecipients && card.additionalRecipients.length > 0) {
       const totalRecipients = card.additionalRecipients.length + (card.recipientType === "user" ? 1 : 0);
-      const pointsPerRecipient = Math.floor(100 / totalRecipients) / 100; // 小数点2桁まで
+      const pointsPerRecipient = Math.floor(1 / totalRecipients); // 整数のみ（小数点切り捨て）
 
       for (const recipientId of card.additionalRecipients) {
         const additionalRecipient = await this.getUser(recipientId);
-        if (additionalRecipient) {
+        if (additionalRecipient && pointsPerRecipient > 0) {
           await db
             .update(users)
             .set({
-              totalPointsReceived: Math.floor((additionalRecipient.totalPointsReceived + pointsPerRecipient) * 100) / 100
+              totalPointsReceived: additionalRecipient.totalPointsReceived + pointsPerRecipient
             })
             .where(eq(users.id, recipientId));
         }
