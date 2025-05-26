@@ -124,11 +124,11 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
           <Dialog open={isLikeDialogOpen} onOpenChange={setIsLikeDialogOpen}>
             <DialogTrigger asChild>
               <div className="relative">
-                {/* いいねした人の名前表示 */}
+                {/* いいねした人の名前表示 - ハートと完全に分離 */}
                 {card.likes.length > 0 && (
-                  <div className="absolute bottom-full left-0 mb-1 bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10 shadow-lg max-w-xs">
+                  <div className="absolute bottom-full left-full ml-2 mb-1 bg-gray-800 text-white text-xs rounded px-2 py-1 z-20 shadow-lg max-w-xs whitespace-normal break-words">
                     いいね！
-                    <div className="text-xs opacity-80">
+                    <div className="text-xs opacity-80 mt-1">
                       {card.likes.map(like => like.user.displayName || like.user.name).join(', ')}
                     </div>
                   </div>
