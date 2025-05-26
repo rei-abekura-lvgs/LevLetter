@@ -55,7 +55,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
             />
           ) : (
             <AvatarFallback className="p-0 border-0">
-              <BearLogo size={40} useTransparent={true} bgColor="bg-[#3990EA]" />
+              <BearLogo size={40} useNewIcon={true} />
             </AvatarFallback>
           )}
         </Avatar>
@@ -102,7 +102,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                   />
                 ) : (
                   <AvatarFallback className="p-0 border-0">
-                    <BearLogo size={48} useTransparent={true} bgColor="bg-[#3990EA]" />
+                    <BearLogo size={48} useNewIcon={true} />
                   </AvatarFallback>
                 )}
               </Avatar>
