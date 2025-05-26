@@ -130,12 +130,12 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className={`flex items-center ${userLike ? 'text-red-500' : 'text-gray-600'}`}
+                  className={`flex items-center ${userLike ? 'text-red-500' : 'text-gray-600'} pointer-events-none`}
                 >
                   <Heart 
                     className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
                   />
-                  <span>{card.likes.length * 2}pt</span>
+                  <span>{card.likes.reduce((total, like) => total + (like.points || 2), 0)}pt</span>
                 </Button>
               </div>
             </DialogTrigger>
