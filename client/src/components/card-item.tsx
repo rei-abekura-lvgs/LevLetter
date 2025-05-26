@@ -95,24 +95,15 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
             >
               <Avatar className="h-12 w-12 ring-2 ring-white shadow-md">
                 {recipient.customAvatarUrl ? (
-                  <>
-                    <AvatarImage 
-                      src={recipient.customAvatarUrl} 
-                      alt={recipient.displayName || recipient.name}
-                      className="object-cover"
-                      onError={() => {
-                        console.log(`Avatar failed to load for ${recipient.name}: ${recipient.customAvatarUrl}`);
-                      }}
-                    />
-                    <AvatarFallback className="p-0 border-0">
-                      <BearLogo size={48} useNewIcon={true} />
-                    </AvatarFallback>
-                  </>
-                ) : (
-                  <AvatarFallback className="p-0 border-0">
-                    <BearLogo size={48} useNewIcon={true} />
-                  </AvatarFallback>
-                )}
+                  <AvatarImage 
+                    src={recipient.customAvatarUrl} 
+                    alt={recipient.displayName || recipient.name}
+                    className="object-cover"
+                  />
+                ) : null}
+                <AvatarFallback className="p-0 border-0">
+                  <BearLogo size={48} useNewIcon={true} />
+                </AvatarFallback>
               </Avatar>
               {/* ポイントバッジ */}
               <div className="absolute -top-1 -right-1 bg-[#3990EA] text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 shadow-sm">
