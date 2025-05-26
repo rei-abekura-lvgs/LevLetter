@@ -10,6 +10,7 @@ import { and, eq, desc, count, sql, isNotNull, isNull, inArray, like, not } from
 import { storage } from "./storage";
 import { serveStatic, log } from "./vite";
 import { hashPassword } from "./storage";
+import { generateGoogleAuthUrl, exchangeCodeForTokens, decodeIdToken, getRedirectUri } from "./cognito-auth";
 import { 
   registerSchema, 
   loginSchema, 
@@ -93,6 +94,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     console.error("バリデーションエラー:", error);
     return res.status(500).json({ message: "バリデーション処理中にエラーが発生しました" });
   };
+
+  // Google認証開始エンドポイント
+  app.get("/api/auth/google", async (req: Request, res: Response) => {
+    try {
+      console.log("🌐 Google認証開始");
+      const redirectUri = getRedirectUri(req);
+      const authUrl = generateGoogleAuthUrl(redirectUri);
+      console.log("🔗 リダイレクトURI:", redirectUri);
+      console.log("🔗 認証URL:", authUrl);
+      res.redirect(authUrl);
+    } catch (error) {
+      console.error("❌ Google認証開始エラー:", error);
+      res.status(500).json({ message: "認証開始に失敗しました" });
+    }
+  });
+
+  // Google認証コールバックエンドポイント
+  app.get("/auth/callback", async (req: Request, res: Response) => {
+    try {
+      console.log("🔄 Google認証コールバック処理開始");
+      const { code } = req.query;
+      
+      if (!code || typeof code !== 'string') {
+        console.log("❌ 認証コードが見つかりません");
+        return res.redirect('/login?error=auth_failed');
+      }
+
+      console.log("🔑 認証コード受信:", code);
+      const redirectUri = getRedirectUri(req);
+      
+      // 認証コードをトークンに交換
+      const tokens = await exchangeCodeForTokens(code, redirectUri);
+      console.log("✅ トークン取得成功");
+      
+      // IDトークンからユーザー情報を取得
+      const cognitoUser = decodeIdToken(tokens.id_token);
+      console.log("👤 Cognitoユーザー情報:", cognitoUser);
+      
+      // データベースでユーザーを検索または作成
+      let user = await storage.getUserByEmail(cognitoUser.email);
+      
+      if (!user) {
+        console.log("👤 新規ユーザー作成:", cognitoUser.email);
+        // 新規ユーザーを作成
+        user = await storage.createUser({
+          name: cognitoUser.name,
+          email: cognitoUser.email,
+          displayName: cognitoUser.name,
+          department: null,
+          avatarColor: getRandomColor(),
+          customAvatarUrl: cognitoUser.picture || null,
+          weeklyPoints: 100,
+          totalPointsReceived: 0,
+          totalPointsSent: 0,
+          cardsSent: 0,
+          cardsReceived: 0,
+          likesGiven: 0,
+          likesReceived: 0,
+          profileImageUrl: cognitoUser.picture || null,
+          cognitoSub: cognitoUser.id,
+        });
+      } else {
+        console.log("👤 既存ユーザーでログイン:", user.email);
+        // 既存ユーザーのCognito IDを更新
+        if (!user.cognitoSub) {
+          await storage.updateUser(user.id, { cognitoSub: cognitoUser.id });
+        }
+      }
+      
+      // セッションにユーザーIDを保存
+      req.session.userId = user.id;
+      console.log("💾 セッション保存:", { userId: user.id, sessionId: req.sessionID });
+      
+      // メインページにリダイレクト
+      res.redirect('/');
+    } catch (error) {
+      console.error("❌ Google認証コールバックエラー:", error);
+      res.redirect('/login?error=auth_failed');
+    }
+  });
 
   // 認証関連API
   app.post("/api/auth/login", async (req, res) => {
