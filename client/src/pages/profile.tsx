@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { User } from "@shared/schema";
-import { Card, CardContent } from "@/components/ui/card";
-import { Coins, HeartIcon, Edit2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Coins, HeartIcon, Edit2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProfileForm from "@/components/profile-form";
+import PasswordChangeForm from "@/components/password-change-form";
 
 interface ProfileProps {
   user: User;
@@ -11,6 +12,7 @@ interface ProfileProps {
 
 export default function Profile({ user }: ProfileProps) {
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   // ユーザーのイニシャル
   const userInitials = user.name
@@ -90,11 +92,43 @@ export default function Profile({ user }: ProfileProps) {
         </Card>
       </div>
       
+      {/* セキュリティセクション */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Lock className="h-5 w-5" />
+            セキュリティ設定
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-between items-center">
+            <div>
+              <h4 className="font-medium text-gray-800">パスワード</h4>
+              <p className="text-sm text-gray-600">アカウントのセキュリティを保つため、定期的にパスワードを変更してください</p>
+            </div>
+            <Button 
+              onClick={() => setShowPasswordModal(true)}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Lock className="h-4 w-4" />
+              パスワード変更
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      
       {/* プロフィール編集モーダル */}
       <ProfileForm
         user={user}
         open={showProfileModal}
         onOpenChange={setShowProfileModal}
+      />
+      
+      {/* パスワード変更モーダル */}
+      <PasswordChangeForm
+        open={showPasswordModal}
+        onOpenChange={setShowPasswordModal}
       />
     </div>
   );
