@@ -103,7 +103,7 @@ Respond in a structured format that could be used for image generation.`
       }],
     });
 
-    const avatarDescription = response.content[0].text;
+    const avatarDescription = response.content[0].type === 'text' ? response.content[0].text : 'AI設計生成中...';
     console.log('✨ AI生成アバター設計:', avatarDescription);
 
     // 現在は美しいSVGアバターを生成するフォールバック
