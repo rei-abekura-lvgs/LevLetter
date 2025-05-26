@@ -540,8 +540,8 @@ export default function CardForm({ onSent }: CardFormProps) {
                                   className="object-cover"
                                 />
                               ) : (
-                                <AvatarFallback className="p-0 border-0">
-                                  <BearLogo size={32} useTransparent={true} bgColor="bg-[#3990EA]" />
+                                <AvatarFallback className="bg-transparent flex items-center justify-center">
+                                  <img src="/bear_icon.png" alt="" className="w-6 h-6 object-contain" />
                                 </AvatarFallback>
                               )}
                             </Avatar>

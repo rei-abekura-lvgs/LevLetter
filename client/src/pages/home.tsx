@@ -122,7 +122,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             ) : (
               /* 画像がない場合はクマアイコン */
               <AvatarFallback className="bg-transparent flex items-center justify-center">
-                <img src={bearAvatarUrl} alt="" className="w-10 h-10 object-contain" />
+                <img src={bearAvatarUrl} alt="" className="w-12 h-12 object-contain" />
               </AvatarFallback>
             )}
           </Avatar>
@@ -175,7 +175,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                             ) : (
                               /* 画像がない場合はクマアイコン */
                               <AvatarFallback className="bg-transparent flex items-center justify-center">
-                                <img src={bearAvatarUrl} alt="" className={`${isMultiple ? 'w-3 h-3' : 'w-4 h-4'} object-contain`} />
+                                <img src={bearAvatarUrl} alt="" className={`${isMultiple ? 'w-6 h-6' : 'w-8 h-8'} object-contain`} />
                               </AvatarFallback>
                             )}
                           </Avatar>

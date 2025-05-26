@@ -54,8 +54,8 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
               className="object-cover"
             />
           ) : (
-            <AvatarFallback className="p-0 border-0">
-              <BearLogo size={40} useNewIcon={true} />
+            <AvatarFallback className="bg-transparent flex items-center justify-center">
+              <img src="/bear_icon.png" alt="" className="w-10 h-10 object-contain" />
             </AvatarFallback>
           )}
         </Avatar>
