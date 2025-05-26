@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CardWithRelations, User } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +41,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   const [isHidden, setIsHidden] = useState(card.hidden || false);
   const [showSenderDepartment, setShowSenderDepartment] = useState(false);
   const [showRecipientDepartment, setShowRecipientDepartment] = useState(false);
+  const queryClient = useQueryClient();
   
   // 管理者かどうかを確認
   const isAdmin = currentUser?.isAdmin || false;
