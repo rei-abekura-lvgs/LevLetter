@@ -78,7 +78,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const data = await response.json();
         console.log("✅ ログイン成功:", data.user.name);
         setUser(data.user);
-        setLocation("/"); // ホーム画面に遷移
+        // ログイン成功メッセージ付きでホーム画面に遷移
+        const successMessage = encodeURIComponent("ログインに成功しました");
+        setLocation(`/?success=${successMessage}`);
         return true;
       } else {
         const errorData = await response.json();
