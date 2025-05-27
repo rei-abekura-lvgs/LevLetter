@@ -5,9 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Activity, BarChart3, TrendingUp } from "lucide-react";
-import { CardItem } from "@/components/card-item";
-import { CreateCardDialog } from "@/components/create-card-dialog";
-import { Sidebar } from "@/components/layout/sidebar";
+import CardItem from "@/components/card-item";
+import CardForm from "@/components/card-form";
+import Sidebar from "@/components/layout/sidebar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Dashboard from "./dashboard";
 import Ranking from "./ranking";
 import type { User, CardWithRelations } from "@shared/schema";
@@ -211,7 +212,7 @@ export default function Home({ user }: HomeProps) {
               <Tabs 
                 value={activeTab} 
                 className="flex flex-col flex-1 overflow-hidden" 
-                onValueChange={setActiveTab}
+                onValueChange={(value) => setActiveTab(value as "all" | "received" | "sent" | "liked")}
               >
                 <TabsList className="grid w-full grid-cols-4 mx-4 mb-4 flex-shrink-0">
                   <TabsTrigger value="all">全て</TabsTrigger>
