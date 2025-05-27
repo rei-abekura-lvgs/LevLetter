@@ -384,7 +384,11 @@ export class DatabaseStorage implements IStorage {
     return results;
   }
 
-  async getTopPointGivers(limit: number = 10): Promise<Array<{ user: User; totalPoints: number }>> {
+  // 最近1ヶ月のランキング取得（ポイント付与者）
+  async getMonthlyPointGivers(limit: number = 10): Promise<Array<{ user: User; totalPoints: number }>> {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    
     const results = await db
       .select({
         user: users,
@@ -392,6 +396,7 @@ export class DatabaseStorage implements IStorage {
       })
       .from(likes)
       .innerJoin(users, eq(likes.userId, users.id))
+      .where(sql`${likes.createdAt} >= ${oneMonthAgo}`)
       .groupBy(users.id)
       .orderBy(sql`sum(${likes.points}) desc`)
       .limit(limit);
@@ -399,7 +404,11 @@ export class DatabaseStorage implements IStorage {
     return results;
   }
 
-  async getTopAppreciatedUsers(limit: number = 10): Promise<Array<{ user: User; totalPoints: number }>> {
+  // 最近1ヶ月のランキング取得（ポイント受信者）
+  async getMonthlyPointReceivers(limit: number = 10): Promise<Array<{ user: User; totalPoints: number }>> {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    
     const results = await db
       .select({
         user: users,
@@ -408,8 +417,90 @@ export class DatabaseStorage implements IStorage {
       .from(likes)
       .innerJoin(cards, eq(likes.cardId, cards.id))
       .innerJoin(users, eq(cards.recipientId, users.id))
+      .where(sql`${likes.createdAt} >= ${oneMonthAgo}`)
       .groupBy(users.id)
       .orderBy(sql`sum(${likes.points}) desc`)
+      .limit(limit);
+    
+    return results;
+  }
+
+  // 最近1ヶ月のカード送信ランキング
+  async getMonthlyCardSenders(limit: number = 10): Promise<Array<{ user: User; cardCount: number }>> {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    
+    const results = await db
+      .select({
+        user: users,
+        cardCount: sql<number>`count(${cards.id})`
+      })
+      .from(cards)
+      .innerJoin(users, eq(cards.senderId, users.id))
+      .where(sql`${cards.createdAt} >= ${oneMonthAgo}`)
+      .groupBy(users.id)
+      .orderBy(sql`count(${cards.id}) desc`)
+      .limit(limit);
+    
+    return results;
+  }
+
+  // 最近1ヶ月のカード受信ランキング
+  async getMonthlyCardReceivers(limit: number = 10): Promise<Array<{ user: User; cardCount: number }>> {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    
+    const results = await db
+      .select({
+        user: users,
+        cardCount: sql<number>`count(${cards.id})`
+      })
+      .from(cards)
+      .innerJoin(users, eq(cards.recipientId, users.id))
+      .where(sql`${cards.createdAt} >= ${oneMonthAgo}`)
+      .groupBy(users.id)
+      .orderBy(sql`count(${cards.id}) desc`)
+      .limit(limit);
+    
+    return results;
+  }
+
+  // 最近1ヶ月の拍手送信ランキング
+  async getMonthlyLikeSenders(limit: number = 10): Promise<Array<{ user: User; likeCount: number }>> {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    
+    const results = await db
+      .select({
+        user: users,
+        likeCount: sql<number>`count(${likes.id})`
+      })
+      .from(likes)
+      .innerJoin(users, eq(likes.userId, users.id))
+      .where(sql`${likes.createdAt} >= ${oneMonthAgo}`)
+      .groupBy(users.id)
+      .orderBy(sql`count(${likes.id}) desc`)
+      .limit(limit);
+    
+    return results;
+  }
+
+  // 最近1ヶ月の拍手受信ランキング
+  async getMonthlyLikeReceivers(limit: number = 10): Promise<Array<{ user: User; likeCount: number }>> {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    
+    const results = await db
+      .select({
+        user: users,
+        likeCount: sql<number>`count(${likes.id})`
+      })
+      .from(likes)
+      .innerJoin(cards, eq(likes.cardId, cards.id))
+      .innerJoin(users, eq(cards.recipientId, users.id))
+      .where(sql`${likes.createdAt} >= ${oneMonthAgo}`)
+      .groupBy(users.id)
+      .orderBy(sql`count(${likes.id}) desc`)
       .limit(limit);
     
     return results;

@@ -1286,7 +1286,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const reactionRate = receivedCards.length > 0 ? (reactionCount / receivedCards.length) * 100 : 100;
       
       // ランキング情報
-      const allUsers = await storage.getAllUsers();
+      const allUsers = await storage.getUsers();
       
       // 送信ランキング（カード数）
       const userCardCounts = await Promise.all(
@@ -1368,52 +1368,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   const httpServer = createServer(app);
-  // ランキングAPI
+  // ランキングAPI（最近1ヶ月基準）
   app.get("/api/rankings", async (req, res) => {
     // 認証チェック
     if (!(req.session as any)?.userId) {
       return res.status(401).json({ message: "認証が必要です" });
     }
     try {
-      const users = await storage.getUsers();
-      
-      if (!users || !Array.isArray(users)) {
-        return res.status(500).json({ message: "ユーザーデータの取得に失敗しました" });
-      }
-
-      // 今週獲得ポイントランキング（weeklyPointsReceived順）
-      const weeklyReceivedRanking = [...users]
-        .sort((a, b) => (b.weeklyPointsReceived || 0) - (a.weeklyPointsReceived || 0))
-        .map((user, index) => ({
-          ...user,
-          rank: index + 1
-        }));
-
-      // 累計獲得ポイントランキング（totalPointsReceived順）
-      const totalPointsRanking = [...users]
-        .sort((a, b) => (b.totalPointsReceived || 0) - (a.totalPointsReceived || 0))
-        .map((user, index) => ({
-          ...user,
-          rank: index + 1
-        }));
-
-      // 利用可能ポイントランキング（weeklyPoints順）
-      const weeklyPointsRanking = [...users]
-        .sort((a, b) => (b.weeklyPoints || 0) - (a.weeklyPoints || 0))
-        .map((user, index) => ({
-          ...user,
-          rank: index + 1
-        }));
-
-      // 現在のユーザー情報
-      const currentUserId = (req.session as any).userId;
-      const currentUser = users.find(u => u.id === currentUserId) || null;
+      // 最近1ヶ月のランキング取得
+      const pointGivers = await storage.getMonthlyPointGivers(20);
+      const pointReceivers = await storage.getMonthlyPointReceivers(20);
+      const cardSenders = await storage.getMonthlyCardSenders(20);
+      const cardReceivers = await storage.getMonthlyCardReceivers(20);
+      const likeSenders = await storage.getMonthlyLikeSenders(20);
+      const likeReceivers = await storage.getMonthlyLikeReceivers(20);
 
       res.json({
-        weeklyReceivedRanking: weeklyReceivedRanking || [],
-        totalPointsRanking: totalPointsRanking || [],
-        weeklyPointsRanking: weeklyPointsRanking || [],
-        currentUser
+        pointGivers: pointGivers.map((item, index) => ({ ...item, rank: index + 1 })),
+        pointReceivers: pointReceivers.map((item, index) => ({ ...item, rank: index + 1 })),
+        cardSenders: cardSenders.map((item, index) => ({ ...item, rank: index + 1 })),
+        cardReceivers: cardReceivers.map((item, index) => ({ ...item, rank: index + 1 })),
+        likeSenders: likeSenders.map((item, index) => ({ ...item, rank: index + 1 })),
+        likeReceivers: likeReceivers.map((item, index) => ({ ...item, rank: index + 1 }))
       });
     } catch (error) {
       console.error("ランキング取得エラー:", error);
