@@ -316,6 +316,101 @@ export class DatabaseStorage implements IStorage {
       .where(eq(teams.id, id));
   }
 
+  // ダッシュボード統計用メソッド
+  async getUserCount(): Promise<number> {
+    const result = await db.select({ count: sql<number>`count(*)` }).from(users);
+    return result[0].count;
+  }
+
+  async getCardsByUser(userId: number, limit?: number): Promise<Card[]> {
+    const query = db.select().from(cards).where(eq(cards.senderId, userId));
+    if (limit) {
+      query.limit(limit);
+    }
+    return await query;
+  }
+
+  async getCardsToUser(userId: number, limit?: number): Promise<Card[]> {
+    const query = db.select().from(cards).where(eq(cards.recipientId, userId));
+    if (limit) {
+      query.limit(limit);
+    }
+    return await query;
+  }
+
+  async getLikesByUser(userId: number): Promise<Like[]> {
+    return await db.select().from(likes).where(eq(likes.userId, userId));
+  }
+
+  async getLikesToUserCards(userId: number): Promise<Like[]> {
+    return await db
+      .select()
+      .from(likes)
+      .innerJoin(cards, eq(likes.cardId, cards.id))
+      .where(eq(cards.recipientId, userId));
+  }
+
+  async getTopCardSenders(limit: number = 10): Promise<Array<{ user: User; count: number }>> {
+    const results = await db
+      .select({
+        user: users,
+        count: sql<number>`count(${cards.id})`
+      })
+      .from(cards)
+      .innerJoin(users, eq(cards.senderId, users.id))
+      .groupBy(users.id)
+      .orderBy(sql`count(${cards.id}) desc`)
+      .limit(limit);
+    
+    return results;
+  }
+
+  async getTopCardReceivers(limit: number = 10): Promise<Array<{ user: User; count: number }>> {
+    const results = await db
+      .select({
+        user: users,
+        count: sql<number>`count(${cards.id})`
+      })
+      .from(cards)
+      .innerJoin(users, eq(cards.recipientId, users.id))
+      .groupBy(users.id)
+      .orderBy(sql`count(${cards.id}) desc`)
+      .limit(limit);
+    
+    return results;
+  }
+
+  async getTopPointGivers(limit: number = 10): Promise<Array<{ user: User; totalPoints: number }>> {
+    const results = await db
+      .select({
+        user: users,
+        totalPoints: sql<number>`sum(${likes.pointsAwarded})`
+      })
+      .from(likes)
+      .innerJoin(users, eq(likes.userId, users.id))
+      .groupBy(users.id)
+      .orderBy(sql`sum(${likes.pointsAwarded}) desc`)
+      .limit(limit);
+    
+    return results;
+  }
+
+  async getTopAppreciatedUsers(limit: number = 10): Promise<Array<{ user: User; totalPoints: number }>> {
+    const results = await db
+      .select({
+        user: users,
+        totalPoints: sql<number>`sum(${likes.pointsAwarded})`
+      })
+      .from(likes)
+      .innerJoin(cards, eq(likes.cardId, cards.id))
+      .innerJoin(users, eq(cards.recipientId, users.id))
+      .groupBy(users.id)
+      .orderBy(sql`sum(${likes.pointsAwarded}) desc`)
+      .limit(limit);
+    
+    return results;
+  }
+
   // チームメンバー関連
   async getTeamMembers(teamId: number): Promise<Array<TeamMember & { user: User }>> {
     const results = await db
