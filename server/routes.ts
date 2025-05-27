@@ -1377,6 +1377,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const users = await storage.getUsers();
       
+      if (!users || !Array.isArray(users)) {
+        return res.status(500).json({ message: "ユーザーデータの取得に失敗しました" });
+      }
+
       // 今週獲得ポイントランキング（weeklyPointsReceived順）
       const weeklyReceivedRanking = [...users]
         .sort((a, b) => (b.weeklyPointsReceived || 0) - (a.weeklyPointsReceived || 0))
@@ -1406,9 +1410,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const currentUser = users.find(u => u.id === currentUserId) || null;
 
       res.json({
-        weeklyReceivedRanking,
-        totalPointsRanking,
-        weeklyPointsRanking,
+        weeklyReceivedRanking: weeklyReceivedRanking || [],
+        totalPointsRanking: totalPointsRanking || [],
+        weeklyPointsRanking: weeklyPointsRanking || [],
         currentUser
       });
     } catch (error) {

@@ -122,7 +122,7 @@ export default function Ranking() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {users.slice(0, 10).map((rankUser, index) => {
+          {users && users.length > 0 ? users.slice(0, 10).map((rankUser, index) => {
             const isCurrentUser = rankUser.id === user.id;
             const points = rankUser[pointKey];
             
@@ -177,7 +177,11 @@ export default function Ranking() {
                 </div>
               </div>
             );
-          })}
+          }) : (
+            <div className="text-center py-8 text-gray-500">
+              ランキングデータがありません
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
