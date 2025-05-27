@@ -256,7 +256,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     onRefresh?.();
                     toast({ 
                       title: "いいねしました！✨", 
-                      description: "2ポイント消費しました",
+                      description: "2pt",
                       duration: 2000
                     });
                   } catch (error) {
