@@ -87,7 +87,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                   onClick={handleBearClick}
                   className="inline-block cursor-pointer hover:scale-110 transition-transform duration-200 mb-6"
                 >
-                  <BearLogo size={120} useNewIcon={true} />
+                  <BearLogo size={120} />
                 </div>
                 <h1 className="text-5xl font-bold mb-4">LevLetter</h1>
                 <p className="text-xl opacity-90">企業のフィードバック文化を育む</p>
@@ -157,7 +157,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               pointerEvents: 'none'
             }}
           >
-            <BearLogo size={60} useTransparent={true} bgColor="bg-white" />
+            <BearLogo size={60} />
           </div>
           <div style={{
             position: 'absolute',
