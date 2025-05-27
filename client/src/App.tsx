@@ -16,6 +16,8 @@ import Landing from "@/pages/landing";
 import Contact from "@/pages/contact";
 import Demo from "@/pages/demo";
 import Trial from "@/pages/trial";
+import Dashboard from "@/pages/dashboard";
+import Ranking from "@/pages/ranking";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context-new";
@@ -80,6 +82,12 @@ function AppRoutes() {
           </Route>
           <Route path="/settings">
             <Settings />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
+          </Route>
+          <Route path="/ranking">
+            <Ranking />
           </Route>
           <Route path="/admin">
             {user.isAdmin ? (
