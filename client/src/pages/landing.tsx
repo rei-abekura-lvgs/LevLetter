@@ -40,7 +40,7 @@ export default function Landing() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="mb-8 inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
-              <BearLogo size={32} />
+              <BearLogo size={32} useNewIcon={true} />
               <span className="text-white/90 text-sm font-medium tracking-wide">3,000+ 企業が導入済み</span>
             </div>
             
@@ -307,23 +307,28 @@ export default function Landing() {
                 </Link>
               </div>
               <div className="flex justify-center">
-                <div className="bg-gradient-to-br from-[#3990EA] to-[#2563EB] rounded-2xl p-8 text-white max-w-md">
-                  <div className="text-center mb-6">
-                    <BearLogo size={80} useTransparent={true} bgColor="bg-white" />
-                    <h4 className="text-xl font-bold mt-4">LevLetterで実現</h4>
-                  </div>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
-                      <span>継続的なフィードバック習慣</span>
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#3990EA] via-purple-500 to-[#3990EA] rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-[#3990EA] to-[#2563EB] rounded-2xl p-10 text-white max-w-md backdrop-blur-sm border border-white/10">
+                    <div className="text-center mb-8">
+                      <div className="bg-white/15 backdrop-blur-sm rounded-full p-4 inline-block mb-4 border border-white/20">
+                        <BearLogo size={64} useNewIcon={true} />
+                      </div>
+                      <h4 className="text-2xl font-bold bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent">LevLetterで実現</h4>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
-                      <span>組織全体のエンゲージメント向上</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
-                      <span>データに基づいた改善サイクル</span>
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                        <div className="w-3 h-3 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-full flex-shrink-0"></div>
+                        <span className="font-medium">継続的なフィードバック習慣</span>
+                      </div>
+                      <div className="flex items-center space-x-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                        <div className="w-3 h-3 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-full flex-shrink-0"></div>
+                        <span className="font-medium">組織全体のエンゲージメント向上</span>
+                      </div>
+                      <div className="flex items-center space-x-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                        <div className="w-3 h-3 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-full flex-shrink-0"></div>
+                        <span className="font-medium">データに基づいた改善サイクル</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -334,72 +339,135 @@ export default function Landing() {
       </section>
 
       {/* ポジティブフィードバックの重要性セクション */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+      <section className="py-20 bg-gradient-to-b from-gray-50 via-white to-gray-50 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(59,130,246,0.05),transparent)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(168,85,247,0.05),transparent)]"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 bg-blue-500/10 backdrop-blur-sm rounded-full px-6 py-3 border border-blue-500/20 mb-6">
+              <Star className="h-5 w-5 text-blue-500" />
+              <span className="text-blue-600 text-sm font-medium">科学的根拠</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
               <span className="text-[#3990EA]">ポジティブフィードバック</span>が<br />
               組織に与える科学的効果
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               心理学研究で実証されたフィードバックの力を、あなたの組織でも活用できます
             </p>
           </div>
 
-          <div className="max-w-5xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 md:p-12 shadow-xl mb-12">
-              <h3 className="text-3xl font-bold text-center text-gray-900 mb-8">ポジティブフィードバックとは</h3>
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-[#3990EA] p-6 rounded-lg mb-8">
-                <p className="text-gray-700 font-medium mb-3 text-lg">
-                  相手の行動や成果に対して前向きな評価や称賛を伝えること
-                </p>
-                <p className="text-gray-600 text-lg">
-                  相手の強みや貢献に注目して、ポジティブなメッセージを伝える
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                  <h4 className="text-xl font-bold text-green-800 mb-4">好ましい行動の強化</h4>
-                  <p className="text-green-700 mb-3">例：「今回"も"期限厳守で素晴らしい！」</p>
-                  <p className="text-green-600 text-sm">いつも期限を守る相手に、今後も守り続けてほしいから</p>
+          <div className="max-w-6xl mx-auto">
+            <div className="relative group mb-16">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+              <div className="relative bg-white rounded-2xl p-10 md:p-12 shadow-2xl backdrop-blur-sm border border-gray-100">
+                <div className="text-center mb-10">
+                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <MessageSquare className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-6">
+                    ポジティブフィードバックとは
+                  </h3>
                 </div>
-                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                  <h4 className="text-xl font-bold text-blue-800 mb-4">好ましい行動への転換</h4>
-                  <p className="text-blue-700 mb-3">例：「今回"は"期限厳守で素晴らしい！」</p>
-                  <p className="text-blue-600 text-sm">期限を守れない相手に、期限厳守に変わってほしいから</p>
+                
+                <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border border-blue-200 rounded-2xl p-8 mb-8 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full -translate-y-16 translate-x-16"></div>
+                  <div className="relative">
+                    <p className="text-gray-800 font-semibold mb-4 text-lg">
+                      相手の行動や成果に対して前向きな評価や称賛を伝えること
+                    </p>
+                    <p className="text-gray-700 text-lg">
+                      相手の強みや貢献に注目して、ポジティブなメッセージを伝える
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="group relative bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-200 hover:shadow-lg transition-all duration-300">
+                    <div className="absolute top-4 right-4 w-8 h-8 bg-green-500/10 rounded-full flex items-center justify-center">
+                      <span className="text-green-600 text-xl">✓</span>
+                    </div>
+                    <h4 className="text-2xl font-bold text-green-800 mb-4">好ましい行動の強化</h4>
+                    <div className="bg-white/70 rounded-lg p-4 mb-4">
+                      <p className="text-green-700 font-medium">例：「今回"も"期限厳守で素晴らしい！」</p>
+                    </div>
+                    <p className="text-green-600">いつも期限を守る相手に、今後も守り続けてほしいから</p>
+                  </div>
+                  
+                  <div className="group relative bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 hover:shadow-lg transition-all duration-300">
+                    <div className="absolute top-4 right-4 w-8 h-8 bg-blue-500/10 rounded-full flex items-center justify-center">
+                      <span className="text-blue-600 text-xl">↗</span>
+                    </div>
+                    <h4 className="text-2xl font-bold text-blue-800 mb-4">好ましい行動への転換</h4>
+                    <div className="bg-white/70 rounded-lg p-4 mb-4">
+                      <p className="text-blue-700 font-medium">例：「今回"は"期限厳守で素晴らしい！」</p>
+                    </div>
+                    <p className="text-blue-600">期限を守れない相手に、期限厳守に変わってほしいから</p>
+                  </div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 md:p-12 border border-purple-200">
-              <h3 className="text-3xl font-bold text-center text-gray-900 mb-8">ピグマリオン効果の活用</h3>
-              <div className="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-8">
-                <div className="text-center">
-                  <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-green-600 font-bold text-lg">期待</span>
+            <div className="relative group mb-16">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+              <div className="relative bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 rounded-2xl p-10 md:p-12 border border-purple-200 backdrop-blur-sm">
+                <div className="text-center mb-10">
+                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="h-8 w-8 text-white" />
                   </div>
-                  <h4 className="font-bold text-gray-900 mb-2">他者からの期待</h4>
-                  <p className="text-gray-600 text-sm">学習成績が向上し、仕事での成果が上がる心理効果</p>
+                  <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-800 to-pink-800 bg-clip-text text-transparent">
+                    ピグマリオン効果の活用
+                  </h3>
                 </div>
-                <ArrowRight className="h-8 w-8 text-[#3990EA] transform md:rotate-0 rotate-90" />
-                <div className="text-center">
-                  <div className="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-blue-600 font-bold text-lg">成長</span>
+                
+                <div className="flex flex-col lg:flex-row items-center justify-center space-y-8 lg:space-y-0 lg:space-x-12">
+                  <div className="text-center group">
+                    <div className="relative mb-6">
+                      <div className="bg-gradient-to-br from-green-400 to-emerald-500 w-24 h-24 rounded-full flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <span className="text-white font-bold text-xl">期待</span>
+                      </div>
+                      <div className="absolute -inset-2 bg-green-400/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <h4 className="font-bold text-gray-900 mb-3 text-lg">他者からの期待</h4>
+                    <p className="text-gray-600 max-w-xs">学習成績が向上し、仕事での成果が上がる心理効果</p>
                   </div>
-                  <h4 className="font-bold text-gray-900 mb-2">継続的な成長</h4>
-                  <p className="text-gray-600 text-sm">期待に応えようとする意欲が成長を促進</p>
+                  
+                  <div className="flex items-center">
+                    <ArrowRight className="h-10 w-10 text-purple-500 transform lg:rotate-0 rotate-90 animate-pulse" />
+                  </div>
+                  
+                  <div className="text-center group">
+                    <div className="relative mb-6">
+                      <div className="bg-gradient-to-br from-blue-400 to-indigo-500 w-24 h-24 rounded-full flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <span className="text-white font-bold text-xl">成長</span>
+                      </div>
+                      <div className="absolute -inset-2 bg-blue-400/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <h4 className="font-bold text-gray-900 mb-3 text-lg">継続的な成長</h4>
+                    <p className="text-gray-600 max-w-xs">期待に応えようとする意欲が成長を促進</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="text-center bg-white rounded-2xl p-8 shadow-lg mt-12">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                現在 <span className="text-[#3990EA]">3,000人以上</span> のユーザーが活用中
-              </h3>
-              <p className="text-gray-600">
-                様々な業界・規模の組織でフィードバック文化の醸成を実現
-              </p>
+            <div className="text-center">
+              <div className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-[#3990EA] via-blue-500 to-[#3990EA] rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+                <div className="relative bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+                  <div className="flex items-center justify-center mb-6">
+                    <div className="bg-[#3990EA]/10 p-3 rounded-full mr-4">
+                      <Users className="h-8 w-8 text-[#3990EA]" />
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
+                      現在 <span className="bg-gradient-to-r from-[#3990EA] to-blue-600 bg-clip-text text-transparent">3,000人以上</span> のユーザーが活用中
+                    </h3>
+                  </div>
+                  <p className="text-xl text-gray-600">
+                    様々な業界・規模の組織でフィードバック文化の醸成を実現
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
