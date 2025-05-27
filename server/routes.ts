@@ -1247,175 +1247,96 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = (req as any).user;
       const userId = user.id;
       
-      // 今週の範囲を計算
-      const now = new Date();
-      const startOfWeek = new Date(now);
-      startOfWeek.setDate(now.getDate() - (now.getDay() + 6) % 7);
-      startOfWeek.setHours(0, 0, 0, 0);
-      
-      const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 6);
-      endOfWeek.setHours(23, 59, 59, 999);
-      
-      // 先月の範囲を計算
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-      endOfMonth.setHours(23, 59, 59, 999);
-      
-      // 基本統計
-      const totalUsers = await storage.getUserCount();
-      const userCards = await storage.getCardsByUser(userId);
-      const userLikes = await storage.getLikesByUser(userId);
-      
-      // 今週のカード数
-      const cardsThisWeek = userCards.filter(card => 
-        new Date(card.createdAt) >= startOfWeek && new Date(card.createdAt) <= endOfWeek
-      ).length;
-      
-      // 今週付与したポイント
-      const pointsGivenThisWeek = userLikes
-        .filter(like => new Date(like.createdAt) >= startOfWeek && new Date(like.createdAt) <= endOfWeek)
-        .reduce((sum, like) => sum + like.points, 0);
-      
       // ポイント消化率（500ptを最大として）
       const pointConversionRate = Math.min(100, ((500 - user.weeklyPoints) / 500) * 100);
       
-      // リアクション率（受け取ったカードに対するいいねの割合）
+      // 基本データ取得
+      const sentCards = await storage.getCardsByUser(userId);
       const receivedCards = await storage.getCardsToUser(userId);
-      const likesToUserCards = await storage.getLikesToUserCards(userId);
-      const reactionRate = receivedCards.length > 0 ? (likesToUserCards.length / receivedCards.length) * 100 : 100;
-      
-      // ランキング情報
-      const allUsers = await storage.getUsers();
-      
-      // 送信ランキング（カード数）
-      const userCardCounts = await Promise.all(
-        allUsers.map(async (u) => ({
-          userId: u.id,
-          count: (await storage.getCardsByUser(u.id)).length
-        }))
-      );
-      userCardCounts.sort((a, b) => b.count - a.count);
-      const sendingRank = userCardCounts.findIndex(u => u.userId === userId) + 1;
-      
-      // 受信ランキング（ポイント）
-      const userPointCounts = allUsers.map(u => ({
-        userId: u.id,
-        points: u.totalPointsReceived || 0
-      }));
-      userPointCounts.sort((a, b) => b.points - a.points);
-      const receivingRank = userPointCounts.findIndex(u => u.userId === userId) + 1;
-      
-      // 最近1ヶ月のデータ
-      const oneMonthAgo = new Date();
-      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-      // 月間ランキングデータ（簡略化版）
-      const allCards = await storage.getCards();
-      
-      // 最近1ヶ月のカードをフィルタリング
-      const recentCards = allCards.filter(card => 
-        new Date(card.createdAt) >= oneMonthAgo
-      );
-      
-      // 送信者別ポイント統計
-      const senderStats: Record<number, number> = {};
-      recentCards.forEach(card => {
-        if (card.senderId) {
-          senderStats[card.senderId] = (senderStats[card.senderId] || 0) + card.points;
+      // 個人インタラクション統計
+      const sentCardStats: Record<number, number> = {};
+      sentCards.forEach(card => {
+        if (card.recipientId && card.recipientId !== userId) {
+          sentCardStats[card.recipientId] = (sentCardStats[card.recipientId] || 0) + 1;
         }
       });
 
-      // 上位10名の送信者を取得
-      const topSenders = Object.entries(senderStats)
-        .map(([id, points]) => ({ id: parseInt(id), points: points as number }))
-        .sort((a, b) => b.points - a.points)
-        .slice(0, 10);
-
-      const monthlyCardSenders = [];
-      for (let i = 0; i < topSenders.length; i++) {
-        const user = await storage.getUser(topSenders[i].id);
-        if (user) {
-          monthlyCardSenders.push({
-            user,
-            points: topSenders[i].points,
-            rank: i + 1
-          });
+      const receivedCardStats: Record<number, number> = {};
+      receivedCards.forEach(card => {
+        if (card.senderId && card.senderId !== userId) {
+          receivedCardStats[card.senderId] = (receivedCardStats[card.senderId] || 0) + 1;
         }
-      }
+      });
 
-      // 月間いいね送信者（簡略化）
-      const monthlyLikeSenders = monthlyCardSenders.slice(0, 5);
-
-      // 現在のユーザーの順位を計算
-      const userCardRank = monthlyCardSenders.findIndex(item => item.user.id === userId) + 1;
-      const userLikeRank = monthlyLikeSenders.findIndex(item => item.user.id === userId) + 1;
-
-      // 累計個人インタラクションデータ（簡略化版）
-      const sentCards = await storage.getCardsByUser(userId);
-      const receivedCardsData = await storage.getCardsToUser(userId);
-
-      // 個人インタラクション相手の統計（上位30名）
-      const sentCardStats = sentCards.reduce((acc, card) => {
-        const recipientId = card.recipientId;
-        if (recipientId && recipientId !== userId) {
-          acc[recipientId] = (acc[recipientId] || 0) + 1;
-        }
-        return acc;
-      }, {} as Record<number, number>);
-
-      const receivedCardStats = receivedCardsData.reduce((acc, card) => {
-        const senderId = card.senderId;
-        if (senderId && senderId !== userId) {
-          acc[senderId] = (acc[senderId] || 0) + 1;
-        }
-        return acc;
-      }, {} as Record<number, number>);
-
-      // ユーザー情報を取得してランキング形式に変換
+      // 上位30名のランキング作成
       const createPersonalRanking = async (stats: Record<number, number>) => {
-        const entries = Object.entries(stats).map(([id, count]) => ({ id: parseInt(id), count }));
-        entries.sort((a, b) => b.count - a.count);
-        
-        const topUsers = await Promise.all(
-          entries.slice(0, 30).map(async (entry, index) => {
-            const user = await storage.getUser(entry.id);
-            return user ? {
+        const entries = Object.entries(stats)
+          .map(([id, count]) => ({ id: parseInt(id), count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 30);
+
+        const rankings = [];
+        for (let i = 0; i < entries.length; i++) {
+          const user = await storage.getUser(entries[i].id);
+          if (user) {
+            rankings.push({
               user,
-              count: entry.count,
-              rank: index + 1
-            } : null;
-          })
-        );
-        
-        return topUsers.filter(item => item !== null);
+              count: entries[i].count,
+              rank: i + 1
+            });
+          }
+        }
+        return rankings;
       };
 
       const personalSentCards = await createPersonalRanking(sentCardStats);
       const personalReceivedCards = await createPersonalRanking(receivedCardStats);
-      // いいね機能は後で実装
-      const personalSentLikes: any[] = [];
-      const personalReceivedLikes: any[] = [];
 
       return res.json({
-        // 最近1ヶ月のデータ
         monthly: {
-          pointConsumptionRate: Math.round(pointConversionRate),
-          cardRank: userCardRank || 999,
-          likeRank: userLikeRank || 999,
-          totalUsers
+          pointConversionRate: Math.round(pointConversionRate),
+          reactionRate: 100,
+          cardSenders: [],
+          likeSenders: [],
+          userCardRank: 0,
+          userLikeRank: 0
         },
-        // 累計個人インタラクションランキング
         personal: {
           sentCards: personalSentCards,
           receivedCards: personalReceivedCards,
-          sentLikes: personalSentLikes,
-          receivedLikes: personalReceivedLikes
+          sentLikes: [],
+          receivedLikes: []
         }
       });
     } catch (error) {
-      console.error("ダッシュボード統計情報取得エラー:", error);
-      return res.status(500).json({ message: "ダッシュボード統計情報の取得に失敗しました" });
+      console.error('ダッシュボード統計情報取得エラー:', error);
+      return res.status(500).json({ message: 'ダッシュボード統計情報の取得に失敗しました' });
+    }
+  });
+
+  // ランキングAPI（最近1ヶ月基準）
+  app.get("/api/rankings", authenticate, async (req, res) => {
+    try {
+      // 最近1ヶ月のランキング取得
+      const pointGivers = await storage.getMonthlyPointGivers(20);
+      const pointReceivers = await storage.getMonthlyPointReceivers(20);
+      const cardSenders = await storage.getMonthlyCardSenders(20);
+      const cardReceivers = await storage.getMonthlyCardReceivers(20);
+      const likeSenders = await storage.getMonthlyLikeSenders(20);
+      const likeReceivers = await storage.getMonthlyLikeReceivers(20);
+
+      res.json({
+        pointGivers: pointGivers.map((item, index) => ({ ...item, rank: index + 1 })),
+        pointReceivers: pointReceivers.map((item, index) => ({ ...item, rank: index + 1 })),
+        cardSenders: cardSenders.map((item, index) => ({ ...item, rank: index + 1 })),
+        cardReceivers: cardReceivers.map((item, index) => ({ ...item, rank: index + 1 })),
+        likeSenders: likeSenders.map((item, index) => ({ ...item, rank: index + 1 })),
+        likeReceivers: likeReceivers.map((item, index) => ({ ...item, rank: index + 1 }))
+      });
+    } catch (error) {
+      console.error("ランキング取得エラー:", error);
+      res.status(500).json({ message: "ランキング情報の取得に失敗しました" });
     }
   });
 
@@ -1450,34 +1371,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   const httpServer = createServer(app);
-  // ランキングAPI（最近1ヶ月基準）
-  app.get("/api/rankings", async (req, res) => {
-    // 認証チェック
-    if (!(req.session as any)?.userId) {
-      return res.status(401).json({ message: "認証が必要です" });
-    }
-    try {
-      // 最近1ヶ月のランキング取得
-      const pointGivers = await storage.getMonthlyPointGivers(20);
-      const pointReceivers = await storage.getMonthlyPointReceivers(20);
-      const cardSenders = await storage.getMonthlyCardSenders(20);
-      const cardReceivers = await storage.getMonthlyCardReceivers(20);
-      const likeSenders = await storage.getMonthlyLikeSenders(20);
-      const likeReceivers = await storage.getMonthlyLikeReceivers(20);
-
-      res.json({
-        pointGivers: pointGivers.map((item, index) => ({ ...item, rank: index + 1 })),
-        pointReceivers: pointReceivers.map((item, index) => ({ ...item, rank: index + 1 })),
-        cardSenders: cardSenders.map((item, index) => ({ ...item, rank: index + 1 })),
-        cardReceivers: cardReceivers.map((item, index) => ({ ...item, rank: index + 1 })),
-        likeSenders: likeSenders.map((item, index) => ({ ...item, rank: index + 1 })),
-        likeReceivers: likeReceivers.map((item, index) => ({ ...item, rank: index + 1 }))
-      });
-    } catch (error) {
-      console.error("ランキング取得エラー:", error);
-      res.status(500).json({ message: "ランキング情報の取得に失敗しました" });
-    }
-  });
 
   return httpServer;
 }
