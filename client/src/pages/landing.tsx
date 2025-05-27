@@ -40,7 +40,7 @@ export default function Landing() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="mb-8 inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
-              <BearLogo size={32} useNewIcon={true} />
+              <BearLogo size={32} />
               <span className="text-white/90 text-sm font-medium tracking-wide">3,000+ 企業が導入済み</span>
             </div>
             

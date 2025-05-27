@@ -1,6 +1,7 @@
 import bearImage from "@assets/ChatGPT Image 2025年5月22日 18_56_53.png";
 import bearTransparentImage from "@assets/ChatGPT Image 2025年5月22日 20_25_45.png";
 import newBearIcon from "@assets/ChatGPT Image 2025年5月23日 12_20_03.png";
+import whiteBearIcon from "@assets/ChatGPT Image 2025年5月22日 20_52_25.png";
 
 // LevLetter可愛いクマのロゴコンポーネント
 export function BearLogo({ 
@@ -14,39 +15,10 @@ export function BearLogo({
   useNewIcon?: boolean;
   bgColor?: string; 
 }) {
-  // 新しいクマアイコンを使用
-  if (useNewIcon) {
-    return (
-      <img 
-        src={newBearIcon} 
-        alt="LevLetter Bear Logo" 
-        width={size} 
-        height={size}
-        className="object-contain rounded-full"
-      />
-    );
-  }
-
-  if (useTransparent) {
-    return (
-      <div 
-        className={`rounded-full ${bgColor} flex items-center justify-center p-1`}
-        style={{ width: size, height: size }}
-      >
-        <img 
-          src={bearTransparentImage} 
-          alt="LevLetter Bear Logo" 
-          width={size - 8} 
-          height={size - 8}
-          className="object-contain"
-        />
-      </div>
-    );
-  }
-
+  // デフォルトで白いクマアイコン（ハートのLL付き）を使用
   return (
     <img 
-      src={bearImage} 
+      src={whiteBearIcon} 
       alt="LevLetter Bear Logo" 
       width={size} 
       height={size}
