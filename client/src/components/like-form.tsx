@@ -91,7 +91,7 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
 
     try {
       // サーバーリクエスト
-      const response = await apiRequest("POST", `/api/cards/${cardId}/likes`);
+      const response = await apiRequest(`/api/cards/${cardId}/likes`, "POST");
       console.log("🎉 サーバー送信成功 - 正確なデータで更新");
       
       toast({

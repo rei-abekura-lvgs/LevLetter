@@ -1,0 +1,74 @@
+中...
+auth-context-new.tsx:162 📊 認証状態更新: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/'}
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/'}
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth-context.tsx:157 🔄 認証初期化開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+2
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/'}
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth-context.tsx:157 🔄 認証初期化開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+2
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+5
+Unchecked runtime.lastError: The message port closed before a response was received.
+auth-context-new.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context-new.tsx:139 🎯 認証初期化完了: 阿部倉 怜
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+App.tsx:57 アプリ状態: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, 現在のパス: '/'}
+auth-context-new.tsx:162 📊 認証状態更新: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+4
+home.tsx:343 Like error: TypeError: path.includes is not a function
+    at apiRequest (queryClient.ts:38:12)
+    at onClick (home.tsx:335:27)
