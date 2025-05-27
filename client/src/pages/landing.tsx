@@ -36,7 +36,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              次代を創る企業が選ぶ<br />
+              組織の可能性を最大化する<br />
               <span className="text-yellow-300">フィードバック文化</span>醸成プラットフォーム
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-4xl mx-auto">
@@ -279,30 +279,105 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 導入実績セクション */}
+      {/* ポジティブフィードバックの重要性セクション */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
-            様々な業界・規模の企業で導入実績
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <div className="text-3xl font-bold text-[#3990EA] mb-2">500+</div>
-              <div className="text-gray-600">導入企業数</div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <span className="text-[#3990EA]">ポジティブフィードバック</span>が<br />
+              組織に与える科学的効果
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              心理学研究で実証されたフィードバックの力を、あなたの組織でも活用できます
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <div className="bg-white rounded-xl p-8 shadow-lg mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">ポジティブフィードバックとは</h3>
+                <div className="bg-blue-50 border-l-4 border-[#3990EA] p-4 rounded">
+                  <p className="text-gray-700 font-medium mb-2">
+                    相手の行動や成果に対して前向きな評価や称賛を伝えること
+                  </p>
+                  <p className="text-gray-600">
+                    相手の強みや貢献に注目して、ポジティブなメッセージを伝える
+                  </p>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-xl p-8 shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">ピグマリオン効果の活用</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-green-100 rounded-full p-2 mt-1">
+                      <span className="text-green-600 font-bold text-sm">期待</span>
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">他者からの期待を受けることで</p>
+                      <p className="text-gray-600 text-sm">学習成績が向上し、仕事での成果が上がる心理効果</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <ArrowRight className="h-6 w-6 text-[#3990EA]" />
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-blue-100 rounded-full p-2 mt-1">
+                      <span className="text-blue-600 font-bold text-sm">成長</span>
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">継続的なポジティブフィードバック</p>
+                      <p className="text-gray-600 text-sm">期待に応えようとする意欲が成長を促進</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <div className="text-3xl font-bold text-[#3990EA] mb-2">50,000+</div>
-              <div className="text-gray-600">利用ユーザー数</div>
-            </div>
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <div className="text-3xl font-bold text-[#3990EA] mb-2">1M+</div>
-              <div className="text-gray-600">送信された感謝カード</div>
+
+            <div className="space-y-6">
+              <div className="bg-gradient-to-r from-[#3990EA] to-[#2563EB] rounded-xl p-8 text-white">
+                <h3 className="text-2xl font-bold mb-6">フィードバックの2つの目的</h3>
+                <div className="space-y-6">
+                  <div className="bg-white bg-opacity-20 rounded-lg p-4">
+                    <h4 className="font-bold text-lg mb-2">好ましい行動の強化</h4>
+                    <p className="text-sm opacity-90 mb-2">例：「今回"も"期限厳守で素晴らしい！」</p>
+                    <p className="text-sm opacity-75">いつも期限を守る相手に、今後も守り続けてほしいから</p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 rounded-lg p-4">
+                    <h4 className="font-bold text-lg mb-2">好ましい行動への転換</h4>
+                    <p className="text-sm opacity-90 mb-2">例：「今回"は"期限厳守で素晴らしい！」</p>
+                    <p className="text-sm opacity-75">期限を守れない相手に、期限厳守に変わってほしいから</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 rounded-xl p-8 border border-yellow-200">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  "フィードバック濃度"を高める
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  関係性の潤滑油として機能し、相互の関係を強化
+                </p>
+                <div className="flex items-center space-x-4 text-sm">
+                  <span className="bg-yellow-200 px-3 py-1 rounded-full font-medium">相手のため</span>
+                  <span className="bg-yellow-200 px-3 py-1 rounded-full font-medium">お互いのため</span>
+                </div>
+                <div className="mt-4 flex items-center space-x-4 text-sm font-medium">
+                  <span className="text-blue-600">→ 成長へ</span>
+                  <span className="text-green-600">→ いい関係へ</span>
+                </div>
+              </div>
             </div>
           </div>
-          <p className="text-lg text-gray-600">
-            IT企業 / 製造業 / 金融業 / 医療・介護 / 教育機関 / 小売業など<br />
-            あらゆる業界で組織改善を実現
-          </p>
+
+          <div className="text-center bg-white rounded-2xl p-8 shadow-lg">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              現在 <span className="text-[#3990EA]">3,000人以上</span> のユーザーが活用中
+            </h3>
+            <p className="text-gray-600">
+              様々な業界・規模の組織でフィードバック文化の醸成を実現
+            </p>
+          </div>
         </div>
       </section>
 
@@ -400,88 +475,108 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 導入企業の声セクション */}
+      {/* フィードバック文化醸成の効果セクション */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              導入企業様の<span className="text-[#3990EA]">変革ストーリー</span>
+              フィードバック文化が<br />
+              <span className="text-[#3990EA]">組織にもたらす変化</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              LevLetterでフィードバック文化を醸成し、組織変革を実現した企業様の声をご紹介します
+              組織心理学の研究により実証された、フィードバック文化醸成による組織変革の効果
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            <div className="bg-gray-50 rounded-xl p-8">
-              <div className="flex items-start mb-6">
-                <div className="bg-[#3990EA] w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                  <span className="text-white font-bold">A</span>
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-8 border border-green-200">
+              <div className="flex items-center mb-6">
+                <div className="bg-green-500 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-white text-xl">🚀</span>
                 </div>
-                <div>
-                  <h3 className="font-bold text-lg text-gray-900">IT サービス企業（従業員数500名）</h3>
-                  <p className="text-gray-600">人事部長様</p>
-                </div>
+                <h3 className="text-2xl font-bold text-gray-900">個人の成長加速</h3>
               </div>
-              <blockquote className="text-gray-700 italic mb-6 leading-relaxed">
-                「導入前は、個人の成長が頭打ちになる傾向があり、チーム間の連携も課題でした。LevLetterを導入してから、
-                建設的なフィードバックが日常的に交わされるようになり、個人の自己認識が向上。
-                <span className="font-semibold text-[#3990EA]">離職率が40%減少し、社員エンゲージメントが大幅に改善</span>しました。」
-              </blockquote>
-              <div className="flex items-center text-sm text-gray-600">
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <Star className="h-5 w-5 text-yellow-400 mr-2" />
-                <span>導入から6ヶ月で効果を実感</span>
+              <div className="space-y-4">
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <h4 className="font-bold text-gray-900 mb-2">自己認識の向上</h4>
+                  <p className="text-gray-700 text-sm">
+                    継続的なフィードバックにより、自分の強みと改善点を正確に把握できるようになる
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <h4 className="font-bold text-gray-900 mb-2">スキル開発の促進</h4>
+                  <p className="text-gray-700 text-sm">
+                    具体的な改善提案により、効率的なスキルアップが可能になる
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <h4 className="font-bold text-gray-900 mb-2">モチベーション向上</h4>
+                  <p className="text-gray-700 text-sm">
+                    ポジティブフィードバックにより、仕事への意欲と自信が高まる
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-8">
-              <div className="flex items-start mb-6">
-                <div className="bg-[#3990EA] w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                  <span className="text-white font-bold">B</span>
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 border border-blue-200">
+              <div className="flex items-center mb-6">
+                <div className="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-white text-xl">🤝</span>
                 </div>
-                <div>
-                  <h3 className="font-bold text-lg text-gray-900">製造業（従業員数1,200名）</h3>
-                  <p className="text-gray-600">代表取締役様</p>
-                </div>
+                <h3 className="text-2xl font-bold text-gray-900">組織連携の強化</h3>
               </div>
-              <blockquote className="text-gray-700 italic mb-6 leading-relaxed">
-                「従来の評価制度では表面的な課題解決に留まっていましたが、LevLetterにより根本的な組織文化改革が実現。
-                <span className="font-semibold text-[#3990EA]">生産性が25%向上し、新規事業のアイデアも3倍に増加</span>。
-                相手を理解し合う文化が浸透し、セクショナリズムも解消されました。」
-              </blockquote>
-              <div className="flex items-center text-sm text-gray-600">
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                <Star className="h-5 w-5 text-yellow-400 mr-2" />
-                <span>導入から1年で組織変革を実現</span>
+              <div className="space-y-4">
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <h4 className="font-bold text-gray-900 mb-2">相互理解の促進</h4>
+                  <p className="text-gray-700 text-sm">
+                    相手の立場や考えを理解しようとする姿勢が組織全体に浸透
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <h4 className="font-bold text-gray-900 mb-2">心理的安全性の向上</h4>
+                  <p className="text-gray-700 text-sm">
+                    建設的な意見交換ができる環境により、チーム内の信頼関係が強化
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <h4 className="font-bold text-gray-900 mb-2">セクショナリズムの解消</h4>
+                  <p className="text-gray-700 text-sm">
+                    部署間の壁を越えた協力体制が自然に形成される
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="text-center">
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 inline-block">
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-200">
+            <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                導入企業の平均的な成果
+                組織心理学研究による実証効果
               </h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">+38%</div>
-                  <p className="text-gray-700">社員エンゲージメント向上</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">-42%</div>
-                  <p className="text-gray-700">離職率減少</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 mb-2">+31%</div>
-                  <p className="text-gray-700">業務効率改善</p>
-                </div>
+              <p className="text-gray-700">
+                フィードバック文化が浸透した組織で観測される一般的な変化
+              </p>
+            </div>
+            <div className="grid md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">25-40%</div>
+                <p className="text-gray-700 font-medium">エンゲージメント向上</p>
+                <p className="text-gray-600 text-sm">研究事例の平均値</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 mb-2">30-50%</div>
+                <p className="text-gray-700 font-medium">離職率減少</p>
+                <p className="text-gray-600 text-sm">心理的安全性の効果</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600 mb-2">20-35%</div>
+                <p className="text-gray-700 font-medium">生産性向上</p>
+                <p className="text-gray-600 text-sm">組織連携の強化</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-orange-600 mb-2">3-5倍</div>
+                <p className="text-gray-700 font-medium">イノベーション創出</p>
+                <p className="text-gray-600 text-sm">アイデア提案の増加</p>
               </div>
             </div>
           </div>
