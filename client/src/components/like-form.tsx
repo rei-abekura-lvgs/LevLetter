@@ -104,8 +104,23 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
       queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       onClose();
     } catch (error) {
-      console.error("いいねエラー:", error);
-      const errorMessage = error instanceof Error ? error.message : "操作に失敗しました";
+      console.error("Like error:", error);
+      console.error("Error details:", {
+        name: error?.name,
+        message: error?.message,
+        stack: error?.stack,
+        response: error?.response,
+        status: error?.status
+      });
+      
+      let errorMessage = "いいねの送信に失敗しました";
+      
+      if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "エラーが発生しました",
         description: errorMessage,
