@@ -46,8 +46,21 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
           
           {/* 今週の残りポイント表示 */}
           <div className="bg-blue-50 rounded-lg p-4 mb-4">
-            <p className="text-sm text-gray-600 mb-1">今週の残りポイント</p>
-            <p className="text-xl font-bold text-[#3990EA]">{user.weeklyPoints}pt</p>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600">今週の残りポイント</p>
+              <span className="text-xs text-gray-500">週次リセット</span>
+            </div>
+            <p className="text-2xl font-bold text-[#3990EA] mb-1">{user.weeklyPoints}pt</p>
+            <div className="text-xs text-gray-500">
+              <p>毎週500ptが付与されます</p>
+              <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                <div 
+                  className="bg-[#3990EA] h-1.5 rounded-full transition-all duration-300" 
+                  style={{ width: `${(user.weeklyPoints / 500) * 100}%` }}
+                ></div>
+              </div>
+              <p className="mt-1">{user.weeklyPoints}/500pt 残り</p>
+            </div>
           </div>
 
           {/* ランキングナビゲーション */}
