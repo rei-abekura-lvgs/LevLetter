@@ -152,7 +152,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                           alt={user.displayName || user.name} 
                         />
                         <AvatarFallback className={`text-xs text-white bg-${user.avatarColor}`}>
-                          {(user.displayName || user.name).charAt(0)}
+                          {(user.displayName || user.name || 'U').charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <span className="text-gray-700 text-sm font-medium">
@@ -554,7 +554,7 @@ export default function Home({ user }: HomeProps) {
                 {filteredCards.length}件のカード
               </Badge>
               <Select defaultValue="newest" onValueChange={handleSortChange}>
-                <SelectTrigger className="w-[120px] h-8 text-sm">
+                <SelectTrigger className="w-[100px] h-8 text-sm">
                   <SelectValue placeholder="新しい順" />
                 </SelectTrigger>
                 <SelectContent>
@@ -562,6 +562,33 @@ export default function Home({ user }: HomeProps) {
                   <SelectItem value="popular">人気順</SelectItem>
                 </SelectContent>
               </Select>
+              <Select defaultValue="all" onValueChange={setFilterBy}>
+                <SelectTrigger className="w-[100px] h-8 text-sm">
+                  <SelectValue placeholder="全て" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全て</SelectItem>
+                  <SelectItem value="person">人で絞込</SelectItem>
+                  <SelectItem value="department">部署で絞込</SelectItem>
+                </SelectContent>
+              </Select>
+              {filterBy !== 'all' && (
+                <Select defaultValue="" onValueChange={setFilterValue}>
+                  <SelectTrigger className="w-[120px] h-8 text-sm">
+                    <SelectValue placeholder={filterBy === 'person' ? '人を選択' : '部署を選択'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {filterBy === 'person' ? 
+                      uniquePeople.map(person => (
+                        <SelectItem key={person} value={person}>{person}</SelectItem>
+                      )) :
+                      uniqueDepartments.map(dept => (
+                        <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                      ))
+                    }
+                  </SelectContent>
+                </Select>
+              )}
             </div>
           </div>
 
