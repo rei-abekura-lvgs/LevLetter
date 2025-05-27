@@ -44,39 +44,23 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
             </div>
           </div>
           
-          {/* シンプルなナビゲーション */}
+          {/* 今週の残りポイント表示 */}
+          <div className="bg-blue-50 rounded-lg p-4 mb-4">
+            <p className="text-sm text-gray-600 mb-1">今週の残りポイント</p>
+            <p className="text-xl font-bold text-[#3990EA]">{user.weeklyPoints}pt</p>
+          </div>
+
+          {/* ランキングナビゲーション */}
           <div className="space-y-2 mb-auto">
-            <Link href="/">
+            <Link href="/ranking">
               <div className={cn(
                 "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
-                location === "/" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
+                location === "/ranking" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
               )}>
-                <Home className="h-5 w-5" />
-                <span className="font-medium">ホーム</span>
+                <Settings className="h-5 w-5" />
+                <span className="font-medium">ランキング</span>
               </div>
             </Link>
-            
-            <Link href="/profile">
-              <div className={cn(
-                "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
-                location === "/profile" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
-              )}>
-                <UserCircle className="h-5 w-5" />
-                <span className="font-medium">プロフィール設定</span>
-              </div>
-            </Link>
-            
-            {user.isAdmin && (
-              <Link href="/admin">
-                <div className={cn(
-                  "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
-                  location === "/admin" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
-                )}>
-                  <Settings className="h-5 w-5" />
-                  <span className="font-medium">管理者設定</span>
-                </div>
-              </Link>
-            )}
           </div>
           
           {/* ログアウトボタン */}
