@@ -1,7 +1,7 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/context/auth-context-new";
-import { Home, Settings, UserCircle, LogOut } from "lucide-react";
+import { Home, Settings, UserCircle, LogOut, Bell, BarChart3, Trophy, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
 import { BearLogo } from "@/components/bear-logo";

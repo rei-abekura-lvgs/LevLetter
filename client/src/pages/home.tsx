@@ -101,7 +101,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
   // 受信者表示の処理
   const primaryRecipient = card.recipient;
-  const additionalRecipients = (card.additionalRecipients || []).filter(Boolean);
+  const additionalRecipients = Array.isArray(card.additionalRecipients) ? card.additionalRecipients : [];
   const allRecipients = primaryRecipient ? [primaryRecipient, ...additionalRecipients] : additionalRecipients;
   
   // 表示する受信者（最大3人）
@@ -133,7 +133,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   {card.sender.displayName || card.sender.name}
                 </span>
                 <span className="text-gray-400">→</span>
-                {allRecipients.map((user: User, index: number) => (
+                {displayRecipients.map((user: User, index: number) => (
                   <div key={user.id} className="flex items-center gap-1">
                     <Avatar className="h-6 w-6">
                       <AvatarImage 
@@ -147,9 +147,14 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     <span className="text-gray-700 text-sm font-medium">
                       {user.displayName || user.name}
                     </span>
-                    {index < allRecipients.length - 1 && <span className="text-gray-400 mx-1">,</span>}
+                    {index < displayRecipients.length - 1 && <span className="text-gray-400 mx-1">,</span>}
                   </div>
                 ))}
+                {remainingCount > 0 && (
+                  <span className="text-gray-500 text-sm">
+                    +{remainingCount}人
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-3 mt-1">
                 <div className="flex items-center gap-1 text-gray-500 text-xs">
