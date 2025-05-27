@@ -243,7 +243,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                             className="object-cover"
                           />
                           <AvatarFallback style={{ backgroundColor: user.avatarColor }}>
-                            {(user.displayName || user.name).charAt(0)}
+                            {(user.displayName || user.name || '?').charAt(0)}
                           </AvatarFallback>
                         </Avatar>
                         <span className="text-sm">{user.displayName || user.name}</span>
