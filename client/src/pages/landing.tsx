@@ -32,104 +32,179 @@ export default function Landing() {
       </header>
 
       {/* ヒーローセクション */}
-      <section className="pt-24 pb-16 bg-gradient-to-br from-[#3990EA] to-[#2563EB] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-24 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#3990EA] via-[#2563EB] to-[#1e40af]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent)] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.05),transparent)] pointer-events-none"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <div className="mb-8 inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
+              <BearLogo size={32} />
+              <span className="text-white/90 text-sm font-medium tracking-wide">3,000+ 企業が導入済み</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-8 bg-gradient-to-r from-white via-white to-yellow-200 bg-clip-text text-transparent leading-tight">
               組織の可能性を最大化する<br />
-              <span className="text-yellow-300">フィードバック文化</span>醸成プラットフォーム
+              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                フィードバック文化
+              </span>
+              <br />醸成プラットフォーム
             </h1>
-            <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-4xl mx-auto">
-              「相手の成長、組織・事業の成長のために建設的にフィードバックが伝えられる組織」<br />
-              「フィードバックを進んで受け入れ改善していける組織」を実現します
+            
+            <p className="text-xl md:text-2xl mb-10 text-white/90 max-w-5xl mx-auto leading-relaxed font-light">
+              建設的なフィードバックが自然に行き交う組織へ。<br />
+              心理学に基づいた科学的アプローチで、<span className="font-semibold text-yellow-200">真の組織変革</span>を実現します。
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Link href="/login">
-                <Button size="lg" className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-8 py-4 text-lg">
+                <Button size="lg" className="group bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-gray-900 font-bold px-10 py-5 text-lg rounded-xl shadow-2xl hover:shadow-yellow-400/25 transition-all duration-300 transform hover:scale-105">
                   無料トライアル開始
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#3990EA] px-8 py-4 text-lg">
+              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#3990EA] px-10 py-5 text-lg rounded-xl backdrop-blur-sm bg-white/10 transition-all duration-300 font-semibold">
                 お問い合わせ
               </Button>
             </div>
+            
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <div className="text-center group">
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 group-hover:bg-white/15 transition-all duration-300">
+                  <div className="text-3xl font-bold text-yellow-300 mb-2">30日間</div>
+                  <div className="text-white/80">無料トライアル</div>
+                </div>
+              </div>
+              <div className="text-center group">
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 group-hover:bg-white/15 transition-all duration-300">
+                  <div className="text-3xl font-bold text-yellow-300 mb-2">24/7</div>
+                  <div className="text-white/80">専任サポート</div>
+                </div>
+              </div>
+              <div className="text-center group">
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 group-hover:bg-white/15 transition-all duration-300">
+                  <div className="text-3xl font-bold text-yellow-300 mb-2">100%</div>
+                  <div className="text-white/80">カスタマイズ対応</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        
+        {/* 装飾的な要素 */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
       </section>
 
       {/* 組織課題セクション */}
-      <section className="py-16 bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(59,130,246,0.1),transparent)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.1),transparent)]"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              <span className="text-red-400">なぜ多くの組織で</span><br />
-              フィードバック文化が根付かないのか？
+            <div className="inline-flex items-center space-x-2 bg-red-500/10 backdrop-blur-sm rounded-full px-6 py-3 border border-red-500/20 mb-6">
+              <AlertTriangle className="h-5 w-5 text-red-400" />
+              <span className="text-red-300 text-sm font-medium">組織の課題</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-gray-100 to-red-200 bg-clip-text text-transparent">
+              なぜ多くの組織で<br />
+              <span className="text-red-400">フィードバック文化が根付かない</span>のか？
             </h2>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
               組織の成長を阻む6つの根本的な課題が、あなたの会社にも潜んでいませんか？
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-red-500">
-              <div className="flex items-center mb-4">
-                <AlertTriangle className="h-8 w-8 text-red-400 mr-3" />
-                <h3 className="text-xl font-bold">成長機会の損失</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-red-500/30 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-red-500/20 p-3 rounded-full mr-4">
+                    <AlertTriangle className="h-6 w-6 text-red-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">成長機会の損失</h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  個人の成長が鈍化し、自己認識とのズレが拡大。建設的なフィードバックの欠如により、組織全体の競争力が低下している。
+                </p>
               </div>
-              <p className="text-gray-300">
-                個人の成長が鈍化し、自己認識とのズレが拡大。建設的なフィードバックの欠如により、組織全体の競争力が低下している。
-              </p>
             </div>
 
-            <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-orange-500">
-              <div className="flex items-center mb-4">
-                <Shield className="h-8 w-8 text-orange-400 mr-3" />
-                <h3 className="text-xl font-bold">表面的な解決策</h3>
+            <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-orange-500/20 p-3 rounded-full mr-4">
+                    <Shield className="h-6 w-6 text-orange-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">表面的な解決策</h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  問題の根本原因に向き合わず、その場しのぎの対応を繰り返すことで、組織の本質的な改善が阻害されている。
+                </p>
               </div>
-              <p className="text-gray-300">
-                問題の根本原因に向き合わず、その場しのぎの対応を繰り返すことで、組織の本質的な改善が阻害されている。
-              </p>
             </div>
 
-            <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-yellow-500">
-              <div className="flex items-center mb-4">
-                <Eye className="h-8 w-8 text-yellow-400 mr-3" />
-                <h3 className="text-xl font-bold">相互理解の欠如</h3>
+            <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-yellow-500/30 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-yellow-500/20 p-3 rounded-full mr-4">
+                    <Eye className="h-6 w-6 text-yellow-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">相互理解の欠如</h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  相手を理解しようとする姿勢の欠如により、セクショナリズムが蔓延し、組織内の連携が困難になっている。
+                </p>
               </div>
-              <p className="text-gray-300">
-                相手を理解しようとする姿勢の欠如により、セクショナリズムが蔓延し、組織内の連携が困難になっている。
-              </p>
             </div>
 
-            <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-blue-500">
-              <div className="flex items-center mb-4">
-                <Building className="h-8 w-8 text-blue-400 mr-3" />
-                <h3 className="text-xl font-bold">組織文化の劣化</h3>
+            <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-blue-500/30 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-blue-500/20 p-3 rounded-full mr-4">
+                    <Building className="h-6 w-6 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">組織文化の劣化</h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  言うべきことを言えない環境が定着し、組織の健全性が損なわれ、イノベーションが生まれにくい状況に陥っている。
+                </p>
               </div>
-              <p className="text-gray-300">
-                言うべきことを言えない環境が定着し、組織の健全性が損なわれ、イノベーションが生まれにくい状況に陥っている。
-              </p>
             </div>
 
-            <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-purple-500">
-              <div className="flex items-center mb-4">
-                <Target className="h-8 w-8 text-purple-400 mr-3" />
-                <h3 className="text-xl font-bold">変化への適応力不足</h3>
+            <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-purple-500/30 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-purple-500/20 p-3 rounded-full mr-4">
+                    <Target className="h-6 w-6 text-purple-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">変化への適応力不足</h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  フィードバックを受け入れ改善していく文化の欠如により、急速な市場変化に対応できない組織になっている。
+                </p>
               </div>
-              <p className="text-gray-300">
-                フィードバックを受け入れ改善していく文化の欠如により、急速な市場変化に対応できない組織になっている。
-              </p>
             </div>
 
-            <div className="bg-gray-800 p-6 rounded-lg border-l-4 border-green-500">
-              <div className="flex items-center mb-4">
-                <TrendingDown className="h-8 w-8 text-green-400 mr-3" />
-                <h3 className="text-xl font-bold">継続的改善の停滞</h3>
+            <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-green-500/30 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative">
+                <div className="flex items-center mb-6">
+                  <div className="bg-green-500/20 p-3 rounded-full mr-4">
+                    <TrendingDown className="h-6 w-6 text-green-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">継続的改善の停滞</h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
+                  組織・事業の成長のためのフィードバックサイクルが機能せず、持続的な競争優位性を築けない状況が続いている。
+                </p>
               </div>
-              <p className="text-gray-300">
-                組織・事業の成長のためのフィードバックサイクルが機能せず、持続的な競争優位性を築けない状況が続いている。
-              </p>
             </div>
           </div>
 
