@@ -29,6 +29,7 @@ import {
 import CardForm from "@/components/card-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import Dashboard from "@/pages/dashboard";
 import Ranking from "@/pages/ranking";
 
@@ -168,7 +169,25 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleDeleteCard(card.id)}
+              onClick={async () => {
+                try {
+                  const response = await apiRequest(`/api/cards/${card.id}`, {
+                    method: 'DELETE',
+                  });
+                  
+                  if (response.ok) {
+                    onRefresh?.();
+                    toast({ title: "カードを削除しました" });
+                  }
+                } catch (error) {
+                  console.error('Delete error:', error);
+                  toast({ 
+                    title: "エラーが発生しました",
+                    description: "カードの削除に失敗しました",
+                    variant: "destructive" 
+                  });
+                }
+              }}
               className="h-8 w-8 p-0 text-gray-400 hover:text-red-500 hover:bg-red-50"
             >
               <Trash2 className="h-4 w-4" />
@@ -291,7 +310,26 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               <Button 
                 className="flex-1"
                 disabled={totalLikes >= 50}
-                onClick={handleLikeSubmit}
+                onClick={async () => {
+                  try {
+                    const response = await apiRequest(`/api/cards/${card.id}/likes`, {
+                      method: 'POST',
+                    });
+                    
+                    if (response.ok) {
+                      setIsLikeFormOpen(false);
+                      onRefresh?.();
+                      toast({ title: "いいねを送りました！" });
+                    }
+                  } catch (error) {
+                    console.error('Like error:', error);
+                    toast({ 
+                      title: "エラーが発生しました",
+                      description: "いいねの送信に失敗しました",
+                      variant: "destructive" 
+                    });
+                  }
+                }}
               >
                 いいねを送る
               </Button>
