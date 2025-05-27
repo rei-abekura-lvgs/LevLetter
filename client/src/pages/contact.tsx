@@ -249,7 +249,7 @@ export default function Contact() {
                   <p className="text-sm text-gray-600">
                     〒150-6190<br />
                     東京都渋谷区渋谷2-24-12<br />
-                    渋谷スクランブルスクエア東棟24,25階
+                    渋谷スクランブルスクエア 24F・25F
                   </p>
                 </div>
               </CardContent>

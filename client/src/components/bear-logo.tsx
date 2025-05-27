@@ -9,6 +9,7 @@ interface Bear {
   vy: number;
   size: number;
   rotation: number;
+  isDragging?: boolean;
 }
 
 // LevLetter可愛いクマのロゴコンポーネント
@@ -26,6 +27,8 @@ export function BearLogo({
   const [bears, setBears] = useState<Bear[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [bearCount, setBearCount] = useState(0);
+  const [draggedBear, setDraggedBear] = useState<Bear | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const createRandomBear = (id: number): Bear => ({
     id,
@@ -44,20 +47,28 @@ export function BearLogo({
     setIsAnimating(true);
   };
 
+  const handleBearMouseDown = (bear: Bear, e: React.MouseEvent) => {
+    e.preventDefault();
+    setDraggedBear(bear);
+    setBears(prev => prev.map(b => 
+      b.id === bear.id ? { ...b, isDragging: true, vx: 0, vy: 0 } : b
+    ));
+  };
+
   const handleAnimatedBearClick = (clickedBear: Bear) => {
-    // クリックされたクマを分裂させる
-    const bear1 = createRandomBear(bearCount);
-    const bear2 = createRandomBear(bearCount + 1);
-    
-    // 元のクマの位置の近くに2匹を配置
-    bear1.x = clickedBear.x + Math.random() * 100 - 50;
-    bear1.y = clickedBear.y + Math.random() * 100 - 50;
-    bear2.x = clickedBear.x + Math.random() * 100 - 50;
-    bear2.y = clickedBear.y + Math.random() * 100 - 50;
-    
-    // 元のクマを削除して新しい2匹を追加
-    setBears(prev => prev.filter(bear => bear.id !== clickedBear.id).concat([bear1, bear2]));
-    setBearCount(prev => prev + 2);
+    if (!draggedBear) {
+      // ドラッグ中でない場合は分裂
+      const bear1 = createRandomBear(bearCount);
+      const bear2 = createRandomBear(bearCount + 1);
+      
+      bear1.x = clickedBear.x + Math.random() * 100 - 50;
+      bear1.y = clickedBear.y + Math.random() * 100 - 50;
+      bear2.x = clickedBear.x + Math.random() * 100 - 50;
+      bear2.y = clickedBear.y + Math.random() * 100 - 50;
+      
+      setBears(prev => prev.filter(bear => bear.id !== clickedBear.id).concat([bear1, bear2]));
+      setBearCount(prev => prev + 2);
+    }
   };
 
   // クマ同士の衝突検知と反発

@@ -770,7 +770,7 @@ export default function Landing() {
                 <p className="text-gray-600 text-sm">
                   〒150-6190<br />
                   東京都渋谷区渋谷2-24-12<br />
-                  渋谷スクランブルスクエア東棟24,25階
+                  渋谷スクランブルスクエア 24F・25F
                 </p>
                 <p className="text-sm text-gray-500 mt-2">※お打ち合わせも可能です</p>
               </div>
