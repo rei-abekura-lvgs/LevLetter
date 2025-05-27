@@ -264,7 +264,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               {bears.map(bear => (
                 <div
                   key={bear.id}
-                  onClick={catchBear(bear.id)}
+                  onClick={clickBear(bear.id)}
                   style={{
                     position: 'absolute',
                     left: `${bear.x}%`,
@@ -272,40 +272,66 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                     transform: 'translate(-50%, -50%)',
                     cursor: 'pointer',
                     zIndex: 10001,
-                    transition: 'none'
+                    transition: 'all 0.2s ease',
+                    filter: bear.color === 'gold' ? 'hue-rotate(45deg) brightness(1.3)' :
+                           bear.color === 'purple' ? 'hue-rotate(270deg) brightness(1.1)' :
+                           bear.color === 'blue' ? 'hue-rotate(180deg)' :
+                           bear.color === 'rainbow' ? 'hue-rotate(0deg) brightness(1.5) saturate(2)' : 'none'
                   }}
                 >
-                  <BearLogo size={50} useTransparent={true} bgColor="bg-white" />
+                  <BearLogo size={40 + bear.level * 5} useTransparent={true} bgColor="bg-white" />
                 </div>
               ))}
 
-              {/* ゲームUI */}
+              {/* 育成ゲームUI */}
               <div style={{
                 position: 'absolute',
                 top: '20px',
                 left: '20px',
                 color: 'white',
-                fontSize: '20px',
+                fontSize: '18px',
                 fontWeight: 'bold',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                padding: '10px',
-                borderRadius: '8px'
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                padding: '15px',
+                borderRadius: '10px',
+                minWidth: '200px'
               }}>
-                スコア: {score} | クマ: {bears.length}匹
+                <div>🐻 レベル: {bearLevel}</div>
+                <div>⭐ EXP: {bearExp}/{getExpForNextLevel(bearLevel)}</div>
+                <div>👆 総クリック: {totalClicks}</div>
+                <div>🎯 クマ数: {bears.length}匹</div>
               </div>
+              
+              {/* レベルアップバー */}
               <div style={{
                 position: 'absolute',
                 top: '20px',
                 right: '20px',
                 color: 'white',
-                fontSize: '20px',
+                fontSize: '16px',
                 fontWeight: 'bold',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                padding: '10px',
-                borderRadius: '8px'
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                padding: '15px',
+                borderRadius: '10px',
+                minWidth: '200px'
               }}>
-                残り時間: {timeLeft}秒
+                <div style={{ marginBottom: '10px' }}>次のレベルまで:</div>
+                <div style={{
+                  width: '180px',
+                  height: '15px',
+                  backgroundColor: 'rgba(255,255,255,0.3)',
+                  borderRadius: '10px',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    width: `${(bearExp / getExpForNextLevel(bearLevel)) * 100}%`,
+                    height: '100%',
+                    backgroundColor: '#3990EA',
+                    transition: 'width 0.3s ease'
+                  }}></div>
+                </div>
               </div>
+
               <div style={{
                 position: 'absolute',
                 bottom: '20px',
@@ -314,80 +340,41 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                 color: 'white',
                 fontSize: '16px',
                 opacity: 0.9,
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                padding: '8px 16px',
-                borderRadius: '20px'
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                padding: '10px 20px',
+                borderRadius: '25px',
+                textAlign: 'center'
               }}>
-                クマをクリックすると新しいクマが現れる！
+                クマを連打してレベルアップ！<br/>
+                <small>レベルが上がると新しいクマが仲間になるよ！</small>
               </div>
             </>
           )}
 
-          {/* ゲーム終了画面 */}
-          {gameStarted && !isGameActive && timeLeft === 0 && (
-            <div style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              textAlign: 'center',
-              color: 'white',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              padding: '40px',
-              borderRadius: '20px'
-            }}>
-              <h2 style={{ fontSize: '28px', fontWeight: 'bold', margin: '0 0 20px 0' }}>
-                ゲーム終了！
-              </h2>
-              <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#3990EA', margin: '10px 0' }}>
-                スコア: {score}匹
-              </p>
-              <p style={{ fontSize: '16px', opacity: 0.9, margin: '20px 0' }}>
-                {score >= 15 ? "素晴らしい！クマキャッチマスター！" :
-                 score >= 10 ? "上手！なかなかの腕前です！" :
-                 score >= 5 ? "良い調子！もう少し頑張れます！" :
-                 "練習あるのみ！再挑戦してみましょう！"}
-              </p>
-              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    startGame();
-                  }}
-                  style={{
-                    backgroundColor: '#3990EA',
-                    color: 'white',
-                    border: 'none',
-                    padding: '12px 24px',
-                    fontSize: '16px',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  もう一度
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsScreensaverActive(false);
-                    endGame();
-                  }}
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                    color: 'white',
-                    border: '1px solid white',
-                    padding: '12px 24px',
-                    fontSize: '16px',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  終了
-                </button>
-              </div>
-            </div>
+          {/* 終了ボタン（育成ゲーム用） */}
+          {gameStarted && (
+            <button
+              onClick={() => {
+                setGameStarted(false);
+                setIsGameActive(false);
+                setIsScreensaverActive(false);
+              }}
+              style={{
+                position: 'absolute',
+                top: '120px',
+                right: '20px',
+                backgroundColor: 'rgba(220, 53, 69, 0.8)',
+                color: 'white',
+                border: 'none',
+                padding: '10px 15px',
+                borderRadius: '5px',
+                fontSize: '14px',
+                cursor: 'pointer',
+                zIndex: 10003
+              }}
+            >
+              ❌ 終了
+            </button>
           )}
 
           {/* スクリーンセーバーモード（ゲーム機能なし） */}
