@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { CardWithRelations, User } from "@shared/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Heart, MessageSquare, Share } from "lucide-react";
-import LikeForm from "./like-form";
 import { BearLogo } from "@/components/bear-logo";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { toast } from "@/hooks/use-toast";
 
 interface CardItemProps {
   card: CardWithRelations;
@@ -15,10 +15,101 @@ interface CardItemProps {
 }
 
 export default function CardItem({ card, currentUser }: CardItemProps) {
-  const [isLikeDialogOpen, setIsLikeDialogOpen] = useState(false);
-
+  const queryClient = useQueryClient();
+  
   // 自分がいいねしたか
   const userLike = card.likes.find(like => like.user.id === currentUser.id);
+
+  // いいね機能のミューテーション
+  const likeMutation = useMutation({
+    mutationFn: () => apiRequest(`/api/cards/${card.id}/likes`, 'POST'),
+    onMutate: async () => {
+      // 楽観的更新：カードデータを即座に更新
+      await queryClient.cancelQueries({ queryKey: ['/api/cards'] });
+      const previousCards = queryClient.getQueryData(['/api/cards']);
+      
+      queryClient.setQueryData(['/api/cards'], (oldData: any) => {
+        if (!oldData) return oldData;
+        return oldData.map((oldCard: any) => {
+          if (oldCard.id === card.id) {
+            const newLike = {
+              id: Date.now(),
+              userId: currentUser.id,
+              points: 2,
+              user: currentUser
+            };
+            return {
+              ...oldCard,
+              likes: [...(oldCard.likes || []), newLike]
+            };
+          }
+          return oldCard;
+        });
+      });
+
+      // 楽観的更新：ユーザーポイントを即座に減少
+      queryClient.setQueryData(['/api/auth/me'], (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          weeklyPoints: Math.max(0, oldData.weeklyPoints - 2)
+        };
+      });
+
+      return { previousCards };
+    },
+    onError: (error, variables, context) => {
+      // エラー時はロールバック
+      if (context?.previousCards) {
+        queryClient.setQueryData(['/api/cards'], context.previousCards);
+      }
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+      toast({
+        variant: "destructive",
+        title: "エラー",
+        description: error instanceof Error ? error.message : "いいね処理に失敗しました"
+      });
+    },
+    onSuccess: () => {
+      // 成功時はサーバーデータで更新
+      queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+    }
+  });
+
+  const handleLike = () => {
+    // ポイント不足チェック
+    if (currentUser.weeklyPoints < 2) {
+      toast({
+        variant: "destructive",
+        title: "ポイント不足",
+        description: "いいねするには2pt必要です"
+      });
+      return;
+    }
+
+    // 既にいいね済みチェック
+    if (userLike) {
+      toast({
+        variant: "destructive",
+        title: "エラー",
+        description: "既にいいね済みです"
+      });
+      return;
+    }
+
+    // 自分のカードにはいいねできない
+    if (card.senderId === currentUser.id) {
+      toast({
+        variant: "destructive",
+        title: "エラー",
+        description: "自分のカードにはいいねできません"
+      });
+      return;
+    }
+
+    likeMutation.mutate();
+  };
 
   // 受信者の表示名を取得
   const recipientName = 
@@ -121,52 +212,50 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
       {/* アクション */}
       <div className="flex items-center justify-between border-t pt-3">
         <div className="flex items-center space-x-2">
-          <Dialog open={isLikeDialogOpen} onOpenChange={setIsLikeDialogOpen}>
-            <DialogTrigger asChild>
-              <div className="relative group">
-                {/* いいねした人の名前表示 - 横長ツールチップ */}
-                {card.likes.length > 0 && (
-                  <div className="absolute -top-12 left-0 right-0 bg-gray-800 text-white text-xs rounded px-3 py-2 z-30 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap overflow-hidden">
-                    <div className="font-medium mb-1">いいね！({card.likes.length * 2}pt)</div>
-                    <div className="text-xs opacity-80">
-                      {(() => {
-                        // 同じユーザーのいいねをまとめる
-                        const groupedLikes = card.likes.reduce((acc: any, like: any) => {
-                          const userName = like.user.displayName || like.user.name;
-                          if (acc[userName]) {
-                            acc[userName] += 2; // 常に2ptずつ
-                          } else {
-                            acc[userName] = 2;
-                          }
-                          return acc;
-                        }, {});
-                        
-                        return Object.entries(groupedLikes)
-                          .map(([name, points]) => (points as number) === 2 ? name : `${name}(${points}pt)`)
-                          .join('、');
-                      })()}
-                    </div>
-                  </div>
-                )}
-                <LikeForm 
-                  cardId={card.id} 
-                  onClose={() => {}}
-                  hasLiked={!!userLike}
-                />
+          {/* いいねボタン - 1クリック即座実行 */}
+          <div className="relative group">
+            {/* ツールチップ - いいねした人の表示 */}
+            {card.likes.length > 0 && (
+              <div className="absolute -top-12 left-0 bg-gray-800 text-white text-xs rounded px-3 py-2 z-30 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                <div className="font-medium mb-1">いいね！({card.likes.length * 2}pt)</div>
+                <div className="text-xs opacity-80">
+                  {(() => {
+                    // 同じユーザーのいいねをまとめる
+                    const groupedLikes = card.likes.reduce((acc: any, like: any) => {
+                      const userName = like.user.displayName || like.user.name;
+                      if (acc[userName]) {
+                        acc[userName] += 2;
+                      } else {
+                        acc[userName] = 2;
+                      }
+                      return acc;
+                    }, {});
+                    
+                    return Object.entries(groupedLikes)
+                      .map(([name, points]) => (points as number) === 2 ? name : `${name}(${points}pt)`)
+                      .join('、');
+                  })()}
+                </div>
               </div>
-            </DialogTrigger>
-            <DialogContent>
-              <LikeForm 
-                cardId={card.id} 
-                onClose={() => setIsLikeDialogOpen(false)}
-                hasLiked={!!userLike}
+            )}
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLike}
+              disabled={likeMutation.isPending || userLike || card.senderId === currentUser.id}
+              className={`text-gray-600 ${userLike ? 'text-red-500' : ''} ${likeMutation.isPending ? 'opacity-50' : ''}`}
+            >
+              <Heart 
+                className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500 text-red-500' : ''}`} 
               />
-            </DialogContent>
-          </Dialog>
+              <span>{card.likes.length * 2}pt</span>
+            </Button>
+          </div>
 
           <Button variant="ghost" size="sm" className="text-gray-600">
             <MessageSquare className="h-5 w-5 mr-1" />
-            <span>{card.likes.length * 2}pt</span>
+            <span>コメント</span>
           </Button>
         </div>
 
