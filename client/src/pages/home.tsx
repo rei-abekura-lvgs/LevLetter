@@ -291,7 +291,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                             <div className="text-xs text-gray-500">{user.department}</div>
                           )}
                         </div>
-                        {index === 0 && <Badge variant="secondary" className="text-xs">主受信者</Badge>}
+
                       </div>
                     ))}
                   </div>

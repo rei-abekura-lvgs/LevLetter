@@ -83,7 +83,7 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
           </div>
 
           {/* 下部アクションエリア */}
-          <div className="mt-auto pt-4 border-t border-gray-200">
+          <div className="mt-auto pt-4 pb-6 border-t border-gray-200">
             <div className="space-y-2">
               <Link href="/profile">
                 <button className={cn(

@@ -31,9 +31,10 @@ import { cn, getInitials } from "@/lib/utils";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
+  onCardFormOpen?: () => void;
 }
 
-export default function Header({ toggleSidebar }: HeaderProps) {
+export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
   const { user, logout } = useAuth();
   const isMobile = useIsMobile();
   const [location] = useLocation();
@@ -91,8 +92,8 @@ export default function Header({ toggleSidebar }: HeaderProps) {
 
             {/* 感謝の気持ちを伝えるボタン - ヘッダー用シンプルデザイン */}
             <div className="group cursor-pointer transition-all duration-200" onClick={() => {
-              // カード作成ダイアログを開く処理をここに追加
               console.log('感謝の気持ちを伝えるボタンがクリックされました');
+              onCardFormOpen?.();
             }}>
               <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
                 <div className="flex items-center gap-3">
