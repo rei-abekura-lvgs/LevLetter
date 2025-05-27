@@ -76,7 +76,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               <BearLogo size={120} useTransparent={true} bgColor="bg-white" />
             </div>
             <h1 className="text-5xl font-bold mb-4">LevLetter</h1>
-            <p className="text-xl opacity-90">企業の感謝文化を育む</p>
+            <p className="text-xl opacity-90">企業のフィードバック文化を育む</p>
           </div>
 
           {/* 特徴セクション */}
@@ -85,7 +85,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-lg">簡単に感謝の気持ちを伝えられる</p>
+                <p className="text-lg">継続的なフィードバック習慣</p>
               </div>
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
@@ -93,7 +93,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               </div>
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-lg">チーム単位での感謝カード送信</p>
+                <p className="text-lg">チーム単位でのフィードバック送信</p>
               </div>
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
@@ -113,10 +113,6 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       {/* 右側 - ログインエリア */}
       <div className="w-full max-w-md bg-white flex flex-col justify-center">
         <div className="p-8">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">ログイン</h2>
-            <p className="text-gray-600">アカウントにアクセス</p>
-          </div>
           {children}
         </div>
       </div>
