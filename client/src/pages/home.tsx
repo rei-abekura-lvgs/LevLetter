@@ -128,22 +128,39 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="font-medium text-gray-900 text-sm">
-                  {card.sender.displayName || card.sender.name}
-                </p>
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-6 w-6">
+                    <AvatarImage 
+                      src={card.sender.customAvatarUrl || bearAvatarUrl} 
+                      alt={card.sender.displayName || card.sender.name} 
+                    />
+                    <AvatarFallback className={`text-xs text-white bg-${card.sender.avatarColor}`}>
+                      {(card.sender.displayName || card.sender.name).charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <p className="font-medium text-gray-900 text-sm">
+                    {card.sender.displayName || card.sender.name}
+                  </p>
+                </div>
                 <span className="text-gray-400">→</span>
-                <div className="flex items-center gap-1 flex-wrap">
-                  {displayRecipients.map((user: User, index: number) => (
-                    <span key={user.id} className="text-gray-700 text-sm font-medium">
-                      {user.displayName || user.name}
-                      {index < displayRecipients.length - 1 && ", "}
-                    </span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {allRecipients.map((user: User, index: number) => (
+                    <div key={user.id} className="flex items-center gap-1">
+                      <Avatar className="h-6 w-6">
+                        <AvatarImage 
+                          src={user.customAvatarUrl || bearAvatarUrl} 
+                          alt={user.displayName || user.name} 
+                        />
+                        <AvatarFallback className={`text-xs text-white bg-${user.avatarColor}`}>
+                          {(user.displayName || user.name).charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-gray-700 text-sm font-medium">
+                        {user.displayName || user.name}
+                      </span>
+                      {index < allRecipients.length - 1 && <span className="text-gray-400">,</span>}
+                    </div>
                   ))}
-                  {remainingCount > 0 && (
-                    <span className="text-gray-500 text-sm">
-                      他{remainingCount}名
-                    </span>
-                  )}
                 </div>
               </div>
               <div className="flex items-center gap-3 mt-1">
@@ -528,9 +545,9 @@ export default function Home({ user }: HomeProps) {
       <Tabs value={mainTab} onValueChange={(value) => setMainTab(value as "timeline" | "dashboard" | "ranking")} className="flex flex-col h-full">
         <div className="flex-1 overflow-hidden">
 
-        <TabsContent value="timeline" className="flex-1 flex flex-col overflow-hidden">
+        <TabsContent value="timeline" className="flex flex-col h-full overflow-hidden m-0">
           {/* タイムラインタイトル */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-100">
+          <div className="flex items-center justify-between p-4 border-b border-gray-100 flex-shrink-0">
             <h2 className="text-xl font-bold text-gray-800">タイムライン</h2>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
@@ -548,12 +565,8 @@ export default function Home({ user }: HomeProps) {
             </div>
           </div>
 
-
-
-          {/* サンクスカード送信ボタン - 控えめなデザイン */}
-          <div className={`hidden md:block transition-all duration-300 ${
-            isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
-          }`}>
+          {/* サンクスカード送信ボタン - デスクトップのみ */}
+          <div className="hidden md:block p-4 flex-shrink-0">
             <div className="group cursor-pointer transition-all duration-200" onClick={() => setIsCardFormOpen(true)}>
               <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
                 <div className="flex items-center gap-3">
@@ -576,13 +589,13 @@ export default function Home({ user }: HomeProps) {
             </div>
           </div>
 
-          {/* タブ切り替え - 常に表示 */}
+          {/* タブ切り替えとカードリスト */}
           <Tabs 
             value={activeTab} 
-            className="flex flex-col flex-1 min-h-0" 
+            className="flex flex-col flex-1 overflow-hidden" 
             onValueChange={setActiveTab}
           >
-            <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
+            <TabsList className="grid w-full grid-cols-4 mx-4 mb-4 flex-shrink-0">
               <TabsTrigger value="all">全て</TabsTrigger>
               <TabsTrigger value="received">受け取った</TabsTrigger>
               <TabsTrigger value="sent">送った</TabsTrigger>
@@ -590,31 +603,31 @@ export default function Home({ user }: HomeProps) {
             </TabsList>
 
             <div 
-              className="flex-1 min-h-0 mt-4"
+              className="flex-1 overflow-hidden"
               onTouchStart={onTouchStart}
               onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
             >
-              <TabsContent value="all" className="h-full">
-                <div ref={scrollContainerRef} className="h-full overflow-y-auto pb-20">
+              <TabsContent value="all" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
+                <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-4 pb-20">
                   {renderCardList()}
                 </div>
               </TabsContent>
               
-              <TabsContent value="received" className="h-full">
-                <div className="h-full overflow-y-auto pb-20">
+              <TabsContent value="received" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
+                <div className="flex-1 overflow-y-auto px-4 pb-20">
                   {renderCardList()}
                 </div>
               </TabsContent>
               
-              <TabsContent value="sent" className="h-full">
-                <div className="h-full overflow-y-auto pb-20">
+              <TabsContent value="sent" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
+                <div className="flex-1 overflow-y-auto px-4 pb-20">
                   {renderCardList()}
                 </div>
               </TabsContent>
               
-              <TabsContent value="liked" className="h-full">
-                <div className="h-full overflow-y-auto pb-20">
+              <TabsContent value="liked" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
+                <div className="flex-1 overflow-y-auto px-4 pb-20">
                   {renderCardList()}
                 </div>
               </TabsContent>
