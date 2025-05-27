@@ -860,6 +860,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 管理者権限更新API
+  app.patch("/api/admin/users/:id/admin", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const { isAdmin } = req.body;
+
+      if (isNaN(userId)) {
+        return res.status(400).json({ message: "無効なユーザーIDです" });
+      }
+
+      if (typeof isAdmin !== 'boolean') {
+        return res.status(400).json({ message: "isAdminは真偽値である必要があります" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "ユーザーが見つかりません" });
+      }
+
+      // 管理者権限を更新
+      const updatedUser = await storage.updateUser(userId, { isAdmin });
+      
+      // パスワードを除外してレスポンス
+      const { password, ...userWithoutPassword } = updatedUser;
+
+      console.log(`管理者権限更新: ユーザー${userId}の権限を${isAdmin ? '付与' : '削除'}しました`);
+      
+      return res.json({ 
+        success: true, 
+        user: userWithoutPassword,
+        message: `管理者権限を${isAdmin ? '付与' : '削除'}しました`
+      });
+    } catch (error) {
+      console.error("管理者権限更新エラー:", error);
+      return res.status(500).json({ message: "管理者権限の更新に失敗しました" });
+    }
+  });
+
   // チーム関連API
   app.get("/api/teams", authenticate, async (req, res) => {
     try {

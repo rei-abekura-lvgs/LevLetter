@@ -60,44 +60,7 @@ export default function Profile({ user }: ProfileProps) {
         </CardContent>
       </Card>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <Card>
-          <CardContent className="p-6">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">今週のポイント</h3>
-            <div className="flex items-center">
-              <Coins className="h-8 w-8 text-yellow-500 mr-3" />
-              <div>
-                <div className="flex items-center">
-                  <span className="text-2xl font-bold text-gray-800">{user.weeklyPoints}</span>
-                  <span className="text-gray-600 ml-2">/500</span>
-                </div>
-                <p className="text-sm text-gray-600">残りポイント</p>
-              </div>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">
-              毎週月曜日に500ポイントが付与されます。ポイントは週の終わりにリセットされます。
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-6">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">獲得ポイント</h3>
-            <div className="flex items-center">
-              <HeartIcon className="h-8 w-8 text-accent-500 mr-3 fill-current" />
-              <div>
-                <div className="text-2xl font-bold text-gray-800">
-                  {user.totalPointsReceived.toLocaleString()}
-                </div>
-                <p className="text-sm text-gray-600">累計獲得ポイント</p>
-              </div>
-            </div>
-            <p className="mt-4 text-sm text-gray-600">
-              これまでにカードへのいいねで獲得したポイントの合計です。
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+
       
       {/* セキュリティセクション */}
       <Card>
