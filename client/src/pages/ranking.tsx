@@ -1,45 +1,121 @@
-import { useAuth } from "../context/auth-context-new";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { Trophy, Medal, Award, Crown, Star, TrendingUp, Calendar, Target } from "lucide-react";
-import { format } from "date-fns";
-import { ja } from "date-fns/locale";
+import { Trophy, Calendar, MessageSquare, Heart, Award, TrendingUp } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/context/auth-context-new";
 
-interface RankingUser {
+interface User {
   id: number;
+  email: string;
   name: string;
   displayName: string | null;
   department: string | null;
-  customAvatarUrl: string | null;
   avatarColor: string;
+  customAvatarUrl: string | null;
   weeklyPoints: number;
   totalPointsReceived: number;
   weeklyPointsReceived: number;
+}
+
+interface RankingItem {
+  user: User;
+  totalPoints?: number;
+  cardCount?: number;
+  likeCount?: number;
   rank: number;
 }
 
 interface RankingData {
-  weeklyPointsRanking: RankingUser[];
-  totalPointsRanking: RankingUser[];
-  weeklyReceivedRanking: RankingUser[];
-  currentUser: RankingUser | null;
+  pointGivers: RankingItem[];
+  pointReceivers: RankingItem[];
+  cardSenders: RankingItem[];
+  cardReceivers: RankingItem[];
+  likeSenders: RankingItem[];
+  likeReceivers: RankingItem[];
 }
 
 export default function Ranking() {
   const { user } = useAuth();
-  
+
   const { data: rankings, isLoading } = useQuery<RankingData>({
     queryKey: ["/api/rankings"],
-    enabled: !!user,
   });
+
+  const getMonthDateRange = () => {
+    const now = new Date();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(now.getMonth() - 1);
+    
+    return `${oneMonthAgo.getFullYear()}年${oneMonthAgo.getMonth() + 1}月${oneMonthAgo.getDate()}日 - ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+  };
+
+  const renderRankingCard = (item: RankingItem, index: number) => {
+    const isTopThree = index < 3;
+    const user = item.user;
+    
+    return (
+      <Card key={user.id} className={`${isTopThree ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200' : ''}`}>
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                index === 0 ? 'bg-yellow-100 text-yellow-700' :
+                index === 1 ? 'bg-gray-100 text-gray-700' :
+                index === 2 ? 'bg-amber-100 text-amber-700' :
+                'bg-gray-50 text-gray-600'
+              }`}>
+                {index < 3 ? (
+                  <Trophy className="w-5 h-5" />
+                ) : (
+                  <span className="font-bold">{index + 1}</span>
+                )}
+              </div>
+              
+              <div className="flex items-center space-x-3">
+                {user.customAvatarUrl ? (
+                  <img
+                    src={user.customAvatarUrl}
+                    alt={user.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold bg-${user.avatarColor}`}>
+                    {user.name.charAt(0)}
+                  </div>
+                )}
+                
+                <div>
+                  <h3 className="font-semibold text-gray-900">{user.displayName || user.name}</h3>
+                  <p className="text-sm text-gray-500">{user.department}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-right">
+              <div className={`text-2xl font-bold ${
+                index === 0 ? 'text-yellow-600' :
+                index === 1 ? 'text-gray-600' :
+                index === 2 ? 'text-amber-600' :
+                'text-gray-700'
+              }`}>
+                {item.totalPoints || item.cardCount || item.likeCount || 0}
+              </div>
+              <div className="text-xs text-gray-500">
+                {item.totalPoints !== undefined ? 'pt' : '回'}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div className="animate-pulse space-y-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="animate-pulse space-y-6">
             <div className="h-8 bg-gray-200 rounded w-1/3"></div>
             <div className="h-64 bg-gray-200 rounded"></div>
           </div>
@@ -48,144 +124,15 @@ export default function Ranking() {
     );
   }
 
-  if (!user || !rankings) return null;
-
-  const getCurrentWeekRange = () => {
-    const now = new Date();
-    const monday = new Date(now);
-    monday.setDate(now.getDate() - (now.getDay() + 6) % 7);
-    monday.setHours(0, 0, 0, 0);
-    
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
-    sunday.setHours(23, 59, 59, 999);
-    
-    return `${format(monday, 'M/d', { locale: ja })} - ${format(sunday, 'M/d', { locale: ja })}`;
-  };
-
-  const getRankIcon = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return <Crown className="h-6 w-6 text-yellow-500" />;
-      case 2:
-        return <Medal className="h-6 w-6 text-gray-400" />;
-      case 3:
-        return <Award className="h-6 w-6 text-amber-600" />;
-      default:
-        return <Trophy className="h-5 w-5 text-gray-500" />;
-    }
-  };
-
-  const getRankBadgeVariant = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return "default";
-      case 2:
-        return "secondary";
-      case 3:
-        return "outline";
-      default:
-        return "secondary";
-    }
-  };
-
-  const getUserAvatarColor = (avatarColor: string) => {
-    const colorMap: { [key: string]: string } = {
-      'primary-500': 'bg-blue-500',
-      'red': 'bg-red-500',
-      'green': 'bg-green-500',
-      'yellow': 'bg-yellow-500',
-      'purple': 'bg-purple-500',
-      'pink': 'bg-pink-500',
-      'indigo': 'bg-indigo-500',
-      'orange': 'bg-orange-500',
-    };
-    return colorMap[avatarColor] || 'bg-gray-500';
-  };
-
-  const RankingCard = ({ users, title, subtitle, pointKey, icon }: {
-    users: RankingUser[];
-    title: string;
-    subtitle: string;
-    pointKey: 'weeklyPoints' | 'totalPointsReceived' | 'weeklyPointsReceived';
-    icon: React.ReactNode;
-  }) => (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          {icon}
-          <div>
-            <div>{title}</div>
-            <p className="text-sm font-normal text-gray-600">{subtitle}</p>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {users && users.length > 0 ? users.slice(0, 10).map((rankUser, index) => {
-            const isCurrentUser = rankUser.id === user.id;
-            const points = rankUser[pointKey];
-            
-            return (
-              <div 
-                key={rankUser.id} 
-                className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                  isCurrentUser ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
-                }`}
-              >
-                <div className="flex items-center space-x-3 min-w-0 flex-1">
-                  <div className="flex items-center space-x-2">
-                    {getRankIcon(index + 1)}
-                    <Badge variant={getRankBadgeVariant(index + 1)} className="min-w-[2rem] h-6 flex items-center justify-center text-xs">
-                      {index + 1}
-                    </Badge>
-                  </div>
-                  
-                  <div className="h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0">
-                    {rankUser.customAvatarUrl ? (
-                      <img
-                        src={rankUser.customAvatarUrl}
-                        alt={rankUser.name}
-                        className="h-10 w-10 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-bold ${getUserAvatarColor(rankUser.avatarColor)}`}>
-                        <span className="text-sm">{rankUser.name.charAt(0)}</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-medium truncate ${isCurrentUser ? 'text-blue-700' : 'text-gray-900'}`}>
-                      {rankUser.displayName || rankUser.name}
-                      {isCurrentUser && <span className="ml-2 text-xs text-blue-600">(あなた)</span>}
-                    </p>
-                    <p className="text-xs text-gray-500 truncate">{rankUser.department}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-2 flex-shrink-0">
-                  <span className={`text-lg font-bold ${
-                    index === 0 ? 'text-yellow-600' :
-                    index === 1 ? 'text-gray-600' :
-                    index === 2 ? 'text-amber-600' :
-                    'text-gray-700'
-                  }`}>
-                    {points}
-                  </span>
-                  <span className="text-xs text-gray-500">pt</span>
-                </div>
-              </div>
-            );
-          }) : (
-            <div className="text-center py-8 text-gray-500">
-              ランキングデータがありません
-            </div>
-          )}
+  if (!rankings) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-6xl mx-auto text-center py-20">
+          <p className="text-gray-500">ランキングデータを読み込めませんでした</p>
         </div>
-      </CardContent>
-    </Card>
-  );
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -195,96 +142,159 @@ export default function Ranking() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center space-x-3">
               <Trophy className="h-8 w-8 text-yellow-500" />
-              <span>ポイントランキング</span>
+              <span>月間ランキング</span>
             </h1>
-            <p className="text-gray-600 mt-1">メンバーのポイント獲得状況をチェック</p>
+            <p className="text-gray-600 mt-1">最近1ヶ月のアクティビティランキング</p>
           </div>
           <div className="text-sm text-gray-500 flex items-center space-x-2">
             <Calendar className="h-4 w-4" />
-            <span>今週: {getCurrentWeekRange()}</span>
+            <span>{getMonthDateRange()}</span>
           </div>
         </div>
 
-        {/* 現在のユーザーのポジション */}
-        {rankings.currentUser && (
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="h-16 w-16 bg-white/20 rounded-full flex items-center justify-center">
-                    {user.customAvatarUrl ? (
-                      <img
-                        src={user.customAvatarUrl}
-                        alt={user.name}
-                        className="h-14 w-14 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="h-14 w-14 bg-white/30 rounded-full flex items-center justify-center">
-                        <span className="text-lg font-bold">{user.name.charAt(0)}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold">{user.displayName || user.name}</h2>
-                    <p className="text-blue-100">{user.department}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold">{user.weeklyPoints}</div>
-                  <div className="text-sm text-blue-100">利用可能ポイント</div>
-                  <div className="text-lg font-semibold mt-1">{user.totalPointsReceived}</div>
-                  <div className="text-xs text-blue-100">累計獲得ポイント</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* ランキングタブ */}
-        <Tabs defaultValue="weekly-received" className="space-y-6">
+        <Tabs defaultValue="points" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="weekly-received" className="flex items-center space-x-2">
-              <Star className="h-4 w-4" />
-              <span>今週獲得ポイント</span>
+            <TabsTrigger value="points" className="flex items-center space-x-2">
+              <Award className="h-4 w-4" />
+              <span>ポイント</span>
             </TabsTrigger>
-            <TabsTrigger value="total-received" className="flex items-center space-x-2">
-              <TrendingUp className="h-4 w-4" />
-              <span>累計獲得ポイント</span>
+            <TabsTrigger value="cards" className="flex items-center space-x-2">
+              <MessageSquare className="h-4 w-4" />
+              <span>投稿数</span>
             </TabsTrigger>
-            <TabsTrigger value="weekly-available" className="flex items-center space-x-2">
-              <Target className="h-4 w-4" />
-              <span>利用可能ポイント</span>
+            <TabsTrigger value="likes" className="flex items-center space-x-2">
+              <Heart className="h-4 w-4" />
+              <span>拍手数</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="weekly-received">
-            <RankingCard
-              users={rankings.weeklyReceivedRanking}
-              title="今週獲得ポイントランキング"
-              subtitle={`今週（${getCurrentWeekRange()}）に獲得したポイント`}
-              pointKey="weeklyPointsReceived"
-              icon={<Star className="h-5 w-5 text-yellow-500" />}
-            />
+          {/* ポイントランキング */}
+          <TabsContent value="points" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <TrendingUp className="h-5 w-5 text-blue-500" />
+                    <h2 className="text-xl font-bold">ポイント付与ランキング</h2>
+                    <Badge variant="secondary">送った</Badge>
+                  </div>
+                  <div className="space-y-3">
+                    {rankings.pointGivers.length > 0 ? (
+                      rankings.pointGivers.slice(0, 10).map((item, index) => renderRankingCard(item, index))
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        データがありません
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Award className="h-5 w-5 text-purple-500" />
+                    <h2 className="text-xl font-bold">ポイント獲得ランキング</h2>
+                    <Badge variant="secondary">受け取った</Badge>
+                  </div>
+                  <div className="space-y-3">
+                    {rankings.pointReceivers.length > 0 ? (
+                      rankings.pointReceivers.slice(0, 10).map((item, index) => renderRankingCard(item, index))
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        データがありません
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
-          <TabsContent value="total-received">
-            <RankingCard
-              users={rankings.totalPointsRanking}
-              title="累計獲得ポイントランキング"
-              subtitle="これまでに獲得したポイントの総計"
-              pointKey="totalPointsReceived"
-              icon={<TrendingUp className="h-5 w-5 text-green-500" />}
-            />
+          {/* 投稿数ランキング */}
+          <TabsContent value="cards" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <MessageSquare className="h-5 w-5 text-green-500" />
+                    <h2 className="text-xl font-bold">カード送信ランキング</h2>
+                    <Badge variant="secondary">送った</Badge>
+                  </div>
+                  <div className="space-y-3">
+                    {rankings.cardSenders.length > 0 ? (
+                      rankings.cardSenders.slice(0, 10).map((item, index) => renderRankingCard(item, index))
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        データがありません
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <MessageSquare className="h-5 w-5 text-teal-500" />
+                    <h2 className="text-xl font-bold">カード受信ランキング</h2>
+                    <Badge variant="secondary">受け取った</Badge>
+                  </div>
+                  <div className="space-y-3">
+                    {rankings.cardReceivers.length > 0 ? (
+                      rankings.cardReceivers.slice(0, 10).map((item, index) => renderRankingCard(item, index))
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        データがありません
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
-          <TabsContent value="weekly-available">
-            <RankingCard
-              users={rankings.weeklyPointsRanking}
-              title="利用可能ポイントランキング"
-              subtitle="現在利用可能な週次ポイント"
-              pointKey="weeklyPoints"
-              icon={<Target className="h-5 w-5 text-blue-500" />}
-            />
+          {/* 拍手数ランキング */}
+          <TabsContent value="likes" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Heart className="h-5 w-5 text-red-500" />
+                    <h2 className="text-xl font-bold">拍手送信ランキング</h2>
+                    <Badge variant="secondary">送った</Badge>
+                  </div>
+                  <div className="space-y-3">
+                    {rankings.likeSenders.length > 0 ? (
+                      rankings.likeSenders.slice(0, 10).map((item, index) => renderRankingCard(item, index))
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        データがありません
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Heart className="h-5 w-5 text-pink-500" />
+                    <h2 className="text-xl font-bold">拍手受信ランキング</h2>
+                    <Badge variant="secondary">受け取った</Badge>
+                  </div>
+                  <div className="space-y-3">
+                    {rankings.likeReceivers.length > 0 ? (
+                      rankings.likeReceivers.slice(0, 10).map((item, index) => renderRankingCard(item, index))
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        データがありません
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
