@@ -10,7 +10,7 @@ interface AuthLayoutProps {
 export default function AuthLayout({ children }: AuthLayoutProps) {
   const [isScreensaverActive, setIsScreensaverActive] = useState(false);
   const [bearPosition, setBearPosition] = useState({ x: 50, y: 50 });
-  const [bearDirection, setBearDirection] = useState({ x: 2, y: 1.5 });
+  const [bearDirection, setBearDirection] = useState({ x: 4, y: 3 });
 
   // スクリーンセーバーのアニメーション
   useEffect(() => {
@@ -85,7 +85,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               <div className="text-center">
                 <div 
                   onClick={handleBearClick}
-                  className="inline-block cursor-pointer hover:scale-110 transition-transform duration-200 mb-6"
+                  className="inline-block cursor-pointer hover:scale-125 hover:rotate-12 transition-all duration-300 ease-in-out transform hover:shadow-2xl hover:shadow-white/20 mb-6"
                 >
                   <BearLogo size={120} />
                 </div>
@@ -157,7 +157,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               pointerEvents: 'none'
             }}
           >
-            <BearLogo size={60} />
+            <BearLogo size={80} />
           </div>
           <div style={{
             position: 'absolute',
