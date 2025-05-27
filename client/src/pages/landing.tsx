@@ -64,7 +64,7 @@ export default function Landing() {
                   <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#3990EA] px-10 py-5 text-lg rounded-xl backdrop-blur-sm bg-white/10 transition-all duration-300 font-semibold">
+              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#3990EA] px-10 py-5 text-lg rounded-xl bg-white/20 backdrop-blur-sm transition-all duration-300 font-semibold">
                 お問い合わせ
               </Button>
             </div>
