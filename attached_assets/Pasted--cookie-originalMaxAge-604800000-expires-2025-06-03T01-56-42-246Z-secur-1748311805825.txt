@@ -1,0 +1,519 @@
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T01:56:42.246Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+1:56:43 AM [express] GET /api/cards 304 in 601ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T01:56:42.995Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+1:56:43 AM [express] GET /api/cards 304 in 651ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T01:56:43.797Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+1:56:44 AM [express] GET /api/cards 304 in 645ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T01:56:44.595Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+1:56:45 AM [express] GET /api/cards 304 in 663ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T01:56:45.409Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:08:52 AM [express] GET /api/cards 304 in 1332ms :: [{"id":85,"senderId":5,"recipientId":281,"recip…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:03.736Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+✅ 認証ユーザー情報返送: 牧野　航大 (ID: 269 )
+2:09:04 AM [express] GET /api/auth/me 200 in 97ms :: {"id":269,"email":"kota.makino@leverages.jp","n…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:04.031Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:04.189Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+✅ 認証ユーザー情報返送: 牧野　航大 (ID: 269 )
+2:09:04 AM [express] GET /api/auth/me 304 in 29ms :: {"id":269,"email":"kota.makino@leverages.jp","n…
+2:09:04 AM [express] GET /api/cards 304 in 760ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/79/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:04.956Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/79/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:04.956Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+いいね作成エラー: Error: このカードは最大いいね数に達しています
+    at <anonymous> (/home/runner/workspace/server/routes.ts:1071:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2:09:41 AM [express] POST /api/cards/79/likes 400 in 388ms :: {"message":"このカードは最大いいね数（50回）に達しています"}
+いいね作成エラー: Error: このカードは最大いいね数に達しています
+    at <anonymous> (/home/runner/workspace/server/routes.ts:1071:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2:09:41 AM [express] POST /api/cards/79/likes 400 in 274ms :: {"message":"このカードは最大いいね数（50回）に達しています"}
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/79/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:41.460Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:41.460Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:42 AM [express] GET /api/cards 304 in 673ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+いいね作成エラー: Error: このカードは最大いいね数に達しています
+    at <anonymous> (/home/runner/workspace/server/routes.ts:1071:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2:09:42 AM [express] POST /api/cards/79/likes 400 in 721ms :: {"message":"このカードは最大いいね数（50回）に達しています"}
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:42.190Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:42 AM [express] GET /api/cards 304 in 605ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:42.920Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:43 AM [express] GET /api/cards 304 in 607ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/80/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:43.679Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/80/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:43.679Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:45 AM [express] POST /api/cards/80/likes 201 in 535ms :: {"message":"いいねしました","like":{"id":290,…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:45.993Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/80/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:45.993Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:46 AM [express] GET /api/cards 200 in 557ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+2:09:46 AM [express] POST /api/cards/80/likes 201 in 908ms :: {"message":"いいねしました","like":{"id":291,…
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/80/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:46.712Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:46.712Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:47 AM [express] GET /api/cards 200 in 630ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:47.485Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:47 AM [express] POST /api/cards/80/likes 201 in 1023ms :: {"message":"いいねしました","like":{"id":292…
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/80/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:47.670Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/80/likes
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:47.670Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:48 AM [express] GET /api/cards 200 in 623ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+2:09:48 AM [express] POST /api/cards/80/likes 201 in 1467ms :: {"message":"いいねしました","like":{"id":293…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:48.287Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:49 AM [express] GET /api/cards 200 in 628ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:49.038Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:49 AM [express] POST /api/cards/80/likes 201 in 1398ms :: {"message":"いいねしました","like":{"id":294…
+2:09:49 AM [express] POST /api/cards/80/likes 201 in 1244ms :: {"message":"いいねしました","like":{"id":295…
+2:09:49 AM [express] GET /api/cards 200 in 587ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:49.777Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:50 AM [express] GET /api/cards 304 in 609ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:50.537Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:51 AM [express] GET /api/cards 304 in 658ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:51.347Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:52 AM [express] GET /api/cards 304 in 650ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:52.156Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:52 AM [express] GET /api/cards 304 in 657ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:52.964Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:53 AM [express] GET /api/cards 304 in 650ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:53.765Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:54 AM [express] GET /api/cards 304 in 620ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: jZqkzAaSMNv1Orym_jm_aWV7N6Kpdx1m
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799998,
+    "expires": "2025-06-03T02:09:54.535Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 269
+}
+👤 セッションから取得したユーザーID: 269
+🔍 ユーザー情報取得試行 - ユーザーID: 269
+2:09:55 AM [express] GET /api/cards 304 in 592ms :: [{"id":85,"senderId":5,"recipientId":281,"recipi…

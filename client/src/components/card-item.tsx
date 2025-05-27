@@ -130,13 +130,9 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                     <div className="font-medium mb-1">いいね！({card.likes.length * 2}pt)</div>
                     <div className="text-xs opacity-80">
                       {(() => {
-                        console.log("🔍 カードのlikesデータ:", card.likes);
-                        
                         // 同じユーザーのいいねをまとめる
                         const groupedLikes = card.likes.reduce((acc: any, like: any) => {
                           const userName = like.user.displayName || like.user.name;
-                          console.log("👤 処理中のユーザー:", userName, "現在のポイント:", acc[userName] || 0);
-                          
                           if (acc[userName]) {
                             acc[userName] += 2; // 常に2ptずつ
                           } else {
@@ -145,14 +141,9 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                           return acc;
                         }, {});
                         
-                        console.log("📊 グループ化後のlikesデータ:", groupedLikes);
-                        
-                        const result = Object.entries(groupedLikes)
+                        return Object.entries(groupedLikes)
                           .map(([name, points]) => (points as number) === 2 ? name : `${name}(${points}pt)`)
                           .join('、');
-                          
-                        console.log("✅ 最終表示テキスト:", result);
-                        return result;
                       })()}
                     </div>
                   </div>
