@@ -88,17 +88,71 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
             </div>
             
             {/* ポイントランキング */}
-            <div className="bg-white p-4 rounded-md border">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center text-sm font-medium">
-                  <TrendingUp className="h-5 w-5 mr-2 text-blue-500" />
-                  ポイントランキング
+            <Link href="/ranking">
+              <div className="bg-white p-4 rounded-md border hover:bg-gray-50 transition-colors cursor-pointer">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center text-sm font-medium">
+                    <TrendingUp className="h-5 w-5 mr-2 text-blue-500" />
+                    ポイントランキング
+                  </div>
+                  <span className="text-sm px-2.5 py-1.5 bg-blue-100 text-blue-700 rounded-full font-medium">詳細→</span>
                 </div>
-                <span className="text-sm px-2.5 py-1.5 bg-blue-100 text-blue-700 rounded-full font-medium">--位</span>
               </div>
-            </div>
+            </Link>
           </div>
           
+          {/* ナビゲーションメニュー */}
+          <div className="space-y-2 mt-6">
+            <Link href="/">
+              <div className={cn(
+                "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
+                location === "/" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
+              )}>
+                <Award className="h-5 w-5" />
+                <span className="font-medium">ホーム</span>
+              </div>
+            </Link>
+            
+            <Link href="/dashboard">
+              <div className={cn(
+                "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
+                location === "/dashboard" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
+              )}>
+                <TrendingUp className="h-5 w-5" />
+                <span className="font-medium">ダッシュボード</span>
+              </div>
+            </Link>
+            
+            <Link href="/ranking">
+              <div className={cn(
+                "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
+                location === "/ranking" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
+              )}>
+                <Award className="h-5 w-5" />
+                <span className="font-medium">ランキング</span>
+              </div>
+            </Link>
+            
+            <Link href="/profile">
+              <div className={cn(
+                "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
+                location === "/profile" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
+              )}>
+                <Gift className="h-5 w-5" />
+                <span className="font-medium">プロフィール</span>
+              </div>
+            </Link>
+          </div>
+          
+          {/* ログアウトボタン */}
+          <div className="mt-auto pt-4 border-t">
+            <button 
+              onClick={handleLogout}
+              className="w-full text-left text-red-600 hover:text-red-700 text-sm font-medium"
+            >
+              ログアウト
+            </button>
+          </div>
 
         </div>
       )}

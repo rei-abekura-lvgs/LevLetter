@@ -1368,6 +1368,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   const httpServer = createServer(app);
+  // ランキングAPI
+  app.get("/api/rankings", async (req, res) => {
+    // 認証チェック
+    if (!(req.session as any)?.userId) {
+      return res.status(401).json({ message: "認証が必要です" });
+    }
+    try {
+      const users = await storage.getUsers();
+      
+      // 今週獲得ポイントランキング（weeklyPointsReceived順）
+      const weeklyReceivedRanking = [...users]
+        .sort((a, b) => (b.weeklyPointsReceived || 0) - (a.weeklyPointsReceived || 0))
+        .map((user, index) => ({
+          ...user,
+          rank: index + 1
+        }));
+
+      // 累計獲得ポイントランキング（totalPointsReceived順）
+      const totalPointsRanking = [...users]
+        .sort((a, b) => (b.totalPointsReceived || 0) - (a.totalPointsReceived || 0))
+        .map((user, index) => ({
+          ...user,
+          rank: index + 1
+        }));
+
+      // 利用可能ポイントランキング（weeklyPoints順）
+      const weeklyPointsRanking = [...users]
+        .sort((a, b) => (b.weeklyPoints || 0) - (a.weeklyPoints || 0))
+        .map((user, index) => ({
+          ...user,
+          rank: index + 1
+        }));
+
+      // 現在のユーザー情報
+      const currentUserId = (req.session as any).userId;
+      const currentUser = users.find(u => u.id === currentUserId) || null;
+
+      res.json({
+        weeklyReceivedRanking,
+        totalPointsRanking,
+        weeklyPointsRanking,
+        currentUser
+      });
+    } catch (error) {
+      console.error("ランキング取得エラー:", error);
+      res.status(500).json({ message: "ランキング情報の取得に失敗しました" });
+    }
+  });
+
   return httpServer;
 }
 
