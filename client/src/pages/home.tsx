@@ -253,7 +253,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                         ? 'bg-gray-100 hover:bg-pink-100 cursor-pointer' 
                         : 'bg-gray-50 cursor-not-allowed opacity-50'
                     }`}
-                    onClick={canLike ? () => handleLike(card.id) : undefined}
+                    onClick={undefined}
                   >
                     <Heart className={`h-4 w-4 ${userLiked ? 'text-pink-500 fill-pink-500' : 'text-gray-500'}`} />
                   </div>
