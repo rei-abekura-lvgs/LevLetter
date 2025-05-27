@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import { Badge } from "../components/ui/badge";
 import { BearLogo } from "../components/bear-logo";
 import { Link } from "wouter";
-import { Heart, MessageCircle, ArrowLeft, Plus, Settings, LogOut, Bell, Users, TrendingUp, Filter, Calendar, Gift, Star, Trophy, Clock } from "lucide-react";
+import { Heart, MessageCircle, ArrowLeft, Plus, Settings, LogOut, Bell, Users, TrendingUp, Filter, Calendar, Gift, Star, Trophy, Clock, Mail, Phone, MapPin } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
@@ -595,6 +595,87 @@ export default function Demo() {
                     <p className="text-gray-400 text-sm">フィルターを変更するか、新しいカードを送信してみてください</p>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* お問い合わせセクション */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              お問い合わせ
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              LevLetterについてのご質問やご相談がございましたら、お気軽にお問い合わせください。
+              導入のご検討やカスタマイズについても承っております。
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white rounded-xl p-6 shadow-lg">
+              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-4">
+                <Mail className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">メール</h3>
+              <p className="text-gray-600 text-sm mb-3">お気軽にメールでお問い合わせください</p>
+              <a 
+                href="mailto:rei.abekura@leverages.jp" 
+                className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+              >
+                rei.abekura@leverages.jp
+              </a>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-lg">
+              <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mx-auto mb-4">
+                <Phone className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">電話</h3>
+              <p className="text-gray-600 text-sm mb-3">平日 9:00-18:00</p>
+              <a 
+                href="tel:03-5774-1632" 
+                className="text-green-600 hover:text-green-700 font-medium text-sm"
+              >
+                03-5774-1632
+              </a>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-lg">
+              <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-4">
+                <MapPin className="h-6 w-6 text-purple-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">オフィス</h3>
+              <p className="text-gray-600 text-sm mb-3">お打ち合わせも可能です</p>
+              <p className="text-purple-600 font-medium text-sm">
+                渋谷スクランブルスクエア<br />
+                東棟24,25階
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 shadow-xl">
+            <h3 className="text-xl font-semibold text-gray-900 mb-6">
+              導入をご検討の方へ
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6 text-left">
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">✓ 無料デモンストレーション</h4>
+                <p className="text-gray-600 text-sm">実際の操作画面をご覧いただけます</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">✓ カスタマイズ対応</h4>
+                <p className="text-gray-600 text-sm">企業様のニーズに合わせた機能追加</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">✓ 導入サポート</h4>
+                <p className="text-gray-600 text-sm">スムーズな運用開始をお手伝い</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">✓ 運用コンサルティング</h4>
+                <p className="text-gray-600 text-sm">フィードバック文化の浸透支援</p>
               </div>
             </div>
           </div>
