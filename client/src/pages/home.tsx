@@ -27,6 +27,7 @@ import {
   DialogDescription
 } from "@/components/ui/dialog";
 import CardForm from "@/components/card-form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import Dashboard from "@/pages/dashboard";

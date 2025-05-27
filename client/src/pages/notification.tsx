@@ -40,13 +40,12 @@ export default function NotificationPage() {
 
   const markAsRead = async (notificationId: number) => {
     try {
-      const response = await apiRequest(`/api/notifications/${notificationId}/read`, {
+      await apiRequest(`/api/notifications/${notificationId}/read`, {
         method: 'PATCH',
       });
       
-      if (response.ok) {
-        queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
-      }
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
+      toast({ title: "通知を既読にしました" });
     } catch (error) {
       console.error('Mark as read error:', error);
       toast({ 
@@ -59,14 +58,12 @@ export default function NotificationPage() {
 
   const markAllAsRead = async () => {
     try {
-      const response = await apiRequest('/api/notifications/read-all', {
+      await apiRequest('/api/notifications/mark-all-read', {
         method: 'PATCH',
       });
       
-      if (response.ok) {
-        queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
-        toast({ title: "すべての通知を既読にしました" });
-      }
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
+      toast({ title: "すべての通知を既読にしました" });
     } catch (error) {
       console.error('Mark all as read error:', error);
       toast({ 

@@ -1402,6 +1402,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 通知関連のAPI
+  app.get("/api/notifications", isAuthenticated, async (req, res) => {
+    try {
+      const currentUser = await storage.getUser(req.session.userId!);
+      if (!currentUser) {
+        return res.status(401).json({ message: "認証が必要です" });
+      }
+
+      const notifications = await storage.getNotifications(currentUser.id);
+      res.json(notifications);
+    } catch (error) {
+      console.error("通知取得エラー:", error);
+      res.status(500).json({ message: "通知取得中にエラーが発生しました" });
+    }
+  });
+
+  app.patch("/api/notifications/:id/read", isAuthenticated, async (req, res) => {
+    try {
+      const currentUser = await storage.getUser(req.session.userId!);
+      if (!currentUser) {
+        return res.status(401).json({ message: "認証が必要です" });
+      }
+
+      const notificationId = parseInt(req.params.id);
+      await storage.markNotificationAsRead(notificationId, currentUser.id);
+      
+      res.json({ message: "通知を既読にしました" });
+    } catch (error) {
+      console.error("通知既読エラー:", error);
+      res.status(500).json({ message: "通知既読処理中にエラーが発生しました" });
+    }
+  });
+
+  app.patch("/api/notifications/mark-all-read", isAuthenticated, async (req, res) => {
+    try {
+      const currentUser = await storage.getUser(req.session.userId!);
+      if (!currentUser) {
+        return res.status(401).json({ message: "認証が必要です" });
+      }
+
+      await storage.markAllNotificationsAsRead(currentUser.id);
+      
+      res.json({ message: "すべての通知を既読にしました" });
+    } catch (error) {
+      console.error("全通知既読エラー:", error);
+      res.status(500).json({ message: "全通知既読処理中にエラーが発生しました" });
+    }
+  });
+
   // 開発環境では静的ファイルの配信はViteが行うので、
   // 本番環境でのみ静的ファイル配信を設定
   if (process.env.NODE_ENV === "production") {
