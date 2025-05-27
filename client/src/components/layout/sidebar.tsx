@@ -63,17 +63,19 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
             </div>
           </div>
 
-          {/* ランキングナビゲーション */}
-          <div className="space-y-2 mb-auto">
-            <Link href="/ranking">
-              <div className={cn(
-                "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
-                location === "/ranking" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
-              )}>
-                <Settings className="h-5 w-5" />
-                <span className="font-medium">ランキング</span>
+          {/* 受信ポイント表示 */}
+          <div className="bg-green-50 rounded-lg p-4 mb-4">
+            <p className="text-sm text-gray-600 mb-2">受信ポイント</p>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500">今月</span>
+                <span className="text-sm font-semibold text-green-600">{user.weeklyPointsReceived}pt</span>
               </div>
-            </Link>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500">累計</span>
+                <span className="text-lg font-bold text-green-700">{user.totalPointsReceived}pt</span>
+              </div>
+            </div>
           </div>
           
           {/* ログアウトボタン */}
