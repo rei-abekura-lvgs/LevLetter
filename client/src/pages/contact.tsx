@@ -261,9 +261,9 @@ export default function Contact() {
                 <p className="text-sm opacity-90 mb-4">
                   まずは無料でLevLetterの効果を実感してみませんか？
                 </p>
-                <Link href="/register">
+                <Link href="/trial">
                   <Button variant="secondary" className="w-full bg-white text-[#3990EA] hover:bg-gray-50">
-                    無料トライアルを開始
+                    30日間無料トライアルの開始
                   </Button>
                 </Link>
               </CardContent>
