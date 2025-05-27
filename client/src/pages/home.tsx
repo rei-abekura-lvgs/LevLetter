@@ -99,10 +99,14 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
     return `👏 ${userLikeCount}回いいね済み`;
   };
 
-  // 受信者表示の処理
-  const primaryRecipient = card.recipient;
-  const additionalRecipients = Array.isArray(card.additionalRecipientUsers) ? card.additionalRecipientUsers : [];
-  const allRecipients = primaryRecipient ? [primaryRecipient, ...additionalRecipients] : additionalRecipients;
+  // 受信者表示の処理 - 全受信者を横並びで表示
+  const allRecipients = [];
+  if (card.recipient) {
+    allRecipients.push(card.recipient);
+  }
+  if (Array.isArray(card.additionalRecipientUsers)) {
+    allRecipients.push(...card.additionalRecipientUsers);
+  }
   
   // 表示する受信者（最大3人）
   const displayRecipients = allRecipients.slice(0, 3);
@@ -317,15 +321,13 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                 disabled={totalLikes >= 50}
                 onClick={async () => {
                   try {
-                    const response = await apiRequest(`/api/cards/${card.id}/likes`, {
+                    await apiRequest(`/api/cards/${card.id}/likes`, {
                       method: 'POST',
                     });
                     
-                    if (response.ok) {
-                      setIsLikeFormOpen(false);
-                      onRefresh?.();
-                      toast({ title: "いいねを送りました！" });
-                    }
+                    setIsLikeFormOpen(false);
+                    onRefresh?.();
+                    toast({ title: "いいねを送りました！" });
                   } catch (error) {
                     console.error('Like error:', error);
                     toast({ 
