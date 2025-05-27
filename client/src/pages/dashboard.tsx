@@ -140,6 +140,25 @@ export default function Dashboard() {
     );
   }
 
+  // 簡単なテスト表示
+  return (
+    <div className="p-6">
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold">ダッシュボード</h1>
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold">月間データ</h2>
+          <p>ポイント消費率: {stats.monthly.pointConversionRate}%</p>
+          <p>カード送信数: {stats.personal.sentCards.length}件</p>
+          <p>カード受信数: {stats.personal.receivedCards.length}件</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // 元のコードはコメントアウト
+  /*
+  // 以下は元の複雑なコード - 後で復元予定
+
   return (
     <div className="p-6">
       <div className="space-y-6">
