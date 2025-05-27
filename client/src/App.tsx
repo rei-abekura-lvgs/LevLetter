@@ -15,6 +15,7 @@ import AdminDashboard from "@/pages/admin";
 import Landing from "@/pages/landing";
 import Contact from "@/pages/contact";
 import Demo from "@/pages/demo";
+import Trial from "@/pages/trial";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context-new";
@@ -27,7 +28,7 @@ function AppRoutes() {
   // 初期認証処理とナビゲーション制御
   useEffect(() => {
     // 保護されたルートとパブリックルートの定義
-    const publicRoutes = ['/landing', '/login', '/register', '/forgot-password', '/contact', '/demo'];
+    const publicRoutes = ['/landing', '/login', '/register', '/forgot-password', '/contact', '/demo', '/trial'];
     
     // 認証状態によるリダイレクト処理
     if (!isLoading) {
@@ -130,6 +131,9 @@ function AppRoutes() {
         </Route>
         <Route path="/demo">
           <Demo />
+        </Route>
+        <Route path="/trial">
+          <Trial />
         </Route>
         <Route path="/landing">
           <Landing />
