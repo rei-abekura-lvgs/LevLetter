@@ -11,8 +11,9 @@ export const users = pgTable("users", {
   department: text("department"),
   avatarColor: text("avatar_color").notNull().default("primary-500"),
   customAvatarUrl: text("custom_avatar_url"), // カスタムアバター画像のURL
-  weeklyPoints: integer("weekly_points").notNull().default(500),
-  totalPointsReceived: integer("total_points_received").notNull().default(0),
+  weeklyPoints: integer("weekly_points").notNull().default(500), // 今週の利用可能ポイント
+  totalPointsReceived: integer("total_points_received").notNull().default(0), // 累計獲得ポイント
+  weeklyPointsReceived: integer("weekly_points_received").notNull().default(0), // 今週の獲得ポイント
   lastWeeklyPointsReset: timestamp("last_weekly_points_reset"),
   isAdmin: boolean("is_admin").notNull().default(false),
   isActive: boolean("is_active").notNull().default(true),

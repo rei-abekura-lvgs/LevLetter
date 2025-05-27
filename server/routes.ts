@@ -1241,27 +1241,99 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 統計情報API
-  app.get("/api/stats", authenticate, async (req, res) => {
+  // ダッシュボード統計情報API
+  app.get("/api/dashboard/stats", authenticate, async (req, res) => {
     try {
-      // 仮の統計情報を返す
+      const user = (req as any).user;
+      const userId = user.id;
+      
+      // 今週の範囲を計算
+      const now = new Date();
+      const startOfWeek = new Date(now);
+      startOfWeek.setDate(now.getDate() - (now.getDay() + 6) % 7);
+      startOfWeek.setHours(0, 0, 0, 0);
+      
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      endOfWeek.setHours(23, 59, 59, 999);
+      
+      // 先月の範囲を計算
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+      endOfMonth.setHours(23, 59, 59, 999);
+      
+      // 基本統計
+      const totalUsers = await storage.getUserCount();
+      const userCards = await storage.getCardsByUser(userId);
+      const userLikes = await storage.getLikesByUser(userId);
+      
+      // 今週のカード数
+      const cardsThisWeek = userCards.filter(card => 
+        new Date(card.createdAt) >= startOfWeek && new Date(card.createdAt) <= endOfWeek
+      ).length;
+      
+      // 今週付与したポイント
+      const pointsGivenThisWeek = userLikes
+        .filter(like => new Date(like.createdAt) >= startOfWeek && new Date(like.createdAt) <= endOfWeek)
+        .reduce((sum, like) => sum + like.points, 0);
+      
+      // ポイント消化率（500ptを最大として）
+      const pointConversionRate = Math.min(100, ((500 - user.weeklyPoints) / 500) * 100);
+      
+      // リアクション率（受け取ったカードに対するいいねの割合）
+      const receivedCards = await storage.getCardsToUser(userId);
+      const reactionCount = await storage.getLikesToUserCards(userId);
+      const reactionRate = receivedCards.length > 0 ? (reactionCount / receivedCards.length) * 100 : 100;
+      
+      // ランキング情報
+      const allUsers = await storage.getAllUsers();
+      
+      // 送信ランキング（カード数）
+      const userCardCounts = await Promise.all(
+        allUsers.map(async (u) => ({
+          userId: u.id,
+          count: (await storage.getCardsByUser(u.id)).length
+        }))
+      );
+      userCardCounts.sort((a, b) => b.count - a.count);
+      const sendingRank = userCardCounts.findIndex(u => u.userId === userId) + 1;
+      
+      // 受信ランキング（ポイント）
+      const userPointCounts = allUsers.map(u => ({
+        userId: u.id,
+        points: u.totalPointsReceived || 0
+      }));
+      userPointCounts.sort((a, b) => b.points - a.points);
+      const receivingRank = userPointCounts.findIndex(u => u.userId === userId) + 1;
+      
+      // トップ送信者（ユーザーが送信したカードの受信者）
+      const topSenders = await storage.getTopCardSenders(userId, 10);
+      
+      // トップ受信者（ユーザーが受信したカードの送信者）
+      const topReceivers = await storage.getTopCardReceivers(userId, 10);
+      
+      // トップポイント付与者（ユーザーがいいねした相手）
+      const topGivers = await storage.getTopPointGivers(userId, 10);
+      
+      // トップ感謝者（ユーザーにいいねをくれた人）
+      const topAppreciatedUsers = await storage.getTopAppreciatedUsers(userId, 10);
+      
       return res.json({
-        totalCards: 120,
-        totalLikes: 342,
-        topSenders: [
-          { id: 1, name: "山田太郎", count: 15 },
-          { id: 2, name: "佐藤次郎", count: 12 },
-          { id: 3, name: "鈴木花子", count: 10 },
-        ],
-        topReceivers: [
-          { id: 3, name: "鈴木花子", count: 18 },
-          { id: 1, name: "山田太郎", count: 14 },
-          { id: 4, name: "田中明", count: 11 },
-        ],
+        pointConversionRate: Math.round(pointConversionRate),
+        reactionRate: Math.round(Math.min(100, reactionRate)),
+        sendingRank,
+        receivingRank,
+        totalUsers,
+        cardsThisWeek,
+        pointsGivenThisWeek,
+        topSenders,
+        topReceivers,
+        topGivers,
+        topAppreciatedUsers
       });
     } catch (error) {
-      console.error("統計情報取得エラー:", error);
-      return res.status(500).json({ message: "統計情報の取得に失敗しました" });
+      console.error("ダッシュボード統計情報取得エラー:", error);
+      return res.status(500).json({ message: "ダッシュボード統計情報の取得に失敗しました" });
     }
   });
 
