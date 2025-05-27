@@ -235,12 +235,14 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               variant="ghost" 
               size="sm" 
               className={`h-8 px-3 transition-all ${
-                userHasLiked 
+                !canLike 
+                  ? 'text-gray-400 cursor-not-allowed opacity-50' 
+                  : userHasLiked 
                   ? 'text-[#3990EA] bg-blue-50 hover:bg-blue-100' 
                   : 'text-gray-600 hover:text-[#3990EA] hover:bg-blue-50'
               }`}
-              onClick={() => setIsLikeFormOpen(true)}
-              disabled={totalLikes >= 50}
+              onClick={() => canLike && setIsLikeFormOpen(true)}
+              disabled={totalLikes >= 50 || !canLike}
             >
               <Heart className={`h-4 w-4 mr-2 ${userHasLiked ? 'fill-current' : ''}`} />
               <span className="text-xs font-medium">
@@ -328,8 +330,9 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               </Button>
               <Button 
                 className="flex-1"
-                disabled={totalLikes >= 50}
+                disabled={totalLikes >= 50 || !canLike}
                 onClick={async () => {
+                  if (!canLike) return;
                   try {
                     await apiRequest('POST', `/api/cards/${card.id}/likes`);
                     
