@@ -101,7 +101,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
   // 受信者表示の処理
   const primaryRecipient = card.recipient;
-  const additionalRecipients = Array.isArray(card.additionalRecipients) ? card.additionalRecipients : [];
+  const additionalRecipients = Array.isArray(card.additionalRecipientUsers) ? card.additionalRecipientUsers : [];
   const allRecipients = primaryRecipient ? [primaryRecipient, ...additionalRecipients] : additionalRecipients;
   
   // 表示する受信者（最大3人）

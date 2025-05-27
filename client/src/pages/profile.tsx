@@ -100,6 +100,24 @@ export default function Profile({ user }: ProfileProps) {
         open={showPasswordModal}
         onOpenChange={setShowPasswordModal}
       />
+      
+      {/* フッター */}
+      <footer className="mt-12 py-8 border-t border-gray-200">
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="h-8 w-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-sm">🐻</span>
+            </div>
+            <span className="text-xl font-bold text-gray-800">LevLetter</span>
+          </div>
+          <p className="text-gray-600 text-sm mb-2">
+            社内コミュニケーションを活性化する感謝カードプラットフォーム
+          </p>
+          <p className="text-gray-500 text-xs">
+            © 2025 LevLetter. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
