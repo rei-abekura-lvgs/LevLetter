@@ -1282,8 +1282,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // リアクション率（受け取ったカードに対するいいねの割合）
       const receivedCards = await storage.getCardsToUser(userId);
-      const reactionCount = await storage.getLikesToUserCards(userId);
-      const reactionRate = receivedCards.length > 0 ? (reactionCount / receivedCards.length) * 100 : 100;
+      const likesToUserCards = await storage.getLikesToUserCards(userId);
+      const reactionRate = receivedCards.length > 0 ? (likesToUserCards.length / receivedCards.length) * 100 : 100;
       
       // ランキング情報
       const allUsers = await storage.getUsers();
@@ -1310,9 +1310,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const oneMonthAgo = new Date();
       oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-      // 月間ランキングデータ取得
-      const monthlyCardSenders = await storage.getMonthlyCardSenders(10);
-      const monthlyLikeSenders = await storage.getMonthlyLikeSenders(10);
+      // 月間ランキングデータ（簡略化版）
+      const allCards = await storage.getCards();
+      
+      // 最近1ヶ月のカードをフィルタリング
+      const recentCards = allCards.filter(card => 
+        new Date(card.createdAt) >= oneMonthAgo
+      );
+      
+      // 送信者別ポイント統計
+      const senderStats: Record<number, number> = {};
+      recentCards.forEach(card => {
+        if (card.senderId) {
+          senderStats[card.senderId] = (senderStats[card.senderId] || 0) + card.points;
+        }
+      });
+
+      // 上位10名の送信者を取得
+      const topSenders = Object.entries(senderStats)
+        .map(([id, points]) => ({ id: parseInt(id), points: points as number }))
+        .sort((a, b) => b.points - a.points)
+        .slice(0, 10);
+
+      const monthlyCardSenders = [];
+      for (let i = 0; i < topSenders.length; i++) {
+        const user = await storage.getUser(topSenders[i].id);
+        if (user) {
+          monthlyCardSenders.push({
+            user,
+            points: topSenders[i].points,
+            rank: i + 1
+          });
+        }
+      }
+
+      // 月間いいね送信者（簡略化）
+      const monthlyLikeSenders = monthlyCardSenders.slice(0, 5);
 
       // 現在のユーザーの順位を計算
       const userCardRank = monthlyCardSenders.findIndex(item => item.user.id === userId) + 1;
