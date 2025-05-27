@@ -231,6 +231,28 @@ export default function Landing() {
                   </Button>
                 </Link>
               </div>
+              <div className="flex justify-center">
+                <div className="bg-gradient-to-br from-[#3990EA] to-[#2563EB] rounded-2xl p-8 text-white max-w-md">
+                  <div className="text-center mb-6">
+                    <BearLogo size={80} useTransparent={true} bgColor="bg-white" />
+                    <h4 className="text-xl font-bold mt-4">LevLetterで実現</h4>
+                  </div>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
+                      <span>継続的なフィードバック習慣</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
+                      <span>組織全体のエンゲージメント向上</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
+                      <span>データに基づいた改善サイクル</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -424,76 +446,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* チャットボットセクション（デモ用） */}
-      <section className="py-16 bg-gradient-to-br from-[#3990EA] to-[#2563EB] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              AIアシスタントに<br />
-              <span className="text-yellow-300">フィードバック文化</span>について質問してみませんか？
-            </h2>
-            <p className="text-xl opacity-90">
-              LevLetterに関するご質問や、フィードバック文化の醸成についてお気軽にお聞きください
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-2xl p-6 shadow-2xl">
-            <div className="space-y-4">
-              {/* チャットボット画面 */}
-              <div className="bg-gray-50 rounded-lg p-4 min-h-[300px] flex flex-col">
-                <div className="flex-1 space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-[#3990EA] w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-sm font-bold">AI</span>
-                    </div>
-                    <div className="bg-white rounded-lg p-3 shadow-sm">
-                      <p className="text-gray-800">
-                        こんにちは！LevLetterのAIアシスタントです。<br />
-                        フィードバック文化の醸成や組織改善について、どのようなことでもお気軽にご質問ください！
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* 入力エリア */}
-                <div className="mt-4 flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder="フィードバック文化について質問してください..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3990EA] text-gray-800"
-                    disabled
-                  />
-                  <button
-                    className="bg-[#3990EA] text-white px-6 py-2 rounded-lg hover:bg-[#2563EB] transition-colors disabled:opacity-50"
-                    disabled
-                  >
-                    送信
-                  </button>
-                </div>
-              </div>
-              
-              {/* サンプル質問 */}
-              <div className="text-center">
-                <p className="text-gray-600 mb-3">よくある質問：</p>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  <button className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-200 transition-colors" disabled>
-                    フィードバック文化のメリットは？
-                  </button>
-                  <button className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-200 transition-colors" disabled>
-                    導入にはどのくらい期間がかかる？
-                  </button>
-                  <button className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-200 transition-colors" disabled>
-                    料金プランを教えて
-                  </button>
-                </div>
-                <p className="text-gray-500 text-sm mt-4">
-                  ※ これはデモ画面です。実際のチャットボット機能は製品版でご利用いただけます。
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* CTAセクション */}
       <section className="py-16 bg-gradient-to-br from-[#3990EA] to-[#2563EB] text-white">
