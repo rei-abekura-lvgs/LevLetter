@@ -16,6 +16,9 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   const [timeLeft, setTimeLeft] = useState(30);
   const [bearSpeed, setBearSpeed] = useState(2);
   const [gameStarted, setGameStarted] = useState(false);
+  const [bears, setBears] = useState([
+    { id: 1, x: 50, y: 50, directionX: 2, directionY: 1.5 }
+  ]);
 
   // ゲームタイマー
   useEffect(() => {
@@ -34,34 +37,64 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     return () => clearInterval(timer);
   }, [isGameActive, timeLeft]);
 
-  // クマアニメーション（スクリーンセーバー & ゲーム）
+  // クマアニメーション（複数クマ対応）
   useEffect(() => {
     if (!isScreensaverActive) return;
 
     const interval = setInterval(() => {
-      setBearPosition(prev => {
-        let newX = prev.x + bearDirection.x * bearSpeed;
-        let newY = prev.y + bearDirection.y * bearSpeed;
-        let newDirectionX = bearDirection.x;
-        let newDirectionY = bearDirection.y;
+      if (gameStarted && isGameActive) {
+        // ゲーム中：複数のクマを動かす
+        setBears(prevBears => 
+          prevBears.map(bear => {
+            let newX = bear.x + bear.directionX * bearSpeed;
+            let newY = bear.y + bear.directionY * bearSpeed;
+            let newDirectionX = bear.directionX;
+            let newDirectionY = bear.directionY;
 
-        // 画面端での反射
-        if (newX <= 5 || newX >= 95) {
-          newDirectionX = -newDirectionX;
-          newX = Math.max(5, Math.min(95, newX));
-        }
-        if (newY <= 5 || newY >= 95) {
-          newDirectionY = -newDirectionY;
-          newY = Math.max(5, Math.min(95, newY));
-        }
+            // 画面端での反射
+            if (newX <= 5 || newX >= 95) {
+              newDirectionX = -newDirectionX;
+              newX = Math.max(5, Math.min(95, newX));
+            }
+            if (newY <= 5 || newY >= 95) {
+              newDirectionY = -newDirectionY;
+              newY = Math.max(5, Math.min(95, newY));
+            }
 
-        setBearDirection({ x: newDirectionX, y: newDirectionY });
-        return { x: newX, y: newY };
-      });
+            return {
+              ...bear,
+              x: newX,
+              y: newY,
+              directionX: newDirectionX,
+              directionY: newDirectionY
+            };
+          })
+        );
+      } else {
+        // スクリーンセーバー：単体クマ
+        setBearPosition(prev => {
+          let newX = prev.x + bearDirection.x * bearSpeed;
+          let newY = prev.y + bearDirection.y * bearSpeed;
+          let newDirectionX = bearDirection.x;
+          let newDirectionY = bearDirection.y;
+
+          if (newX <= 5 || newX >= 95) {
+            newDirectionX = -newDirectionX;
+            newX = Math.max(5, Math.min(95, newX));
+          }
+          if (newY <= 5 || newY >= 95) {
+            newDirectionY = -newDirectionY;
+            newY = Math.max(5, Math.min(95, newY));
+          }
+
+          setBearDirection({ x: newDirectionX, y: newDirectionY });
+          return { x: newX, y: newY };
+        });
+      }
     }, 50);
 
     return () => clearInterval(interval);
-  }, [isScreensaverActive, bearDirection, bearSpeed]);
+  }, [isScreensaverActive, bearDirection, bearSpeed, gameStarted, isGameActive]);
 
   // ESCキーでスクリーンセーバー終了
   useEffect(() => {
@@ -90,35 +123,57 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     setScore(0);
     setTimeLeft(30);
     setBearSpeed(2);
-    setBearPosition({ 
-      x: 20 + Math.random() * 60, 
-      y: 20 + Math.random() * 60 
-    });
-    setBearDirection({ 
-      x: (Math.random() - 0.5) * 4, 
-      y: (Math.random() - 0.5) * 4 
-    });
+    
+    // 初期クマ1匹
+    setBears([{
+      id: 1,
+      x: 20 + Math.random() * 60,
+      y: 20 + Math.random() * 60,
+      directionX: (Math.random() - 0.5) * 4,
+      directionY: (Math.random() - 0.5) * 4
+    }]);
   };
 
   // クマをキャッチ
-  const catchBear = (e: React.MouseEvent) => {
+  const catchBear = (bearId: number) => (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!isGameActive) return;
     
-    console.log("🎯 クマキャッチ！");
+    console.log("🎯 クマキャッチ！ID:", bearId);
     setScore(prev => prev + 1);
     
     // 速度アップ（最大5まで）
-    setBearSpeed(prev => Math.min(5, prev + 0.2));
+    setBearSpeed(prev => Math.min(5, prev + 0.3));
     
-    // 新しい位置にクマを移動
-    setBearPosition({
-      x: 10 + Math.random() * 80,
-      y: 10 + Math.random() * 80
-    });
-    setBearDirection({
-      x: (Math.random() - 0.5) * 6,
-      y: (Math.random() - 0.5) * 6
+    // 新しいクマを追加！（最大8匹まで）
+    setBears(prevBears => {
+      const newBears = [...prevBears];
+      
+      // 最大8匹まで追加
+      if (newBears.length < 8) {
+        const newId = Math.max(...newBears.map(b => b.id)) + 1;
+        newBears.push({
+          id: newId,
+          x: 10 + Math.random() * 80,
+          y: 10 + Math.random() * 80,
+          directionX: (Math.random() - 0.5) * 6,
+          directionY: (Math.random() - 0.5) * 6
+        });
+        console.log("🐻 新しいクマが登場！現在", newBears.length, "匹");
+      }
+      
+      // キャッチされたクマは新しい位置に移動
+      return newBears.map(bear => 
+        bear.id === bearId 
+          ? {
+              ...bear,
+              x: 10 + Math.random() * 80,
+              y: 10 + Math.random() * 80,
+              directionX: (Math.random() - 0.5) * 6,
+              directionY: (Math.random() - 0.5) * 6
+            }
+          : bear
+      );
     });
   };
 
@@ -203,20 +258,24 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           {/* ゲーム中の画面 */}
           {gameStarted && (
             <>
-              {/* クマ */}
-              <div
-                onClick={catchBear}
-                style={{
-                  position: 'absolute',
-                  left: `${bearPosition.x}%`,
-                  top: `${bearPosition.y}%`,
-                  transform: 'translate(-50%, -50%)',
-                  cursor: 'pointer',
-                  zIndex: 10001
-                }}
-              >
-                <BearLogo size={60} useTransparent={true} bgColor="bg-white" />
-              </div>
+              {/* 複数のクマ */}
+              {bears.map(bear => (
+                <div
+                  key={bear.id}
+                  onClick={catchBear(bear.id)}
+                  style={{
+                    position: 'absolute',
+                    left: `${bear.x}%`,
+                    top: `${bear.y}%`,
+                    transform: 'translate(-50%, -50%)',
+                    cursor: 'pointer',
+                    zIndex: 10001,
+                    transition: 'none'
+                  }}
+                >
+                  <BearLogo size={50} useTransparent={true} bgColor="bg-white" />
+                </div>
+              ))}
 
               {/* ゲームUI */}
               <div style={{
@@ -225,9 +284,12 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                 left: '20px',
                 color: 'white',
                 fontSize: '20px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: '10px',
+                borderRadius: '8px'
               }}>
-                スコア: {score}
+                スコア: {score} | クマ: {bears.length}匹
               </div>
               <div style={{
                 position: 'absolute',
@@ -235,7 +297,10 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                 right: '20px',
                 color: 'white',
                 fontSize: '20px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: '10px',
+                borderRadius: '8px'
               }}>
                 残り時間: {timeLeft}秒
               </div>
@@ -246,9 +311,12 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                 transform: 'translateX(-50%)',
                 color: 'white',
                 fontSize: '16px',
-                opacity: 0.8
+                opacity: 0.9,
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: '8px 16px',
+                borderRadius: '20px'
               }}>
-                クマをクリックして捕まえよう！
+                クマをクリックすると新しいクマが現れる！
               </div>
             </>
           )}
