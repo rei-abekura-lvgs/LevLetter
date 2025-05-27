@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/select";
 import { 
   Calendar, Clock, Heart, MessageSquare, RotateCcw, 
-  User as UserIcon, Send, Plus, Eye, EyeOff, Trash2
+  User as UserIcon, Send, Plus, Eye, EyeOff, Trash2,
+  BarChart3, TrendingUp, Activity
 } from "lucide-react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
@@ -28,303 +29,296 @@ import {
 import CardForm from "@/components/card-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import Dashboard from "@/pages/dashboard";
+import Ranking from "@/pages/ranking";
 
 // カードコンポーネント
 const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, currentUser: User, onRefresh?: () => void }) => {
   const formattedDate = format(new Date(card.createdAt), 'yyyy年MM月dd日', { locale: ja });
-  const formattedTime = format(new Date(card.createdAt), 'HH:mm', { locale: ja });
-  const recipientName = card.recipientType === "user" 
-    ? (card.recipient as User).displayName || (card.recipient as User).name
-    : "チーム";
-  const { toast } = useToast();
+  const timeFromNow = format(new Date(card.createdAt), 'HH:mm', { locale: ja });
+  const [isLikeFormOpen, setIsLikeFormOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isHidden, setIsHidden] = useState(card.hidden || false);
-  const [showSenderDepartment, setShowSenderDepartment] = useState(false);
-  const [showRecipientDepartment, setShowRecipientDepartment] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
   const queryClient = useQueryClient();
-  
-  // 管理者かどうかを確認
-  const isAdmin = currentUser?.isAdmin || false;
+  const { toast } = useToast();
 
-  // ユーザーアバターのイニシャルを作成
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map(n => n[0])
-      .join("")
-      .toUpperCase();
-  };
-  
-  // カードを非表示にする処理
-  const handleHideCard = async () => {
-    try {
-      const response = await fetch(`/api/cards/${card.id}/visibility`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ hidden: !isHidden })
-      });
-      
-      if (!response.ok) {
-        throw new Error('カードの表示状態の更新に失敗しました');
-      }
-      
-      setIsHidden(!isHidden);
-      toast({
-        title: !isHidden ? "カードを非表示にしました" : "カードを表示状態に戻しました",
-        description: "正常に更新されました",
-      });
-    } catch (error) {
-      console.error('カード表示状態更新エラー:', error);
-      toast({
-        title: "エラー",
-        description: `カードの表示状態を更新できませんでした: ${error}`,
-        variant: "destructive",
-      });
-    }
-  };
-  
-  // カードを削除する処理
-  const handleDeleteCard = async () => {
+  // 削除権限チェック
+  useEffect(() => {
+    const checkDeletePermission = () => {
+      // 管理者またはカード送信者のみ削除可能
+      const isAdmin = currentUser.role === 'admin';
+      const isSender = card.senderId === currentUser.id;
+      setCanDelete(isAdmin || isSender);
+    };
+
+    checkDeletePermission();
+  }, [currentUser, card]);
+
+  // カード削除処理
+  const handleDelete = async () => {
     try {
       const response = await fetch(`/api/cards/${card.id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-      
+
       if (!response.ok) {
         throw new Error('カードの削除に失敗しました');
       }
-      
+
       toast({
-        title: "カードを削除しました",
-        description: "カードは完全に削除されました",
+        title: "削除完了",
+        description: "カードを削除しました",
       });
-      
-      setIsDeleteDialogOpen(false);
+
+      // データを再取得
+      queryClient.invalidateQueries({ queryKey: ['/api/cards'] });
       if (onRefresh) onRefresh();
+      setIsDeleteDialogOpen(false);
     } catch (error) {
-      console.error('カード削除エラー:', error);
+      console.error('削除エラー:', error);
       toast({
         title: "エラー",
-        description: `カードを削除できませんでした: ${error}`,
+        description: "カードの削除に失敗しました",
         variant: "destructive",
       });
     }
   };
 
+  // いいね状況を確認
+  const userLikeCount = card.likes?.filter(like => like.userId === currentUser.id).length || 0;
+  const totalLikes = card.totalLikes || 0;
+  const userHasLiked = userLikeCount > 0;
+
+  // いいねボタンのテキスト
+  const getLikeButtonText = () => {
+    if (userLikeCount === 0) return "👏 いいね";
+    return `👏 ${userLikeCount}回いいね済み`;
+  };
+
+  // 受信者表示の処理
+  const primaryRecipient = card.recipient;
+  const additionalRecipients = card.additionalRecipients || [];
+  const allRecipients = primaryRecipient ? [primaryRecipient, ...additionalRecipients] : additionalRecipients;
+  
+  // 表示する受信者（最大3人）
+  const displayRecipients = allRecipients.slice(0, 3);
+  const remainingCount = Math.max(0, allRecipients.length - 3);
+
+  // ポイント表示の処理
+  const pointsPerRecipient = card.pointsPerRecipient || 1;
+  const totalPoints = pointsPerRecipient * allRecipients.length;
+
   return (
-    <Card className={`border border-gray-200 bg-white mb-4 ${isHidden ? 'opacity-50' : ''}`}>
-      <CardContent className="p-4">
-        {/* 左上：送信者アバターと名前、日時 */}
-        <div className="flex items-center gap-3 mb-3">
-          <Avatar className="h-12 w-12">
-            {/* Google認証で画像がある場合は画像、それ以外はクマアイコン */}
-            {card.sender.customAvatarUrl ? (
-              <AvatarImage src={card.sender.customAvatarUrl} alt={card.sender.name} />
-            ) : (
-              /* 画像がない場合はクマアイコン */
-              <AvatarFallback className="bg-transparent flex items-center justify-center">
-                <img src={bearAvatarUrl} alt="" className="w-12 h-12 object-contain" />
+    <Card className="mb-4 last:mb-0 border-none shadow-sm bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-200">
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3 flex-1">
+            <Avatar className="h-10 w-10 ring-2 ring-white shadow-sm">
+              <AvatarImage 
+                src={card.sender.customAvatarUrl || bearAvatarUrl} 
+                alt={card.sender.displayName || card.sender.name}
+                className="object-cover"
+              />
+              <AvatarFallback style={{ backgroundColor: card.sender.avatarColor }}>
+                {(card.sender.displayName || card.sender.name).charAt(0)}
               </AvatarFallback>
-            )}
-          </Avatar>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <button 
-                className="font-medium text-gray-900 hover:text-[#3990EA] transition-colors"
-                onClick={() => setShowSenderDepartment(!showSenderDepartment)}
-              >
-                {card.sender.displayName || card.sender.name}
-              </button>
-              <span className="text-gray-400 text-sm">{formattedDate.replace('年', '/').replace('月', '/').replace('日', '')} {formattedTime}</span>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="font-medium text-gray-900 text-sm">
+                  {card.sender.displayName || card.sender.name}
+                </p>
+                <span className="text-gray-400">→</span>
+                <div className="flex items-center gap-1 flex-wrap">
+                  {displayRecipients.map((user: User, index: number) => (
+                    <span key={user.id} className="text-gray-700 text-sm font-medium">
+                      {user.displayName || user.name}
+                      {index < displayRecipients.length - 1 && ", "}
+                    </span>
+                  ))}
+                  {remainingCount > 0 && (
+                    <span className="text-gray-500 text-sm">
+                      他{remainingCount}名
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-1">
+                <div className="flex items-center gap-1 text-gray-500 text-xs">
+                  <Clock className="h-3 w-3" />
+                  {formattedDate} {timeFromNow}
+                </div>
+                {totalPoints > 1 && (
+                  <div className="flex items-center gap-1 text-[#3990EA] text-xs font-medium">
+                    <span>💎 {totalPoints}pt</span>
+                  </div>
+                )}
+              </div>
             </div>
-            {showSenderDepartment && card.sender.department && (
-              <div className="text-xs text-gray-500 mt-1">
-                {card.sender.department}
+          </div>
+          {canDelete && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsDeleteDialogOpen(true)}
+              className="h-8 w-8 p-0 text-gray-400 hover:text-red-500 hover:bg-red-50"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      
+      <CardContent className="pt-0 pb-3">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
+          <p className="text-gray-800 leading-relaxed whitespace-pre-wrap text-sm">
+            {card.message}
+          </p>
+        </div>
+        
+        {card.tags && card.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-3">
+            {card.tags.map((tag, index) => (
+              <Badge key={index} variant="secondary" className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 hover:bg-blue-200">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </CardContent>
+      
+      <CardFooter className="pt-0 pb-4">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`h-8 px-3 transition-all ${
+                userHasLiked 
+                  ? 'text-[#3990EA] bg-blue-50 hover:bg-blue-100' 
+                  : 'text-gray-600 hover:text-[#3990EA] hover:bg-blue-50'
+              }`}
+              onClick={() => setIsLikeFormOpen(true)}
+              disabled={totalLikes >= 50}
+            >
+              <Heart className={`h-4 w-4 mr-2 ${userHasLiked ? 'fill-current' : ''}`} />
+              <span className="text-xs font-medium">
+                {getLikeButtonText()}
+              </span>
+            </Button>
+            
+            {totalLikes > userLikeCount && (
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 text-gray-500 text-xs">
+                  <Heart className="h-3 w-3 fill-current text-pink-400" />
+                  <span>他 {totalLikes - userLikeCount}件</span>
+                </div>
               </div>
             )}
           </div>
-        </div>
-
-        {/* メッセージと受信者情報を含む中央部分 */}
-        <div className="flex items-start gap-4 mb-4 pl-16">
-          {/* メッセージ部分 - 左側80% */}
-          <div className="flex-1 max-w-[75%]">
-            <p className="text-gray-900 leading-relaxed whitespace-pre-line">{card.message}</p>
-          </div>
           
-          {/* 受信者情報 - 右側20% */}
-          {card.recipientType === "user" && (
-            <div className="flex-none w-[20%] flex flex-col items-end">
-              {(() => {
-                const allRecipients = [card.recipient as User, ...(card.additionalRecipientUsers || [])];
-                const maxDisplayCount = 3; // 最大3つまで表示
-                const displayRecipients = allRecipients.slice(0, maxDisplayCount);
-                const remainingCount = allRecipients.length - maxDisplayCount;
-                const isMultiple = allRecipients.length > 1;
-                const avatarSize = isMultiple ? "h-14 w-14" : "h-20 w-20"; // 複数人の場合は小さく、単独は大きく
-                
-                return (
-                  <div className="relative">
-                    {/* アバター表示 */}
-                    <div className="flex items-center -space-x-2">
-                      {displayRecipients.map((user: User, index: number) => (
-                        <div key={user.id} className="relative">
-                          <Avatar className={`${avatarSize} border-2 border-white`}>
-                            {/* Google認証で画像がある場合は画像、それ以外はクマアイコン */}
-                            {user.customAvatarUrl ? (
-                              <AvatarImage src={user.customAvatarUrl} alt={user.name} />
-                            ) : (
-                              /* 画像がない場合はクマアイコン */
-                              <AvatarFallback className="bg-transparent flex items-center justify-center">
-                                <img src={bearAvatarUrl} alt="" className={`${isMultiple ? 'w-10 h-10' : 'w-12 h-12'} object-contain`} />
-                              </AvatarFallback>
-                            )}
-                          </Avatar>
-                          
-                          {/* 各アバターの右下にポイントバッジ（単独の場合のみ） */}
-                          {!isMultiple && (
-                            <div className="absolute -bottom-0.5 -right-0.5 bg-[#3990EA] text-white font-bold rounded-full min-w-[18px] h-4 flex items-center justify-center px-0.5 z-10" style={{ fontSize: '8px' }}>
-                              {card.points}pt
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                      
-                      {/* 省略表示 */}
-                      {remainingCount > 0 && (
-                        <div className={`${avatarSize} bg-gray-300 rounded-full border-2 border-white flex items-center justify-center`}>
-                          <span className="text-gray-600 text-xs font-bold">+{remainingCount}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* 複数人の場合は全体の右下にポイントバッジ */}
-                    {isMultiple && (
-                      <div className="absolute -bottom-0.5 -right-0.5 bg-[#3990EA] text-white font-bold rounded-full min-w-[18px] h-4 flex items-center justify-center px-0.5 z-10" style={{ fontSize: '8px' }}>
-                        {card.points}pt
+          <div className="flex items-center gap-2">
+            {allRecipients.length > displayRecipients.length && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-gray-500">
+                    <UserIcon className="h-3 w-3 mr-1" />
+                    全員表示
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>受信者一覧</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-2">
+                    {allRecipients.map((user: User, index) => (
+                      <div key={user.id} className="flex items-center gap-3 p-2 rounded-lg bg-gray-50">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage 
+                            src={user.customAvatarUrl || bearAvatarUrl} 
+                            alt={user.displayName || user.name}
+                            className="object-cover"
+                          />
+                          <AvatarFallback style={{ backgroundColor: user.avatarColor }}>
+                            {(user.displayName || user.name).charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm">{user.displayName || user.name}</span>
+                        {index === 0 && <Badge variant="secondary" className="text-xs">主受信者</Badge>}
                       </div>
-                    )}
-                    
-                    {/* 受信者名 */}
-                    <div className="text-center mt-3 group relative">
-                      <span className="text-sm font-medium text-gray-800 cursor-pointer">
-                        {(card.recipient as User).displayName || (card.recipient as User).name}
-                        {allRecipients.length > 1 && ` + ${allRecipients.length - 1}人`}
-                      </span>
-                      
-                      {/* ホバー時の全員表示 */}
-                      {allRecipients.length > 1 && (
-                        <div className="absolute bottom-full right-0 mb-2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
-                          {allRecipients.map((user: User, index) => (
-                            <span key={user.id}>
-                              {index > 0 && ", "}
-                              {user.displayName || user.name}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    ))}
                   </div>
-                );
-              })()}
-            </div>
-          )}
-        </div>
-
-        {/* 下部：いいねボタンとアクション */}
-        <div className="flex items-center pl-16">
-          <div className="flex items-center gap-4">
-            {/* いいねアイコン */}
-            <div className="flex items-center gap-1 group relative">
-              {(() => {
-                // 送信者と受信者以外がいいねできる
-                const allRecipients = card.additionalRecipients 
-                  ? [card.recipient as User, ...(card.additionalRecipients as User[])] 
-                  : [card.recipient as User];
-                const isRecipient = allRecipients.some(r => r.id === currentUser?.id);
-                const isSender = card.sender.id === currentUser?.id;
-                const canLike = !isSender && !isRecipient;
-                const userLiked = card.likes.some(like => like.user.id === currentUser?.id);
-                
-                return (
-                  <div 
-                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                      canLike 
-                        ? 'bg-gray-100 hover:bg-pink-100 cursor-pointer' 
-                        : 'bg-gray-50 cursor-not-allowed opacity-50'
-                    }`}
-                    onClick={undefined}
-                  >
-                    <Heart className={`h-4 w-4 ${userLiked ? 'text-pink-500 fill-pink-500' : 'text-gray-500'}`} />
-                  </div>
-                );
-              })()}
-              
-              <span className="text-sm text-gray-600">{card.likes.length}</span>
-              
-              {/* ホバー時のいいねユーザー表示 */}
-              {card.likes.length > 0 && (
-                <div className="absolute bottom-full left-0 mb-2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
-                  <div className="font-medium mb-1">いいね！</div>
-                  {card.likes.map((like, index) => (
-                    <div key={like.id}>
-                      {index > 0 && ", "}
-                      {like.user.displayName || like.user.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            
-            {/* 管理者ボタン */}
-            {isAdmin && (
-              <>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-xs"
-                  onClick={handleHideCard}
-                >
-                  {isHidden ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-                </Button>
-                
-                <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-xs text-red-500"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>カードを削除しますか？</DialogTitle>
-                      <DialogDescription>
-                        この操作は元に戻せません。
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex justify-end gap-3 mt-4">
-                      <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-                        キャンセル
-                      </Button>
-                      <Button 
-                        variant="destructive" 
-                        onClick={handleDeleteCard}
-                      >
-                        削除する
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </>
+                </DialogContent>
+              </Dialog>
             )}
           </div>
-
-          
         </div>
-      </CardContent>
+      </CardFooter>
+
+      {/* いいねフォームダイアログ */}
+      <Dialog open={isLikeFormOpen} onOpenChange={setIsLikeFormOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>いいねを送る</DialogTitle>
+            <DialogDescription>
+              このカードに「いいね」を送ります（1回につき2pt消費）
+            </DialogDescription>
+          </DialogHeader>
+          {/* LikeForm コンポーネントをここに配置 */}
+          <div className="p-4">
+            <p className="text-sm text-gray-600 mb-4">
+              現在のいいね数: {totalLikes}件 / 上限50件
+            </p>
+            <p className="text-sm text-gray-600 mb-4">
+              あなたのいいね数: {userLikeCount}件
+            </p>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => setIsLikeFormOpen(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                キャンセル
+              </Button>
+              <Button 
+                className="flex-1"
+                disabled={totalLikes >= 50}
+              >
+                いいねを送る
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* 削除確認ダイアログ */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>カードを削除</DialogTitle>
+            <DialogDescription>
+              このカードを削除しますか？この操作は元に戻せません。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-2 justify-end">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteDialogOpen(false)}
+            >
+              キャンセル
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleDelete}
+            >
+              削除
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
@@ -337,6 +331,7 @@ export default function Home({ user }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
   const [isCardFormOpen, setIsCardFormOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("all");
+  const [mainTab, setMainTab] = useState<"timeline" | "dashboard" | "ranking">("timeline");
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -346,54 +341,37 @@ export default function Home({ user }: HomeProps) {
   // URLパラメータから成功メッセージを読み取り
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const successMessage = urlParams.get('success');
+    const success = urlParams.get('success');
     
-    if (successMessage) {
+    if (success === 'card_sent') {
       toast({
-        title: "✅ 成功",
-        description: decodeURIComponent(successMessage),
-        duration: 4000,
+        title: "送信完了！",
+        description: "サンクスカードを送信しました",
+        duration: 3000,
       });
-      
-      // URLからパラメータを削除（履歴を残さない）
-      const newUrl = window.location.pathname;
-      window.history.replaceState({}, '', newUrl);
+      // URLからパラメータを削除
+      window.history.replaceState({}, '', window.location.pathname);
     }
   }, [toast]);
 
-  // APIからカードデータを取得
-  const {
-    data: cards = [],
-    isLoading,
-    error,
-    refetch
-  } = useQuery<CardWithRelations[]>({
-    queryKey: ["/api/cards"],
-    queryFn: () => getCards({}),
-    enabled: !!user?.id,
-    refetchOnWindowFocus: true,
-    staleTime: 10000 // 10秒間はキャッシュを使用
+  const { data: cards = [], isLoading, refetch } = useQuery<CardWithRelations[]>({
+    queryKey: ['/api/cards'],
+    refetchInterval: 30000,
   });
 
-  // データの読み込み確認のログ
-  useEffect(() => {
-    console.log("カード取得データ状態:", { カード数: cards?.length || 0, ロード中: isLoading, エラー: !!error });
-    if (cards && cards.length > 0) {
-      console.log("カード取得レスポンス:", 200, "OK");
-      console.log("取得したカードデータ:", cards);
+  // フィルタリングロジック
+  const filteredCards = cards.filter((card) => {
+    const recipients = [card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+    const recipientIds = recipients.map(r => r?.id).filter(Boolean);
+    
+    if (activeTab === "all") return true;
+    if (activeTab === "received") return recipientIds.includes(user.id);
+    if (activeTab === "sent") return card.senderId === user.id;
+    if (activeTab === "liked") {
+      return card.likes?.some(like => like.userId === user.id) || false;
     }
-  }, [cards, isLoading, error]);
-
-  // カードのフィルタリングとソート
-  const filteredCards = activeTab === "all" 
-    ? cards 
-    : activeTab === "received" 
-      ? cards.filter(card => card.recipientId === user.id || (card.additionalRecipients && card.additionalRecipients.includes(user.id)))
-      : activeTab === "sent"
-        ? cards.filter(card => card.senderId === user.id)
-        : cards.filter(card => card.likes.some(like => like.user.id === user.id));
-
-  const sortedCards = [...filteredCards].sort((a, b) => {
+    return true;
+  }).sort((a, b) => {
     if (sortOrder === "newest") {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     } else {
@@ -447,7 +425,7 @@ export default function Home({ user }: HomeProps) {
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
-
+    
     const currentIndex = tabs.indexOf(activeTab);
     
     if (isLeftSwipe && currentIndex < tabs.length - 1) {
@@ -459,6 +437,52 @@ export default function Home({ user }: HomeProps) {
       // 右スワイプ（前のタブ）
       setActiveTab(tabs[currentIndex - 1]);
     }
+  };
+
+  // カードリスト表示関数
+  const renderCardList = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3990EA]"></div>
+        </div>
+      );
+    }
+
+    if (filteredCards.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <MessageSquare className="w-8 h-8 text-gray-400" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            {activeTab === "all" && "カードがありません"}
+            {activeTab === "received" && "受け取ったカードがありません"}
+            {activeTab === "sent" && "送ったカードがありません"}
+            {activeTab === "liked" && "いいねしたカードがありません"}
+          </h3>
+          <p className="text-gray-500 text-sm max-w-sm">
+            {activeTab === "sent" 
+              ? "感謝の気持ちを伝えるサンクスカードを送ってみましょう"
+              : "新しいカードが投稿されるとここに表示されます"
+            }
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-4 pb-6">
+        {filteredCards.map((card) => (
+          <CardItem 
+            key={card.id} 
+            card={card} 
+            currentUser={user} 
+            onRefresh={refreshCards}
+          />
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -476,7 +500,7 @@ export default function Home({ user }: HomeProps) {
         </Button>
       </div>
 
-      {/* モバイル用固定カード送信ボタン */}
+      {/* モバイル用のフローティング感謝ボタン */}
       <div className="md:hidden fixed right-6 bottom-6 z-10">
         <Button 
           size="lg" 
@@ -500,172 +524,135 @@ export default function Home({ user }: HomeProps) {
         </DialogContent>
       </Dialog>
 
-      {/* タイムライン */}
-      <div className="flex flex-col h-full">
-        {/* ヘッダー部分 - スクロール時に隠れる */}
-        <div className={`flex items-center justify-between transition-all duration-300 ${
-          isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
-        }`}>
-          <div className="flex items-center gap-3">
-            <h2 className="text-lg font-semibold text-gray-800">カードタイムライン</h2>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
-              {filteredCards.length}件のカード
-            </Badge>
-            <Select defaultValue="newest" onValueChange={handleSortChange}>
-              <SelectTrigger className="w-[120px] h-8 text-sm">
-                <SelectValue placeholder="新しい順" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="newest">新しい順</SelectItem>
-                <SelectItem value="popular">人気順</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={refreshCards}
-              className="ml-2"
-              disabled={isLoading}
-            >
-              <RotateCcw className={`h-4 w-4 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
-              更新
-            </Button>
-          </div>
-        </div>
+      {/* メインタブナビゲーション */}
+      <Tabs value={mainTab} onValueChange={(value) => setMainTab(value as "timeline" | "dashboard" | "ranking")} className="flex flex-col h-full">
+        <TabsList className="grid w-full grid-cols-3 mb-4">
+          <TabsTrigger value="timeline" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            タイムライン
+          </TabsTrigger>
+          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+            <BarChart3 className="h-4 w-4" />
+            ダッシュボード
+          </TabsTrigger>
+          <TabsTrigger value="ranking" className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4" />
+            ランキング
+          </TabsTrigger>
+        </TabsList>
 
-        {/* サンクスカード送信ボタン - 控えめなデザイン */}
-        <div className={`hidden md:block transition-all duration-300 ${
-          isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
-        }`}>
-          <div className="group cursor-pointer transition-all duration-200" onClick={() => setIsCardFormOpen(true)}>
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#3990EA] rounded-full flex items-center justify-center">
-                  <Send className="h-4 w-4 text-white" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-gray-700 text-sm font-medium">
-                    感謝の気持ちを伝える
+        <TabsContent value="timeline" className="flex-1 flex flex-col">
+          {/* タイムラインヘッダー - スクロール時に隠れる */}
+          <div className={`flex items-center justify-between transition-all duration-300 ${
+            isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
+          }`}>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
+                {filteredCards.length}件のカード
+              </Badge>
+              <Select defaultValue="newest" onValueChange={handleSortChange}>
+                <SelectTrigger className="w-[120px] h-8 text-sm">
+                  <SelectValue placeholder="新しい順" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">新しい順</SelectItem>
+                  <SelectItem value="popular">人気順</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={refreshCards}
+                className="ml-2"
+                disabled={isLoading}
+              >
+                <RotateCcw className={`h-4 w-4 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
+                更新
+              </Button>
+            </div>
+          </div>
+
+          {/* サンクスカード送信ボタン - 控えめなデザイン */}
+          <div className={`hidden md:block transition-all duration-300 ${
+            isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
+          }`}>
+            <div className="group cursor-pointer transition-all duration-200" onClick={() => setIsCardFormOpen(true)}>
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-[#3990EA] rounded-full flex items-center justify-center">
+                    <Send className="h-4 w-4 text-white" />
                   </div>
-                  <div className="text-gray-500 text-xs">
-                    新しいサンクスカードを作成
+                  <div className="flex-1">
+                    <div className="text-gray-700 text-sm font-medium">
+                      感謝の気持ちを伝える
+                    </div>
+                    <div className="text-gray-500 text-xs">
+                      新しいサンクスカードを作成
+                    </div>
                   </div>
-                </div>
-                <div className="text-gray-400">
-                  <Plus className="w-4 h-4" />
+                  <div className="text-gray-400">
+                    <Plus className="w-4 h-4" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* タブ切り替え - 常に表示 */}
-        <Tabs 
-          value={activeTab} 
-          className="flex flex-col flex-1 overflow-hidden" 
-          onValueChange={setActiveTab}
-        >
-          <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
-            <TabsTrigger value="all">全て</TabsTrigger>
-            <TabsTrigger value="received">受け取った</TabsTrigger>
-            <TabsTrigger value="sent">送った</TabsTrigger>
-            <TabsTrigger value="liked">いいねした</TabsTrigger>
-          </TabsList>
-
-          <div 
-            className="flex-1 overflow-hidden mt-4"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
+          {/* タブ切り替え - 常に表示 */}
+          <Tabs 
+            value={activeTab} 
+            className="flex flex-col flex-1 overflow-hidden" 
+            onValueChange={setActiveTab}
           >
-            <TabsContent value="all" className="h-full overflow-hidden">
-              <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-                {renderCardList()}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="received" className="h-full overflow-hidden">
-              <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-                {renderCardList()}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="sent" className="h-full overflow-hidden">
-              <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-                {renderCardList()}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="liked" className="h-full overflow-hidden">
-              <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-                {renderCardList()}
-              </div>
-            </TabsContent>
-          </div>
-        </Tabs>
-      </div>
+            <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
+              <TabsTrigger value="all">全て</TabsTrigger>
+              <TabsTrigger value="received">受け取った</TabsTrigger>
+              <TabsTrigger value="sent">送った</TabsTrigger>
+              <TabsTrigger value="liked">いいねした</TabsTrigger>
+            </TabsList>
+
+            <div 
+              className="flex-1 overflow-hidden mt-4"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
+              <TabsContent value="all" className="h-full overflow-hidden">
+                <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+                  {renderCardList()}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="received" className="h-full overflow-hidden">
+                <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+                  {renderCardList()}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="sent" className="h-full overflow-hidden">
+                <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+                  {renderCardList()}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="liked" className="h-full overflow-hidden">
+                <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+                  {renderCardList()}
+                </div>
+              </TabsContent>
+            </div>
+          </Tabs>
+        </TabsContent>
+
+        <TabsContent value="dashboard" className="flex-1">
+          <Dashboard user={user} />
+        </TabsContent>
+
+        <TabsContent value="ranking" className="flex-1">
+          <Ranking user={user} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
-
-  // カードリスト表示関数
-  function renderCardList() {
-    if (isLoading) {
-      return (
-        <div className="text-center py-10">
-          <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-600">読み込み中...</p>
-        </div>
-      );
-    }
-    
-    if (error) {
-      return (
-        <div className="bg-red-50 text-red-800 p-8 rounded-lg text-center border border-red-200">
-          <p className="mb-4 font-medium">エラーが発生しました</p>
-          <p className="text-sm">{(error as Error)?.message || "データの取得に失敗しました"}</p>
-          <Button 
-            variant="outline" 
-            className="mt-4 bg-white"
-            onClick={refreshCards}
-          >
-            <RotateCcw className="h-4 w-4 mr-1" />
-            再試行
-          </Button>
-        </div>
-      );
-    }
-    
-    if (sortedCards.length === 0) {
-      return (
-        <div className="bg-gray-50 text-gray-600 p-8 rounded-lg text-center">
-          <p className="mb-4">表示するカードがありません。</p>
-          <Button 
-            onClick={() => setIsCardFormOpen(true)}
-            variant="outline"
-            className="mt-2"
-          >
-            <Send className="h-4 w-4 mr-2" />
-            新しいカードを送る
-          </Button>
-        </div>
-      );
-    }
-    
-    return (
-      <div className="space-y-4">
-        {sortedCards.map(card => (
-          <CardItem 
-            key={`card-${card.id}`} 
-            card={{...card, hidden: card.hidden || false}} 
-            currentUser={user}
-            onRefresh={refreshCards} 
-          />
-        ))}
-      </div>
-    );
-  }
 }
