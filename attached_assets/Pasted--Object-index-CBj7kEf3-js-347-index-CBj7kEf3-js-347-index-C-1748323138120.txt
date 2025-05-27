@@ -1,0 +1,102 @@
+アプリ状態: Object
+index-CBj7kEf3.js:347 🚀 認証初期化開始
+index-CBj7kEf3.js:347 🔍 セッションからユーザー情報を取得中...
+index-CBj7kEf3.js:347 📊 認証状態更新: Object
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:347 アプリ状態: Object
+index-CBj7kEf3.js:48 🔍 認証ユーザー情報取得開始...
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at cr (index-CBj7kEf3.js:48:43916)
+    at ZL (index-CBj7kEf3.js:48:43249)
+    at index-CBj7kEf3.js:347:181994
+    at index-CBj7kEf3.js:347:182382
+    at index-CBj7kEf3.js:347:182477
+    at Bm (index-CBj7kEf3.js:40:24283)
+    at ic (index-CBj7kEf3.js:40:42409)
+    at Q2 (index-CBj7kEf3.js:40:36625)
+    at fo (index-CBj7kEf3.js:38:3279)
+    at F5 (index-CBj7kEf3.js:40:41286)
+ZL @ index-CBj7kEf3.js:48Understand this error
+index-CBj7kEf3.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at cr (index-CBj7kEf3.js:48:43916)
+    at ZL (index-CBj7kEf3.js:48:43249)
+    at index-CBj7kEf3.js:347:181994
+    at index-CBj7kEf3.js:347:182382
+    at index-CBj7kEf3.js:347:182477
+    at Bm (index-CBj7kEf3.js:40:24283)
+    at ic (index-CBj7kEf3.js:40:42409)
+    at Q2 (index-CBj7kEf3.js:40:36625)
+    at fo (index-CBj7kEf3.js:38:3279)
+    at F5 (index-CBj7kEf3.js:40:41286)
+ZL @ index-CBj7kEf3.js:48Understand this error
+2index-CBj7kEf3.js:347 🔄 初期認証結果: 認証失敗
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:347 アプリ状態: Object
+index-CBj7kEf3.js:48 🔍 認証ユーザー情報取得開始...
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at cr (index-CBj7kEf3.js:48:43916)
+    at ZL (index-CBj7kEf3.js:48:43249)
+    at index-CBj7kEf3.js:347:181994
+    at index-CBj7kEf3.js:347:182382
+    at index-CBj7kEf3.js:347:182477
+    at Bm (index-CBj7kEf3.js:40:24283)
+    at ic (index-CBj7kEf3.js:40:42409)
+    at index-CBj7kEf3.js:40:40726
+    at b (index-CBj7kEf3.js:25:1572)
+    at MessagePort.N (index-CBj7kEf3.js:25:1933)
+ZL @ index-CBj7kEf3.js:48Understand this error
+index-CBj7kEf3.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at cr (index-CBj7kEf3.js:48:43916)
+    at ZL (index-CBj7kEf3.js:48:43249)
+    at index-CBj7kEf3.js:347:181994
+    at index-CBj7kEf3.js:347:182382
+    at index-CBj7kEf3.js:347:182477
+    at Bm (index-CBj7kEf3.js:40:24283)
+    at ic (index-CBj7kEf3.js:40:42409)
+    at index-CBj7kEf3.js:40:40726
+    at b (index-CBj7kEf3.js:25:1572)
+    at MessagePort.N (index-CBj7kEf3.js:25:1933)
+ZL @ index-CBj7kEf3.js:48Understand this error
+2index-CBj7kEf3.js:347 🔄 初期認証結果: 認証失敗
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:347 アプリ状態: Object
+index-CBj7kEf3.js:48 🔍 認証ユーザー情報取得開始...
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at cr (index-CBj7kEf3.js:48:43916)
+    at ZL (index-CBj7kEf3.js:48:43249)
+    at index-CBj7kEf3.js:347:181994
+    at index-CBj7kEf3.js:347:182382
+    at index-CBj7kEf3.js:347:182477
+    at Bm (index-CBj7kEf3.js:40:24283)
+    at ic (index-CBj7kEf3.js:40:42409)
+    at index-CBj7kEf3.js:40:40726
+    at b (index-CBj7kEf3.js:25:1572)
+    at MessagePort.N (index-CBj7kEf3.js:25:1933)
+ZL @ index-CBj7kEf3.js:48Understand this error
+index-CBj7kEf3.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at cr (index-CBj7kEf3.js:48:43916)
+    at ZL (index-CBj7kEf3.js:48:43249)
+    at index-CBj7kEf3.js:347:181994
+    at index-CBj7kEf3.js:347:182382
+    at index-CBj7kEf3.js:347:182477
+    at Bm (index-CBj7kEf3.js:40:24283)
+    at ic (index-CBj7kEf3.js:40:42409)
+    at index-CBj7kEf3.js:40:40726
+    at b (index-CBj7kEf3.js:25:1572)
+    at MessagePort.N (index-CBj7kEf3.js:25:1933)
+ZL @ index-CBj7kEf3.js:48Understand this error
+2index-CBj7kEf3.js:347 🔄 初期認証結果: 認証失敗
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:347 🔄 初期認証結果: 認証失敗
+api/auth/me:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 ()Understand this error
+index-CBj7kEf3.js:347 🔒 未認証状態
+index-CBj7kEf3.js:347 🎯 認証初期化完了: 未ログイン
+index-CBj7kEf3.js:481 アプリ状態: Object
+index-CBj7kEf3.js:347 📊 認証状態更新: Object
+index-CBj7kEf3.js:481 アプリ状態: Object

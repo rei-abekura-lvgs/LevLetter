@@ -1,0 +1,74 @@
+index-CBj7kEf3.js:347 🔄 初期認証結果: 認証失敗
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:347 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-CBj7kEf3.js:48 🔍 認証ユーザー情報取得開始...
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at cr (index-CBj7kEf3.js:48:43916)
+    at ZL (index-CBj7kEf3.js:48:43249)
+    at index-CBj7kEf3.js:347:181994
+    at index-CBj7kEf3.js:347:182382
+    at index-CBj7kEf3.js:347:182477
+    at Bm (index-CBj7kEf3.js:40:24283)
+    at ic (index-CBj7kEf3.js:40:42409)
+    at index-CBj7kEf3.js:40:40726
+    at b (index-CBj7kEf3.js:25:1572)
+    at MessagePort.N (index-CBj7kEf3.js:25:1933)
+ZL @ index-CBj7kEf3.js:48
+await in ZL
+(anonymous) @ index-CBj7kEf3.js:347
+(anonymous) @ index-CBj7kEf3.js:347
+(anonymous) @ index-CBj7kEf3.js:347
+Bm @ index-CBj7kEf3.js:40
+ic @ index-CBj7kEf3.js:40
+(anonymous) @ index-CBj7kEf3.js:40
+b @ index-CBj7kEf3.js:25
+N @ index-CBj7kEf3.js:25Understand this error
+index-CBj7kEf3.js:48 ユーザー認証エラー: Error: 認証が必要です
+    at cr (index-CBj7kEf3.js:48:43916)
+    at ZL (index-CBj7kEf3.js:48:43249)
+    at index-CBj7kEf3.js:347:181994
+    at index-CBj7kEf3.js:347:182382
+    at index-CBj7kEf3.js:347:182477
+    at Bm (index-CBj7kEf3.js:40:24283)
+    at ic (index-CBj7kEf3.js:40:42409)
+    at index-CBj7kEf3.js:40:40726
+    at b (index-CBj7kEf3.js:25:1572)
+    at MessagePort.N (index-CBj7kEf3.js:25:1933)
+ZL @ index-CBj7kEf3.js:48
+await in ZL
+(anonymous) @ index-CBj7kEf3.js:347
+(anonymous) @ index-CBj7kEf3.js:347
+(anonymous) @ index-CBj7kEf3.js:347
+Bm @ index-CBj7kEf3.js:40
+ic @ index-CBj7kEf3.js:40
+(anonymous) @ index-CBj7kEf3.js:40
+b @ index-CBj7kEf3.js:25
+N @ index-CBj7kEf3.js:25Understand this error
+2index-CBj7kEf3.js:347 🔄 初期認証結果: 認証失敗
+index-CBj7kEf3.js:347 🔄 認証初期化開始...
+index-CBj7kEf3.js:347 🔄 初期認証結果: 認証失敗
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+index-CBj7kEf3.js:347 
+            
+            
+           GET https://levletter.replit.app/api/auth/me 401 (Unauthorized)
+l @ index-CBj7kEf3.js:347
+(anonymous) @ index-CBj7kEf3.js:347
+(anonymous) @ index-CBj7kEf3.js:347
+Bm @ index-CBj7kEf3.js:40
+ic @ index-CBj7kEf3.js:40
+Q2 @ index-CBj7kEf3.js:40
+fo @ index-CBj7kEf3.js:38
+F5 @ index-CBj7kEf3.js:40
+wo @ index-CBj7kEf3.js:40
+BN @ index-CBj7kEf3.js:40
+b @ index-CBj7kEf3.js:25
+N @ index-CBj7kEf3.js:25Understand this error
+index-CBj7kEf3.js:347 🔒 未認証状態
+index-CBj7kEf3.js:347 🎯 認証初期化完了: 未ログイン
+index-CBj7kEf3.js:481 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-CBj7kEf3.js:347 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
