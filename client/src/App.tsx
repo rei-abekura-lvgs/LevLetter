@@ -13,6 +13,7 @@ import ResetPassword from "@/pages/reset-password";
 import Settings from "@/pages/settings";
 import AdminDashboard from "@/pages/admin";
 import Landing from "@/pages/landing";
+import Contact from "@/pages/contact";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context-new";
@@ -25,7 +26,7 @@ function AppRoutes() {
   // 初期認証処理とナビゲーション制御
   useEffect(() => {
     // 保護されたルートとパブリックルートの定義
-    const publicRoutes = ['/landing', '/login', '/register', '/forgot-password'];
+    const publicRoutes = ['/landing', '/login', '/register', '/forgot-password', '/contact'];
     
     // 認証状態によるリダイレクト処理
     if (!isLoading) {
@@ -122,6 +123,9 @@ function AppRoutes() {
           <AuthLayout>
             <ResetPassword />
           </AuthLayout>
+        </Route>
+        <Route path="/contact">
+          <Contact />
         </Route>
         <Route path="/landing">
           <Landing />

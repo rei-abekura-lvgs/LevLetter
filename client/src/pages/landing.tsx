@@ -64,9 +64,11 @@ export default function Landing() {
                   <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#3990EA] px-10 py-5 text-lg rounded-xl bg-white/20 backdrop-blur-sm transition-all duration-300 font-semibold">
-                お問い合わせ
-              </Button>
+              <Link href="/contact">
+                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-[#3990EA] px-10 py-5 text-lg rounded-xl bg-white/20 backdrop-blur-sm transition-all duration-300 font-semibold">
+                  お問い合わせ
+                </Button>
+              </Link>
             </div>
             
             <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -607,9 +609,11 @@ export default function Landing() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="border-[#3990EA] text-[#3990EA] hover:bg-[#3990EA] hover:text-white px-8 py-4 text-lg">
-              お問い合わせ
-            </Button>
+            <Link href="/contact">
+              <Button size="lg" variant="outline" className="border-[#3990EA] text-[#3990EA] hover:bg-[#3990EA] hover:text-white px-8 py-4 text-lg">
+                お問い合わせ
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
