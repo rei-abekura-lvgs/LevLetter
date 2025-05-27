@@ -668,29 +668,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             </div>
           </div>
 
-          {/* サンクスカード送信ボタン - デスクトップのみ */}
-          <div className="hidden md:block p-4 flex-shrink-0">
-            <div className="group cursor-pointer transition-all duration-200" onClick={() => setIsCardFormOpen(true)}>
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-[#3990EA] rounded-full flex items-center justify-center">
-                    <Send className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-gray-700 text-sm font-medium">
-                      感謝の気持ちを伝える
-                    </div>
-                    <div className="text-gray-500 text-xs">
-                      新しいサンクスカードを作成
-                    </div>
-                  </div>
-                  <div className="text-gray-400">
-                    <Plus className="w-4 h-4" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
 
           {/* タブ切り替えとカードリスト */}
           <Tabs 
