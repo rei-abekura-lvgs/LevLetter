@@ -148,16 +148,11 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                     </div>
                   </div>
                 )}
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className={`flex items-center ${userLike ? 'text-red-500' : 'text-gray-600'}`}
-                >
-                  <Heart 
-                    className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
-                  />
-                  <span>{card.likes.length * 2}pt</span>
-                </Button>
+                <LikeForm 
+                  cardId={card.id} 
+                  onClose={() => {}}
+                  hasLiked={!!userLike}
+                />
               </div>
             </DialogTrigger>
             <DialogContent>
