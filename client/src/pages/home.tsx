@@ -112,9 +112,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   const displayRecipients = allRecipients.slice(0, 3);
   const remainingCount = Math.max(0, allRecipients.length - 3);
 
-  // ポイント表示の処理
-  const pointsPerRecipient = card.pointsPerRecipient || 1;
-  const totalPoints = pointsPerRecipient * allRecipients.length;
+  // ポイント表示の処理 - カード作成時に設定された実際のポイント数を使用
+  const totalPoints = card.points || 0;
 
   return (
     <Card className="mb-4 last:mb-0 border-none shadow-sm bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-200">
