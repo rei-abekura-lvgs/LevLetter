@@ -1,5 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { BearLogo } from '../bear-logo';
+import { Link } from "wouter";
+import { ArrowLeft } from "lucide-react";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -63,59 +65,72 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#3990EA] to-[#2563EB] flex">
-      {/* 左側 - LP風の特徴紹介 */}
-      <div className="flex-1 flex flex-col justify-center items-center p-8 text-white">
-        <div className="max-w-md space-y-8">
-          {/* ロゴとタイトル */}
-          <div className="text-center">
-            <div 
-              onClick={handleBearClick}
-              className="inline-block cursor-pointer hover:scale-110 transition-transform duration-200 mb-6"
-            >
-              <BearLogo size={120} useTransparent={true} bgColor="bg-white" />
+    <div className="min-h-screen bg-gradient-to-br from-[#3990EA] to-[#2563EB] flex flex-col">
+      {/* ヘッダー */}
+      <header className="p-4">
+        <div className="flex items-center justify-between">
+          <Link href="/landing" className="flex items-center space-x-2 text-white hover:text-white/80 transition-colors group">
+            <ArrowLeft className="h-5 w-5 group-hover:transform group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm font-medium">LevLetterについて</span>
+          </Link>
+        </div>
+      </header>
+      
+      {/* メインコンテンツ */}
+      <div className="flex-1 flex">
+        {/* 左側 - LP風の特徴紹介 */}
+        <div className="flex-1 flex flex-col justify-center items-center p-8 text-white">
+            <div className="max-w-md space-y-8">
+              {/* ロゴとタイトル */}
+              <div className="text-center">
+                <div 
+                  onClick={handleBearClick}
+                  className="inline-block cursor-pointer hover:scale-110 transition-transform duration-200 mb-6"
+                >
+                  <BearLogo size={120} useNewIcon={true} />
+                </div>
+                <h1 className="text-5xl font-bold mb-4">LevLetter</h1>
+                <p className="text-xl opacity-90">企業のフィードバック文化を育む</p>
+              </div>
+
+              {/* 特徴セクション */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                <h2 className="text-2xl font-bold mb-6 text-center">特徴</h2>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-lg">継続的なフィードバック習慣</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-lg">ポイント付与でモチベーションアップ</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-lg">チーム単位でのフィードバック送信</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-lg">社内コミュニケーションの活性化</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* コンセプト */}
+              <div className="text-center">
+                <p className="text-lg opacity-80">継続的なフィードバック文化の構築</p>
+                <p className="text-sm opacity-60 mt-2">組織のコミュニケーション改善をサポート</p>
+              </div>
             </div>
-            <h1 className="text-5xl font-bold mb-4">LevLetter</h1>
-            <p className="text-xl opacity-90">企業のフィードバック文化を育む</p>
           </div>
 
-          {/* 特徴セクション */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-            <h2 className="text-2xl font-bold mb-6 text-center">特徴</h2>
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-lg">継続的なフィードバック習慣</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-lg">ポイント付与でモチベーションアップ</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-lg">チーム単位でのフィードバック送信</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-white rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-lg">社内コミュニケーションの活性化</p>
-              </div>
+          {/* 右側 - ログインエリア */}
+          <div className="w-full max-w-md bg-white flex flex-col justify-center">
+            <div className="p-8">
+              {children}
             </div>
-          </div>
-
-          {/* コンセプト */}
-          <div className="text-center">
-            <p className="text-lg opacity-80">継続的なフィードバック文化の構築</p>
-            <p className="text-sm opacity-60 mt-2">組織のコミュニケーション改善をサポート</p>
           </div>
         </div>
-      </div>
-
-      {/* 右側 - ログインエリア */}
-      <div className="w-full max-w-md bg-white flex flex-col justify-center">
-        <div className="p-8">
-          {children}
-        </div>
-      </div>
 
       {/* スクリーンセーバーオーバーレイ */}
       {isScreensaverActive && (
