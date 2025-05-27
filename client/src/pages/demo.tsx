@@ -1,78 +1,90 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import { Badge } from "../components/ui/badge";
 import { BearLogo } from "../components/bear-logo";
 import { Link } from "wouter";
-import { Heart, MessageCircle, ArrowLeft, Star, TrendingUp, Users, Target } from "lucide-react";
+import { Heart, MessageCircle, ArrowLeft, Plus, Settings, LogOut, Bell, Users, TrendingUp } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { useToast } from "../hooks/use-toast";
 
 export default function Demo() {
   const [likedCards, setLikedCards] = useState<Set<number>>(new Set());
+  const [cards, setCards] = useState<any[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newCardData, setNewCardData] = useState({
+    recipient: "",
+    message: "",
+    category: ""
+  });
+  const { toast } = useToast();
 
-  // デモ用のサンプルデータ
+  // デモユーザー情報
   const demoUser = {
     name: "デモユーザー",
-    email: "demo@example.com",
+    displayName: "デモ太郎",
     department: "営業部",
     weeklyPoints: 450,
     avatarColor: "#3990EA"
   };
 
-  const demoCards = [
-    {
-      id: 1,
-      senderName: "田中マネージャー",
-      senderDepartment: "営業部",
-      recipientName: "佐藤さん",
-      recipientDepartment: "マーケティング部",
-      message: "新商品のプレゼン資料、とても分かりやすかったです！お客様への説明がスムーズに進みました。ありがとうございました！",
-      category: "感謝",
-      likes: 12,
-      createdAt: "2024-05-27",
-      senderColor: "#FF6B6B",
-      recipientColor: "#4ECDC4"
-    },
-    {
-      id: 2,
-      senderName: "山田リーダー",
-      senderDepartment: "開発部",
-      recipientName: "鈴木さん",
-      recipientDepartment: "品質管理部",
-      message: "バグの発見と詳細な報告書をありがとうございました。迅速な対応のおかげで、リリース前に修正できました。",
-      category: "協力",
-      likes: 8,
-      createdAt: "2024-05-26", 
-      senderColor: "#95E1D3",
-      recipientColor: "#F8B500"
-    },
-    {
-      id: 3,
-      senderName: "高橋部長",
-      senderDepartment: "人事部",
-      recipientName: "営業チーム",
-      recipientDepartment: "営業部",
-      message: "今月の売上目標達成、お疲れ様でした！チーム一丸となって取り組む姿勢が素晴らしいです。",
-      category: "称賛",
-      likes: 25,
-      createdAt: "2024-05-25",
-      senderColor: "#A8E6CF",
-      recipientColor: "#FFB6C1"
-    },
-    {
-      id: 4,
-      senderName: "伊藤さん",
-      senderDepartment: "総務部",
-      recipientName: "新入社員の皆さん",
-      recipientDepartment: "全部署",
-      message: "研修期間中の積極的な質問や取り組み姿勢が印象的でした。これからの活躍を楽しみにしています！",
-      category: "激励",
-      likes: 18,
-      createdAt: "2024-05-24",
-      senderColor: "#DDA0DD",
-      recipientColor: "#98FB98"
-    }
+  // デモ用ユーザーリスト
+  const demoUsers = [
+    { name: "田中マネージャー", department: "営業部", color: "#FF6B6B" },
+    { name: "佐藤さん", department: "マーケティング部", color: "#4ECDC4" },
+    { name: "山田リーダー", department: "開発部", color: "#95E1D3" },
+    { name: "鈴木さん", department: "品質管理部", color: "#F8B500" },
+    { name: "高橋部長", department: "人事部", color: "#A8E6CF" }
   ];
+
+  // 初期カードデータ
+  useEffect(() => {
+    setCards([
+      {
+        id: 1,
+        senderName: "田中マネージャー",
+        senderDepartment: "営業部",
+        recipientName: "佐藤さん",
+        recipientDepartment: "マーケティング部",
+        message: "新商品のプレゼン資料、とても分かりやすかったです！お客様への説明がスムーズに進みました。ありがとうございました！",
+        category: "感謝",
+        likes: 12,
+        createdAt: "2024-05-27",
+        senderColor: "#FF6B6B",
+        recipientColor: "#4ECDC4"
+      },
+      {
+        id: 2,
+        senderName: "山田リーダー",
+        senderDepartment: "開発部",
+        recipientName: "鈴木さん",
+        recipientDepartment: "品質管理部",
+        message: "バグの発見と詳細な報告書をありがとうございました。迅速な対応のおかげで、リリース前に修正できました。",
+        category: "協力",
+        likes: 8,
+        createdAt: "2024-05-26",
+        senderColor: "#95E1D3",
+        recipientColor: "#F8B500"
+      },
+      {
+        id: 3,
+        senderName: "高橋部長",
+        senderDepartment: "人事部",
+        recipientName: "営業チーム",
+        recipientDepartment: "営業部",
+        message: "今月の売上目標達成、お疲れ様でした！チーム一丸となって取り組む姿勢が素晴らしいです。",
+        category: "称賛",
+        likes: 25,
+        createdAt: "2024-05-25",
+        senderColor: "#A8E6CF",
+        recipientColor: "#FFB6C1"
+      }
+    ]);
+  }, []);
 
   const handleLike = (cardId: number) => {
     setLikedCards(prev => {
@@ -86,16 +98,50 @@ export default function Demo() {
     });
   };
 
+  const handleSendCard = () => {
+    if (!newCardData.recipient || !newCardData.message || !newCardData.category) {
+      toast({
+        title: "入力エラー",
+        description: "すべての項目を入力してください",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const selectedUser = demoUsers.find(user => user.name === newCardData.recipient);
+    const newCard = {
+      id: cards.length + 1,
+      senderName: demoUser.displayName,
+      senderDepartment: demoUser.department,
+      recipientName: newCardData.recipient,
+      recipientDepartment: selectedUser?.department || "不明",
+      message: newCardData.message,
+      category: newCardData.category,
+      likes: 0,
+      createdAt: new Date().toISOString().split('T')[0],
+      senderColor: demoUser.avatarColor,
+      recipientColor: selectedUser?.color || "#999"
+    };
+
+    setCards(prev => [newCard, ...prev]);
+    setNewCardData({ recipient: "", message: "", category: "" });
+    setIsDialogOpen(false);
+    
+    toast({
+      title: "カードを送信しました！",
+      description: `${newCardData.recipient}さんにフィードバックカードを送信しました。`,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* デモ専用ヘッダー */}
-      <header className="bg-white border-b border-gray-200 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ヘッダー */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Link href="/landing">
-                <Button variant="outline" className="flex items-center space-x-2">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
                   <ArrowLeft className="h-4 w-4" />
                   <span>ランディングページに戻る</span>
                 </Button>
@@ -103,113 +149,161 @@ export default function Demo() {
               <div className="flex items-center space-x-2">
                 <BearLogo size={32} />
                 <span className="text-2xl font-bold text-gray-900">LevLetter</span>
-                <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">デモ版</Badge>
+                <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 font-semibold">デモ版</Badge>
               </div>
             </div>
+            
             <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{demoUser.name}</p>
-                <p className="text-xs text-gray-500">{demoUser.department}</p>
+              <Button variant="ghost" size="sm">
+                <Bell className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Settings className="h-4 w-4" />
+              </Button>
+              <div className="flex items-center space-x-3">
+                <div className="text-right">
+                  <p className="text-sm font-medium text-gray-900">{demoUser.displayName}</p>
+                  <p className="text-xs text-gray-500">{demoUser.department}</p>
+                </div>
+                <Avatar>
+                  <AvatarFallback style={{ backgroundColor: demoUser.avatarColor, color: 'white' }}>
+                    デ
+                  </AvatarFallback>
+                </Avatar>
+                <Button variant="ghost" size="sm">
+                  <LogOut className="h-4 w-4" />
+                </Button>
               </div>
-              <Avatar>
-                <AvatarFallback style={{ backgroundColor: demoUser.avatarColor, color: 'white' }}>
-                  デ
-                </AvatarFallback>
-              </Avatar>
             </div>
           </div>
         </div>
       </header>
 
       {/* デモ説明バナー */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4">
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-lg font-semibold mb-2">🎉 LevLetterデモ版へようこそ！</h2>
-          <p className="text-sm opacity-90">
-            このページでは実際のシステムの雰囲気を体験できます。カードにいいねを押したり、機能を確認してみてください。
+          <p className="text-sm">
+            🎉 <strong>LevLetterデモ版</strong> - 実際のシステムの雰囲気を体験できます。カードの送信やいいね機能をお試しください！
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* サイドバー - 統計情報 */}
-          <div className="lg:col-span-1 space-y-6">
+          {/* サイドバー */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* ポイント情報 */}
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center">
-                  <TrendingUp className="h-5 w-5 mr-2 text-[#3990EA]" />
-                  今週のポイント
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-[#3990EA] mb-2">{demoUser.weeklyPoints}</div>
-                <p className="text-sm text-gray-600">残り50pt / 500pt</p>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2 mb-2">
+                  <TrendingUp className="h-4 w-4 text-[#3990EA]" />
+                  <h3 className="font-semibold text-sm">今週のポイント</h3>
+                </div>
+                <div className="text-2xl font-bold text-[#3990EA] mb-1">{demoUser.weeklyPoints}</div>
+                <p className="text-xs text-gray-600">残り50pt / 500pt</p>
               </CardContent>
             </Card>
 
+            {/* 統計情報 */}
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center">
-                  <Users className="h-5 w-5 mr-2 text-green-600" />
-                  今月の実績
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">送信したカード</span>
-                  <span className="font-semibold">15枚</span>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-2 mb-3">
+                  <Users className="h-4 w-4 text-green-600" />
+                  <h3 className="font-semibold text-sm">今月の実績</h3>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">受信したカード</span>
-                  <span className="font-semibold">12枚</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">いいね数</span>
-                  <span className="font-semibold">68</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center">
-                  <Target className="h-5 w-5 mr-2 text-purple-600" />
-                  部署ランキング
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">営業部</span>
-                  <div className="flex items-center">
-                    <Star className="h-4 w-4 text-yellow-500 mr-1" />
-                    <span className="text-sm font-semibold">1位</span>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">送信したカード</span>
+                    <span className="font-semibold">15枚</span>
                   </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">開発部</span>
-                  <span className="text-sm font-semibold">2位</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">マーケティング部</span>
-                  <span className="text-sm font-semibold">3位</span>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">受信したカード</span>
+                    <span className="font-semibold">12枚</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">いいね数</span>
+                    <span className="font-semibold">68</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* メインエリア - カード一覧 */}
+          {/* メインエリア */}
           <div className="lg:col-span-3">
             <div className="flex items-center justify-between mb-6">
               <h1 className="text-2xl font-bold text-gray-900">フィードバックカード</h1>
-              <Button className="bg-[#3990EA] hover:bg-[#2563EB]">
-                <MessageCircle className="h-4 w-4 mr-2" />
-                カードを送る
-              </Button>
+              
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-[#3990EA] hover:bg-[#2563EB]">
+                    <Plus className="h-4 w-4 mr-2" />
+                    カードを送る
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>フィードバックカードを送る</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">送信先</label>
+                      <Select value={newCardData.recipient} onValueChange={(value) => setNewCardData(prev => ({ ...prev, recipient: value }))}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="送信先を選択してください" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {demoUsers.map(user => (
+                            <SelectItem key={user.name} value={user.name}>
+                              {user.name} ({user.department})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">カテゴリ</label>
+                      <Select value={newCardData.category} onValueChange={(value) => setNewCardData(prev => ({ ...prev, category: value }))}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="カテゴリを選択してください" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="感謝">感謝</SelectItem>
+                          <SelectItem value="協力">協力</SelectItem>
+                          <SelectItem value="称賛">称賛</SelectItem>
+                          <SelectItem value="激励">激励</SelectItem>
+                          <SelectItem value="成長支援">成長支援</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">メッセージ</label>
+                      <Textarea
+                        placeholder="フィードバックメッセージを入力してください..."
+                        value={newCardData.message}
+                        onChange={(e) => setNewCardData(prev => ({ ...prev, message: e.target.value }))}
+                        rows={4}
+                      />
+                    </div>
+                    
+                    <div className="flex gap-2 pt-2">
+                      <Button onClick={handleSendCard} className="flex-1 bg-[#3990EA] hover:bg-[#2563EB]">
+                        送信する
+                      </Button>
+                      <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="flex-1">
+                        キャンセル
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
 
-            <div className="space-y-6">
-              {demoCards.map((card) => (
+            {/* カード一覧 */}
+            <div className="space-y-4">
+              {cards.map((card) => (
                 <Card key={card.id} className="hover:shadow-lg transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">

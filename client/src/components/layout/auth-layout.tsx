@@ -11,6 +11,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   const [isScreensaverActive, setIsScreensaverActive] = useState(false);
   const [bearPosition, setBearPosition] = useState({ x: 50, y: 50 });
   const [bearDirection, setBearDirection] = useState({ x: 4, y: 3 });
+  const [lastActivity, setLastActivity] = useState(Date.now());
 
   // スクリーンセーバーのアニメーション
   useEffect(() => {
@@ -19,21 +20,34 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     if (isScreensaverActive) {
       const animate = () => {
         setBearPosition(prevPosition => {
+          setBearDirection(prevDirection => {
+            let newX = prevPosition.x + prevDirection.x;
+            let newY = prevPosition.y + prevDirection.y;
+            let newDirectionX = prevDirection.x;
+            let newDirectionY = prevDirection.y;
+
+            if (newX <= 5 || newX >= 90) {
+              newDirectionX = -newDirectionX;
+              newX = Math.max(5, Math.min(90, newX));
+            }
+            if (newY <= 5 || newY >= 90) {
+              newDirectionY = -newDirectionY;
+              newY = Math.max(5, Math.min(90, newY));
+            }
+
+            return { x: newDirectionX, y: newDirectionY };
+          });
+
           let newX = prevPosition.x + bearDirection.x;
           let newY = prevPosition.y + bearDirection.y;
-          let newDirectionX = bearDirection.x;
-          let newDirectionY = bearDirection.y;
 
           if (newX <= 5 || newX >= 90) {
-            newDirectionX = -newDirectionX;
             newX = Math.max(5, Math.min(90, newX));
           }
           if (newY <= 5 || newY >= 90) {
-            newDirectionY = -newDirectionY;
             newY = Math.max(5, Math.min(90, newY));
           }
 
-          setBearDirection({ x: newDirectionX, y: newDirectionY });
           return { x: newX, y: newY };
         });
         animationFrame = requestAnimationFrame(animate);
@@ -46,13 +60,47 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         cancelAnimationFrame(animationFrame);
       }
     };
-  }, [isScreensaverActive]);
+  }, [isScreensaverActive, bearDirection]);
+
+  // アクティビティ監視とスクリーンセーバー自動起動
+  useEffect(() => {
+    let inactivityTimer: NodeJS.Timeout;
+
+    const resetTimer = () => {
+      setLastActivity(Date.now());
+      setIsScreensaverActive(false);
+      clearTimeout(inactivityTimer);
+      
+      // 15秒後にスクリーンセーバーを起動
+      inactivityTimer = setTimeout(() => {
+        setIsScreensaverActive(true);
+      }, 15000);
+    };
+
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+    
+    // イベントリスナー追加
+    events.forEach(event => {
+      document.addEventListener(event, resetTimer, { passive: true });
+    });
+
+    // 初期タイマー開始
+    resetTimer();
+
+    return () => {
+      clearTimeout(inactivityTimer);
+      events.forEach(event => {
+        document.removeEventListener(event, resetTimer);
+      });
+    };
+  }, []);
 
   // キーボードイベント
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isScreensaverActive) {
         setIsScreensaverActive(false);
+        setLastActivity(Date.now());
       }
     };
 
