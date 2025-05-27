@@ -9,7 +9,6 @@ interface Bear {
   vy: number;
   size: number;
   rotation: number;
-  isDragging?: boolean;
 }
 
 // LevLetter可愛いクマのロゴコンポーネント
@@ -27,8 +26,6 @@ export function BearLogo({
   const [bears, setBears] = useState<Bear[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [bearCount, setBearCount] = useState(0);
-  const [draggedBear, setDraggedBear] = useState<Bear | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const createRandomBear = (id: number): Bear => ({
     id,
@@ -47,28 +44,20 @@ export function BearLogo({
     setIsAnimating(true);
   };
 
-  const handleBearMouseDown = (bear: Bear, e: React.MouseEvent) => {
-    e.preventDefault();
-    setDraggedBear(bear);
-    setBears(prev => prev.map(b => 
-      b.id === bear.id ? { ...b, isDragging: true, vx: 0, vy: 0 } : b
-    ));
-  };
-
   const handleAnimatedBearClick = (clickedBear: Bear) => {
-    if (!draggedBear) {
-      // ドラッグ中でない場合は分裂
-      const bear1 = createRandomBear(bearCount);
-      const bear2 = createRandomBear(bearCount + 1);
-      
-      bear1.x = clickedBear.x + Math.random() * 100 - 50;
-      bear1.y = clickedBear.y + Math.random() * 100 - 50;
-      bear2.x = clickedBear.x + Math.random() * 100 - 50;
-      bear2.y = clickedBear.y + Math.random() * 100 - 50;
-      
-      setBears(prev => prev.filter(bear => bear.id !== clickedBear.id).concat([bear1, bear2]));
-      setBearCount(prev => prev + 2);
-    }
+    // クリックされたクマを分裂させる
+    const bear1 = createRandomBear(bearCount);
+    const bear2 = createRandomBear(bearCount + 1);
+    
+    // 元のクマの位置の近くに2匹を配置
+    bear1.x = clickedBear.x + Math.random() * 100 - 50;
+    bear1.y = clickedBear.y + Math.random() * 100 - 50;
+    bear2.x = clickedBear.x + Math.random() * 100 - 50;
+    bear2.y = clickedBear.y + Math.random() * 100 - 50;
+    
+    // 元のクマを削除して新しい2匹を追加
+    setBears(prev => prev.filter(bear => bear.id !== clickedBear.id).concat([bear1, bear2]));
+    setBearCount(prev => prev + 2);
   };
 
   // クマ同士の衝突検知と反発
@@ -80,9 +69,6 @@ export function BearLogo({
         const bear1 = updatedBears[i];
         const bear2 = updatedBears[j];
         
-        // ドラッグ中のクマは他のクマとの衝突時に打ち返し効果を強化
-        const isDraggedInvolved = bear1.isDragging || bear2.isDragging;
-        
         const dx = bear2.x - bear1.x;
         const dy = bear2.y - bear1.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -91,8 +77,7 @@ export function BearLogo({
         if (distance < minDistance && distance > 0) {
           // 衝突時の反発
           const angle = Math.atan2(dy, dx);
-          const baseForce = (minDistance - distance) * 0.1;
-          const force = isDraggedInvolved ? baseForce * 3 : baseForce; // ドラッグ中は強い打ち返し
+          const force = (minDistance - distance) * 0.1;
           
           updatedBears[i].vx -= Math.cos(angle) * force;
           updatedBears[i].vy -= Math.sin(angle) * force;
@@ -105,46 +90,7 @@ export function BearLogo({
     return updatedBears;
   };
 
-  // マウス位置の追跡
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-      
-      // ドラッグ中のクマをマウス位置に移動
-      if (draggedBear) {
-        setBears(prev => prev.map(bear => 
-          bear.id === draggedBear.id ? { 
-            ...bear, 
-            x: e.clientX - bear.size / 2, 
-            y: e.clientY - bear.size / 2 
-          } : bear
-        ));
-      }
-    };
 
-    const handleMouseUp = () => {
-      if (draggedBear) {
-        // ドラッグ終了時に速度を与える
-        setBears(prev => prev.map(bear => 
-          bear.id === draggedBear.id ? { 
-            ...bear, 
-            isDragging: false,
-            vx: Math.random() * 4 - 2,
-            vy: Math.random() * 4 - 2
-          } : bear
-        ));
-        setDraggedBear(null);
-      }
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [draggedBear]);
 
   // クマのアニメーション
   useEffect(() => {
@@ -213,26 +159,18 @@ export function BearLogo({
           {bears.map(bear => (
             <div
               key={bear.id}
-              className={`absolute transition-all duration-[60ms] ease-linear pointer-events-auto ${
-                bear.isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab'
-              }`}
+              className="absolute transition-all duration-[60ms] ease-linear pointer-events-auto cursor-pointer"
               style={{
                 left: `${bear.x}px`,
                 top: `${bear.y}px`,
                 transform: `rotate(${bear.rotation}deg)`,
                 width: `${bear.size}px`,
-                height: `${bear.size}px`,
-                zIndex: bear.isDragging ? 1000 : 10
+                height: `${bear.size}px`
               }}
-              onMouseDown={(e) => handleBearMouseDown(bear, e)}
               onClick={() => handleAnimatedBearClick(bear)}
-              title={bear.isDragging ? "ドラッグ中！他のクマにぶつけよう！" : "長押しでドラッグ、クリックで分裂！"}
+              title="クリックで分裂！"
             >
-              <div className={`w-full h-full bg-white rounded-full shadow-lg border-2 flex items-center justify-center transition-all ${
-                bear.isDragging 
-                  ? 'border-red-400 shadow-red-200 shadow-xl' 
-                  : 'border-blue-200 hover:border-yellow-300 hover:scale-110'
-              }`}>
+              <div className="w-full h-full bg-white rounded-full shadow-lg border-2 border-blue-200 flex items-center justify-center hover:border-yellow-300 hover:scale-110 transition-all">
                 <img 
                   src={whiteBearIcon} 
                   alt="Dancing Bear" 
