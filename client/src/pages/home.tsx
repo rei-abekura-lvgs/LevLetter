@@ -128,40 +128,36 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage 
-                      src={card.sender.customAvatarUrl || bearAvatarUrl} 
-                      alt={card.sender.displayName || card.sender.name} 
-                    />
-                    <AvatarFallback className={`text-xs text-white bg-${card.sender.avatarColor}`}>
-                      {(card.sender.displayName || card.sender.name).charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p className="font-medium text-gray-900 text-sm">
-                    {card.sender.displayName || card.sender.name}
-                  </p>
-                </div>
+                <Avatar className="h-6 w-6">
+                  <AvatarImage 
+                    src={card.sender.customAvatarUrl || bearAvatarUrl} 
+                    alt={card.sender.displayName || card.sender.name} 
+                  />
+                  <AvatarFallback className={`text-xs text-white bg-${card.sender.avatarColor}`}>
+                    {(card.sender.displayName || card.sender.name).charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="font-medium text-gray-900 text-sm">
+                  {card.sender.displayName || card.sender.name}
+                </span>
                 <span className="text-gray-400">→</span>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {allRecipients.map((user: User, index: number) => (
-                    <div key={user.id} className="flex items-center gap-1">
-                      <Avatar className="h-6 w-6">
-                        <AvatarImage 
-                          src={user.customAvatarUrl || bearAvatarUrl} 
-                          alt={user.displayName || user.name} 
-                        />
-                        <AvatarFallback className={`text-xs text-white bg-${user.avatarColor}`}>
-                          {(user.displayName || user.name || 'U').charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-gray-700 text-sm font-medium">
-                        {user.displayName || user.name}
-                      </span>
-                      {index < allRecipients.length - 1 && <span className="text-gray-400">,</span>}
-                    </div>
-                  ))}
-                </div>
+                {allRecipients.map((user: User, index: number) => (
+                  <div key={user.id} className="flex items-center gap-1">
+                    <Avatar className="h-6 w-6">
+                      <AvatarImage 
+                        src={user.customAvatarUrl || bearAvatarUrl} 
+                        alt={user.displayName || user.name} 
+                      />
+                      <AvatarFallback className={`text-xs text-white bg-${user.avatarColor}`}>
+                        {(user.displayName || user.name || 'U').charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-gray-700 text-sm font-medium">
+                      {user.displayName || user.name}
+                    </span>
+                    {index < allRecipients.length - 1 && <span className="text-gray-400 mx-1">,</span>}
+                  </div>
+                ))}
               </div>
               <div className="flex items-center gap-3 mt-1">
                 <div className="flex items-center gap-1 text-gray-500 text-xs">
