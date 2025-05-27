@@ -3,6 +3,7 @@ import { useAuth } from "@/context/auth-context-new";
 import Sidebar from "./sidebar";
 import MobileNav from "./mobile-nav";
 import Header from "./header";
+import Footer from "./footer";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MainLayoutProps {
