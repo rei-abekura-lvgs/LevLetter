@@ -811,7 +811,7 @@ export default function Landing() {
             <div>
               <h3 className="font-bold text-lg mb-4">会社情報</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">私たちについて</a></li>
+                <li><a href="https://leverages.jp/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">私たちについて</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">利用規約</a></li>
               </ul>

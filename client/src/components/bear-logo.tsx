@@ -44,6 +44,22 @@ export function BearLogo({
     setIsAnimating(true);
   };
 
+  const handleAnimatedBearClick = (clickedBear: Bear) => {
+    // クリックされたクマを分裂させる
+    const bear1 = createRandomBear(bearCount);
+    const bear2 = createRandomBear(bearCount + 1);
+    
+    // 元のクマの位置の近くに2匹を配置
+    bear1.x = clickedBear.x + Math.random() * 100 - 50;
+    bear1.y = clickedBear.y + Math.random() * 100 - 50;
+    bear2.x = clickedBear.x + Math.random() * 100 - 50;
+    bear2.y = clickedBear.y + Math.random() * 100 - 50;
+    
+    // 元のクマを削除して新しい2匹を追加
+    setBears(prev => prev.filter(bear => bear.id !== clickedBear.id).concat([bear1, bear2]));
+    setBearCount(prev => prev + 2);
+  };
+
   // クマ同士の衝突検知と反発
   const checkCollisions = (bears: Bear[]): Bear[] => {
     const updatedBears = [...bears];
@@ -141,7 +157,7 @@ export function BearLogo({
           {bears.map(bear => (
             <div
               key={bear.id}
-              className="absolute transition-all duration-[60ms] ease-linear"
+              className="absolute transition-all duration-[60ms] ease-linear pointer-events-auto cursor-pointer"
               style={{
                 left: `${bear.x}px`,
                 top: `${bear.y}px`,
@@ -149,8 +165,10 @@ export function BearLogo({
                 width: `${bear.size}px`,
                 height: `${bear.size}px`
               }}
+              onClick={() => handleAnimatedBearClick(bear)}
+              title="クリックで分裂！"
             >
-              <div className="w-full h-full bg-white rounded-full shadow-lg border-2 border-blue-200 flex items-center justify-center">
+              <div className="w-full h-full bg-white rounded-full shadow-lg border-2 border-blue-200 flex items-center justify-center hover:border-yellow-300 hover:scale-110 transition-all">
                 <img 
                   src={whiteBearIcon} 
                   alt="Dancing Bear" 
@@ -159,20 +177,6 @@ export function BearLogo({
               </div>
             </div>
           ))}
-          
-          {/* クリアボタン */}
-          <div className="absolute top-4 right-4 pointer-events-auto">
-            <button
-              onClick={() => {
-                setBears([]);
-                setIsAnimating(false);
-                setBearCount(0);
-              }}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors flex items-center gap-2"
-            >
-              🐻 クマをクリア ({bears.length}匹)
-            </button>
-          </div>
         </div>
       )}
     </>
