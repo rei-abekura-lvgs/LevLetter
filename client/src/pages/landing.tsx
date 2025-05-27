@@ -2,7 +2,7 @@ import { BearLogo } from "../components/bear-logo";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Link } from "wouter";
-import { ArrowRight, Heart, TrendingUp, Users, Star, CheckCircle, AlertTriangle, Shield, Eye, Building, Target, TrendingDown } from "lucide-react";
+import { ArrowRight, Heart, TrendingUp, Users, Star, CheckCircle, AlertTriangle, Shield, Eye, Building, Target, TrendingDown, Lightbulb } from "lucide-react";
 
 export default function Landing() {
   return (
@@ -399,7 +399,7 @@ export default function Landing() {
             <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="text-center mb-6">
                 <div className="bg-red-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl font-bold text-red-600">93%</span>
+                  <AlertTriangle className="h-10 w-10 text-red-600" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">組織の潜在能力の未活用</h3>
               </div>
@@ -412,9 +412,9 @@ export default function Landing() {
             <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="text-center mb-6">
                 <div className="bg-orange-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl font-bold text-orange-600">67%</span>
+                  <TrendingDown className="h-10 w-10 text-orange-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">成長機会の損失率</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">成長機会の損失</h3>
               </div>
               <p className="text-gray-600 text-center leading-relaxed">
                 適切なフィードバックを受けられない従業員は、自己認識のズレに気づけず、
@@ -425,13 +425,13 @@ export default function Landing() {
             <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="text-center mb-6">
                 <div className="bg-[#3990EA] w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl font-bold text-white">5X</span>
+                  <TrendingUp className="h-10 w-10 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">フィードバック文化の効果</h3>
               </div>
               <p className="text-gray-600 text-center leading-relaxed">
-                建設的なフィードバック文化を持つ組織は、そうでない組織と比較して
-                5倍の成長率を示すという研究結果があります。
+                建設的なフィードバック文化を持つ組織では、
+                従業員のエンゲージメントと組織全体のパフォーマンスが大幅に向上します。
               </p>
             </div>
           </div>
@@ -551,32 +551,40 @@ export default function Landing() {
           <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-200">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                組織心理学研究による実証効果
+                フィードバック文化醸成による期待効果
               </h3>
               <p className="text-gray-700">
-                フィードバック文化が浸透した組織で観測される一般的な変化
+                組織心理学の理論に基づく、フィードバック文化が組織にもたらす変化
               </p>
             </div>
             <div className="grid md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">25-40%</div>
-                <p className="text-gray-700 font-medium">エンゲージメント向上</p>
-                <p className="text-gray-600 text-sm">研究事例の平均値</p>
+                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Heart className="h-8 w-8 text-purple-600" />
+                </div>
+                <p className="text-gray-700 font-medium mb-2">エンゲージメント向上</p>
+                <p className="text-gray-600 text-sm">ポジティブフィードバックによる意欲向上</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">30-50%</div>
-                <p className="text-gray-700 font-medium">離職率減少</p>
-                <p className="text-gray-600 text-sm">心理的安全性の効果</p>
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="h-8 w-8 text-blue-600" />
+                </div>
+                <p className="text-gray-700 font-medium mb-2">離職率減少</p>
+                <p className="text-gray-600 text-sm">心理的安全性の向上効果</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 mb-2">20-35%</div>
-                <p className="text-gray-700 font-medium">生産性向上</p>
-                <p className="text-gray-600 text-sm">組織連携の強化</p>
+                <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-green-600" />
+                </div>
+                <p className="text-gray-700 font-medium mb-2">生産性向上</p>
+                <p className="text-gray-600 text-sm">組織連携の強化による効果</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600 mb-2">3-5倍</div>
-                <p className="text-gray-700 font-medium">イノベーション創出</p>
-                <p className="text-gray-600 text-sm">アイデア提案の増加</p>
+                <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lightbulb className="h-8 w-8 text-orange-600" />
+                </div>
+                <p className="text-gray-700 font-medium mb-2">イノベーション創出</p>
+                <p className="text-gray-600 text-sm">アイデア提案の活性化</p>
               </div>
             </div>
           </div>
