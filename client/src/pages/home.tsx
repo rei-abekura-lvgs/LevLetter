@@ -158,11 +158,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   </div>
                 </div>
                 <div className="text-right">
-                  {allRecipients.length > 0 && allRecipients[0].department && (
-                    <div className="text-gray-500 text-xs">
-                      {allRecipients[0].department}
-                    </div>
-                  )}
+                  {/* 部署表示を削除 */}
                 </div>
               </div>
               <div className="flex items-center gap-3 mt-1">
