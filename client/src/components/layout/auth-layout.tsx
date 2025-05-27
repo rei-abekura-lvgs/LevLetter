@@ -102,10 +102,10 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
             </div>
           </div>
 
-          {/* 導入実績 */}
+          {/* コンセプト */}
           <div className="text-center">
-            <p className="text-lg opacity-80">多くの企業で導入実績あり</p>
-            <p className="text-sm opacity-60 mt-2">感謝の文化で職場を変革</p>
+            <p className="text-lg opacity-80">継続的なフィードバック文化の構築</p>
+            <p className="text-sm opacity-60 mt-2">組織のコミュニケーション改善をサポート</p>
           </div>
         </div>
       </div>
