@@ -124,26 +124,26 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
           <Dialog open={isLikeDialogOpen} onOpenChange={setIsLikeDialogOpen}>
             <DialogTrigger asChild>
               <div className="relative group">
-                {/* いいねした人の名前表示 - コンパクト版 */}
+                {/* いいねした人の名前表示 - 横長ツールチップ */}
                 {card.likes.length > 0 && (
-                  <div className="absolute top-full left-full ml-2 mt-1 bg-gray-800 text-white text-xs rounded px-2 py-1 z-30 shadow-lg max-w-48 opacity-0 group-hover:opacity-100 transition-opacity">
-                    いいね！
-                    <div className="text-xs opacity-80 mt-1">
+                  <div className="absolute -top-12 left-0 right-0 bg-gray-800 text-white text-xs rounded px-3 py-2 z-30 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap overflow-hidden">
+                    <div className="font-medium mb-1">いいね！({card.likes.length * 2}pt)</div>
+                    <div className="text-xs opacity-80">
                       {(() => {
                         // 同じユーザーのいいねをまとめる
                         const groupedLikes = card.likes.reduce((acc: any, like: any) => {
                           const userName = like.user.displayName || like.user.name;
                           if (acc[userName]) {
-                            acc[userName] += (like.points || 2);
+                            acc[userName] += 2; // 常に2ptずつ
                           } else {
-                            acc[userName] = (like.points || 2);
+                            acc[userName] = 2;
                           }
                           return acc;
                         }, {});
                         
                         return Object.entries(groupedLikes)
-                          .map(([name, points]) => points === 2 ? name : `${name}(${points}pt)`)
-                          .join(', ');
+                          .map(([name, points]) => (points as number) === 2 ? name : `${name}(${points}pt)`)
+                          .join('、');
                       })()}
                     </div>
                   </div>
@@ -156,7 +156,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
                   <Heart 
                     className={`h-5 w-5 mr-1 ${userLike ? 'fill-red-500' : ''}`} 
                   />
-                  <span>{card.likes.reduce((total, like) => total + (like.points || 2), 0)}pt</span>
+                  <span>{card.likes.length * 2}pt</span>
                 </Button>
               </div>
             </DialogTrigger>
