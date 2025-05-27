@@ -81,6 +81,45 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
             </div>
             <p className="text-xs text-gray-500 mt-2">カードへのいいねで受け取ったポイント</p>
           </div>
+
+          {/* 下部アクションエリア */}
+          <div className="mt-auto pt-4 border-t border-gray-200">
+            <div className="space-y-2">
+              <Link href="/profile">
+                <button className={cn(
+                  "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors",
+                  location === "/profile" 
+                    ? "bg-[#3990EA] text-white" 
+                    : "text-gray-700 hover:bg-gray-100"
+                )}>
+                  <UserCircle className="h-4 w-4" />
+                  プロフィール設定
+                </button>
+              </Link>
+
+              {user.isAdmin && (
+                <Link href="/admin">
+                  <button className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors",
+                    location === "/admin" 
+                      ? "bg-[#3990EA] text-white" 
+                      : "text-gray-700 hover:bg-gray-100"
+                  )}>
+                    <Shield className="h-4 w-4" />
+                    管理者設定
+                  </button>
+                </Link>
+              )}
+
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                <LogOut className="h-4 w-4" />
+                ログアウト
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

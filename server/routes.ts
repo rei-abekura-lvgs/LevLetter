@@ -1403,7 +1403,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // 通知関連のAPI
-  app.get("/api/notifications", isAuthenticated, async (req, res) => {
+  app.get("/api/notifications", authenticate, async (req, res) => {
     try {
       const currentUser = await storage.getUser(req.session.userId!);
       if (!currentUser) {

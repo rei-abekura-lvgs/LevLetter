@@ -21,7 +21,9 @@ import {
   Home, 
   FileText, 
   Building2,
-  Star
+  Star,
+  Heart,
+  Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -72,95 +74,32 @@ export default function Header({ toggleSidebar }: HeaderProps) {
         </Link>
       </div>
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2">
         {user && (
           <>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
-                  {notifications > 0 && (
-                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
-                      {notifications}
-                    </span>
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>通知</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  山田さんがあなたのカードにいいねしました
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  佐藤さんから新しいカードが届きました
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="justify-center">
-                  すべて既読にする
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full border-2 border-[#3990EA] hover:bg-[#3990EA]/10">
-                  {user.customAvatarUrl ? (
-                    <img 
-                      src={user.customAvatarUrl} 
-                      alt={user.name}
-                      className="h-full w-full rounded-full object-cover"
-                    />
-                  ) : (
-                    <BearLogo size={36} useTransparent={true} bgColor="bg-[#3990EA]" />
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-64">
-                <DropdownMenuLabel className="bg-[#3990EA]/5 rounded-t-md pb-3">
-                  <div className="flex items-center gap-3">
-                    {user.customAvatarUrl ? (
-                      <img 
-                        src={user.customAvatarUrl} 
-                        alt={user.name}
-                        className="h-10 w-10 rounded-full object-cover border border-[#3990EA]"
-                      />
-                    ) : (
-                      <div className="h-10 w-10 rounded-full bg-[#3990EA] flex items-center justify-center text-white font-medium">
-                        {user.displayName?.[0] || user.name[0]}
-                      </div>
-                    )}
-                    <div className="flex flex-col">
-                      <span className="font-semibold">{user.displayName || user.name}</span>
-                      <span className="text-xs text-gray-600">{user.email}</span>
-                    </div>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <Link href="/profile">
-                  <DropdownMenuItem className="py-2 focus:bg-[#3990EA]/10 focus:text-[#3990EA]">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>プロフィール設定</span>
-                  </DropdownMenuItem>
-                </Link>
-                
-                {/* 管理者メニュー */}
-                {user.isAdmin && (
-                  <Link href="/admin">
-                    <DropdownMenuItem className="py-2 focus:bg-[#046EB8]/10 focus:text-[#046EB8]">
-                      <Star className="mr-2 h-4 w-4 text-amber-500" />
-                      <span>管理者設定</span>
-                    </DropdownMenuItem>
-                  </Link>
+            {/* 通知ボタン */}
+            <Link href="/notifications">
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                {notifications > 0 && (
+                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
+                    {notifications}
+                  </span>
                 )}
-                
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>ログアウト</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </Button>
+            </Link>
+
+            {/* 感謝の気持ちを伝えるボタン */}
+            <Button 
+              className="bg-[#3990EA] hover:bg-[#3990EA]/90 text-white font-medium px-4 py-2 rounded-lg transition-colors"
+              onClick={() => {
+                // カード作成ダイアログを開く処理をここに追加
+                console.log('感謝の気持ちを伝えるボタンがクリックされました');
+              }}
+            >
+              <Heart className="h-4 w-4 mr-2" />
+              感謝の気持ちを伝える
+            </Button>
           </>
         )}
       </div>
