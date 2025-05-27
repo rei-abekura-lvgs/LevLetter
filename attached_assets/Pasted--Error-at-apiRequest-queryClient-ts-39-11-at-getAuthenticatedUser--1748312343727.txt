@@ -1,0 +1,142 @@
+ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2c26a533:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2c26a533:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2c26a533:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2c26a533:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2c26a533:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2c26a533:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2c26a533:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2c26a533:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2c26a533:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2c26a533:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: Object
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth-context.tsx:157 🔄 認証初期化開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2c26a533:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2c26a533:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2c26a533:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2c26a533:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2c26a533:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2c26a533:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2c26a533:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2c26a533:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2c26a533:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2c26a533:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+2auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: Object
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth-context.tsx:157 🔄 認証初期化開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2c26a533:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2c26a533:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2c26a533:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2c26a533:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2c26a533:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2c26a533:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2c26a533:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2c26a533:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2c26a533:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2c26a533:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+2auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+5Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context-new.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context-new.tsx:139 🎯 認証初期化完了: 阿部倉 怜
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+home.tsx:466 カード取得データ状態: Object
+App.tsx:50 アプリ状態: Object
+auth-context-new.tsx:162 📊 認証状態更新: Object
+api.ts:126 取得したカードデータ: Array(30)
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:126 取得したカードデータ: Array(30)
+home.tsx:52 🎯 いいねボタン押下開始 - カードID: 96
+home.tsx:53 👤 現在のユーザー利用可能ポイント: 152
+home.tsx:58 📝 カードデータ楽観的更新開始
+home.tsx:68 💖 新しいいいね追加: {id: 1748312323657, userId: 5, points: 2, user: {…}}
+home.tsx:73 📊 更新後のいいね数: 17
+home.tsx:83 ⚠️ ポイント不足または認証データなし
+home.tsx:98 ✅ トースト表示完了
+home.tsx:101 🌐 サーバーへの送信開始
+home.tsx:466 カード取得データ状態: {カード数: 30, ロード中: false, エラー: false}
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: (30) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+home.tsx:114 🎉 サーバー送信成功 - 正確なデータで更新
+api.ts:113 getCards呼び出し - オプション: {}
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:113 getCards呼び出し - オプション: {}
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:126 取得したカードデータ: (30) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+api.ts:126 取得したカードデータ: (30) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+home.tsx:466 カード取得データ状態: {カード数: 30, ロード中: false, エラー: false}
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: (30) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+home.tsx:52 🎯 いいねボタン押下開始 - カードID: 96
+home.tsx:53 👤 現在のユーザー利用可能ポイント: 152
+home.tsx:58 📝 カードデータ楽観的更新開始
+home.tsx:68 💖 新しいいいね追加: {id: 1748312326000, userId: 5, points: 2, user: {…}}
+home.tsx:73 📊 更新後のいいね数: 18
+home.tsx:83 ⚠️ ポイント不足または認証データなし
+home.tsx:98 ✅ トースト表示完了
+home.tsx:101 🌐 サーバーへの送信開始
+home.tsx:466 カード取得データ状態: {カード数: 30, ロード中: false, エラー: false}
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: (30) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+home.tsx:114 🎉 サーバー送信成功 - 正確なデータで更新
+api.ts:113 getCards呼び出し - オプション: {}
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:113 getCards呼び出し - オプション: {}
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:126 取得したカードデータ: (30) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+api.ts:126 取得したカードデータ: (30) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+home.tsx:466 カード取得データ状態: {カード数: 30, ロード中: false, エラー: false}
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: (30) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]

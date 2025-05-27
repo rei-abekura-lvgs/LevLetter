@@ -1,0 +1,165 @@
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:15 AM [express] GET /api/cards 304 in 487ms :: [{"id":96,"senderId":322,"recipientId":334,"reci…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:18.887Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+✅ 認証ユーザー情報返送: 阿部倉 怜 (ID: 5 )
+2:18:19 AM [express] GET /api/auth/me 200 in 25ms :: {"id":5,"email":"rei.abekura@leverages.jp","nam…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:19.145Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:19 AM [express] GET /api/cards 200 in 337ms :: [{"id":96,"senderId":322,"recipientId":334,"reci…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:19.800Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:40 AM [express] GET /api/cards 304 in 469ms :: [{"id":96,"senderId":322,"recipientId":334,"reci…
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/96/likes
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:40.187Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:44 AM [express] POST /api/cards/96/likes 201 in 421ms :: {"message":"いいねしました","like":{"id":321,…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:44.221Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:44 AM [express] GET /api/cards 200 in 276ms :: [{"id":96,"senderId":322,"recipientId":334,"reci…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:44.655Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:45 AM [express] GET /api/cards 304 in 326ms :: [{"id":96,"senderId":322,"recipientId":334,"reci…
+🔐 認証チェック開始
+🆔 リクエストURL: POST /api/cards/96/likes
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:45.429Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:46 AM [express] POST /api/cards/96/likes 201 in 446ms :: {"message":"いいねしました","like":{"id":322,…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:46.587Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:47 AM [express] GET /api/cards 200 in 281ms :: [{"id":96,"senderId":322,"recipientId":334,"reci…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:47.020Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+2:18:47 AM [express] GET /api/cards 304 in 339ms :: [{"id":96,"senderId":322,"recipientId":334,"reci…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: 2-r6PopvuFW4D8xHm3xIWSxCV3v1GFVq
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T02:18:47.509Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5

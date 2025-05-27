@@ -77,10 +77,16 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
 
     // 楽観的更新: ユーザーのポイントを即座に減少
     queryClient.setQueryData(["/api/auth/me"], (oldData: any) => {
-      if (!oldData) return oldData;
+      console.log("💰 現在のユーザーデータ:", oldData);
+      if (!oldData) {
+        console.log("❌ ユーザーデータが存在しません");
+        return oldData;
+      }
       const newWeeklyPoints = Math.max(0, oldData.weeklyPoints - 2);
       console.log("💰 ユーザーポイント更新:", oldData.weeklyPoints, "→", newWeeklyPoints);
-      return { ...oldData, weeklyPoints: newWeeklyPoints };
+      const updatedData = { ...oldData, weeklyPoints: newWeeklyPoints };
+      console.log("💰 更新後のユーザーデータ:", updatedData);
+      return updatedData;
     });
 
     try {
