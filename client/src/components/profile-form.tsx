@@ -16,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { User } from "@shared/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProfile, getDepartments, uploadAvatar } from "@/lib/api";
-import { Coins, HeartIcon, Camera, Upload, X } from "lucide-react";
+import { Camera, Upload, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -496,28 +496,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
               </form>
             </Form>
             
-            <div className="bg-gray-50 p-4 rounded-lg mb-6">
-              <h4 className="text-sm font-medium text-gray-700 mb-3">ポイント情報</h4>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-3 rounded-md border border-gray-200">
-                  <div className="text-xs text-gray-500 mb-1">今週の残りポイント</div>
-                  <div className="flex items-center">
-                    <Coins className="h-4 w-4 text-yellow-500 mr-1" />
-                    <span className="text-lg font-semibold text-gray-800">{user.weeklyPoints}</span>
-                    <span className="text-sm text-gray-500 ml-1">/500</span>
-                  </div>
-                </div>
-                
-                <div className="bg-white p-3 rounded-md border border-gray-200">
-                  <div className="text-xs text-gray-500 mb-1">累計獲得ポイント</div>
-                  <div className="flex items-center">
-                    <HeartIcon className="h-4 w-4 text-accent-500 mr-1 fill-current" />
-                    <span className="text-lg font-semibold text-gray-800">{user.totalPointsReceived.toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+
             
             <div className="flex justify-end">
               <DialogClose asChild>
