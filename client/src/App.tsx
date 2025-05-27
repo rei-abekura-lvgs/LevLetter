@@ -12,6 +12,7 @@ import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
 import Settings from "@/pages/settings";
 import AdminDashboard from "@/pages/admin";
+import Landing from "@/pages/landing";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
 import { AuthProvider, useAuth } from "@/context/auth-context-new";
@@ -24,7 +25,7 @@ function AppRoutes() {
   // 初期認証処理とナビゲーション制御
   useEffect(() => {
     // 保護されたルートとパブリックルートの定義
-    const publicRoutes = ['/login', '/register', '/forgot-password'];
+    const publicRoutes = ['/landing', '/login', '/register', '/forgot-password'];
     
     // 認証状態によるリダイレクト処理
     if (!isLoading) {
@@ -38,9 +39,9 @@ function AppRoutes() {
       if (isAuthenticated && publicRoutes.includes(location)) {
         setLocation('/');
       } 
-      // 未認証かつ保護されたページにいる場合はログインへリダイレクト
+      // 未認証かつ保護されたページにいる場合はランディングページへリダイレクト
       else if (!isAuthenticated && !publicRoutes.includes(location)) {
-        setLocation('/login');
+        setLocation('/landing');
       }
     }
   }, [isAuthenticated, isLoading, location, setLocation]);
@@ -96,25 +97,39 @@ function AppRoutes() {
   } else {
     // 未認証状態のルーティング
     return (
-      <AuthLayout>
-        <Switch>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/forgot-password">
-            <ForgotPassword />
-          </Route>
-          <Route path="/reset-password">
-            <ResetPassword />
-          </Route>
-          <Route path="/reset-password/:token">
-            <ResetPassword />
-          </Route>
-          <Route path="*">
+      <Switch>
+        <Route path="/login">
+          <AuthLayout>
             <Login />
-          </Route>
-        </Switch>
-      </AuthLayout>
+          </AuthLayout>
+        </Route>
+        <Route path="/register">
+          <AuthLayout>
+            <Register />
+          </AuthLayout>
+        </Route>
+        <Route path="/forgot-password">
+          <AuthLayout>
+            <ForgotPassword />
+          </AuthLayout>
+        </Route>
+        <Route path="/reset-password">
+          <AuthLayout>
+            <ResetPassword />
+          </AuthLayout>
+        </Route>
+        <Route path="/reset-password/:token">
+          <AuthLayout>
+            <ResetPassword />
+          </AuthLayout>
+        </Route>
+        <Route path="/landing">
+          <Landing />
+        </Route>
+        <Route path="*">
+          <Landing />
+        </Route>
+      </Switch>
     );
   }
 }
