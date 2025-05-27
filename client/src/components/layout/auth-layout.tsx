@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { BearLogo } from '../ui/bear-logo';
+import { BearLogo } from '../bear-logo';
 
 interface AuthLayoutProps {
   children: ReactNode;
