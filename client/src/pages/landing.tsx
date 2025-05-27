@@ -35,16 +35,13 @@ export default function Landing() {
       <section className="pt-24 pb-16 bg-gradient-to-br from-[#3990EA] to-[#2563EB] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="mb-8">
-              <BearLogo size={120} useTransparent={true} bgColor="bg-white" />
-            </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              企業の感謝文化を<br />
-              <span className="text-yellow-300">革新する</span>
+              企業の<span className="text-yellow-300">フィードバック文化</span>を<br />
+              革新する
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
-              LevLetterで、チーム間のコミュニケーションを活性化し、<br />
-              社員のモチベーション向上と組織力強化を実現します
+              LevLetterで、建設的なフィードバックが飛び交う組織を実現し、<br />
+              個人の成長と組織の継続的改善を促進します
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/login">
@@ -54,7 +51,7 @@ export default function Landing() {
                 </Button>
               </Link>
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#3990EA] px-8 py-4 text-lg">
-                導入事例を見る
+                お問い合わせ
               </Button>
             </div>
           </div>
@@ -66,10 +63,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              なぜLevLetterが選ばれるのか
+              フィードバック文化不足の課題を解決
             </h2>
             <p className="text-xl text-gray-600">
-              多くの企業が抱える組織課題を解決する4つの特徴
+              組織の成長を阻害する根本的な問題に対処する4つの特徴
             </p>
           </div>
           
@@ -79,9 +76,9 @@ export default function Landing() {
                 <div className="bg-[#3990EA] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Heart className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">簡単感謝送信</h3>
+                <h3 className="text-xl font-bold mb-3">建設的フィードバック</h3>
                 <p className="text-gray-600">
-                  ワンクリックで感謝の気持ちを伝えられる。複雑な操作は一切不要です。
+                  成長につながる具体的なフィードバックを簡単に送信。自己認識のズレを解消します。
                 </p>
               </CardContent>
             </Card>
@@ -91,9 +88,9 @@ export default function Landing() {
                 <div className="bg-[#3990EA] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <TrendingUp className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">ポイント制度</h3>
+                <h3 className="text-xl font-bold mb-3">継続的改善</h3>
                 <p className="text-gray-600">
-                  感謝を可視化するポイントシステムで、社員のモチベーションが向上します。
+                  フィードバックを受け入れ改善していく文化を醸成し、組織の成長を促進します。
                 </p>
               </CardContent>
             </Card>
@@ -103,9 +100,9 @@ export default function Landing() {
                 <div className="bg-[#3990EA] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">チーム連携</h3>
+                <h3 className="text-xl font-bold mb-3">相互理解促進</h3>
                 <p className="text-gray-600">
-                  部署を超えたコミュニケーションで、組織全体の一体感が生まれます。
+                  相手を理解しようとする姿勢を育み、セクショナリズムを防止します。
                 </p>
               </CardContent>
             </Card>
@@ -115,9 +112,9 @@ export default function Landing() {
                 <div className="bg-[#3990EA] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Star className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">分析機能</h3>
+                <h3 className="text-xl font-bold mb-3">適切な意見表明</h3>
                 <p className="text-gray-600">
-                  組織の感謝度を可視化し、データに基づいた組織改善が可能です。
+                  言うべきことを言える組織風土を構築し、組織の健全性を保ちます。
                 </p>
               </CardContent>
             </Card>
@@ -131,29 +128,29 @@ export default function Landing() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                導入企業の<span className="text-[#3990EA]">95%</span>が<br />
-                組織改善を実感
+                フィードバック文化の構築で<br />
+                <span className="text-[#3990EA]">組織力</span>が劇的に向上
               </h2>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-lg">社員満足度 38%向上</h4>
-                    <p className="text-gray-600">感謝の可視化により、働きがいが大幅に改善</p>
+                    <h4 className="font-semibold text-lg">成長機会の創出</h4>
+                    <p className="text-gray-600">個人の成長鈍化を解消し、自己認識のズレを修正</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-lg">離職率 25%削減</h4>
-                    <p className="text-gray-600">良好な職場環境の構築で人材定着率が向上</p>
+                    <h4 className="font-semibold text-lg">組織風土の改善</h4>
+                    <p className="text-gray-600">言うべきことを言える文化で、健全な組織運営を実現</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-lg">生産性 42%向上</h4>
-                    <p className="text-gray-600">チーム連携の強化により業務効率が大幅改善</p>
+                    <h4 className="font-semibold text-lg">連携力の強化</h4>
+                    <p className="text-gray-600">相互理解の促進でセクショナリズムを防止</p>
                   </div>
                 </div>
               </div>
@@ -210,11 +207,11 @@ export default function Landing() {
       <section className="py-16 bg-gradient-to-br from-[#3990EA] to-[#2563EB] text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            今すぐ感謝文化を始めませんか？
+            今すぐフィードバック文化を始めませんか？
           </h2>
           <p className="text-xl mb-8 opacity-90">
-            LevLetterで、あなたの組織に感謝の文化を根付かせ、<br />
-            より良い職場環境を築きましょう。
+            LevLetterで、建設的なフィードバックが飛び交う組織を実現し、<br />
+            次代を創る企業への成長を加速させましょう。
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/login">
@@ -224,7 +221,7 @@ export default function Landing() {
               </Button>
             </Link>
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#3990EA] px-8 py-4 text-lg">
-              資料請求・お問い合わせ
+              お問い合わせ
             </Button>
           </div>
         </div>
