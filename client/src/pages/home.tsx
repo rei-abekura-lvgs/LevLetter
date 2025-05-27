@@ -37,7 +37,7 @@ import Ranking from "@/pages/ranking";
 const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, currentUser: User, onRefresh?: () => void }) => {
   const formattedDate = format(new Date(card.createdAt), 'yyyy年MM月dd日', { locale: ja });
   const timeFromNow = format(new Date(card.createdAt), 'HH:mm', { locale: ja });
-  const [isLikeFormOpen, setIsLikeFormOpen] = useState(false);
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [canDelete, setCanDelete] = useState(false);
   const queryClient = useQueryClient();
@@ -241,12 +241,30 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   ? 'text-[#3990EA] bg-blue-50 hover:bg-blue-100' 
                   : 'text-gray-600 hover:text-[#3990EA] hover:bg-blue-50'
               }`}
-              onClick={() => canLike && setIsLikeFormOpen(true)}
+              onClick={async () => {
+                if (!canLike || totalLikes >= 50) return;
+                try {
+                  await apiRequest('POST', `/api/cards/${card.id}/likes`);
+                  onRefresh?.();
+                  toast({ 
+                    title: "感謝を送りました！✨", 
+                    description: `${card.sender.displayName || card.sender.name}さんに感謝が届きました`,
+                    duration: 2000
+                  });
+                } catch (error) {
+                  console.error('Like error:', error);
+                  toast({ 
+                    title: "エラーが発生しました",
+                    description: "いいねの送信に失敗しました",
+                    variant: "destructive" 
+                  });
+                }
+              }}
               disabled={totalLikes >= 50 || !canLike}
             >
               <Heart className={`h-4 w-4 mr-2 ${userHasLiked ? 'fill-current' : ''}`} />
               <span className="text-xs font-medium">
-                {getLikeButtonText()}
+                {getLikeButtonText()} {totalLikes >= 50 ? '' : `(${50 - totalLikes}回可能)`}
               </span>
             </Button>
             
@@ -303,58 +321,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
         </div>
       </CardFooter>
 
-      {/* いいねフォームダイアログ */}
-      <Dialog open={isLikeFormOpen} onOpenChange={setIsLikeFormOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>いいねを送る</DialogTitle>
-            <DialogDescription>
-              このカードに「いいね」を送ります（1回につき2pt消費）
-            </DialogDescription>
-          </DialogHeader>
-          {/* LikeForm コンポーネントをここに配置 */}
-          <div className="p-4">
-            <p className="text-sm text-gray-600 mb-4">
-              現在のいいね数: {totalLikes}件 / 上限50件
-            </p>
-            <p className="text-sm text-gray-600 mb-4">
-              あなたのいいね数: {userLikeCount}件
-            </p>
-            <div className="flex gap-2">
-              <Button 
-                onClick={() => setIsLikeFormOpen(false)}
-                variant="outline"
-                className="flex-1"
-              >
-                キャンセル
-              </Button>
-              <Button 
-                className="flex-1"
-                disabled={totalLikes >= 50 || !canLike}
-                onClick={async () => {
-                  if (!canLike) return;
-                  try {
-                    await apiRequest('POST', `/api/cards/${card.id}/likes`);
-                    
-                    setIsLikeFormOpen(false);
-                    onRefresh?.();
-                    toast({ title: "いいねを送りました！" });
-                  } catch (error) {
-                    console.error('Like error:', error);
-                    toast({ 
-                      title: "エラーが発生しました",
-                      description: "いいねの送信に失敗しました",
-                      variant: "destructive" 
-                    });
-                  }
-                }}
-              >
-                いいねを送る
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+
 
       {/* 削除確認ダイアログ */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>

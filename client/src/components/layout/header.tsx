@@ -78,6 +78,14 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
       <div className="flex items-center space-x-2">
         {user && (
           <>
+            {/* ポイント表示 */}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
+              <Heart className="h-4 w-4 text-[#3990EA]" />
+              <span className="text-sm font-medium text-[#3990EA] transition-all duration-300 ease-in-out">
+                {user.weeklyPoints}pt
+              </span>
+            </div>
+
             {/* 通知ボタン */}
             <Link href="/notifications">
               <Button variant="ghost" size="icon" className="relative">
