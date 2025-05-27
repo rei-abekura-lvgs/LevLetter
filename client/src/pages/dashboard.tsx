@@ -38,6 +38,10 @@ export default function Dashboard() {
     queryKey: ["/api/dashboard/stats"],
   });
 
+  // デバッグ用ログ
+  console.log("Dashboard stats:", stats);
+  console.log("Dashboard loading:", isLoading);
+
   if (isLoading) {
     return (
       <div className="p-6">
@@ -48,15 +52,21 @@ export default function Dashboard() {
     );
   }
 
-  if (!stats) {
-    return (
-      <div className="p-6">
-        <div className="text-center py-20">
-          <p className="text-gray-500">ダッシュボードデータを読み込めませんでした</p>
-        </div>
-      </div>
-    );
-  }
+  // statsが存在しない場合でも基本的なレイアウトを表示
+  const displayStats = stats || {
+    monthly: {
+      pointConversionRate: 0,
+      cardRank: 0,
+      likeRank: 0,
+      totalUsers: 0
+    },
+    personal: {
+      sentCards: [],
+      receivedCards: [],
+      sentLikes: [],
+      receivedLikes: []
+    }
+  };
 
   return (
     <div className="p-6">
@@ -66,30 +76,30 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">ポイント消費率</h3>
-            <p className="text-2xl font-bold text-blue-600">{stats.monthly.pointConversionRate}%</p>
+            <p className="text-2xl font-bold text-blue-600">{displayStats.monthly.pointConversionRate}%</p>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">カード送信ランク</h3>
-            <p className="text-2xl font-bold text-green-600">{stats.monthly.cardRank}位</p>
+            <p className="text-2xl font-bold text-green-600">{displayStats.monthly.cardRank}位</p>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">拍手ランク</h3>
-            <p className="text-2xl font-bold text-pink-600">{stats.monthly.likeRank}位</p>
+            <p className="text-2xl font-bold text-pink-600">{displayStats.monthly.likeRank}位</p>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">総ユーザー数</h3>
-            <p className="text-2xl font-bold text-gray-600">{stats.monthly.totalUsers}人</p>
+            <p className="text-2xl font-bold text-gray-600">{displayStats.monthly.totalUsers}人</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-3">カード送信ランキング</h2>
-            {stats.personal.sentCards.length > 0 ? (
-              stats.personal.sentCards.slice(0, 5).map((item, index) => (
+            {displayStats.personal.sentCards.length > 0 ? (
+              displayStats.personal.sentCards.slice(0, 5).map((item, index) => (
                 <div key={item.user.id} className="flex justify-between items-center py-2">
                   <span className="text-sm">{index + 1}. {item.user.displayName || item.user.name}</span>
                   <span className="font-bold">{item.count}回</span>
@@ -102,8 +112,8 @@ export default function Dashboard() {
           
           <div className="bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-3">カード受信ランキング</h2>
-            {stats.personal.receivedCards.length > 0 ? (
-              stats.personal.receivedCards.slice(0, 5).map((item, index) => (
+            {displayStats.personal.receivedCards.length > 0 ? (
+              displayStats.personal.receivedCards.slice(0, 5).map((item, index) => (
                 <div key={item.user.id} className="flex justify-between items-center py-2">
                   <span className="text-sm">{index + 1}. {item.user.displayName || item.user.name}</span>
                   <span className="font-bold">{item.count}回</span>
