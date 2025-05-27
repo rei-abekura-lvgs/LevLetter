@@ -89,22 +89,27 @@ export default function Header({ toggleSidebar }: HeaderProps) {
               </Button>
             </Link>
 
-            {/* 感謝の気持ちを伝えるボタン - 画像と同じスタイル */}
+            {/* 感謝の気持ちを伝えるボタン - 洗練されたデザイン */}
             <Button 
-              className="bg-[#3990EA] hover:bg-[#3990EA]/90 text-white px-3 py-2 rounded-lg transition-colors flex items-center gap-3 min-w-[200px]"
+              className="bg-gradient-to-r from-[#3990EA] to-[#2D7BD9] hover:from-[#2D7BD9] hover:to-[#2563EB] text-white px-4 py-3 rounded-xl transition-all duration-300 ease-out flex items-center gap-3 min-w-[220px] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 group"
               onClick={() => {
                 // カード作成ダイアログを開く処理をここに追加
                 console.log('感謝の気持ちを伝えるボタンがクリックされました');
               }}
             >
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <div className="w-10 h-10 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/25 transition-colors duration-300 group-hover:scale-110 transform">
+                <svg className="w-5 h-5 drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
               </div>
-              <div className="text-left">
-                <div className="text-sm font-medium">感謝の気持ちを伝える</div>
-                <div className="text-xs opacity-80">新しいサンクスカードを作成</div>
+              <div className="text-left group-hover:translate-x-0.5 transform transition-transform duration-300">
+                <div className="text-sm font-semibold drop-shadow-sm">感謝の気持ちを伝える</div>
+                <div className="text-xs opacity-90 font-medium">新しいサンクスカードを作成</div>
+              </div>
+              <div className="ml-auto opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
               </div>
             </Button>
           </>
