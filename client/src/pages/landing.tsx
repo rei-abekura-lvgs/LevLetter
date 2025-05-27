@@ -1,8 +1,12 @@
 import { BearLogo } from "../components/bear-logo";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Link } from "wouter";
-import { ArrowRight, Heart, TrendingUp, Users, Star, CheckCircle, AlertTriangle, Shield, Eye, Building, Target, TrendingDown, Lightbulb, MessageSquare } from "lucide-react";
+import { ArrowRight, Heart, TrendingUp, Users, Star, CheckCircle, AlertTriangle, Shield, Eye, Building, Target, TrendingDown, Lightbulb, MessageSquare, Send, Phone, Mail, MapPin } from "lucide-react";
 
 export default function Landing() {
   return (
@@ -614,6 +618,163 @@ export default function Landing() {
                 お問い合わせ
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* お問い合わせセクション */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              今すぐ<span className="text-[#3990EA]">フィードバック文化</span>を<br />
+              組織に浸透させませんか？
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              LevLetterについてのご質問やお見積りなど、お気軽にお問い合わせください。<br />
+              専任担当者より3営業日以内にご連絡いたします。
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* お問い合わせフォーム */}
+            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <Send className="h-6 w-6 text-[#3990EA] mr-3" />
+                お問い合わせフォーム
+              </h3>
+              <form className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="companyName">会社名 *</Label>
+                    <Input
+                      id="companyName"
+                      required
+                      placeholder="株式会社◯◯"
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="contactName">お名前 *</Label>
+                    <Input
+                      id="contactName"
+                      required
+                      placeholder="山田 太郎"
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="email">メールアドレス *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      required
+                      placeholder="yamada@company.com"
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">電話番号</Label>
+                    <Input
+                      id="phone"
+                      placeholder="03-1234-5678"
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="department">部署・役職</Label>
+                  <Input
+                    id="department"
+                    placeholder="人事部 部長"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="inquiryType">お問い合わせ種別</Label>
+                  <Select>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="選択してください" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="trial">30日間無料トライアル</SelectItem>
+                      <SelectItem value="demo">デモンストレーション</SelectItem>
+                      <SelectItem value="pricing">料金・お見積り</SelectItem>
+                      <SelectItem value="implementation">導入・運用相談</SelectItem>
+                      <SelectItem value="other">その他</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="message">お問い合わせ内容</Label>
+                  <Textarea
+                    id="message"
+                    placeholder="ご質問やご要望をお聞かせください"
+                    rows={4}
+                    className="mt-1"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full bg-[#3990EA] hover:bg-blue-600 text-white py-3 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
+                >
+                  お問い合わせを送信
+                  <Send className="ml-2 h-5 w-5" />
+                </Button>
+              </form>
+            </div>
+
+            {/* 連絡先情報・特典 */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+                <h4 className="font-bold text-lg mb-4 flex items-center">
+                  <Phone className="h-5 w-5 text-[#3990EA] mr-2" />
+                  お電話でのお問い合わせ
+                </h4>
+                <p className="text-2xl font-bold text-[#3990EA] mb-2">03-5774-1632</p>
+                <p className="text-gray-600 text-sm">平日 9:00-18:00（土日祝除く）</p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+                <h4 className="font-bold text-lg mb-4 flex items-center">
+                  <Mail className="h-5 w-5 text-[#3990EA] mr-2" />
+                  メールでのお問い合わせ
+                </h4>
+                <p className="text-[#3990EA] font-medium">rei.abekura@leverages.jp</p>
+                <p className="text-gray-600 text-sm mt-1">24時間受付、3営業日以内に返信</p>
+              </div>
+
+              <div className="bg-gradient-to-r from-[#3990EA] to-blue-600 rounded-2xl p-6 text-white shadow-xl">
+                <h4 className="font-bold text-lg mb-3">🎁 特典情報</h4>
+                <div className="space-y-2 text-sm">
+                  <p>✓ 30日間完全無料トライアル</p>
+                  <p>✓ 専任担当者による導入サポート</p>
+                  <p>✓ カスタマイズ相談無料</p>
+                  <p>✓ 運用コンサルティング付き</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+                <h4 className="font-bold text-lg mb-3 flex items-center">
+                  <MapPin className="h-5 w-5 text-[#3990EA] mr-2" />
+                  オフィス
+                </h4>
+                <p className="text-gray-600 text-sm">
+                  〒150-6190<br />
+                  東京都渋谷区渋谷2-24-12<br />
+                  渋谷スクランブルスクエア東棟24,25階
+                </p>
+                <p className="text-sm text-gray-500 mt-2">※お打ち合わせも可能です</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

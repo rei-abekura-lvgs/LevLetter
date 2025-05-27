@@ -678,6 +678,14 @@ export default function Demo() {
                 <p className="text-gray-600 text-sm">フィードバック文化の浸透支援</p>
               </div>
             </div>
+            
+            <div className="mt-8 text-center">
+              <Link href="/contact">
+                <Button size="lg" className="bg-[#3990EA] hover:bg-blue-600 text-white px-8 py-3 rounded-xl shadow-lg">
+                  お問い合わせ・導入相談
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
