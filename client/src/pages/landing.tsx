@@ -44,9 +44,9 @@ export default function Landing() {
               <span className="text-white/90 text-sm font-medium tracking-wide">3,000+ 企業が導入済み</span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-extrabold mb-8 bg-gradient-to-r from-white via-white to-yellow-200 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-8 text-white leading-tight">
               組織の可能性を最大化する<br />
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="text-yellow-300">
                 フィードバック文化
               </span>
               <br />醸成プラットフォーム
