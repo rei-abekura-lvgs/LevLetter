@@ -128,15 +128,6 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage 
-                    src={card.sender.customAvatarUrl || bearAvatarUrl} 
-                    alt={card.sender.displayName || card.sender.name} 
-                  />
-                  <AvatarFallback className={`text-xs text-white bg-${card.sender.avatarColor}`}>
-                    {(card.sender.displayName || card.sender.name).charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
                 <span className="font-medium text-gray-900 text-sm">
                   {card.sender.displayName || card.sender.name}
                 </span>
@@ -172,11 +163,12 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               </div>
             </div>
           </div>
-          {canDelete && (
+          {/* 管理者用削除ボタン */}
+          {currentUser.isAdmin && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setIsDeleteDialogOpen(true)}
+              onClick={() => handleDeleteCard(card.id)}
               className="h-8 w-8 p-0 text-gray-400 hover:text-red-500 hover:bg-red-50"
             >
               <Trash2 className="h-4 w-4" />
@@ -299,6 +291,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               <Button 
                 className="flex-1"
                 disabled={totalLikes >= 50}
+                onClick={handleLikeSubmit}
               >
                 いいねを送る
               </Button>
