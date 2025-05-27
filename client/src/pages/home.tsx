@@ -332,7 +332,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                 disabled={totalLikes >= 50}
                 onClick={async () => {
                   try {
-                    await apiRequest(`/api/cards/${card.id}/likes`, 'POST');
+                    await apiRequest('POST', `/api/cards/${card.id}/likes`);
                     
                     setIsLikeFormOpen(false);
                     onRefresh?.();
