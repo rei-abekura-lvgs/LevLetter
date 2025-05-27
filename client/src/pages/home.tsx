@@ -109,8 +109,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
   // いいねボタンのテキスト
   const getLikeButtonText = () => {
-    if (userLikeCount === 0) return "👏 共感";
-    return `👏 ${userLikeCount}回共感済み`;
+    return "";
   };
   
   // 表示する受信者（最大3人）
@@ -234,12 +233,12 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`h-8 px-3 transition-all ${
+              className={`h-8 px-2 transition-all ${
                 !canLike 
                   ? 'text-gray-400 cursor-not-allowed opacity-50' 
                   : userHasLiked 
-                  ? 'text-[#3990EA] bg-blue-50 hover:bg-blue-100' 
-                  : 'text-gray-600 hover:text-[#3990EA] hover:bg-blue-50'
+                  ? 'text-pink-500 bg-pink-50 hover:bg-pink-100' 
+                  : 'text-gray-600 hover:text-pink-500 hover:bg-pink-50'
               }`}
               onClick={async () => {
                 if (!canLike || totalLikes >= 50) return;
@@ -247,7 +246,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   await apiRequest('POST', `/api/cards/${card.id}/likes`);
                   onRefresh?.();
                   toast({ 
-                    title: "共感しました！✨", 
+                    title: "いいねしました！✨", 
                     description: "2ポイント消費しました",
                     duration: 2000
                   });
@@ -262,10 +261,12 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               }}
               disabled={totalLikes >= 50 || !canLike}
             >
-              <Heart className={`h-4 w-4 mr-2 ${userHasLiked ? 'fill-current' : ''}`} />
-              <span className="text-xs font-medium">
-                {getLikeButtonText()}
-              </span>
+              <Heart className={`h-4 w-4 ${userHasLiked ? 'fill-current' : ''}`} />
+              {totalLikes > 0 && (
+                <span className="text-xs font-medium ml-1">
+                  {totalLikes}
+                </span>
+              )}
             </Button>
             
             {totalLikes > 0 && (
