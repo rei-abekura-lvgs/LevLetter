@@ -1,5 +1,5 @@
-import { ReactNode, useState, useEffect } from "react";
-import { BearLogo } from "@/components/bear-logo";
+import { ReactNode, useEffect, useState } from 'react';
+import { BearLogo } from '../ui/bear-logo';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -10,439 +10,125 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   const [bearPosition, setBearPosition] = useState({ x: 50, y: 50 });
   const [bearDirection, setBearDirection] = useState({ x: 2, y: 1.5 });
   
-  // ゲーム状態（育成ゲーム）
-  const [isGameActive, setIsGameActive] = useState(false);
-  const [totalClicks, setTotalClicks] = useState(0);
-  const [bearLevel, setBearLevel] = useState(1);
-  const [bearExp, setBearExp] = useState(0);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [bearSpeed] = useState(1.5);
-  const [bears, setBears] = useState([
-    { id: 1, x: 50, y: 50, directionX: 1, directionY: 1, level: 1, color: 'white' }
-  ]);
-
-  // レベルアップ計算
-  const getExpForNextLevel = (level: number) => level * 10;
-  const getBearColorByLevel = (level: number) => {
-    if (level >= 10) return 'rainbow';
-    if (level >= 7) return 'gold';
-    if (level >= 5) return 'purple';
-    if (level >= 3) return 'blue';
-    return 'white';
-  };
-  
-  // レベルアップチェック
+  // スクリーンセーバーのアニメーション
   useEffect(() => {
-    const expNeeded = getExpForNextLevel(bearLevel);
-    if (bearExp >= expNeeded) {
-      setBearLevel(prev => prev + 1);
-      setBearExp(0);
-      console.log("🎉 レベルアップ！レベル", bearLevel + 1);
-      
-      // レベルアップ時に新しいクマを追加
-      if (bears.length < 10) {
-        const newBearColor = getBearColorByLevel(bearLevel + 1);
-        setBears(prev => [...prev, {
-          id: Math.max(...prev.map(b => b.id)) + 1,
-          x: 20 + Math.random() * 60,
-          y: 20 + Math.random() * 60,
-          directionX: (Math.random() - 0.5) * 2,
-          directionY: (Math.random() - 0.5) * 2,
-          level: bearLevel + 1,
-          color: newBearColor
-        }]);
-      }
-    }
-  }, [bearExp, bearLevel, bears.length]);
-
-  // クマアニメーション（複数クマ対応）
-  useEffect(() => {
-    if (!isScreensaverActive) return;
-
-    const interval = setInterval(() => {
-      if (gameStarted && isGameActive) {
-        // ゲーム中：複数のクマを動かす
-        setBears(prevBears => 
-          prevBears.map(bear => {
-            let newX = bear.x + bear.directionX * bearSpeed;
-            let newY = bear.y + bear.directionY * bearSpeed;
-            let newDirectionX = bear.directionX;
-            let newDirectionY = bear.directionY;
-
-            // 画面端での反射
-            if (newX <= 5 || newX >= 95) {
-              newDirectionX = -newDirectionX;
-              newX = Math.max(5, Math.min(95, newX));
-            }
-            if (newY <= 5 || newY >= 95) {
-              newDirectionY = -newDirectionY;
-              newY = Math.max(5, Math.min(95, newY));
-            }
-
-            return {
-              ...bear,
-              x: newX,
-              y: newY,
-              directionX: newDirectionX,
-              directionY: newDirectionY
-            };
-          })
-        );
-      } else {
-        // スクリーンセーバー：単体クマ
-        setBearPosition(prev => {
-          let newX = prev.x + bearDirection.x * bearSpeed;
-          let newY = prev.y + bearDirection.y * bearSpeed;
+    let animationFrame: number;
+    
+    if (isScreensaverActive) {
+      const animate = () => {
+        setBearPosition(prevPosition => {
+          let newX = prevPosition.x + bearDirection.x;
+          let newY = prevPosition.y + bearDirection.y;
           let newDirectionX = bearDirection.x;
           let newDirectionY = bearDirection.y;
 
-          if (newX <= 5 || newX >= 95) {
+          if (newX <= 5 || newX >= 90) {
             newDirectionX = -newDirectionX;
-            newX = Math.max(5, Math.min(95, newX));
+            newX = Math.max(5, Math.min(90, newX));
           }
-          if (newY <= 5 || newY >= 95) {
+          if (newY <= 5 || newY >= 90) {
             newDirectionY = -newDirectionY;
-            newY = Math.max(5, Math.min(95, newY));
+            newY = Math.max(5, Math.min(90, newY));
           }
 
           setBearDirection({ x: newDirectionX, y: newDirectionY });
           return { x: newX, y: newY };
         });
+        animationFrame = requestAnimationFrame(animate);
+      };
+      animate();
+    }
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
       }
-    }, 50);
+    };
+  }, [isScreensaverActive, bearDirection]);
 
-    return () => clearInterval(interval);
-  }, [isScreensaverActive, bearDirection, bearSpeed, gameStarted, isGameActive]);
-
-  // ESCキーでスクリーンセーバー終了
+  // キーボードイベント
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isScreensaverActive) {
-        console.log("📱 スクリーンセーバー終了 - ESC");
+        console.log('📱 スクリーンセーバー終了 - ESC');
         setIsScreensaverActive(false);
       }
     };
 
-    if (isScreensaverActive) {
-      document.addEventListener('keydown', handleKeyPress);
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress);
-    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isScreensaverActive]);
 
-  // 育成ゲーム開始
-  const startGame = () => {
-    console.log("🎮 育成ゲーム開始！");
-    setIsScreensaverActive(true);
-    setIsGameActive(true);
-    setGameStarted(true);
-    setTotalClicks(0);
-    setBearLevel(1);
-    setBearExp(0);
-    
-    // 初期クマ1匹
-    setBears([{
-      id: 1,
-      x: 20 + Math.random() * 60,
-      y: 20 + Math.random() * 60,
-      directionX: (Math.random() - 0.5) * 2,
-      directionY: (Math.random() - 0.5) * 2,
-      level: 1,
-      color: 'white'
-    }]);
-  };
-
-  // クマをクリック（育成）
-  const clickBear = (bearId: number) => (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isGameActive) return;
-    
-    console.log("🐻 クマクリック！ID:", bearId, "経験値+1");
-    
-    // 総クリック数とレベル経験値を増加
-    setTotalClicks(prev => prev + 1);
-    setBearExp(prev => prev + 1);
-    
-    // クリックエフェクト（クマを少し揺らす）
-    setBears(prevBears => 
-      prevBears.map(bear => 
-        bear.id === bearId 
-          ? {
-              ...bear,
-              x: Math.max(10, Math.min(90, bear.x + (Math.random() - 0.5) * 10)),
-              y: Math.max(10, Math.min(90, bear.y + (Math.random() - 0.5) * 10))
-            }
-          : bear
-      )
-    );
-  };
-
-  // スクリーンセーバー開始（従来の機能）
   const handleBearClick = () => {
-    console.log("🐻 クマがクリックされました！");
+    console.log('🐻 クマがクリックされました！');
     setIsScreensaverActive(true);
-    setBearPosition({ x: 50, y: 50 });
-    setBearDirection({ x: 2 + Math.random() * 2, y: 1.5 + Math.random() * 2 });
-    console.log("🖥️ スクリーンセーバー開始:", { active: true, position: { x: 50, y: 50 } });
-  };
-
-  // ゲーム終了
-  const endGame = () => {
-    setIsGameActive(false);
-    setGameStarted(false);
-    console.log("🏁 ゲーム終了！スコア:", score);
+    console.log('🖥️ スクリーンセーバー開始:', { active: true, position: bearPosition });
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4 relative">
+      {/* メインコンテンツ */}
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="text-center mb-8">
+            <div 
+              onClick={handleBearClick}
+              className="inline-block cursor-pointer hover:scale-110 transition-transform duration-200"
+              style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))' }}
+            >
+              <BearLogo size={80} useTransparent={true} bgColor="bg-white" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800 mt-4">LevLetter</h1>
+            <p className="text-gray-600 mt-2">感謝の気持ちを伝えよう</p>
+          </div>
+          {children}
+        </div>
+      </div>
+
       {/* スクリーンセーバーオーバーレイ */}
       {isScreensaverActive && (
         <div 
-          style={{ 
+          style={{
             position: 'fixed',
             top: 0,
             left: 0,
             width: '100vw',
             height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.95)',
-            zIndex: 10000,
-            userSelect: 'none',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            zIndex: 10001,
             cursor: 'pointer'
           }}
-          onClick={() => {
-            if (isGameActive) return; // ゲーム中はクリックで終了しない
-            console.log("📱 スクリーンセーバー終了 - クリック");
-            setIsScreensaverActive(false);
-            endGame();
-          }}
+          onClick={() => setIsScreensaverActive(false)}
         >
-          {/* ゲーム開始前の画面 */}
-          {!gameStarted && (
-            <div style={{
+          {/* 動くクマ */}
+          <div
+            style={{
               position: 'absolute',
-              top: '50%',
-              left: '50%',
+              left: `${bearPosition.x}%`,
+              top: `${bearPosition.y}%`,
               transform: 'translate(-50%, -50%)',
-              textAlign: 'center',
-              color: 'white'
-            }}>
-              <BearLogo size={100} useTransparent={true} bgColor="bg-white" />
-              <h2 style={{ fontSize: '32px', fontWeight: 'bold', margin: '20px 0' }}>
-                クマキャッチゲーム！
-              </h2>
-              <p style={{ fontSize: '18px', marginBottom: '30px', opacity: 0.9 }}>
-                動き回るクマをクリックして捕まえよう！<br />
-                30秒でどれだけ捕まえられるかな？
-              </p>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  startGame();
-                }}
-                style={{
-                  backgroundColor: '#3990EA',
-                  color: 'white',
-                  border: 'none',
-                  padding: '15px 30px',
-                  fontSize: '20px',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold'
-                }}
-              >
-                ゲーム開始！
-              </button>
-            </div>
-          )}
+              transition: 'none',
+              pointerEvents: 'none'
+            }}
+          >
+            <BearLogo size={60} useTransparent={true} bgColor="bg-white" />
+          </div>
 
-          {/* ゲーム中の画面 */}
-          {gameStarted && (
-            <>
-              {/* 複数のクマ */}
-              {bears.map(bear => (
-                <div
-                  key={bear.id}
-                  onClick={clickBear(bear.id)}
-                  style={{
-                    position: 'absolute',
-                    left: `${bear.x}%`,
-                    top: `${bear.y}%`,
-                    transform: 'translate(-50%, -50%)',
-                    cursor: 'pointer',
-                    zIndex: 10001,
-                    transition: 'all 0.2s ease',
-                    filter: bear.color === 'gold' ? 'hue-rotate(45deg) brightness(1.3)' :
-                           bear.color === 'purple' ? 'hue-rotate(270deg) brightness(1.1)' :
-                           bear.color === 'blue' ? 'hue-rotate(180deg)' :
-                           bear.color === 'rainbow' ? 'hue-rotate(0deg) brightness(1.5) saturate(2)' : 'none'
-                  }}
-                >
-                  <BearLogo size={40 + bear.level * 5} useTransparent={true} bgColor="bg-white" />
-                </div>
-              ))}
-
-              {/* 育成ゲームUI */}
-              <div style={{
-                position: 'absolute',
-                top: '20px',
-                left: '20px',
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                padding: '15px',
-                borderRadius: '10px',
-                minWidth: '200px'
-              }}>
-                <div>🐻 レベル: {bearLevel}</div>
-                <div>⭐ EXP: {bearExp}/{getExpForNextLevel(bearLevel)}</div>
-                <div>👆 総クリック: {totalClicks}</div>
-                <div>🎯 クマ数: {bears.length}匹</div>
-              </div>
-              
-              {/* レベルアップバー */}
-              <div style={{
-                position: 'absolute',
-                top: '20px',
-                right: '20px',
-                color: 'white',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                padding: '15px',
-                borderRadius: '10px',
-                minWidth: '200px'
-              }}>
-                <div style={{ marginBottom: '10px' }}>次のレベルまで:</div>
-                <div style={{
-                  width: '180px',
-                  height: '15px',
-                  backgroundColor: 'rgba(255,255,255,0.3)',
-                  borderRadius: '10px',
-                  overflow: 'hidden'
-                }}>
-                  <div style={{
-                    width: `${(bearExp / getExpForNextLevel(bearLevel)) * 100}%`,
-                    height: '100%',
-                    backgroundColor: '#3990EA',
-                    transition: 'width 0.3s ease'
-                  }}></div>
-                </div>
-              </div>
-
-              <div style={{
-                position: 'absolute',
-                bottom: '20px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                color: 'white',
-                fontSize: '16px',
-                opacity: 0.9,
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                padding: '10px 20px',
-                borderRadius: '25px',
-                textAlign: 'center'
-              }}>
-                クマを連打してレベルアップ！<br/>
-                <small>レベルが上がると新しいクマが仲間になるよ！</small>
-              </div>
-            </>
-          )}
-
-          {/* 終了ボタン（育成ゲーム用） */}
-          {gameStarted && (
-            <button
-              onClick={() => {
-                setGameStarted(false);
-                setIsGameActive(false);
-                setIsScreensaverActive(false);
-              }}
-              style={{
-                position: 'absolute',
-                top: '120px',
-                right: '20px',
-                backgroundColor: 'rgba(220, 53, 69, 0.8)',
-                color: 'white',
-                border: 'none',
-                padding: '10px 15px',
-                borderRadius: '5px',
-                fontSize: '14px',
-                cursor: 'pointer',
-                zIndex: 10003
-              }}
-            >
-              ❌ 終了
-            </button>
-          )}
-
-          {/* スクリーンセーバーモード（ゲーム機能なし） */}
-          {!gameStarted && (
-            <>
-              <div
-                style={{
-                  position: 'absolute',
-                  left: `${bearPosition.x}%`,
-                  top: `${bearPosition.y}%`,
-                  transform: 'translate(-50%, -50%)',
-                  pointerEvents: 'none'
-                }}
-              >
-                <BearLogo size={80} useTransparent={true} bgColor="bg-white" />
-              </div>
-              <div style={{
-                position: 'absolute',
-                bottom: '20px',
-                left: '20px',
-                color: 'white',
-                fontSize: '16px',
-                fontWeight: 'bold'
-              }}>
-                ESCキーまたはクリックで終了
-              </div>
-            </>
-          )}
+          {/* 終了メッセージ */}
+          <div style={{
+            position: 'absolute',
+            bottom: '50px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            color: 'white',
+            fontSize: '16px',
+            opacity: 0.7,
+            textAlign: 'center'
+          }}>
+            ESCキーまたはクリックで終了
+          </div>
         </div>
       )}
-      
-      <div className="min-h-screen flex flex-col md:flex-row relative">
-        {/* ブランドエリア */}
-        <div className="bg-primary md:w-1/2 p-8 flex flex-col justify-center items-center">
-          <div className="max-w-md mx-auto text-center">
-            <div className="flex flex-col items-center gap-4 mb-8">
-              <div 
-                onClick={handleBearClick}
-                className="cursor-pointer hover:scale-110 transition-all duration-300 hover:rotate-12"
-                title="クリックでクマキャッチゲーム開始！"
-                style={{
-                  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))',
-                  animation: 'bounce 2s infinite'
-                }}
-              >
-                <BearLogo size={60} useTransparent={true} bgColor="bg-white" />
-              </div>
-              <h1 className="text-4xl font-bold text-white">LevLetter</h1>
-            </div>
-            <div className="bg-white/10 p-6 rounded-lg">
-              <h2 className="text-xl font-medium text-white mb-3">特徴</h2>
-              <ul className="text-primary-foreground space-y-2 text-left">
-                <li>• 簡単に感謝の気持ちを伝えられる</li>
-                <li>• ポイント付与でモチベーションアップ</li>
-                <li>• チーム単位での感謝カード送信</li>
-                <li>• 社内コミュニケーションの活性化</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        
-        {/* フォームエリア */}
-        <div className="md:w-1/2 p-8 flex items-center justify-center bg-background">
-          <div className="w-full max-w-md">
-            {children}
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 }
