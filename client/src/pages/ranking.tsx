@@ -38,9 +38,12 @@ interface RankingData {
 export default function Ranking() {
   const { user } = useAuth();
 
-  const { data: rankings, isLoading } = useQuery<RankingData>({
+  const { data: rankings, isLoading, error } = useQuery<RankingData>({
     queryKey: ["/api/rankings"],
   });
+
+  // デバッグログ
+  console.log("Ranking render:", { rankings, isLoading, error });
 
   const getMonthDateRange = () => {
     const now = new Date();

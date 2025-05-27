@@ -36,9 +36,12 @@ interface DashboardStats {
 }
 
 export default function Dashboard() {
-  const { data: stats, isLoading } = useQuery<DashboardStats>({
+  const { data: stats, isLoading, error } = useQuery<DashboardStats>({
     queryKey: ["/api/dashboard/stats"],
   });
+
+  // デバッグログ
+  console.log("Dashboard render:", { stats, isLoading, error });
 
   const getMonthDateRange = () => {
     const now = new Date();
