@@ -243,7 +243,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
               variant="ghost"
               size="sm"
               onClick={handleLike}
-              disabled={likeMutation.isPending || userLike || card.senderId === currentUser.id}
+              disabled={likeMutation.isPending || !!userLike || card.senderId === currentUser.id}
               className={`text-gray-600 ${userLike ? 'text-red-500' : ''} ${likeMutation.isPending ? 'opacity-50' : ''}`}
             >
               <Heart 
