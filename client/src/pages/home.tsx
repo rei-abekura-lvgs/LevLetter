@@ -40,8 +40,16 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [canDelete, setCanDelete] = useState(false);
+  const [showDetailsDialog, setShowDetailsDialog] = useState(false);
+  const [detailsTab, setDetailsTab] = useState<"recipients" | "likes">("recipients");
   const queryClient = useQueryClient();
   const { toast } = useToast();
+
+  // いいね詳細データを取得
+  const { data: likeDetails } = useQuery({
+    queryKey: [`/api/cards/${card.id}/likes/details`],
+    enabled: showDetailsDialog && detailsTab === "likes",
+  });
 
   // 削除権限チェック
   useEffect(() => {
@@ -238,7 +246,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   !canLike 
                     ? 'text-gray-400 cursor-not-allowed opacity-50' 
                     : userHasLiked 
-                    ? 'text-pink-500 bg-pink-50 hover:bg-pink-100' 
+                    ? 'text-pink-500 bg-pink-50 hover:text-pink-600 hover:bg-pink-100' 
                     : 'text-gray-600 hover:text-pink-500 hover:bg-pink-50'
                 }`}
                 onClick={async () => {
@@ -263,6 +271,11 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                 disabled={totalLikes >= 50 || !canLike}
               >
                 <Heart className={`h-4 w-4 ${userHasLiked ? 'fill-current' : ''}`} />
+                {userLikeCount > 0 && (
+                  <span className="text-xs font-medium ml-1">
+                    {userLikeCount}
+                  </span>
+                )}
               </Button>
               
               {totalLikes > 0 && (
@@ -270,7 +283,10 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   variant="ghost"
                   size="sm"
                   className="h-8 px-2 text-gray-600 hover:text-pink-500 hover:bg-pink-50"
-                  onClick={() => setShowRecipientsDialog(true)}
+                  onClick={() => {
+                    setShowDetailsDialog(true);
+                    setDetailsTab("likes");
+                  }}
                 >
                   <span className="text-xs font-medium">
                     {totalLikes}
