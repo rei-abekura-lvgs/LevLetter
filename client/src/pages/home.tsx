@@ -27,10 +27,7 @@ import {
   DialogDescription
 } from "@/components/ui/dialog";
 import CardForm from "@/components/card-form";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import Dashboard from "@/pages/dashboard";
-import Ranking from "@/pages/ranking";
 
 // カードコンポーネント
 const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, currentUser: User, onRefresh?: () => void }) => {
