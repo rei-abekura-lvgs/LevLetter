@@ -98,12 +98,25 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
       return;
     }
 
-    // 自分のカードにはいいねできない
+    // 自分のカードにはいいねできない（送信者チェック）
     if (card.senderId === currentUser.id) {
       toast({
         variant: "destructive",
         title: "エラー",
         description: "自分のカードにはいいねできません"
+      });
+      return;
+    }
+
+    // 受信者もいいねできない
+    const isRecipient = card.recipientId === currentUser.id || 
+      (card.additionalRecipients && card.additionalRecipients.includes(currentUser.id));
+    
+    if (isRecipient) {
+      toast({
+        variant: "destructive",
+        title: "エラー",
+        description: "受信者はいいねできません"
       });
       return;
     }

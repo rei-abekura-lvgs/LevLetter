@@ -1,0 +1,102 @@
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=35b0b27e:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=35b0b27e:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=35b0b27e:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=35b0b27e:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=35b0b27e:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=35b0b27e:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=35b0b27e:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=35b0b27e:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=35b0b27e:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=35b0b27e:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+2auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: Object
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth-context.tsx:157 🔄 認証初期化開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=35b0b27e:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=35b0b27e:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=35b0b27e:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=35b0b27e:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=35b0b27e:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=35b0b27e:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=35b0b27e:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=35b0b27e:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=35b0b27e:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=35b0b27e:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+2auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: Object
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth-context.tsx:157 🔄 認証初期化開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=35b0b27e:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=35b0b27e:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=35b0b27e:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=35b0b27e:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=35b0b27e:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=35b0b27e:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=35b0b27e:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=35b0b27e:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=35b0b27e:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=35b0b27e:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+2auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context-new.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context-new.tsx:139 🎯 認証初期化完了: 阿部倉 怜
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+App.tsx:57 アプリ状態: Object
+auth-context-new.tsx:162 📊 認証状態更新: Object
+dashboard.tsx:44 Dashboard stats: undefined
+dashboard.tsx:45 Dashboard loading: true
+queryClient.ts:42 API GET リクエスト: /api/dashboard/stats データなし
+dashboard.tsx:44 Dashboard stats: Object
+dashboard.tsx:45 Dashboard loading: false
+dashboard.tsx:44 Dashboard stats: {monthly: {…}, personal: {…}}
+dashboard.tsx:45 Dashboard loading: false
+dashboard.tsx:44 Dashboard stats: {monthly: {…}, personal: {…}}
+dashboard.tsx:45 Dashboard loading: false
+queryClient.ts:42 API GET リクエスト: /api/dashboard/stats データなし
