@@ -1,0 +1,125 @@
+✅ セッション認証成功: 牧野　航大
+auth-context-new.tsx:139 🎯 認証初期化完了: 牧野　航大
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+home.tsx:466 カード取得データ状態: Object
+App.tsx:50 アプリ状態: Object
+auth-context-new.tsx:162 📊 認証状態更新: Object
+api.ts:126 取得したカードデータ: Array(30)
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+home.tsx:52 🎯 いいねボタン押下開始 - カードID: 96
+home.tsx:53 👤 現在のユーザー利用可能ポイント: 500
+home.tsx:58 📝 カードデータ楽観的更新開始
+home.tsx:68 💖 新しいいいね追加: Object
+home.tsx:73 📊 更新後のいいね数: 23
+home.tsx:83 ⚠️ ポイント不足または認証データなし
+home.tsx:98 ✅ トースト表示完了
+home.tsx:101 🌐 サーバーへの送信開始
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+home.tsx:114 🎉 サーバー送信成功 - 正確なデータで更新
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+home.tsx:52 🎯 いいねボタン押下開始 - カードID: 96
+home.tsx:53 👤 現在のユーザー利用可能ポイント: 500
+home.tsx:58 📝 カードデータ楽観的更新開始
+home.tsx:68 💖 新しいいいね追加: Object
+home.tsx:73 📊 更新後のいいね数: 24
+home.tsx:83 ⚠️ ポイント不足または認証データなし
+home.tsx:98 ✅ トースト表示完了
+home.tsx:101 🌐 サーバーへの送信開始
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+home.tsx:52 🎯 いいねボタン押下開始 - カードID: 96
+home.tsx:53 👤 現在のユーザー利用可能ポイント: 500
+home.tsx:58 📝 カードデータ楽観的更新開始
+home.tsx:68 💖 新しいいいね追加: Object
+home.tsx:73 📊 更新後のいいね数: 25
+home.tsx:83 ⚠️ ポイント不足または認証データなし
+home.tsx:98 ✅ トースト表示完了
+home.tsx:101 🌐 サーバーへの送信開始
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+home.tsx:52 🎯 いいねボタン押下開始 - カードID: 96
+home.tsx:53 👤 現在のユーザー利用可能ポイント: 500
+home.tsx:58 📝 カードデータ楽観的更新開始
+home.tsx:68 💖 新しいいいね追加: Object
+home.tsx:73 📊 更新後のいいね数: 26
+home.tsx:83 ⚠️ ポイント不足または認証データなし
+home.tsx:98 ✅ トースト表示完了
+home.tsx:101 🌐 サーバーへの送信開始
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+home.tsx:52 🎯 いいねボタン押下開始 - カードID: 96
+home.tsx:53 👤 現在のユーザー利用可能ポイント: 500
+home.tsx:58 📝 カードデータ楽観的更新開始
+home.tsx:68 💖 新しいいいね追加: Object
+home.tsx:73 📊 更新後のいいね数: 27
+home.tsx:83 ⚠️ ポイント不足または認証データなし
+home.tsx:98 ✅ トースト表示完了
+home.tsx:101 🌐 サーバーへの送信開始
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+home.tsx:114 🎉 サーバー送信成功 - 正確なデータで更新
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+home.tsx:114 🎉 サーバー送信成功 - 正確なデータで更新
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:126 取得したカードデータ: Array(30)
+home.tsx:114 🎉 サーバー送信成功 - 正確なデータで更新
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+home.tsx:114 🎉 サーバー送信成功 - 正確なデータで更新
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:126 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+home.tsx:52 🎯 いいねボタン押下開始 - カードID: 96
+home.tsx:53 👤 現在のユーザー利用可能ポイント: 500
+home.tsx:58 📝 カードデータ楽観的更新開始
+home.tsx:68 💖 新しいいいね追加: Object
+home.tsx:73 📊 更新後のいいね数: 28
+home.tsx:83 ⚠️ ポイント不足または認証データなし
+home.tsx:98 ✅ トースト表示完了
+home.tsx:101 🌐 サーバーへの送信開始
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+home.tsx:114 🎉 サーバー送信成功 - 正確なデータで更新
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:126 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+api.ts:126 取得したカードデータ: Array(30)
+home.tsx:466 カード取得データ状態: Object
+home.tsx:468 カード取得レスポンス: 200 OK
+home.tsx:469 取得したカードデータ: Array(30)
+api.ts:113 getCards呼び出し - オプション: Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+api.ts:126 取得したカードデータ: Array(30)

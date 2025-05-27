@@ -52,50 +52,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
       console.log('🎯 いいねボタン押下開始 - カードID:', cardId);
       console.log('👤 現在のユーザー利用可能ポイント:', currentUser?.weeklyPoints);
 
-      // 楽観的更新：まず画面上のデータを即座に変更
-      queryClient.setQueryData(['/api/cards'], (oldData: any) => {
-        if (!oldData) return oldData;
-        console.log('📝 カードデータ楽観的更新開始');
-        return oldData.map((card: any) => {
-          if (card.id === cardId) {
-            // 新しいいいねを追加（2ptの価値で）
-            const newLike = { 
-              id: Date.now(), 
-              userId: currentUser?.id,
-              points: 2, // 常に2pt
-              user: currentUser 
-            };
-            console.log('💖 新しいいいね追加:', newLike);
-            const updatedCard = {
-              ...card,
-              likes: [...(card.likes || []), newLike]
-            };
-            console.log('📊 更新後のいいね数:', updatedCard.likes.length);
-            return updatedCard;
-          }
-          return card;
-        });
-      });
-
-      // ユーザーの利用可能ポイントも即座に減らす
-      queryClient.setQueryData(['/api/auth/me'], (oldData: any) => {
-        if (!oldData || oldData.weeklyPoints < 2) {
-          console.log('⚠️ ポイント不足または認証データなし');
-          return oldData;
-        }
-        const newWeeklyPoints = oldData.weeklyPoints - 2;
-        console.log('💰 ポイント楽観的更新:', oldData.weeklyPoints, '→', newWeeklyPoints);
-        return {
-          ...oldData,
-          weeklyPoints: newWeeklyPoints
-        };
-      });
-
-      // 即座にトーストを表示
-      toast({
-        title: "いいねしました！",
-      });
-      console.log('✅ トースト表示完了');
+      // LikeFormで楽観的更新が処理されるため、ここでは削除
 
       // バックグラウンドでサーバーに送信
       console.log('🌐 サーバーへの送信開始');
