@@ -1126,6 +1126,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // いいね詳細を取得
+  app.get("/api/cards/:id/likes", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.id);
+      
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+
+      const likes = await storage.getLikesForCard(cardId);
+      
+      // ユーザー情報と一緒にいいね詳細を返す
+      const likesWithDetails = likes.map(like => ({
+        id: like.id,
+        userId: like.userId,
+        points: like.points,
+        createdAt: like.createdAt,
+        user: {
+          id: like.user.id,
+          name: like.user.name,
+          displayName: like.user.displayName,
+          department: like.user.department,
+          avatarColor: like.user.avatarColor,
+          customAvatarUrl: like.user.customAvatarUrl
+        }
+      }));
+
+      return res.json(likesWithDetails);
+    } catch (error) {
+      console.error("いいね詳細取得エラー:", error);
+      return res.status(500).json({ message: "いいね詳細の取得に失敗しました" });
+    }
+  });
+
   // いいね機能：複数回可能、最大50回まで、2pt固定
   app.post("/api/cards/:id/likes", authenticate, async (req, res) => {
     try {
