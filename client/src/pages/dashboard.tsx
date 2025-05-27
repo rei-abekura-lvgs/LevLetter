@@ -1,330 +1,295 @@
-import { useAuth } from "../context/auth-context-new";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Progress } from "../components/ui/progress";
-import { Avatar } from "../components/ui/avatar";
-import { Badge } from "../components/ui/badge";
-import { TrendingUp, Award, Trophy, Users, Gift, Calendar, Target, Zap } from "lucide-react";
-import { format } from "date-fns";
-import { ja } from "date-fns/locale";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Trophy, TrendingUp, Heart, MessageSquare, Users, Award, Calendar, User } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+interface UserInfo {
+  id: number;
+  name: string;
+  displayName: string | null;
+  department: string | null;
+  avatarColor: string;
+  customAvatarUrl: string | null;
+}
+
+interface PersonalInteraction {
+  user: UserInfo;
+  count: number;
+  rank: number;
+}
 
 interface DashboardStats {
-  pointConversionRate: number;
-  reactionRate: number;
-  sendingRank: number;
-  receivingRank: number;
-  totalUsers: number;
-  cardsThisWeek: number;
-  pointsGivenThisWeek: number;
-  topSenders: Array<{
-    id: number;
-    name: string;
-    displayName: string;
-    customAvatarUrl: string | null;
-    cardsCount: number;
-  }>;
-  topReceivers: Array<{
-    id: number;
-    name: string;
-    displayName: string;
-    customAvatarUrl: string | null;
-    pointsReceived: number;
-  }>;
-  topGivers: Array<{
-    id: number;
-    name: string;
-    displayName: string;
-    customAvatarUrl: string | null;
-    pointsGiven: number;
-  }>;
-  topAppreciatedUsers: Array<{
-    id: number;
-    name: string;
-    displayName: string;
-    customAvatarUrl: string | null;
-    totalPoints: number;
-  }>;
+  monthly: {
+    pointConsumptionRate: number;
+    cardRank: number;
+    likeRank: number;
+    totalUsers: number;
+  };
+  personal: {
+    sentCards: PersonalInteraction[];
+    receivedCards: PersonalInteraction[];
+    sentLikes: PersonalInteraction[];
+    receivedLikes: PersonalInteraction[];
+  };
 }
 
 export default function Dashboard() {
-  const { user } = useAuth();
-  
   const { data: stats, isLoading } = useQuery<DashboardStats>({
     queryKey: ["/api/dashboard/stats"],
-    enabled: !!user,
   });
+
+  const getMonthDateRange = () => {
+    const now = new Date();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(now.getMonth() - 1);
+    
+    return `${oneMonthAgo.getFullYear()}年${oneMonthAgo.getMonth() + 1}月${oneMonthAgo.getDate()}日 - ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+  };
+
+  const renderPersonalRanking = (items: PersonalInteraction[], title: string, icon: React.ReactNode, emptyMessage: string) => {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            {icon}
+            <span>{title}</span>
+            <Badge variant="outline">上位30位</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            {items.length > 0 ? (
+              items.map((item, index) => (
+                <div key={item.user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      index < 3 ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {index < 3 ? (
+                        <Trophy className="w-4 h-4" />
+                      ) : (
+                        <span className="text-sm font-bold">{index + 1}</span>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center space-x-3">
+                      {item.user.customAvatarUrl ? (
+                        <img
+                          src={item.user.customAvatarUrl}
+                          alt={item.user.name}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold bg-${item.user.avatarColor}`}>
+                          {item.user.name.charAt(0)}
+                        </div>
+                      )}
+                      
+                      <div>
+                        <h4 className="font-semibold text-gray-900">{item.user.displayName || item.user.name}</h4>
+                        <p className="text-sm text-gray-500">{item.user.department}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-gray-700">{item.count}</div>
+                    <div className="text-xs text-gray-500">回</div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                {emptyMessage}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardContent className="p-6">
-                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-8 bg-gray-200 rounded"></div>
-                </CardContent>
-              </Card>
-            ))}
+        <div className="max-w-6xl mx-auto">
+          <div className="animate-pulse space-y-6">
+            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="h-32 bg-gray-200 rounded"></div>
+              <div className="h-32 bg-gray-200 rounded"></div>
+              <div className="h-32 bg-gray-200 rounded"></div>
+            </div>
+            <div className="h-96 bg-gray-200 rounded"></div>
           </div>
         </div>
       </div>
     );
   }
 
-  if (!user || !stats) return null;
-
-  const getCurrentWeekRange = () => {
-    const now = new Date();
-    const monday = new Date(now);
-    monday.setDate(now.getDate() - (now.getDay() + 6) % 7);
-    monday.setHours(0, 0, 0, 0);
-    
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
-    sunday.setHours(23, 59, 59, 999);
-    
-    return `${format(monday, 'M/d', { locale: ja })} - ${format(sunday, 'M/d', { locale: ja })}`;
-  };
+  if (!stats) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-6xl mx-auto text-center py-20">
+          <p className="text-gray-500">ダッシュボードデータを読み込めませんでした</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-6">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">ダッシュボード</h1>
-            <p className="text-gray-600 mt-1">最近1ヶ月のデータ</p>
-          </div>
-          <div className="text-sm text-gray-500">
-            {getCurrentWeekRange()}
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center space-x-3">
+              <TrendingUp className="h-8 w-8 text-blue-500" />
+              <span>ダッシュボード</span>
+            </h1>
+            <p className="text-gray-600 mt-1">あなたのアクティビティサマリー</p>
           </div>
         </div>
 
-        {/* ユーザープロフィールカード */}
-        <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <div className="h-16 w-16 bg-white/20 rounded-full flex items-center justify-center">
-                {user.customAvatarUrl ? (
-                  <img
-                    src={user.customAvatarUrl}
-                    alt={user.name}
-                    className="h-14 w-14 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="h-14 w-14 bg-white/30 rounded-full flex items-center justify-center">
-                    <span className="text-lg font-bold">{user.name.charAt(0)}</span>
+        {/* 最近1ヶ月のデータ */}
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <Calendar className="h-5 w-5 text-blue-500" />
+            <h2 className="text-xl font-bold text-gray-900">最近1ヶ月のデータ</h2>
+            <Badge variant="outline">{getMonthDateRange()}</Badge>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* ポイント消費率 */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Award className="h-5 w-5 text-purple-500" />
+                  <span>ポイント消費率</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">消費率</span>
+                    <span className="text-2xl font-bold text-purple-600">{stats.monthly.pointConsumptionRate}%</span>
                   </div>
-                )}
-              </div>
-              <div className="flex-1">
-                <h2 className="text-xl font-bold">{user.displayName || user.name}</h2>
-                <p className="text-blue-100">{user.department}</p>
-                <div className="flex items-center space-x-4 mt-2">
-                  <div className="flex items-center space-x-1">
-                    <Gift className="h-4 w-4" />
-                    <span className="text-sm">もらったポイント: {user.weeklyPointsReceived || 0}pt</span>
+                  <Progress value={stats.monthly.pointConsumptionRate} className="h-2" />
+                  <p className="text-xs text-gray-500">週間500ptに対する消費率</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 投稿数ランキング */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <MessageSquare className="h-5 w-5 text-green-500" />
+                  <span>投稿数ランキング</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">全社員中</span>
+                    <span className="text-2xl font-bold text-green-600">{stats.monthly.cardRank}位</span>
                   </div>
-                  <div className="flex items-center space-x-1">
-                    <Target className="h-4 w-4" />
-                    <span className="text-sm">前週までのポイント: {(user.totalPointsReceived || 0) - (user.weeklyPointsReceived || 0)}pt</span>
+                  <div className="text-center">
+                    <span className="text-xs text-gray-500">/ {stats.monthly.totalUsers}人中</span>
                   </div>
                 </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* KPI指標 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2 mb-2">
-                <Zap className="h-5 w-5 text-blue-500" />
-                <span className="text-sm font-medium text-gray-600">ポイント消化率</span>
-              </div>
-              <div className="text-2xl font-bold text-blue-600 mb-2">{stats.pointConversionRate}%</div>
-              <Progress value={stats.pointConversionRate} className="h-2" />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2 mb-2">
-                <TrendingUp className="h-5 w-5 text-green-500" />
-                <span className="text-sm font-medium text-gray-600">リアクション率</span>
-              </div>
-              <div className="text-2xl font-bold text-green-600 mb-2">{stats.reactionRate}%</div>
-              <Progress value={stats.reactionRate} className="h-2" />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2 mb-2">
-                <Trophy className="h-5 w-5 text-amber-500" />
-                <span className="text-sm font-medium text-gray-600">投稿数ランキング</span>
-              </div>
-              <div className="text-2xl font-bold text-amber-600 mb-2">{stats.sendingRank}位</div>
-              <p className="text-xs text-gray-500">全{stats.totalUsers}人中</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2 mb-2">
-                <Award className="h-5 w-5 text-purple-500" />
-                <span className="text-sm font-medium text-gray-600">拍手数ランキング</span>
-              </div>
-              <div className="text-2xl font-bold text-purple-600 mb-2">{stats.receivingRank}位</div>
-              <p className="text-xs text-gray-500">全{stats.totalUsers}人中</p>
-            </CardContent>
-          </Card>
+            {/* いいねランキング */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Heart className="h-5 w-5 text-red-500" />
+                  <span>拍手ランキング</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">全社員中</span>
+                    <span className="text-2xl font-bold text-red-600">{stats.monthly.likeRank}位</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-xs text-gray-500">/ {stats.monthly.totalUsers}人中</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
-        {/* 累計データ */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Users className="h-5 w-5 text-blue-500" />
-                <span>あなたが投稿した人</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {stats.topSenders.slice(0, 5).map((sender, index) => (
-                  <div key={sender.id} className="flex items-center space-x-3">
-                    <Badge variant={index < 3 ? "default" : "secondary"} className="w-6 h-6 rounded-full flex items-center justify-center text-xs">
-                      {index + 1}
-                    </Badge>
-                    <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                      {sender.customAvatarUrl ? (
-                        <img
-                          src={sender.customAvatarUrl}
-                          alt={sender.name}
-                          className="h-8 w-8 rounded-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-xs font-medium">{sender.name.charAt(0)}</span>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{sender.displayName || sender.name}</p>
-                    </div>
-                    <span className="text-sm font-bold text-blue-600">{sender.cardsCount}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        {/* 累計個人インタラクションランキング */}
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <Users className="h-5 w-5 text-blue-500" />
+            <h2 className="text-xl font-bold text-gray-900">累計個人インタラクションランキング</h2>
+            <Badge variant="outline">過去の通算データ</Badge>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Gift className="h-5 w-5 text-green-500" />
-                <span>あなたに投稿した人</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {stats.topReceivers.slice(0, 5).map((receiver, index) => (
-                  <div key={receiver.id} className="flex items-center space-x-3">
-                    <Badge variant={index < 3 ? "default" : "secondary"} className="w-6 h-6 rounded-full flex items-center justify-center text-xs">
-                      {index + 1}
-                    </Badge>
-                    <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                      {receiver.customAvatarUrl ? (
-                        <img
-                          src={receiver.customAvatarUrl}
-                          alt={receiver.name}
-                          className="h-8 w-8 rounded-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-xs font-medium">{receiver.name.charAt(0)}</span>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{receiver.displayName || receiver.name}</p>
-                    </div>
-                    <span className="text-sm font-bold text-green-600">{receiver.pointsReceived}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <Tabs defaultValue="sentCards" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="sentCards" className="flex items-center space-x-2">
+                <MessageSquare className="h-4 w-4" />
+                <span>投稿した相手</span>
+              </TabsTrigger>
+              <TabsTrigger value="receivedCards" className="flex items-center space-x-2">
+                <MessageSquare className="h-4 w-4" />
+                <span>投稿してくれた人</span>
+              </TabsTrigger>
+              <TabsTrigger value="sentLikes" className="flex items-center space-x-2">
+                <Heart className="h-4 w-4" />
+                <span>拍手した相手</span>
+              </TabsTrigger>
+              <TabsTrigger value="receivedLikes" className="flex items-center space-x-2">
+                <Heart className="h-4 w-4" />
+                <span>拍手してくれた人</span>
+              </TabsTrigger>
+            </TabsList>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Target className="h-5 w-5 text-purple-500" />
-                <span>あなたが拍手した人</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {stats.topGivers.slice(0, 5).map((giver, index) => (
-                  <div key={giver.id} className="flex items-center space-x-3">
-                    <Badge variant={index < 3 ? "default" : "secondary"} className="w-6 h-6 rounded-full flex items-center justify-center text-xs">
-                      {index + 1}
-                    </Badge>
-                    <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                      {giver.customAvatarUrl ? (
-                        <img
-                          src={giver.customAvatarUrl}
-                          alt={giver.name}
-                          className="h-8 w-8 rounded-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-xs font-medium">{giver.name.charAt(0)}</span>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{giver.displayName || giver.name}</p>
-                    </div>
-                    <span className="text-sm font-bold text-purple-600">{giver.pointsGiven}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+            <TabsContent value="sentCards" className="mt-6">
+              {renderPersonalRanking(
+                stats.personal.sentCards,
+                "あなたが投稿した相手ランキング",
+                <MessageSquare className="h-5 w-5 text-green-500" />,
+                "まだ投稿データがありません"
+              )}
+            </TabsContent>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Award className="h-5 w-5 text-amber-500" />
-                <span>あなたに拍手した人</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {stats.topAppreciatedUsers.slice(0, 5).map((user, index) => (
-                  <div key={user.id} className="flex items-center space-x-3">
-                    <Badge variant={index < 3 ? "default" : "secondary"} className="w-6 h-6 rounded-full flex items-center justify-center text-xs">
-                      {index + 1}
-                    </Badge>
-                    <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                      {user.customAvatarUrl ? (
-                        <img
-                          src={user.customAvatarUrl}
-                          alt={user.name}
-                          className="h-8 w-8 rounded-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-xs font-medium">{user.name.charAt(0)}</span>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{user.displayName || user.name}</p>
-                    </div>
-                    <span className="text-sm font-bold text-amber-600">{user.totalPoints}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+            <TabsContent value="receivedCards" className="mt-6">
+              {renderPersonalRanking(
+                stats.personal.receivedCards,
+                "あなたに投稿してくれた人ランキング",
+                <MessageSquare className="h-5 w-5 text-blue-500" />,
+                "まだ受信データがありません"
+              )}
+            </TabsContent>
+
+            <TabsContent value="sentLikes" className="mt-6">
+              {renderPersonalRanking(
+                stats.personal.sentLikes,
+                "あなたが拍手した相手ランキング",
+                <Heart className="h-5 w-5 text-red-500" />,
+                "まだ拍手データがありません"
+              )}
+            </TabsContent>
+
+            <TabsContent value="receivedLikes" className="mt-6">
+              {renderPersonalRanking(
+                stats.personal.receivedLikes,
+                "あなたに拍手してくれた人ランキング",
+                <Heart className="h-5 w-5 text-pink-500" />,
+                "まだ受信拍手データがありません"
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
