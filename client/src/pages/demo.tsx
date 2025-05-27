@@ -232,7 +232,7 @@ export default function Demo() {
 
                     <div className="flex items-center space-x-2 mb-3">
                       <span className="text-sm text-gray-600">→</span>
-                      <Avatar size="sm">
+                      <Avatar className="h-8 w-8">
                         <AvatarFallback style={{ backgroundColor: card.recipientColor, color: 'white' }}>
                           {card.recipientName.charAt(0)}
                         </AvatarFallback>

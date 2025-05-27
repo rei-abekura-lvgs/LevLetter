@@ -58,7 +58,7 @@ export default function Landing() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Link href="/contact">
+              <Link href="/demo">
                 <Button size="lg" className="group bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-gray-900 font-bold px-10 py-5 text-lg rounded-xl shadow-2xl hover:shadow-yellow-400/25 transition-all duration-300 transform hover:scale-105">
                   無料トライアル開始
                   <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
@@ -603,7 +603,7 @@ export default function Landing() {
             30日間無料でLevLetterの全機能をお試しいただけます
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
+            <Link href="/demo">
               <Button size="lg" className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-8 py-4 text-lg">
                 無料トライアル開始
                 <ArrowRight className="ml-2 h-5 w-5" />

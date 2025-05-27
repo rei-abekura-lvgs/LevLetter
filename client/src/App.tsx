@@ -128,6 +128,9 @@ function AppRoutes() {
         <Route path="/contact">
           <Contact />
         </Route>
+        <Route path="/demo">
+          <Demo />
+        </Route>
         <Route path="/landing">
           <Landing />
         </Route>
