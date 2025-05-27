@@ -1318,42 +1318,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userCardRank = monthlyCardSenders.findIndex(item => item.user.id === userId) + 1;
       const userLikeRank = monthlyLikeSenders.findIndex(item => item.user.id === userId) + 1;
 
-      // 累計個人インタラクションデータ
+      // 累計個人インタラクションデータ（簡略化版）
       const sentCards = await storage.getCardsByUser(userId);
-      const receivedCards = await storage.getCardsToUser(userId);
-      const sentLikes = await storage.getLikesByUser(userId);
-      const receivedLikes = await storage.getLikesToUserCards(userId);
+      const receivedCardsData = await storage.getCardsToUser(userId);
 
       // 個人インタラクション相手の統計（上位30名）
       const sentCardStats = sentCards.reduce((acc, card) => {
-        const recipientId = card.recipient?.id || card.recipientId;
+        const recipientId = card.recipientId;
         if (recipientId && recipientId !== userId) {
           acc[recipientId] = (acc[recipientId] || 0) + 1;
         }
         return acc;
       }, {} as Record<number, number>);
 
-      const receivedCardStats = receivedCards.reduce((acc, card) => {
-        const senderId = card.sender?.id || card.senderId;
+      const receivedCardStats = receivedCardsData.reduce((acc, card) => {
+        const senderId = card.senderId;
         if (senderId && senderId !== userId) {
           acc[senderId] = (acc[senderId] || 0) + 1;
-        }
-        return acc;
-      }, {} as Record<number, number>);
-
-      const sentLikeStats = sentLikes.reduce((acc, like) => {
-        // カードの受信者に対してのいいね統計
-        const cardRecipientId = like.cardRecipientId;
-        if (cardRecipientId && cardRecipientId !== userId) {
-          acc[cardRecipientId] = (acc[cardRecipientId] || 0) + 1;
-        }
-        return acc;
-      }, {} as Record<number, number>);
-
-      const receivedLikeStats = receivedLikes.reduce((acc, like) => {
-        const userId = like.user?.id;
-        if (userId) {
-          acc[userId] = (acc[userId] || 0) + 1;
         }
         return acc;
       }, {} as Record<number, number>);
@@ -1379,8 +1360,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const personalSentCards = await createPersonalRanking(sentCardStats);
       const personalReceivedCards = await createPersonalRanking(receivedCardStats);
-      const personalSentLikes = await createPersonalRanking(sentLikeStats);
-      const personalReceivedLikes = await createPersonalRanking(receivedLikeStats);
+      // いいね機能は後で実装
+      const personalSentLikes: any[] = [];
+      const personalReceivedLikes: any[] = [];
 
       return res.json({
         // 最近1ヶ月のデータ
