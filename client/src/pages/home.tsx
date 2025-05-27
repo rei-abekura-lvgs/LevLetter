@@ -109,8 +109,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
   // いいねボタンのテキスト
   const getLikeButtonText = () => {
-    if (userLikeCount === 0) return "👏 いいね";
-    return `👏 ${userLikeCount}回いいね済み`;
+    if (userLikeCount === 0) return "👏 共感";
+    return `👏 ${userLikeCount}回共感済み`;
   };
   
   // 表示する受信者（最大3人）
@@ -247,8 +247,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   await apiRequest('POST', `/api/cards/${card.id}/likes`);
                   onRefresh?.();
                   toast({ 
-                    title: "感謝を送りました！✨", 
-                    description: `${card.sender.displayName || card.sender.name}さんに感謝が届きました`,
+                    title: "共感しました！✨", 
+                    description: "2ポイント消費しました",
                     duration: 2000
                   });
                 } catch (error) {
@@ -264,15 +264,17 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             >
               <Heart className={`h-4 w-4 mr-2 ${userHasLiked ? 'fill-current' : ''}`} />
               <span className="text-xs font-medium">
-                {getLikeButtonText()} {totalLikes >= 50 ? '' : `(${50 - totalLikes}回可能)`}
+                {getLikeButtonText()}
               </span>
             </Button>
             
-            {totalLikes > userLikeCount && (
+            {totalLikes > 0 && (
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 text-gray-500 text-xs">
                   <Heart className="h-3 w-3 fill-current text-pink-400" />
-                  <span>他 {totalLikes - userLikeCount}件</span>
+                  <span>
+                    {totalLikes === 1 ? '1人が共感' : `${totalLikes}人が共感`}
+                  </span>
                 </div>
               </div>
             )}
