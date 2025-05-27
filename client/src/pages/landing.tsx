@@ -45,7 +45,7 @@ export default function Landing() {
           <div className="text-center">
             <div className="mb-8 inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
               <BearLogo size={32} />
-              <span className="text-white/90 text-sm font-medium tracking-wide">3,000+ 企業が導入済み</span>
+              <span className="text-white/90 text-sm font-medium tracking-wide">3,000人+ 企業が導入済み</span>
             </div>
             
             <h1 className="text-5xl md:text-7xl font-extrabold mb-8 text-white leading-tight">
