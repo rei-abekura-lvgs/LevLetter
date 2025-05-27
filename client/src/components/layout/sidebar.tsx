@@ -1,7 +1,7 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/context/auth-context-new";
-import { Home, Settings, UserCircle, LogOut, BarChart3, TrendingUp } from "lucide-react";
+import { Home, Settings, UserCircle, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
 import { BearLogo } from "@/components/bear-logo";
@@ -56,26 +56,6 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
               </div>
             </Link>
             
-            <Link href="/dashboard">
-              <div className={cn(
-                "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
-                location === "/dashboard" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
-              )}>
-                <BarChart3 className="h-5 w-5" />
-                <span className="font-medium">ダッシュボード</span>
-              </div>
-            </Link>
-
-            <Link href="/ranking">
-              <div className={cn(
-                "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
-                location === "/ranking" ? "bg-[#3990EA] text-white" : "text-gray-700 hover:bg-gray-100"
-              )}>
-                <TrendingUp className="h-5 w-5" />
-                <span className="font-medium">ランキング</span>
-              </div>
-            </Link>
-
             <Link href="/profile">
               <div className={cn(
                 "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors",
