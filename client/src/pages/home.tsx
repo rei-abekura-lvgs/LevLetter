@@ -529,6 +529,11 @@ export default function Home({ user }: HomeProps) {
         <div className="flex-1 overflow-hidden">
 
         <TabsContent value="timeline" className="flex-1 flex flex-col">
+          {/* タイムラインタイトル */}
+          <div className="p-4 border-b border-gray-100">
+            <h2 className="text-xl font-bold text-gray-800">タイムライン</h2>
+          </div>
+
           {/* タイムラインヘッダー - スクロール時に隠れる */}
           <div className={`flex items-center justify-between transition-all duration-300 ${
             isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'

@@ -77,16 +77,6 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
               </div>
             </div>
           </div>
-          
-          {/* ログアウトボタン */}
-          <div className="pt-6 border-t border-gray-200">
-            <button
-              onClick={handleLogout}
-              className="w-full text-left text-gray-700 hover:bg-gray-100 p-3 rounded-lg transition-colors"
-            >
-              ログアウト
-            </button>
-          </div>
         </div>
       )}
     </div>
