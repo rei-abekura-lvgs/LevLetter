@@ -230,55 +230,56 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
       <CardFooter className="pt-0 pb-4">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className={`h-8 px-2 transition-all ${
-                !canLike 
-                  ? 'text-gray-400 cursor-not-allowed opacity-50' 
-                  : userHasLiked 
-                  ? 'text-pink-500 bg-pink-50 hover:bg-pink-100' 
-                  : 'text-gray-600 hover:text-pink-500 hover:bg-pink-50'
-              }`}
-              onClick={async () => {
-                if (!canLike || totalLikes >= 50) return;
-                try {
-                  await apiRequest('POST', `/api/cards/${card.id}/likes`);
-                  onRefresh?.();
-                  toast({ 
-                    title: "いいねしました！✨", 
-                    description: "2ポイント消費しました",
-                    duration: 2000
-                  });
-                } catch (error) {
-                  console.error('Like error:', error);
-                  toast({ 
-                    title: "エラーが発生しました",
-                    description: "いいねの送信に失敗しました",
-                    variant: "destructive" 
-                  });
-                }
-              }}
-              disabled={totalLikes >= 50 || !canLike}
-            >
-              <Heart className={`h-4 w-4 ${userHasLiked ? 'fill-current' : ''}`} />
+            <div className="flex items-center gap-1">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className={`h-8 px-2 transition-all ${
+                  !canLike 
+                    ? 'text-gray-400 cursor-not-allowed opacity-50' 
+                    : userHasLiked 
+                    ? 'text-pink-500 bg-pink-50 hover:bg-pink-100' 
+                    : 'text-gray-600 hover:text-pink-500 hover:bg-pink-50'
+                }`}
+                onClick={async () => {
+                  if (!canLike || totalLikes >= 50) return;
+                  try {
+                    await apiRequest('POST', `/api/cards/${card.id}/likes`);
+                    onRefresh?.();
+                    toast({ 
+                      title: "いいねしました！✨", 
+                      description: "2ポイント消費しました",
+                      duration: 2000
+                    });
+                  } catch (error) {
+                    console.error('Like error:', error);
+                    toast({ 
+                      title: "エラーが発生しました",
+                      description: "いいねの送信に失敗しました",
+                      variant: "destructive" 
+                    });
+                  }
+                }}
+                disabled={totalLikes >= 50 || !canLike}
+              >
+                <Heart className={`h-4 w-4 ${userHasLiked ? 'fill-current' : ''}`} />
+              </Button>
+              
               {totalLikes > 0 && (
-                <span className="text-xs font-medium ml-1">
-                  {totalLikes}
-                </span>
-              )}
-            </Button>
-            
-            {totalLikes > 0 && (
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 text-gray-500 text-xs">
-                  <Heart className="h-3 w-3 fill-current text-pink-400" />
-                  <span>
-                    {totalLikes === 1 ? '1人が共感' : `${totalLikes}人が共感`}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 px-2 text-gray-600 hover:text-pink-500 hover:bg-pink-50"
+                  onClick={() => setShowRecipientsDialog(true)}
+                >
+                  <span className="text-xs font-medium">
+                    {totalLikes}
                   </span>
-                </div>
-              </div>
-            )}
+                </Button>
+              )}
+            </div>
+            
+
           </div>
           
           <div className="flex items-center gap-2">
