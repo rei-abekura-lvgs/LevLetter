@@ -12,49 +12,38 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   const [bearPosition, setBearPosition] = useState({ x: 50, y: 50 });
   const [bearDirection, setBearDirection] = useState({ x: 2, y: 1.5 });
 
-  // スクリーンセーバーのアニメーション - 改良版
+  // スクリーンセーバーのアニメーション - ゆっくり安定版
   useEffect(() => {
     let animationFrame: number;
+    let lastTime = 0;
     
     if (isScreensaverActive) {
-      const animate = () => {
-        setBearPosition(prevPosition => {
-          setBearDirection(prevDirection => {
-            let newX = prevPosition.x + prevDirection.x;
-            let newY = prevPosition.y + prevDirection.y;
-            let newDirectionX = prevDirection.x;
-            let newDirectionY = prevDirection.y;
+      const animate = (currentTime: number) => {
+        // 60fpsに制限してゆっくりに
+        if (currentTime - lastTime > 80) { // 80ms間隔でゆっくり
+          setBearPosition(prevPosition => {
+            let newX = prevPosition.x + bearDirection.x * 0.3; // 速度を0.3倍に
+            let newY = prevPosition.y + bearDirection.y * 0.3;
 
             // 壁に衝突した時の反射処理
             if (newX <= 2 || newX >= 95) {
-              newDirectionX = -newDirectionX;
+              setBearDirection(prev => ({ x: -prev.x, y: prev.y }));
               newX = Math.max(2, Math.min(95, newX));
             }
             if (newY <= 2 || newY >= 95) {
-              newDirectionY = -newDirectionY;
+              setBearDirection(prev => ({ x: prev.x, y: -prev.y }));
               newY = Math.max(2, Math.min(95, newY));
             }
 
-            return { x: newDirectionX, y: newDirectionY };
+            return { x: newX, y: newY };
           });
-
-          let newX = prevPosition.x + bearDirection.x;
-          let newY = prevPosition.y + bearDirection.y;
-
-          if (newX <= 2 || newX >= 95) {
-            newX = Math.max(2, Math.min(95, newX));
-          }
-          if (newY <= 2 || newY >= 95) {
-            newY = Math.max(2, Math.min(95, newY));
-          }
-
-          return { x: newX, y: newY };
-        });
+          lastTime = currentTime;
+        }
         
         animationFrame = requestAnimationFrame(animate);
       };
       
-      animate();
+      animationFrame = requestAnimationFrame(animate);
     }
 
     return () => {
@@ -62,7 +51,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         cancelAnimationFrame(animationFrame);
       }
     };
-  }, [isScreensaverActive, bearDirection]);
+  }, [isScreensaverActive]);
 
   // アクティビティ監視とスクリーンセーバー自動起動
   useEffect(() => {

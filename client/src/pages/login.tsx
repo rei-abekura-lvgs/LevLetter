@@ -111,6 +111,9 @@ export default function Login() {
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="text-center">
+          <div className="flex justify-center mb-4">
+            <BearLogo size={60} />
+          </div>
           <h2 className="text-2xl font-semibold">ログイン</h2>
         </div>
       </div>

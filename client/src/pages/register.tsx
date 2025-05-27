@@ -14,6 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { apiRequest } from "@/lib/queryClient";
 import { InfoIcon, CheckCircle, XCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BearLogo } from "@/components/bear-logo";
 
 // バリデーションルールを拡張
 const extendedRegisterSchema = z.object({
@@ -219,6 +220,9 @@ export default function Register() {
   return (
     <div className="space-y-6">
       <div className="space-y-2 text-center">
+        <div className="flex justify-center mb-4">
+          <BearLogo size={60} />
+        </div>
         <h1 className="text-3xl font-bold">アカウント作成</h1>
         <p className="text-muted-foreground">
           Googleアカウントでの簡単登録を推奨しています
