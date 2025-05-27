@@ -38,6 +38,9 @@ export default function Ranking() {
     queryKey: ["/api/rankings"],
   });
 
+  // データ構造を確認するためのデバッグ
+  console.log("Rankings data:", rankings);
+
   if (isLoading) {
     return (
       <div className="p-6">

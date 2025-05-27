@@ -1,0 +1,141 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+1:09:25 PM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+warn - The class `duration-[3000ms]` is ambiguous and matches multiple utilities.
+warn - If this is content and not a class, replace it with `duration-&lsqb;3000ms&rsqb;` to silence this warning.
+
+warn - The class `duration-[60ms]` is ambiguous and matches multiple utilities.
+warn - If this is content and not a class, replace it with `duration-&lsqb;60ms&rsqb;` to silence this warning.
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: wYkalsQNwIAFxvXQEUVJpY3KxeEHbijo
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T13:09:30.623Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+1:09:30 PM [express] GET /api/auth/me 401 in 4ms :: {"message":"認証が必要です"}
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: YLoWrnk3ZDwapZnIdSmR-oiZmFDN7Hdm
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T13:09:35.493Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+1:09:35 PM [express] GET /api/auth/me 401 in 2ms :: {"message":"認証が必要です"}
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: _zLaQt-QmqMNMy0a3PNA6Z7rk3w0Hwzn
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T13:09:38.470Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+1:09:38 PM [express] GET /api/auth/me 401 in 1ms :: {"message":"認証が必要です"}
+🌐 Google認証開始
+🔗 リダイレクトURI: https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/auth/callback
+🔗 認証URL: https://ap-northeast-1fdmrl4gwu.auth.ap-northeast-1.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=https%3A%2F%2F39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev%2Fauth%2Fcallback&response_type=code&client_id=36e7s3i07u3r5t819b9ka9koqq&scope=email+openid+profile
+1:09:50 PM [express] GET /api/auth/google 302 in 4ms
+🌐 Google認証開始
+🔗 リダイレクトURI: https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/auth/callback
+🔗 認証URL: https://ap-northeast-1fdmrl4gwu.auth.ap-northeast-1.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=https%3A%2F%2F39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev%2Fauth%2Fcallback&response_type=code&client_id=36e7s3i07u3r5t819b9ka9koqq&scope=email+openid+profile
+1:09:51 PM [express] GET /api/auth/google 302 in 2ms
+🔄 Google認証コールバック処理開始
+🔑 認証コード受信: ee94c645-9879-4c0d-947b-136b2424bdda
+🔄 トークン交換開始...
+  - ドメイン: ap-northeast-1fdmrl4gwu.auth.ap-northeast-1.amazoncognito.com
+  - クライアントID: 36e7s3i07u3r5t819b9ka9koqq
+  - クライアントシークレット存在: true
+  - リダイレクトURI: https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/auth/callback
+🔐 Basic認証ヘッダーを追加
+📤 トークンエンドポイントへリクエスト: https://ap-northeast-1fdmrl4gwu.auth.ap-northeast-1.amazoncognito.com/oauth2/token
+✅ トークン交換成功
+✅ トークン取得成功
+👤 Cognitoユーザー情報: {
+  id: 'b7642ae8-50c1-7035-e491-2d73e50fdcf3',
+  email: 'rei.abekura@leverages.jp',
+  name: '阿部倉怜',
+  givenName: undefined,
+  familyName: '阿部倉',
+  picture: 'https://lh3.googleusercontent.com/a/ACg8ocK-qCnWDj0Z4Ysy1ZAMoCH7SLgOA_jk4dbYqavCVyDhrNQ_z9A=s96-c'
+}
+🔍 従業員データベース照合開始: rei.abekura@leverages.jp
+🔍 メール検索: rei.abekura@leverages.jp
+📋 検索結果: ユーザー発見 ID:5
+✅ 従業員データベース照合成功: rei.abekura@leverages.jp
+👤 既存Google認証ユーザーでログイン: rei.abekura@leverages.jp
+💾 セッション保存: { userId: 5, sessionId: 'sNwyha6d3fF3YvYsefXbsDqVDFE1-_2N' }
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: sNwyha6d3fF3YvYsefXbsDqVDFE1-_2N
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T13:09:58.906Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+✅ 認証ユーザー情報返送: 阿部倉 怜 (ID: 5 )
+1:09:59 PM [express] GET /api/auth/me 304 in 25ms :: {"id":5,"email":"rei.abekura@leverages.jp","nam…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: sNwyha6d3fF3YvYsefXbsDqVDFE1-_2N
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T13:09:59.113Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+1:09:59 PM [express] GET /api/cards 304 in 561ms :: [{"id":131,"senderId":5,"recipientId":334,"recip…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/dashboard/stats
+🔑 セッションID: sNwyha6d3fF3YvYsefXbsDqVDFE1-_2N
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-03T13:10:00.029Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+1:10:02 PM [express] GET /api/dashboard/stats 304 in 253ms :: {"monthly":{"pointConversionRate":32,"…
