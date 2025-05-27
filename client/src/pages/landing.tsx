@@ -607,7 +607,7 @@ export default function Landing() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#3990EA] px-8 py-4 text-lg">
+            <Button size="lg" variant="outline" className="border-[#3990EA] text-[#3990EA] hover:bg-[#3990EA] hover:text-white px-8 py-4 text-lg">
               お問い合わせ
             </Button>
           </div>
