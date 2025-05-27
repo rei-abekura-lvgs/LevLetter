@@ -10,33 +10,50 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   const [bearPosition, setBearPosition] = useState({ x: 50, y: 50 });
   const [bearDirection, setBearDirection] = useState({ x: 2, y: 1.5 });
   
-  // ゲーム状態
+  // ゲーム状態（育成ゲーム）
   const [isGameActive, setIsGameActive] = useState(false);
-  const [score, setScore] = useState(0);
   const [totalClicks, setTotalClicks] = useState(0);
   const [bearLevel, setBearLevel] = useState(1);
   const [bearExp, setBearExp] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
+  const [bearSpeed] = useState(1.5);
   const [bears, setBears] = useState([
     { id: 1, x: 50, y: 50, directionX: 1, directionY: 1, level: 1, color: 'white' }
   ]);
 
-  // ゲームタイマー
+  // レベルアップ計算
+  const getExpForNextLevel = (level: number) => level * 10;
+  const getBearColorByLevel = (level: number) => {
+    if (level >= 10) return 'rainbow';
+    if (level >= 7) return 'gold';
+    if (level >= 5) return 'purple';
+    if (level >= 3) return 'blue';
+    return 'white';
+  };
+  
+  // レベルアップチェック
   useEffect(() => {
-    if (!isGameActive || timeLeft <= 0) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          setIsGameActive(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isGameActive, timeLeft]);
+    const expNeeded = getExpForNextLevel(bearLevel);
+    if (bearExp >= expNeeded) {
+      setBearLevel(prev => prev + 1);
+      setBearExp(0);
+      console.log("🎉 レベルアップ！レベル", bearLevel + 1);
+      
+      // レベルアップ時に新しいクマを追加
+      if (bears.length < 10) {
+        const newBearColor = getBearColorByLevel(bearLevel + 1);
+        setBears(prev => [...prev, {
+          id: Math.max(...prev.map(b => b.id)) + 1,
+          x: 20 + Math.random() * 60,
+          y: 20 + Math.random() * 60,
+          directionX: (Math.random() - 0.5) * 2,
+          directionY: (Math.random() - 0.5) * 2,
+          level: bearLevel + 1,
+          color: newBearColor
+        }]);
+      }
+    }
+  }, [bearExp, bearLevel, bears.length]);
 
   // クマアニメーション（複数クマ対応）
   useEffect(() => {
@@ -115,67 +132,51 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     };
   }, [isScreensaverActive]);
 
-  // ゲーム開始
+  // 育成ゲーム開始
   const startGame = () => {
-    console.log("🎮 ゲーム開始！");
+    console.log("🎮 育成ゲーム開始！");
     setIsScreensaverActive(true);
     setIsGameActive(true);
     setGameStarted(true);
-    setScore(0);
-    setTimeLeft(30);
-    setBearSpeed(2);
+    setTotalClicks(0);
+    setBearLevel(1);
+    setBearExp(0);
     
     // 初期クマ1匹
     setBears([{
       id: 1,
       x: 20 + Math.random() * 60,
       y: 20 + Math.random() * 60,
-      directionX: (Math.random() - 0.5) * 4,
-      directionY: (Math.random() - 0.5) * 4
+      directionX: (Math.random() - 0.5) * 2,
+      directionY: (Math.random() - 0.5) * 2,
+      level: 1,
+      color: 'white'
     }]);
   };
 
-  // クマをキャッチ
-  const catchBear = (bearId: number) => (e: React.MouseEvent) => {
+  // クマをクリック（育成）
+  const clickBear = (bearId: number) => (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!isGameActive) return;
     
-    console.log("🎯 クマキャッチ！ID:", bearId);
-    setScore(prev => prev + 1);
+    console.log("🐻 クマクリック！ID:", bearId, "経験値+1");
     
-    // 速度アップ（最大5まで）
-    setBearSpeed(prev => Math.min(5, prev + 0.3));
+    // 総クリック数とレベル経験値を増加
+    setTotalClicks(prev => prev + 1);
+    setBearExp(prev => prev + 1);
     
-    // 新しいクマを追加！（最大8匹まで）
-    setBears(prevBears => {
-      const newBears = [...prevBears];
-      
-      // 最大8匹まで追加
-      if (newBears.length < 8) {
-        const newId = Math.max(...newBears.map(b => b.id)) + 1;
-        newBears.push({
-          id: newId,
-          x: 10 + Math.random() * 80,
-          y: 10 + Math.random() * 80,
-          directionX: (Math.random() - 0.5) * 6,
-          directionY: (Math.random() - 0.5) * 6
-        });
-        console.log("🐻 新しいクマが登場！現在", newBears.length, "匹");
-      }
-      
-      // キャッチされたクマは新しい位置に移動
-      return newBears.map(bear => 
+    // クリックエフェクト（クマを少し揺らす）
+    setBears(prevBears => 
+      prevBears.map(bear => 
         bear.id === bearId 
           ? {
               ...bear,
-              x: 10 + Math.random() * 80,
-              y: 10 + Math.random() * 80,
-              directionX: (Math.random() - 0.5) * 6,
-              directionY: (Math.random() - 0.5) * 6
+              x: Math.max(10, Math.min(90, bear.x + (Math.random() - 0.5) * 10)),
+              y: Math.max(10, Math.min(90, bear.y + (Math.random() - 0.5) * 10))
             }
           : bear
-      );
-    });
+      )
+    );
   };
 
   // スクリーンセーバー開始（従来の機能）
