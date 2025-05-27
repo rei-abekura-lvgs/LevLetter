@@ -13,11 +13,12 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   // ゲーム状態
   const [isGameActive, setIsGameActive] = useState(false);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30);
-  const [bearSpeed, setBearSpeed] = useState(2);
+  const [totalClicks, setTotalClicks] = useState(0);
+  const [bearLevel, setBearLevel] = useState(1);
+  const [bearExp, setBearExp] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [bears, setBears] = useState([
-    { id: 1, x: 50, y: 50, directionX: 2, directionY: 1.5 }
+    { id: 1, x: 50, y: 50, directionX: 1, directionY: 1, level: 1, color: 'white' }
   ]);
 
   // ゲームタイマー
