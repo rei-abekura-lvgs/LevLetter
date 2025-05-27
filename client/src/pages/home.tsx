@@ -48,7 +48,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   // いいね詳細データを取得
   const { data: likeDetails } = useQuery({
     queryKey: [`/api/cards/${card.id}/likes/details`],
-    enabled: showDetailsDialog && detailsTab === "likes",
+    enabled: showDetailsDialog,
   });
 
   // 削除権限チェック
@@ -256,7 +256,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     onRefresh?.();
                     toast({ 
                       title: "いいねしました！✨", 
-                      description: "2pt",
+                      description: "2pt使用しました",
                       duration: 2000
                     });
                   } catch (error) {
@@ -283,10 +283,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   variant="ghost"
                   size="sm"
                   className="h-8 px-2 text-gray-600 hover:text-pink-500 hover:bg-pink-50"
-                  onClick={() => {
-                    setShowDetailsDialog(true);
-                    setDetailsTab("likes");
-                  }}
+                  onClick={() => setShowDetailsDialog(true)}
                 >
                   <span className="text-xs font-medium">
                     {totalLikes}
@@ -342,6 +339,45 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
       </CardFooter>
 
 
+
+      {/* いいね詳細ダイアログ */}
+      <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>いいね詳細</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {likeDetails && Array.isArray(likeDetails) && likeDetails.length > 0 ? (
+              likeDetails.map((like: any, index: number) => (
+                <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage 
+                      src={like.user.customAvatarUrl || bearAvatarUrl} 
+                      alt={like.user.displayName || like.user.name}
+                      className="object-cover"
+                    />
+                    <AvatarFallback style={{ backgroundColor: like.user.avatarColor }}>
+                      {(like.user.displayName || like.user.name || "?").charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium">{like.user.displayName || like.user.name}</div>
+                    <div className="text-xs text-gray-500">{like.user.department}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-medium text-pink-600">{like.count}回</div>
+                    <div className="text-xs text-gray-500">{like.count * 2}pt</div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-500 py-4">
+                いいねがありません
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* 削除確認ダイアログ */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
