@@ -532,16 +532,10 @@ export default function Home({ user }: HomeProps) {
           {/* タイムラインタイトル */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <h2 className="text-xl font-bold text-gray-800">タイムライン</h2>
-            <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
-              {filteredCards.length}件のカード
-            </Badge>
-          </div>
-
-          {/* タイムラインヘッダー - スクロール時に隠れる */}
-          <div className={`flex items-center justify-between transition-all duration-300 p-4 ${
-            isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
-          }`}>
             <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
+                {filteredCards.length}件のカード
+              </Badge>
               <Select defaultValue="newest" onValueChange={handleSortChange}>
                 <SelectTrigger className="w-[120px] h-8 text-sm">
                   <SelectValue placeholder="新しい順" />
@@ -551,19 +545,10 @@ export default function Home({ user }: HomeProps) {
                   <SelectItem value="popular">人気順</SelectItem>
                 </SelectContent>
               </Select>
-              
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={refreshCards}
-                className="ml-2"
-                disabled={isLoading}
-              >
-                <RotateCcw className={`h-4 w-4 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
-                更新
-              </Button>
             </div>
           </div>
+
+
 
           {/* サンクスカード送信ボタン - 控えめなデザイン */}
           <div className={`hidden md:block transition-all duration-300 ${
