@@ -353,6 +353,8 @@ export default function Home({ user }: HomeProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [filterBy, setFilterBy] = useState<"all" | "person" | "department">("all");
+  const [filterValue, setFilterValue] = useState<string>("");
   const { toast } = useToast();
 
   // URLパラメータから成功メッセージを読み取り
@@ -376,17 +378,40 @@ export default function Home({ user }: HomeProps) {
     refetchInterval: 30000,
   });
 
+  // 人・部署のユニークリストを生成
+  const uniquePeople = [...new Set(cards.flatMap(card => {
+    const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+    return allUsers.map(user => user.displayName || user.name);
+  }))].sort();
+
+  const uniqueDepartments = [...new Set(cards.flatMap(card => {
+    const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+    return allUsers.map(user => user.department).filter(Boolean);
+  }))].sort();
+
   // フィルタリングロジック
   const filteredCards = cards.filter((card) => {
     const recipients = [card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
     const recipientIds = recipients.map(r => r?.id).filter(Boolean);
     
-    if (activeTab === "all") return true;
-    if (activeTab === "received") return recipientIds.includes(user.id);
-    if (activeTab === "sent") return card.senderId === user.id;
-    if (activeTab === "liked") {
-      return card.likes?.some(like => like.userId === user.id) || false;
+    // タブフィルター
+    if (activeTab === "received" && !recipientIds.includes(user.id)) return false;
+    if (activeTab === "sent" && card.senderId !== user.id) return false;
+    if (activeTab === "liked" && !(card.likes?.some(like => like.userId === user.id) || false)) return false;
+    
+    // 人・部署フィルター
+    if (filterBy === "person" && filterValue) {
+      const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+      const hasMatchingPerson = allUsers.some(user => (user.displayName || user.name) === filterValue);
+      if (!hasMatchingPerson) return false;
     }
+    
+    if (filterBy === "department" && filterValue) {
+      const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+      const hasMatchingDepartment = allUsers.some(user => user.department === filterValue);
+      if (!hasMatchingDepartment) return false;
+    }
+    
     return true;
   }).sort((a, b) => {
     if (sortOrder === "newest") {
@@ -562,7 +587,7 @@ export default function Home({ user }: HomeProps) {
                   <SelectItem value="popular">人気順</SelectItem>
                 </SelectContent>
               </Select>
-              <Select defaultValue="all" onValueChange={setFilterBy}>
+              <Select defaultValue="all" onValueChange={(value) => setFilterBy(value as "all" | "person" | "department")}>
                 <SelectTrigger className="w-[100px] h-8 text-sm">
                   <SelectValue placeholder="全て" />
                 </SelectTrigger>
@@ -579,10 +604,10 @@ export default function Home({ user }: HomeProps) {
                   </SelectTrigger>
                   <SelectContent>
                     {filterBy === 'person' ? 
-                      uniquePeople.map(person => (
+                      uniquePeople.map((person: string) => (
                         <SelectItem key={person} value={person}>{person}</SelectItem>
                       )) :
-                      uniqueDepartments.map(dept => (
+                      uniqueDepartments.map((dept: string) => (
                         <SelectItem key={dept} value={dept}>{dept}</SelectItem>
                       ))
                     }
