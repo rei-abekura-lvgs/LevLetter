@@ -88,25 +88,30 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
     }
   };
 
-  // いいね状況を確認
-  const userLikeCount = card.likes?.filter(like => like.userId === currentUser.id).length || 0;
-  const totalLikes = card.totalLikes || 0;
-  const userHasLiked = userLikeCount > 0;
-
-  // いいねボタンのテキスト
-  const getLikeButtonText = () => {
-    if (userLikeCount === 0) return "👏 いいね";
-    return `👏 ${userLikeCount}回いいね済み`;
-  };
-
   // 受信者表示の処理 - 全受信者を横並びで表示
-  const allRecipients = [];
+  const allRecipients: any[] = [];
   if (card.recipient) {
     allRecipients.push(card.recipient);
   }
   if (Array.isArray(card.additionalRecipientUsers)) {
     allRecipients.push(...card.additionalRecipientUsers);
   }
+
+  // いいね状況を確認
+  const userLikeCount = card.likes?.filter(like => like.userId === currentUser.id).length || 0;
+  const totalLikes = card.totalLikes || 0;
+  const userHasLiked = userLikeCount > 0;
+  
+  // 送信者と受信者の確認
+  const isSender = card.senderId === currentUser.id;
+  const isRecipient = allRecipients.some(recipient => recipient.id === currentUser.id);
+  const canLike = !isSender && !isRecipient;
+
+  // いいねボタンのテキスト
+  const getLikeButtonText = () => {
+    if (userLikeCount === 0) return "👏 いいね";
+    return `👏 ${userLikeCount}回いいね済み`;
+  };
   
   // 表示する受信者（最大3人）
   const displayRecipients = allRecipients.slice(0, 3);
