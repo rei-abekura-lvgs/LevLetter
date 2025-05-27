@@ -59,9 +59,11 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   }, [isScreensaverActive]);
 
   const handleBearClick = () => {
+    console.log("🐻 クマがクリックされました！");
     setIsScreensaverActive(true);
     setBearPosition({ x: 50, y: 50 });
     setBearDirection({ x: 2 + Math.random() * 2, y: 1.5 + Math.random() * 2 });
+    console.log("🖥️ スクリーンセーバー開始:", { active: true, position: { x: 50, y: 50 } });
   };
 
   return (
