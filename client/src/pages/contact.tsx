@@ -226,11 +226,11 @@ export default function Contact() {
               <CardContent className="space-y-4">
                 <div>
                   <Label className="text-sm font-medium text-gray-500">メール</Label>
-                  <p className="text-gray-900">contact@levletter.com</p>
+                  <p className="text-gray-900">rei.abekura@leverages.jp</p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-gray-500">電話</Label>
-                  <p className="text-gray-900">03-1234-5678</p>
+                  <p className="text-gray-900">03-5774-1632</p>
                   <p className="text-sm text-gray-500">受付時間: 平日 9:00-18:00</p>
                 </div>
               </CardContent>
@@ -249,7 +249,7 @@ export default function Contact() {
                   <p className="text-sm text-gray-600">
                     〒150-6190<br />
                     東京都渋谷区渋谷2-24-12<br />
-                    渋谷スクランブルスクエア
+                    渋谷スクランブルスクエア東棟24,25階
                   </p>
                 </div>
               </CardContent>
