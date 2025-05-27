@@ -530,8 +530,11 @@ export default function Home({ user }: HomeProps) {
 
         <TabsContent value="timeline" className="flex-1 flex flex-col overflow-hidden">
           {/* タイムラインタイトル */}
-          <div className="p-4 border-b border-gray-100">
+          <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <h2 className="text-xl font-bold text-gray-800">タイムライン</h2>
+            <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
+              {filteredCards.length}件のカード
+            </Badge>
           </div>
 
           {/* タイムラインヘッダー - スクロール時に隠れる */}
@@ -539,9 +542,6 @@ export default function Home({ user }: HomeProps) {
             isScrolled ? 'opacity-0 -translate-y-4 h-0 mb-0 pointer-events-none overflow-hidden' : 'opacity-100 translate-y-0 mb-4'
           }`}>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
-                {filteredCards.length}件のカード
-              </Badge>
               <Select defaultValue="newest" onValueChange={handleSortChange}>
                 <SelectTrigger className="w-[120px] h-8 text-sm">
                   <SelectValue placeholder="新しい順" />
@@ -594,7 +594,7 @@ export default function Home({ user }: HomeProps) {
           {/* タブ切り替え - 常に表示 */}
           <Tabs 
             value={activeTab} 
-            className="flex flex-col flex-1 overflow-hidden" 
+            className="flex flex-col flex-1 min-h-0" 
             onValueChange={setActiveTab}
           >
             <TabsList className="grid w-full grid-cols-4 flex-shrink-0">
@@ -605,31 +605,31 @@ export default function Home({ user }: HomeProps) {
             </TabsList>
 
             <div 
-              className="flex-1 overflow-hidden mt-4"
+              className="flex-1 min-h-0 mt-4"
               onTouchStart={onTouchStart}
               onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
             >
-              <TabsContent value="all" className="h-full overflow-hidden">
-                <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+              <TabsContent value="all" className="h-full">
+                <div ref={scrollContainerRef} className="h-full overflow-y-auto pb-20">
                   {renderCardList()}
                 </div>
               </TabsContent>
               
-              <TabsContent value="received" className="h-full overflow-hidden">
-                <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+              <TabsContent value="received" className="h-full">
+                <div className="h-full overflow-y-auto pb-20">
                   {renderCardList()}
                 </div>
               </TabsContent>
               
-              <TabsContent value="sent" className="h-full overflow-hidden">
-                <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+              <TabsContent value="sent" className="h-full">
+                <div className="h-full overflow-y-auto pb-20">
                   {renderCardList()}
                 </div>
               </TabsContent>
               
-              <TabsContent value="liked" className="h-full overflow-hidden">
-                <div ref={scrollContainerRef} className="h-full overflow-y-auto">
+              <TabsContent value="liked" className="h-full">
+                <div className="h-full overflow-y-auto pb-20">
                   {renderCardList()}
                 </div>
               </TabsContent>
