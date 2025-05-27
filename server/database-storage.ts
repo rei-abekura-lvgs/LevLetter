@@ -343,11 +343,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getLikesToUserCards(userId: number): Promise<Like[]> {
-    return await db
-      .select()
+    const result = await db
+      .select({
+        like: likes
+      })
       .from(likes)
       .innerJoin(cards, eq(likes.cardId, cards.id))
       .where(eq(cards.recipientId, userId));
+    
+    return result.map(r => r.like);
   }
 
   async getTopCardSenders(limit: number = 10): Promise<Array<{ user: User; count: number }>> {
@@ -384,12 +388,12 @@ export class DatabaseStorage implements IStorage {
     const results = await db
       .select({
         user: users,
-        totalPoints: sql<number>`sum(${likes.pointsAwarded})`
+        totalPoints: sql<number>`sum(${likes.points})`
       })
       .from(likes)
       .innerJoin(users, eq(likes.userId, users.id))
       .groupBy(users.id)
-      .orderBy(sql`sum(${likes.pointsAwarded}) desc`)
+      .orderBy(sql`sum(${likes.points}) desc`)
       .limit(limit);
     
     return results;
@@ -399,13 +403,13 @@ export class DatabaseStorage implements IStorage {
     const results = await db
       .select({
         user: users,
-        totalPoints: sql<number>`sum(${likes.pointsAwarded})`
+        totalPoints: sql<number>`sum(${likes.points})`
       })
       .from(likes)
       .innerJoin(cards, eq(likes.cardId, cards.id))
       .innerJoin(users, eq(cards.recipientId, users.id))
       .groupBy(users.id)
-      .orderBy(sql`sum(${likes.pointsAwarded}) desc`)
+      .orderBy(sql`sum(${likes.points}) desc`)
       .limit(limit);
     
     return results;

@@ -1275,7 +1275,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // 今週付与したポイント
       const pointsGivenThisWeek = userLikes
         .filter(like => new Date(like.createdAt) >= startOfWeek && new Date(like.createdAt) <= endOfWeek)
-        .reduce((sum, like) => sum + like.pointsAwarded, 0);
+        .reduce((sum, like) => sum + like.points, 0);
       
       // ポイント消化率（500ptを最大として）
       const pointConversionRate = Math.min(100, ((500 - user.weeklyPoints) / 500) * 100);
