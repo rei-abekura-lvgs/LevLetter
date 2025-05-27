@@ -65,17 +65,21 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
 
           {/* 受信ポイント表示 */}
           <div className="bg-green-50 rounded-lg p-4 mb-4">
-            <p className="text-sm text-gray-600 mb-2">受信ポイント</p>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-gray-600">受信ポイント</p>
+              <span className="text-xs text-gray-500">もらったポイント</span>
+            </div>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-500">今月</span>
+                <span className="text-xs text-gray-500">今月受信</span>
                 <span className="text-sm font-semibold text-green-600">{user.weeklyPointsReceived}pt</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-500">累計</span>
+                <span className="text-xs text-gray-500">累計受信</span>
                 <span className="text-lg font-bold text-green-700">{user.totalPointsReceived}pt</span>
               </div>
             </div>
+            <p className="text-xs text-gray-500 mt-2">カードへのいいねで受け取ったポイント</p>
           </div>
         </div>
       )}
