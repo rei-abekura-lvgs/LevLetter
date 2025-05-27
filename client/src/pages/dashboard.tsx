@@ -65,15 +65,28 @@ export default function Dashboard() {
     }
   };
 
+  console.log("🎯 レンダリング開始 - displayStats:", displayStats);
+  console.log("🎯 monthly データ:", displayStats?.monthly);
+  console.log("🎯 personal データ:", displayStats?.personal);
+
   return (
     <div className="p-6">
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">ダッシュボード</h1>
         
+        {/* デバッグ情報 */}
+        <div className="bg-yellow-100 p-4 rounded-lg">
+          <h3 className="font-bold">デバッグ情報</h3>
+          <p>データ取得状況: {stats ? '✓ 成功' : '✗ 失敗'}</p>
+          <p>読み込み中: {isLoading ? 'はい' : 'いいえ'}</p>
+          <p>ポイント消費率: {displayStats?.monthly?.pointConversionRate}%</p>
+          <p>リアクション率: {displayStats?.monthly?.reactionRate}%</p>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">ポイント消費率</h3>
-            <p className="text-2xl font-bold text-blue-600">{displayStats.monthly.pointConversionRate}%</p>
+            <p className="text-2xl font-bold text-blue-600">{displayStats?.monthly?.pointConversionRate || 0}%</p>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow">
