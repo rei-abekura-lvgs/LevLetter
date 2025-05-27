@@ -387,11 +387,17 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
 interface HomeProps {
   user: User;
+  isCardFormOpen?: boolean;
+  setIsCardFormOpen?: (open: boolean) => void;
 }
 
-export default function Home({ user }: HomeProps) {
+export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCardFormOpen: propSetIsCardFormOpen }: HomeProps) {
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
-  const [isCardFormOpen, setIsCardFormOpen] = useState(false);
+  const [localIsCardFormOpen, setLocalIsCardFormOpen] = useState(false);
+  
+  // プロップスで状態が渡された場合はそれを使用、そうでなければローカル状態を使用
+  const isCardFormOpen = propIsCardFormOpen ?? localIsCardFormOpen;
+  const setIsCardFormOpen = propSetIsCardFormOpen ?? setLocalIsCardFormOpen;
   const [activeTab, setActiveTab] = useState<string>("all");
   const [mainTab, setMainTab] = useState<"timeline" | "dashboard" | "ranking">("timeline");
   const [isScrolled, setIsScrolled] = useState(false);

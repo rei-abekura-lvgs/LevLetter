@@ -26,6 +26,7 @@ import { useEffect, useState } from "react";
 function AppRoutes() {
   const { user, isLoading, isAuthenticated } = useAuth();
   const [location, setLocation] = useLocation();
+  const [isCardFormOpen, setIsCardFormOpen] = useState(false);
   
   // 初期認証処理とナビゲーション制御
   useEffect(() => {
@@ -75,7 +76,7 @@ function AppRoutes() {
   if (isAuthenticated && user) {
     // 認証済み状態のルーティング
     return (
-      <MainLayout>
+      <MainLayout onCardFormOpen={() => setIsCardFormOpen(true)}>
         <Switch>
           <Route path="/profile">
             <Profile user={user} />
@@ -93,14 +94,26 @@ function AppRoutes() {
             {user.isAdmin ? (
               <AdminDashboard />
             ) : (
-              <Home user={user} />
+              <Home 
+                user={user} 
+                isCardFormOpen={isCardFormOpen}
+                setIsCardFormOpen={setIsCardFormOpen}
+              />
             )}
           </Route>
           <Route path="/">
-            <Home user={user} />
+            <Home 
+              user={user} 
+              isCardFormOpen={isCardFormOpen}
+              setIsCardFormOpen={setIsCardFormOpen}
+            />
           </Route>
           <Route path="*">
-            <Home user={user} />
+            <Home 
+              user={user} 
+              isCardFormOpen={isCardFormOpen}
+              setIsCardFormOpen={setIsCardFormOpen}
+            />
           </Route>
         </Switch>
       </MainLayout>

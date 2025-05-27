@@ -7,9 +7,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MainLayoutProps {
   children: ReactNode;
+  onCardFormOpen?: () => void;
 }
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export default function MainLayout({ children, onCardFormOpen }: MainLayoutProps) {
   const { user } = useAuth();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,7 +22,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex h-screen bg-gray-50">
       <div className="flex flex-col flex-1">
-        <Header toggleSidebar={toggleSidebar} />
+        <Header toggleSidebar={toggleSidebar} onCardFormOpen={onCardFormOpen} />
         
         <div className="flex flex-1 overflow-hidden">
           {/* デスクトップ用サイドバー - 固定 */}
