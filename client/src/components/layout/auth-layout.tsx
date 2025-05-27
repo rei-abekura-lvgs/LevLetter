@@ -71,21 +71,37 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       {/* スクリーンセーバーオーバーレイ */}
       {isScreensaverActive && (
         <div 
-          className="fixed inset-0 bg-black/90 z-50 cursor-pointer"
-          style={{ userSelect: 'none' }}
+          className="fixed inset-0 bg-black z-[9999] cursor-pointer"
+          style={{ 
+            userSelect: 'none',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.95)'
+          }}
+          onClick={() => {
+            console.log("📱 スクリーンセーバー終了 - クリック");
+            setIsScreensaverActive(false);
+          }}
         >
           <div
-            className="absolute transition-none"
+            className="absolute"
             style={{
               left: `${bearPosition.x}%`,
               top: `${bearPosition.y}%`,
               transform: 'translate(-50%, -50%)',
+              pointerEvents: 'none'
             }}
           >
             <BearLogo size={80} useTransparent={true} bgColor="bg-white" />
           </div>
-          <div className="absolute top-4 left-4 text-white text-sm opacity-70">
+          <div className="absolute top-4 left-4 text-white text-lg font-medium">
             ESCキーまたはクリックで終了
+          </div>
+          <div className="absolute top-4 right-4 text-white text-sm opacity-70">
+            スクリーンセーバーモード
           </div>
         </div>
       )}
