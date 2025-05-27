@@ -89,29 +89,32 @@ export default function Header({ toggleSidebar }: HeaderProps) {
               </Button>
             </Link>
 
-            {/* 感謝の気持ちを伝えるボタン - 洗練されたデザイン */}
-            <Button 
-              className="bg-gradient-to-r from-[#3990EA] to-[#2D7BD9] hover:from-[#2D7BD9] hover:to-[#2563EB] text-white px-4 py-3 rounded-xl transition-all duration-300 ease-out flex items-center gap-3 min-w-[220px] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 group"
-              onClick={() => {
-                // カード作成ダイアログを開く処理をここに追加
-                console.log('感謝の気持ちを伝えるボタンがクリックされました');
-              }}
-            >
-              <div className="w-10 h-10 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/25 transition-colors duration-300 group-hover:scale-110 transform">
-                <svg className="w-5 h-5 drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                </svg>
+            {/* 感謝の気持ちを伝えるボタン - ヘッダー用シンプルデザイン */}
+            <div className="group cursor-pointer transition-all duration-200" onClick={() => {
+              // カード作成ダイアログを開く処理をここに追加
+              console.log('感謝の気持ちを伝えるボタンがクリックされました');
+            }}>
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-[#3990EA] rounded-full flex items-center justify-center">
+                    <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-gray-700 text-sm font-medium">
+                      感謝の気持ちを伝える
+                    </div>
+                    <div className="text-gray-500 text-xs">
+                      新しいサンクスカードを作成
+                    </div>
+                  </div>
+                  <div className="text-gray-400">
+                    <Plus className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
-              <div className="text-left group-hover:translate-x-0.5 transform transition-transform duration-300">
-                <div className="text-sm font-semibold drop-shadow-sm">感謝の気持ちを伝える</div>
-                <div className="text-xs opacity-90 font-medium">新しいサンクスカードを作成</div>
-              </div>
-              <div className="ml-auto opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-                </svg>
-              </div>
-            </Button>
+            </div>
           </>
         )}
       </div>
