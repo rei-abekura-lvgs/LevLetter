@@ -54,23 +54,19 @@ export default function Dashboard() {
     );
   }
 
-  // statsが存在しない場合でも基本的なレイアウトを表示
-  const displayStats = stats || {
-    monthly: {
-      pointConversionRate: 0,
-      reactionRate: 0,
-      cardSenders: [],
-      likeSenders: [],
-      userCardRank: 0,
-      userLikeRank: 0
-    },
-    personal: {
-      sentCards: [],
-      receivedCards: [],
-      sentLikes: [],
-      receivedLikes: []
-    }
-  };
+  // データがない場合の早期リターンを削除して強制表示
+  if (!stats) {
+    return (
+      <div className="p-6">
+        <div className="text-center py-20">
+          <p className="text-red-500">データを取得できませんでした</p>
+        </div>
+      </div>
+    );
+  }
+
+  // statsを直接使用（データは確実に取得されている）
+  const displayStats = stats;
 
   return (
     <div className="p-6">
