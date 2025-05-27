@@ -89,16 +89,21 @@ export default function Header({ toggleSidebar }: HeaderProps) {
               </Button>
             </Link>
 
-            {/* 感謝の気持ちを伝えるボタン */}
+            {/* 感謝の気持ちを伝えるボタン - コンパクトなスタイル */}
             <Button 
-              className="bg-[#3990EA] hover:bg-[#3990EA]/90 text-white font-medium px-4 py-2 rounded-lg transition-colors"
+              className="bg-[#3990EA] hover:bg-[#3990EA]/90 text-white px-3 py-2 rounded-full transition-colors flex items-center gap-2"
               onClick={() => {
                 // カード作成ダイアログを開く処理をここに追加
                 console.log('感謝の気持ちを伝えるボタンがクリックされました');
               }}
             >
-              <Heart className="h-4 w-4 mr-2" />
-              感謝の気持ちを伝える
+              <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                <Plus className="h-3 w-3" />
+              </div>
+              <div className="text-left">
+                <div className="text-xs font-medium">感謝の気持ちを伝える</div>
+                <div className="text-xs opacity-80">新しいサンクスカードを作成</div>
+              </div>
             </Button>
           </>
         )}

@@ -1418,7 +1418,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/notifications/:id/read", isAuthenticated, async (req, res) => {
+  app.patch("/api/notifications/:id/read", authenticate, async (req, res) => {
     try {
       const currentUser = await storage.getUser(req.session.userId!);
       if (!currentUser) {
@@ -1435,7 +1435,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/notifications/mark-all-read", isAuthenticated, async (req, res) => {
+  app.patch("/api/notifications/mark-all-read", authenticate, async (req, res) => {
     try {
       const currentUser = await storage.getUser(req.session.userId!);
       if (!currentUser) {
