@@ -52,9 +52,36 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
       console.log('🎯 いいねボタン押下開始 - カードID:', cardId);
       console.log('👤 現在のユーザー利用可能ポイント:', currentUser?.weeklyPoints);
 
-      // LikeFormで楽観的更新が処理されるため、ここでは削除
+      // 楽観的更新: 即座にカードのいいね数を増加
+      queryClient.setQueryData(['/api/cards'], (oldData: any) => {
+        if (!oldData) return oldData;
+        return oldData.map((card: any) => {
+          if (card.id === cardId) {
+            const newLike = { 
+              id: Date.now(), 
+              userId: currentUser?.id,
+              points: 2,
+              user: currentUser 
+            };
+            return {
+              ...card,
+              likes: [...(card.likes || []), newLike]
+            };
+          }
+          return card;
+        });
+      });
 
-      // バックグラウンドでサーバーに送信
+      // 楽観的更新: ユーザーのポイントを即座に減少
+      queryClient.setQueryData(['/api/auth/me'], (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          weeklyPoints: Math.max(0, oldData.weeklyPoints - 2)
+        };
+      });
+
+      // サーバーに送信
       console.log('🌐 サーバーへの送信開始');
       const response = await fetch(`/api/cards/${cardId}/likes`, {
         method: 'POST',
