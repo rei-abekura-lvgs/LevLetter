@@ -138,17 +138,22 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     {card.sender.displayName || card.sender.name}
                   </span>
                   <span className="text-gray-400">→</span>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2">
                     {displayRecipients.map((user: User, index: number) => (
-                      <Avatar key={user.id} className="h-6 w-6">
-                        <AvatarImage 
-                          src={user.customAvatarUrl || bearAvatarUrl} 
-                          alt={user.displayName || user.name} 
-                        />
-                        <AvatarFallback className={`text-xs text-white bg-${user.avatarColor}`}>
-                          {(user.displayName || user.name || 'U').charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
+                      <div key={user.id} className="flex items-center gap-1">
+                        <Avatar className="h-6 w-6">
+                          <AvatarImage 
+                            src={user.customAvatarUrl || bearAvatarUrl} 
+                            alt={user.displayName || user.name} 
+                          />
+                          <AvatarFallback className={`text-xs text-white bg-${user.avatarColor}`}>
+                            {(user.displayName || user.name || 'U').charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium text-gray-900 text-sm">
+                          {user.displayName || user.name}
+                        </span>
+                      </div>
                     ))}
                     {remainingCount > 0 && (
                       <span className="text-gray-500 text-sm ml-1">
