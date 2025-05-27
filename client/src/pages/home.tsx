@@ -185,14 +185,9 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               size="sm"
               onClick={async () => {
                 try {
-                  const response = await apiRequest(`/api/cards/${card.id}`, {
-                    method: 'DELETE',
-                  });
-                  
-                  if (response.ok) {
-                    onRefresh?.();
-                    toast({ title: "カードを削除しました" });
-                  }
+                  await apiRequest('DELETE', `/api/cards/${card.id}`);
+                  onRefresh?.();
+                  toast({ title: "カードを削除しました" });
                 } catch (error) {
                   console.error('Delete error:', error);
                   toast({ 
