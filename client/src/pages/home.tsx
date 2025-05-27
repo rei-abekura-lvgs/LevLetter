@@ -132,33 +132,41 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-medium text-gray-900 text-sm">
-                  {card.sender.displayName || card.sender.name}
-                </span>
-                <span className="text-gray-400">→</span>
-                {displayRecipients.map((user: User, index: number) => (
-                  <div key={user.id} className="flex items-center gap-1">
-                    <Avatar className="h-6 w-6">
-                      <AvatarImage 
-                        src={user.customAvatarUrl || bearAvatarUrl} 
-                        alt={user.displayName || user.name} 
-                      />
-                      <AvatarFallback className={`text-xs text-white bg-${user.avatarColor}`}>
-                        {(user.displayName || user.name || 'U').charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-gray-700 text-sm font-medium">
-                      {user.displayName || user.name}
-                    </span>
-                    {index < displayRecipients.length - 1 && <span className="text-gray-400 mx-1">,</span>}
-                  </div>
-                ))}
-                {remainingCount > 0 && (
-                  <span className="text-gray-500 text-sm">
-                    +{remainingCount}人
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-medium text-gray-900 text-sm">
+                    {card.sender.displayName || card.sender.name}
                   </span>
-                )}
+                  <span className="text-gray-400">→</span>
+                  <div className="flex items-center gap-1">
+                    {displayRecipients.map((user: User, index: number) => (
+                      <Avatar key={user.id} className="h-6 w-6">
+                        <AvatarImage 
+                          src={user.customAvatarUrl || bearAvatarUrl} 
+                          alt={user.displayName || user.name} 
+                        />
+                        <AvatarFallback className={`text-xs text-white bg-${user.avatarColor}`}>
+                          {(user.displayName || user.name || 'U').charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                    ))}
+                    {remainingCount > 0 && (
+                      <span className="text-gray-500 text-sm ml-1">
+                        +{remainingCount}人
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-gray-600 text-xs">
+                    {card.sender.department}
+                  </div>
+                  {allRecipients.length > 0 && allRecipients[0].department && (
+                    <div className="text-gray-500 text-xs">
+                      → {allRecipients[0].department}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-3 mt-1">
                 <div className="flex items-center gap-1 text-gray-500 text-xs">
