@@ -158,12 +158,9 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-gray-600 text-xs">
-                    {card.sender.department}
-                  </div>
                   {allRecipients.length > 0 && allRecipients[0].department && (
                     <div className="text-gray-500 text-xs">
-                      → {allRecipients[0].department}
+                      {allRecipients[0].department}
                     </div>
                   )}
                 </div>
@@ -287,7 +284,12 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                             {(user.displayName || user.name || "?").charAt(0)}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-sm">{user.displayName || user.name}</span>
+                        <div className="flex-1">
+                          <div className="text-sm font-medium">{user.displayName || user.name}</div>
+                          {user.department && (
+                            <div className="text-xs text-gray-500">{user.department}</div>
+                          )}
+                        </div>
                         {index === 0 && <Badge variant="secondary" className="text-xs">主受信者</Badge>}
                       </div>
                     ))}
