@@ -161,7 +161,7 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
         {!hasLiked && (
           <Button
             type="submit"
-            disabled={isSubmitting || (user?.weeklyPoints && user.weeklyPoints < 2)}
+            disabled={isSubmitting || Boolean(user?.weeklyPoints !== undefined && user.weeklyPoints < 2)}
           >
             {isSubmitting ? (
               <span className="flex items-center">

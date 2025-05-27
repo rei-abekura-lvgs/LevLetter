@@ -19,9 +19,11 @@ interface PersonalInteraction {
 interface DashboardStats {
   monthly: {
     pointConversionRate: number;
-    cardRank: number;
-    likeRank: number;
-    totalUsers: number;
+    reactionRate: number;
+    cardSenders: any[];
+    likeSenders: any[];
+    userCardRank: number;
+    userLikeRank: number;
   };
   personal: {
     sentCards: PersonalInteraction[];
@@ -56,9 +58,11 @@ export default function Dashboard() {
   const displayStats = stats || {
     monthly: {
       pointConversionRate: 0,
-      cardRank: 0,
-      likeRank: 0,
-      totalUsers: 0
+      reactionRate: 0,
+      cardSenders: [],
+      likeSenders: [],
+      userCardRank: 0,
+      userLikeRank: 0
     },
     personal: {
       sentCards: [],
@@ -81,17 +85,17 @@ export default function Dashboard() {
           
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">カード送信ランク</h3>
-            <p className="text-2xl font-bold text-green-600">{displayStats.monthly.cardRank}位</p>
+            <p className="text-2xl font-bold text-green-600">{displayStats.monthly.userCardRank}位</p>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="text-sm font-medium text-gray-500">拍手ランク</h3>
-            <p className="text-2xl font-bold text-pink-600">{displayStats.monthly.likeRank}位</p>
+            <p className="text-2xl font-bold text-pink-600">{displayStats.monthly.userLikeRank}位</p>
           </div>
           
           <div className="bg-white p-4 rounded-lg shadow">
-            <h3 className="text-sm font-medium text-gray-500">総ユーザー数</h3>
-            <p className="text-2xl font-bold text-gray-600">{displayStats.monthly.totalUsers}人</p>
+            <h3 className="text-sm font-medium text-gray-500">リアクション率</h3>
+            <p className="text-2xl font-bold text-gray-600">{displayStats.monthly.reactionRate}%</p>
           </div>
         </div>
 
