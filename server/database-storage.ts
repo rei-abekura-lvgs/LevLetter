@@ -1028,8 +1028,8 @@ export class DatabaseStorage implements IStorage {
         .select({
           targetUserId: sql<number>`
             CASE 
-              WHEN ${cards.senderId} = ${userId} THEN ${cards.recipientId}
-              ELSE ${cards.senderId}
+              WHEN cards.sender_id = ${userId} THEN cards.recipient_id
+              ELSE cards.sender_id
             END
           `.as('targetUserId'),
           count: sql<number>`count(*)`.as('count')
@@ -1040,15 +1040,15 @@ export class DatabaseStorage implements IStorage {
           eq(likes.userId, userId),
           sql`
             CASE 
-              WHEN ${cards.senderId} = ${userId} THEN ${cards.recipientId}
-              ELSE ${cards.senderId}
+              WHEN cards.sender_id = ${userId} THEN cards.recipient_id
+              ELSE cards.sender_id
             END != ${userId}
           `
         ))
         .groupBy(sql`
           CASE 
-            WHEN ${cards.senderId} = ${userId} THEN ${cards.recipientId}
-            ELSE ${cards.senderId}
+            WHEN cards.sender_id = ${userId} THEN cards.recipient_id
+            ELSE cards.sender_id
           END
         `)
         .orderBy(desc(sql`count(*)`))
