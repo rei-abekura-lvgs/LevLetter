@@ -1306,4 +1306,14 @@ export class DatabaseStorage implements IStorage {
     await db.delete(userDepartments)
       .where(and(eq(userDepartments.userId, userId), eq(userDepartments.organizationId, organizationId)));
   }
+
+  // 従業員インポート用の組織階層検索・作成メソッド
+  async findOrganizationByNameAndParent(name: string, parentId: number | null): Promise<OrganizationHierarchy | null> {
+    const condition = parentId 
+      ? and(eq(organizationHierarchy.name, name), eq(organizationHierarchy.parentId, parentId))
+      : and(eq(organizationHierarchy.name, name), isNull(organizationHierarchy.parentId));
+    
+    const [organization] = await db.select().from(organizationHierarchy).where(condition);
+    return organization || null;
+  }
 }
