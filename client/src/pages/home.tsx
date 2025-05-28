@@ -9,10 +9,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { 
   Calendar, Clock, Heart, MessageSquare, RotateCcw, 
   User as UserIcon, Send, Plus, Eye, EyeOff, Trash2,
-  BarChart3, TrendingUp, Activity, Info
+  BarChart3, TrendingUp, Activity, Info, Search, Check, ChevronsUpDown, X
 } from "lucide-react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
