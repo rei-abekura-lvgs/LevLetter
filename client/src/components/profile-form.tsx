@@ -190,33 +190,30 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
       const updatedUser = await uploadAvatar(user.id, previewImage);
       console.log("アップロード成功:", updatedUser);
       
+      // 即座にユーザー情報を更新
+      queryClient.setQueryData(["/api/auth/me"], updatedUser.user);
+      
       // 全てのキャッシュを更新して確実に反映させる
-      // ユーザー情報のキャッシュを更新
       queryClient.invalidateQueries({
         queryKey: ["/api/auth/me"]
       });
       
-      // ユーザー一覧を更新
       queryClient.invalidateQueries({
         queryKey: ["/api/users"]
       });
       
-      // 管理者用ユーザー一覧の更新
       queryClient.invalidateQueries({
         queryKey: ["/api/admin/users"]
       });
       
-      // カード一覧の更新（アバターが表示されているため）
       queryClient.invalidateQueries({
         queryKey: ["/api/cards"]
       });
       
-      // 強制的にすべてのキャッシュを更新
+      // 強制的にページを再読み込み（確実に反映させるため）
       setTimeout(() => {
-        queryClient.refetchQueries({
-          queryKey: ["/api/auth/me"]
-        });
-      }, 500);
+        window.location.reload();
+      }, 1000);
       
       // 成功通知
       toast({
