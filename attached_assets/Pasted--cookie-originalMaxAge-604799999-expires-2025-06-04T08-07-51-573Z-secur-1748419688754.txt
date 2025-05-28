@@ -1,0 +1,181 @@
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-04T08:07:51.573Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+8:07:52 AM [express] GET /api/users 304 in 112ms :: [{"id":5,"email":"rei.abekura@leverages.jp","nam…
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+ℹ️ 今週はすでにポイントリセット済み
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/dashboard/stats
+🔑 セッションID: lWG2onO8OBetFz8Cm3rluw-MsYNAhCSj
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-04T08:07:52.417Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+8:07:52 AM [express] GET /api/cards 304 in 679ms :: [{"id":177,"senderId":5,"recipientId":339,"recip…
+ダッシュボード統計取得エラー: error: column "likes.card_id" must appear in the GROUP BY clause or be used in an aggregate function
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.getDashboardStats (/home/runner/workspace/server/database-storage.ts:1032:27)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1278:21) {
+  length: 175,
+  severity: 'ERROR',
+  code: '42803',
+  detail: undefined,
+  hint: undefined,
+  position: '8',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_agg.c',
+  line: '1436',
+  routine: 'check_ungrouped_columns_walker'
+}
+8:07:53 AM [express] GET /api/dashboard/stats 500 in 373ms :: {"message":"ダッシュボード統計の取得に失敗しました"}
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+ℹ️ 今週はすでにポイントリセット済み
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/dashboard/stats
+🔑 セッションID: lWG2onO8OBetFz8Cm3rluw-MsYNAhCSj
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-04T08:07:53.031Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+ダッシュボード統計取得エラー: error: column "likes.card_id" must appear in the GROUP BY clause or be used in an aggregate function
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.getDashboardStats (/home/runner/workspace/server/database-storage.ts:1032:27)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1278:21) {
+  length: 175,
+  severity: 'ERROR',
+  code: '42803',
+  detail: undefined,
+  hint: undefined,
+  position: '8',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_agg.c',
+  line: '1436',
+  routine: 'check_ungrouped_columns_walker'
+}
+8:07:54 AM [express] GET /api/dashboard/stats 500 in 167ms :: {"message":"ダッシュボード統計の取得に失敗しました"}
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+ℹ️ 今週はすでにポイントリセット済み
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/dashboard/stats
+🔑 セッションID: lWG2onO8OBetFz8Cm3rluw-MsYNAhCSj
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-04T08:07:54.335Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+ダッシュボード統計取得エラー: error: column "likes.card_id" must appear in the GROUP BY clause or be used in an aggregate function
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.getDashboardStats (/home/runner/workspace/server/database-storage.ts:1032:27)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1278:21) {
+  length: 175,
+  severity: 'ERROR',
+  code: '42803',
+  detail: undefined,
+  hint: undefined,
+  position: '8',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_agg.c',
+  line: '1436',
+  routine: 'check_ungrouped_columns_walker'
+}
+8:07:56 AM [express] GET /api/dashboard/stats 500 in 185ms :: {"message":"ダッシュボード統計の取得に失敗しました"}
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+ℹ️ 今週はすでにポイントリセット済み
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/dashboard/stats
+🔑 セッションID: lWG2onO8OBetFz8Cm3rluw-MsYNAhCSj
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604799999,
+    "expires": "2025-06-04T08:07:56.663Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/"
+  },
+  "userId": 5
+}
+👤 セッションから取得したユーザーID: 5
+🔍 ユーザー情報取得試行 - ユーザーID: 5
+ダッシュボード統計取得エラー: error: column "likes.card_id" must appear in the GROUP BY clause or be used in an aggregate function
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1345:74
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-serverless/session.ts:102:18)
+    at async DatabaseStorage.getDashboardStats (/home/runner/workspace/server/database-storage.ts:1032:27)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:1278:21) {
+  length: 175,
+  severity: 'ERROR',
+  code: '42803',
+  detail: undefined,
+  hint: undefined,
+  position: '8',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_agg.c',
+  line: '1436',
+  routine: 'check_ungrouped_columns_walker'
+}
+8:08:00 AM [express] GET /api/dashboard/stats 500 in 181ms :: {"message":"ダッシュボード統計の取得に失敗しました"}
