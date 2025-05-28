@@ -101,8 +101,8 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
               </div>
             </Link>
 
-
-
+            {/* 通知ベル */}
+            <NotificationBell />
 
           </>
         )}
