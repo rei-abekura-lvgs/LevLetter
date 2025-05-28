@@ -135,7 +135,7 @@ export default function CardItem({ card, currentUser, isUnread = false }: CardIt
   const allRecipients = [
     card.recipient as User,
     ...(card.additionalRecipientUsers || [])
-  ];
+  ].filter(recipient => recipient && typeof recipient === 'object' && 'displayName' in recipient);
 
   // ユーザーのイニシャルを取得
   const getInitials = (name: string) => {
@@ -176,10 +176,12 @@ export default function CardItem({ card, currentUser, isUnread = false }: CardIt
       <div className="mb-4">
         {/* 受信者表示 */}
         <div className="text-xs sm:text-sm text-gray-600 mb-2 flex flex-wrap items-center gap-1">
-          <span className="text-gray-800 font-medium">{recipientName}</span>
-          {allRecipients.length > 1 && (
-            <span className="text-[#3990EA] font-medium">他{allRecipients.length - 1}人</span>
-          )}
+          {allRecipients.map((recipient, index) => (
+            <span key={recipient.id} className="text-gray-800 font-medium">
+              {recipient.displayName || recipient.name}
+              {index < allRecipients.length - 1 && <span className="text-gray-500 mx-1">、</span>}
+            </span>
+          ))}
           <span className="text-gray-600">へ</span>
         </div>
 
