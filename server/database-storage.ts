@@ -985,8 +985,73 @@ export class DatabaseStorage implements IStorage {
       
       console.log('📅 今月の期間:', thisMonthStart, 'から', nextMonthStart);
 
-      // 実際のデータから個人的なやりとり統計を取得
-      const sentCardsData = await db
+      // 1. 今月のもらったポイント・カード・いいねの数
+      const [monthlyReceivedCards] = await db
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(cards)
+        .where(and(
+          eq(cards.recipientId, userId),
+          gte(cards.createdAt, thisMonthStart),
+          lt(cards.createdAt, nextMonthStart)
+        ));
+
+      const [monthlyReceivedLikes] = await db
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(likes)
+        .innerJoin(cards, eq(likes.cardId, cards.id))
+        .where(and(
+          or(eq(cards.senderId, userId), eq(cards.recipientId, userId)),
+          ne(likes.userId, userId), // 自分以外からのいいね
+          gte(likes.createdAt, thisMonthStart),
+          lt(likes.createdAt, nextMonthStart)
+        ));
+
+      // 2. 今月のあげたポイント・カード・いいねの数
+      const [monthlySentCards] = await db
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(cards)
+        .where(and(
+          eq(cards.senderId, userId),
+          gte(cards.createdAt, thisMonthStart),
+          lt(cards.createdAt, nextMonthStart)
+        ));
+
+      const [monthlySentLikes] = await db
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(likes)
+        .where(and(
+          eq(likes.userId, userId),
+          gte(likes.createdAt, thisMonthStart),
+          lt(likes.createdAt, nextMonthStart)
+        ));
+
+      // 3. 全期間の累計統計
+      const [totalReceivedCards] = await db
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(cards)
+        .where(eq(cards.recipientId, userId));
+
+      const [totalReceivedLikes] = await db
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(likes)
+        .innerJoin(cards, eq(likes.cardId, cards.id))
+        .where(and(
+          or(eq(cards.senderId, userId), eq(cards.recipientId, userId)),
+          ne(likes.userId, userId)
+        ));
+
+      const [totalSentCards] = await db
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(cards)
+        .where(eq(cards.senderId, userId));
+
+      const [totalSentLikes] = await db
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(likes)
+        .where(eq(likes.userId, userId));
+
+      // 4. 自分関連のTOP10ランキング（カード送信先・受信元）
+      const cardSentToRanking = await db
         .select({
           recipientId: cards.recipientId,
           count: sql<number>`count(*)`.as('count')
@@ -997,7 +1062,7 @@ export class DatabaseStorage implements IStorage {
         .orderBy(desc(sql`count(*)`))
         .limit(10);
 
-      const receivedCardsData = await db
+      const cardReceivedFromRanking = await db
         .select({
           senderId: cards.senderId,
           count: sql<number>`count(*)`.as('count')
@@ -1008,140 +1073,92 @@ export class DatabaseStorage implements IStorage {
         .orderBy(desc(sql`count(*)`))
         .limit(10);
 
-      // ユーザー情報を取得して結合
-      const sentCards = await Promise.all(
-        sentCardsData.map(async (item, index) => {
-          const recipientUser = await this.getUser(item.recipientId);
-          return recipientUser ? {
-            user: recipientUser,
-            count: item.count,
-            rank: index + 1
-          } : null;
-        })
-      );
-
-      const receivedCards = await Promise.all(
-        receivedCardsData.map(async (item, index) => {
-          const senderUser = await this.getUser(item.senderId);
-          return senderUser ? {
-            user: senderUser,
-            count: item.count,
-            rank: index + 1
-          } : null;
-        })
-      );
-
-      console.log('📊 いいね送信先ランキング処理開始');
-      // いいね送信先ランキング（自分がいいねしたカードの関係者ランキング）
-      // まず自分がいいねしたカードの情報を取得
-      const myLikedCards = await db
+      // 5. 自分関連のTOP10ランキング（いいね送信先・受信元）
+      const likeSentToRanking = await db
         .select({
-          cardId: likes.cardId,
-          senderId: cards.senderId,
-          recipientId: cards.recipientId
+          targetUserId: cards.senderId,
+          count: sql<number>`count(*)`.as('count')
         })
         .from(likes)
         .innerJoin(cards, eq(likes.cardId, cards.id))
-        .where(eq(likes.userId, userId));
-      console.log('✅ いいね送信先データ取得完了:', myLikedCards.length, '件');
+        .where(and(
+          eq(likes.userId, userId),
+          ne(cards.senderId, userId) // 自分以外
+        ))
+        .groupBy(cards.senderId)
+        .orderBy(desc(sql`count(*)`))
+        .limit(10);
 
-      // JavaScript で集計
-      const sentLikesCount: Record<number, number> = {};
-      for (const card of myLikedCards) {
-        if (card.senderId !== userId) {
-          sentLikesCount[card.senderId] = (sentLikesCount[card.senderId] || 0) + 1;
-        }
-        if (card.recipientId !== userId) {
-          sentLikesCount[card.recipientId] = (sentLikesCount[card.recipientId] || 0) + 1;
-        }
-      }
-
-      const sentLikesData = Object.entries(sentLikesCount)
-        .map(([targetUserId, count]) => ({ targetUserId: parseInt(targetUserId), count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 10);
-
-      console.log('📊 いいね受信元ランキング処理開始');
-      // いいね受信元ランキング（自分のカードにいいねした人のランキング）
-      // 自分のカードを取得
-      const myCards = await db
-        .select({ id: cards.id })
-        .from(cards)
-        .where(or(
-          eq(cards.senderId, userId),
-          eq(cards.recipientId, userId)
-        ));
-      
-      const myCardIds = myCards.map(c => c.id);
-      console.log('✅ 自分のカード取得完了:', myCardIds.length, '件');
-      
-      // 自分のカードにいいねした人のデータを取得（自分は除外）
-      let receivedLikesData: { fromUserId: number; count: number }[] = [];
-      if (myCardIds.length > 0) {
-        // 各カードIDに対して個別にクエリを実行してマージ
-        const allReceivedLikes = [];
-        for (const cardId of myCardIds) {
-          const cardLikes = await db
-            .select({
-              fromUserId: likes.userId,
-              cardId: likes.cardId
-            })
-            .from(likes)
-            .where(and(
-              eq(likes.cardId, cardId),
-              not(eq(likes.userId, userId))
-            ));
-          allReceivedLikes.push(...cardLikes);
-        }
-        
-        // JavaScript で集計
-        const receivedLikesCount: Record<number, number> = {};
-        for (const like of allReceivedLikes) {
-          receivedLikesCount[like.fromUserId] = (receivedLikesCount[like.fromUserId] || 0) + 1;
-        }
-        
-        receivedLikesData = Object.entries(receivedLikesCount)
-          .map(([fromUserId, count]) => ({ fromUserId: parseInt(fromUserId), count }))
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 10);
-      }
-      console.log('✅ いいね受信元データ処理完了:', receivedLikesData.length, '件');
-
-      // ユーザー情報を取得して結合（いいね送信先）
-      const sentLikes = await Promise.all(
-        sentLikesData.map(async (item, index) => {
-          const targetUser = await this.getUser(item.targetUserId);
-          return targetUser ? {
-            user: targetUser,
-            count: item.count,
-            rank: index + 1
-          } : null;
+      const likeReceivedFromRanking = await db
+        .select({
+          fromUserId: likes.userId,
+          count: sql<number>`count(*)`.as('count')
         })
-      );
+        .from(likes)
+        .innerJoin(cards, eq(likes.cardId, cards.id))
+        .where(and(
+          or(eq(cards.senderId, userId), eq(cards.recipientId, userId)),
+          ne(likes.userId, userId) // 自分以外からのいいね
+        ))
+        .groupBy(likes.userId)
+        .orderBy(desc(sql`count(*)`))
+        .limit(10);
 
-      // ユーザー情報を取得して結合（いいね受信元）
-      const receivedLikes = await Promise.all(
-        receivedLikesData.map(async (item, index) => {
-          const fromUser = await this.getUser(item.fromUserId);
-          return fromUser ? {
-            user: fromUser,
-            count: item.count,
-            rank: index + 1
-          } : null;
-        })
-      );
+      // ユーザー情報を取得して結合
+      const [cardSentTo, cardReceivedFrom, likeSentTo, likeReceivedFrom] = await Promise.all([
+        Promise.all(cardSentToRanking.map(async (item, index) => {
+          const user = await this.getUser(item.recipientId);
+          return user ? { user, count: item.count, rank: index + 1 } : null;
+        })),
+        Promise.all(cardReceivedFromRanking.map(async (item, index) => {
+          const user = await this.getUser(item.senderId);
+          return user ? { user, count: item.count, rank: index + 1 } : null;
+        })),
+        Promise.all(likeSentToRanking.map(async (item, index) => {
+          const user = await this.getUser(item.targetUserId);
+          return user ? { user, count: item.count, rank: index + 1 } : null;
+        })),
+        Promise.all(likeReceivedFromRanking.map(async (item, index) => {
+          const user = await this.getUser(item.fromUserId);
+          return user ? { user, count: item.count, rank: index + 1 } : null;
+        }))
+      ]);
 
       return {
-        monthly: {
-          pointConversionRate: Math.round(pointConversionRate),
-          userCardRank: Math.max(1, Math.min(10, sentCards.length || 3)),
-          userLikeRank: Math.max(1, Math.min(10, 5))
+        weekly: {
+          currentPoints: user.weeklyPoints,
+          maxPoints: 500,
+          usedPoints: 500 - user.weeklyPoints
         },
-        personal: {
-          sentCards: sentCards.filter(item => item !== null),
-          receivedCards: receivedCards.filter(item => item !== null),
-          sentLikes: sentLikes.filter(item => item !== null),
-          receivedLikes: receivedLikes.filter(item => item !== null)
+        monthly: {
+          received: {
+            points: user.totalPointsReceived, // これは今月分にする必要がある場合は後で修正
+            cards: monthlyReceivedCards.count,
+            likes: monthlyReceivedLikes.count
+          },
+          sent: {
+            points: 500 - user.weeklyPoints, // 今週使ったポイント（暫定）
+            cards: monthlySentCards.count,
+            likes: monthlySentLikes.count
+          }
+        },
+        lifetime: {
+          received: {
+            points: user.totalPointsReceived,
+            cards: totalReceivedCards.count,
+            likes: totalReceivedLikes.count
+          },
+          sent: {
+            points: user.totalPoints || 0,
+            cards: totalSentCards.count,
+            likes: totalSentLikes.count
+          }
+        },
+        rankings: {
+          cardSentTo: cardSentTo.filter(item => item !== null),
+          cardReceivedFrom: cardReceivedFrom.filter(item => item !== null),
+          likeSentTo: likeSentTo.filter(item => item !== null),
+          likeReceivedFrom: likeReceivedFrom.filter(item => item !== null)
         }
       };
     } catch (error) {
