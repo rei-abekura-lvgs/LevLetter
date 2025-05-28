@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Heart, MessageSquare, TrendingUp, Users } from "lucide-react";
+import { Calendar, Heart, MessageSquare, TrendingUp, Users, Award, Star, Gift, Trophy, Sparkles } from "lucide-react";
 
 interface DashboardStats {
   weekly: {
@@ -321,6 +321,68 @@ export default function DashboardNew() {
               ) : (
                 <div className="text-center text-gray-500 py-4">
                   まだカードを受信していません
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          
+          {/* いいね送信先TOP10 */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-pink-700">いいね送信先TOP10</CardTitle>
+              <CardDescription>
+                最も多くいいねをあげた相手
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {stats.rankings.likeSentTo.length > 0 ? (
+                <div className="space-y-2">
+                  {stats.rankings.likeSentTo.slice(0, 10).map((item, index) => (
+                    <div key={item.user.id} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="w-6 h-6 p-0 flex items-center justify-center text-xs">
+                          {index + 1}
+                        </Badge>
+                        <span className="text-sm">{item.user.displayName || item.user.name}</span>
+                      </div>
+                      <span className="text-sm font-semibold text-pink-600">{item.count}回</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-gray-500 py-4">
+                  まだいいねを送信していません
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* いいね受信元TOP10 */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-pink-700">いいね受信元TOP10</CardTitle>
+              <CardDescription>
+                最も多くいいねをくれた相手
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {stats.rankings.likeReceivedFrom.length > 0 ? (
+                <div className="space-y-2">
+                  {stats.rankings.likeReceivedFrom.slice(0, 10).map((item, index) => (
+                    <div key={item.user.id} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="w-6 h-6 p-0 flex items-center justify-center text-xs">
+                          {index + 1}
+                        </Badge>
+                        <span className="text-sm">{item.user.displayName || item.user.name}</span>
+                      </div>
+                      <span className="text-sm font-semibold text-pink-600">{item.count}回</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-gray-500 py-4">
+                  まだいいねを受信していません
                 </div>
               )}
             </CardContent>
