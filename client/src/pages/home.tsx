@@ -955,24 +955,26 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               </TabsTrigger>
             </TabsList>
 
-            {/* 魅力的な投稿エリア */}
+            {/* テキストボックス風の投稿エリア */}
             <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100 flex-shrink-0">
               <div className="flex items-center gap-4">
-                {/* 魅力的な投稿ボタン - モダンデザイン */}
-                <Button 
-                  onClick={() => setIsCardFormOpen(true)} 
-                  className="bg-gradient-to-r from-[#3990EA] to-[#5BA3F5] hover:from-[#2980D9] hover:to-[#4A92E4] text-white px-8 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.03] hover:-translate-y-0.5 flex items-center gap-3 border-0"
+                {/* テキストボックス風の投稿ボタン */}
+                <div 
+                  onClick={() => setIsCardFormOpen(true)}
+                  className="flex-1 max-w-lg bg-white border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-[#3990EA] hover:bg-blue-50/50 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                  </svg>
-                  感謝の手紙を送る
-                </Button>
+                  <div className="flex items-center gap-3 text-gray-500">
+                    <svg className="w-5 h-5 text-[#3990EA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    <span className="text-sm">感謝の手紙を作成する...</span>
+                  </div>
+                </div>
                 
                 {/* カード数とソート */}
-                <div className="flex items-center gap-3 ml-auto">
+                <div className="flex items-center gap-3">
                   <Badge variant="outline" className="text-xs text-gray-600 bg-white/70 border-gray-300">
-                    {filteredCards.length}件のカード
+                    {filteredCards.length}件
                   </Badge>
                   <Select defaultValue="newest" onValueChange={handleSortChange}>
                     <SelectTrigger className="w-[110px] h-9 text-sm bg-white/70 border-gray-300">
