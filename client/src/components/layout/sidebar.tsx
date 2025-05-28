@@ -1,11 +1,12 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/context/auth-context-new";
-import { Home, Settings, UserCircle, LogOut, Bell, BarChart3, Trophy, Shield } from "lucide-react";
+import { Home, Settings, UserCircle, LogOut, Bell, BarChart3, Trophy, Shield, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
 import { BearLogo } from "@/components/bear-logo";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 interface SidebarProps {
   user: User | null;
@@ -14,6 +15,21 @@ interface SidebarProps {
 export default function Sidebar({ user: propUser }: SidebarProps) {
   const [location] = useLocation();
   const { user: authUser, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // ポイント更新ハンドラー
+  const handleRefreshPoints = async () => {
+    setIsRefreshing(true);
+    try {
+      await queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+      console.log("🔄 ポイント手動更新完了");
+    } catch (error) {
+      console.error("ポイント更新エラー:", error);
+    } finally {
+      setTimeout(() => setIsRefreshing(false), 500); // スピナーを少し見せる
+    }
+  };
   
   // サイドバー用にリアルタイムでユーザー情報を取得
   const { data: currentUser, refetch } = useQuery<User>({
@@ -60,6 +76,14 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
           <div className="bg-blue-50 rounded-lg p-4 mb-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm text-gray-600">今週の残りポイント</p>
+              <button
+                onClick={handleRefreshPoints}
+                disabled={isRefreshing}
+                className="p-1 text-gray-400 hover:text-[#3990EA] transition-colors disabled:opacity-50"
+                title="ポイントを更新"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </button>
             </div>
             <p className="text-2xl font-bold text-[#3990EA] mb-1">{user?.weeklyPoints || 0}pt</p>
             <div className="text-xs text-gray-500">
