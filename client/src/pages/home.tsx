@@ -647,8 +647,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
 
     const counts = {
       all: cards.length, // 控えめ表示
-      sent: cards.filter(card => card.senderId === user.id).length, // 控えめ表示
-      received: receivedCards.length, // 総数表示
+      sent: unreadLikeNotifications.length, // 未読のいいね通知数のみ表示
+      received: unreadReceivedCards.length, // 未読の受信カード数のみ表示
       liked: cards.filter(card => card.likes?.some(like => like.userId === user.id) || false).length, // 控えめ表示
       // 通知の重要度フラグ（未読があるかどうか）
       isReceivedImportant: unreadReceivedCards.length > 0,
@@ -908,7 +908,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               <TabsTrigger value="sent" className="relative">
                 送った
                 {tabCounts.isSentImportant ? (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                     {tabCounts.sent > 99 ? '99+' : tabCounts.sent}
                   </span>
                 ) : tabCounts.sent > 0 ? (
@@ -920,7 +920,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               <TabsTrigger value="received" className="relative">
                 もらった
                 {tabCounts.isReceivedImportant ? (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                     {tabCounts.received > 99 ? '99+' : tabCounts.received}
                   </span>
                 ) : tabCounts.received > 0 ? (
