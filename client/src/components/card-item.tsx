@@ -15,7 +15,7 @@ interface CardItemProps {
   isUnread?: boolean;
 }
 
-export default function CardItem({ card, currentUser, isUnread = false }: CardItemProps) {
+export function CardItem({ card, currentUser, isUnread = false }: CardItemProps) {
   const queryClient = useQueryClient();
   
   // 自分がいいねしたか
