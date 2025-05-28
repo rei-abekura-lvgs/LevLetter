@@ -1,0 +1,244 @@
+PI GET リクエスト: /api/cards データなし
+queryClient.ts:42 API GET リクエスト: /api/users データなし
+home.tsx:691 🎯 URLパラメータチェック: {cardId: null, cardsLength: 0}
+App.tsx:57 アプリ状態: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, 現在のパス: '/'}
+auth-context.tsx:151 📊 認証状態更新: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=b2a01854:840:14)
+    at run (@tanstack_react-query.js?v=b2a01854:494:49)
+    at Object.start (@tanstack_react-query.js?v=b2a01854:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=b2a01854:926:41)
+    at _a9.executeFetch_fn (@tanstack_react-query.js?v=b2a01854:2211:51)
+    at _a9.onSubscribe (@tanstack_react-query.js?v=b2a01854:1898:74)
+    at _a9.subscribe (@tanstack_react-query.js?v=b2a01854:24:10)
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=b2a01854:840
+run @ @tanstack_react-query.js?v=b2a01854:494
+start @ @tanstack_react-query.js?v=b2a01854:536
+fetch @ @tanstack_react-query.js?v=b2a01854:926
+executeFetch_fn @ @tanstack_react-query.js?v=b2a01854:2211
+onSubscribe @ @tanstack_react-query.js?v=b2a01854:1898
+subscribe @ @tanstack_react-query.js?v=b2a01854:24
+(anonymous) @ @tanstack_react-query.js?v=b2a01854:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=b2a01854:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=b2a01854:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=b2a01854:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=b2a01854:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=b2a01854:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=b2a01854:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=b2a01854:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=b2a01854:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b2a01854:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b2a01854:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=b2a01854:19432
+commitRoot @ chunk-RPCDYKBN.js?v=b2a01854:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=b2a01854:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=b2a01854:18718
+workLoop @ chunk-RPCDYKBN.js?v=b2a01854:197
+flushWork @ chunk-RPCDYKBN.js?v=b2a01854:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=b2a01854:384Understand this errorAI
+auth-context.tsx:46 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:128 🎯 認証初期化完了: 阿部倉 怜
+auth-context.tsx:151 📊 認証状態更新: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+home.tsx:691 🎯 URLパラメータチェック: {cardId: null, cardsLength: 0}
+notification-bell.tsx:62 📨 通知データ取得完了（ベルコンポーネント）: [{…}]
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+home.tsx:691 🎯 URLパラメータチェック: {cardId: null, cardsLength: 50}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=b2a01854:840:14)
+    at run (@tanstack_react-query.js?v=b2a01854:494:49)
+    at Object.start (@tanstack_react-query.js?v=b2a01854:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=b2a01854:926:41)
+    at _a9.executeFetch_fn (@tanstack_react-query.js?v=b2a01854:2211:51)
+    at _a9.fetch (@tanstack_react-query.js?v=b2a01854:2011:77)
+    at _a9.refetch (@tanstack_react-query.js?v=b2a01854:2001:17)
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=b2a01854:840
+run @ @tanstack_react-query.js?v=b2a01854:494
+start @ @tanstack_react-query.js?v=b2a01854:536
+fetch @ @tanstack_react-query.js?v=b2a01854:926
+executeFetch_fn @ @tanstack_react-query.js?v=b2a01854:2211
+fetch @ @tanstack_react-query.js?v=b2a01854:2011
+refetch @ @tanstack_react-query.js?v=b2a01854:2001
+onFocus @ @tanstack_react-query.js?v=b2a01854:749
+(anonymous) @ @tanstack_react-query.js?v=b2a01854:1112
+(anonymous) @ @tanstack_react-query.js?v=b2a01854:1111
+batch @ @tanstack_react-query.js?v=b2a01854:583
+onFocus @ @tanstack_react-query.js?v=b2a01854:1110
+(anonymous) @ @tanstack_react-query.js?v=b2a01854:1601
+await in (anonymous)
+(anonymous) @ @tanstack_react-query.js?v=b2a01854:313
+onFocus @ @tanstack_react-query.js?v=b2a01854:312
+(anonymous) @ @tanstack_react-query.js?v=b2a01854:299
+listener @ @tanstack_react-query.js?v=b2a01854:270Understand this errorAI
+@radix-ui_react-select.js?v=b2a01854:873 Uncaught Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at @radix-ui_react-select.js?v=b2a01854:873:13
+    at renderWithHooks (chunk-RPCDYKBN.js?v=b2a01854:11548:26)
+    at updateForwardRef (chunk-RPCDYKBN.js?v=b2a01854:14325:28)
+    at beginWork (chunk-RPCDYKBN.js?v=b2a01854:15946:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=b2a01854:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=b2a01854:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=b2a01854:3733:39)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=b2a01854:19765:15)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=b2a01854:19198:20)
+    at workLoopSync (chunk-RPCDYKBN.js?v=b2a01854:19137:13)
+(anonymous) @ @radix-ui_react-select.js?v=b2a01854:873
+renderWithHooks @ chunk-RPCDYKBN.js?v=b2a01854:11548
+updateForwardRef @ chunk-RPCDYKBN.js?v=b2a01854:14325
+beginWork @ chunk-RPCDYKBN.js?v=b2a01854:15946
+callCallback2 @ chunk-RPCDYKBN.js?v=b2a01854:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=b2a01854:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=b2a01854:3733
+beginWork$1 @ chunk-RPCDYKBN.js?v=b2a01854:19765
+performUnitOfWork @ chunk-RPCDYKBN.js?v=b2a01854:19198
+workLoopSync @ chunk-RPCDYKBN.js?v=b2a01854:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=b2a01854:19116
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b2a01854:18874
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b2a01854:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=b2a01854:18627Understand this errorAI
+@radix-ui_react-select.js?v=b2a01854:873 Uncaught Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at @radix-ui_react-select.js?v=b2a01854:873:13
+    at renderWithHooks (chunk-RPCDYKBN.js?v=b2a01854:11548:26)
+    at updateForwardRef (chunk-RPCDYKBN.js?v=b2a01854:14325:28)
+    at beginWork (chunk-RPCDYKBN.js?v=b2a01854:15946:22)
+    at HTMLUnknownElement.callCallback2 (chunk-RPCDYKBN.js?v=b2a01854:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-RPCDYKBN.js?v=b2a01854:3699:24)
+    at invokeGuardedCallback (chunk-RPCDYKBN.js?v=b2a01854:3733:39)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=b2a01854:19765:15)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=b2a01854:19198:20)
+    at workLoopSync (chunk-RPCDYKBN.js?v=b2a01854:19137:13)
+(anonymous) @ @radix-ui_react-select.js?v=b2a01854:873
+renderWithHooks @ chunk-RPCDYKBN.js?v=b2a01854:11548
+updateForwardRef @ chunk-RPCDYKBN.js?v=b2a01854:14325
+beginWork @ chunk-RPCDYKBN.js?v=b2a01854:15946
+callCallback2 @ chunk-RPCDYKBN.js?v=b2a01854:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=b2a01854:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=b2a01854:3733
+beginWork$1 @ chunk-RPCDYKBN.js?v=b2a01854:19765
+performUnitOfWork @ chunk-RPCDYKBN.js?v=b2a01854:19198
+workLoopSync @ chunk-RPCDYKBN.js?v=b2a01854:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=b2a01854:19116
+recoverFromConcurrentError @ chunk-RPCDYKBN.js?v=b2a01854:18736
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b2a01854:18879
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b2a01854:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=b2a01854:18627Understand this errorAI
+chunk-RPCDYKBN.js?v=b2a01854:14032 The above error occurred in the <SelectItem> component:
+
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-select.js?v=b2a01854:846:7
+    at _c11 (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/components/ui/select.tsx:208:13)
+    at div
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=b2a01854:42:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-2K77HOHX.js?v=b2a01854:79:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-2K77HOHX.js?v=b2a01854:56:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-TPYHSINA.js?v=b2a01854:39:15
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-select.js?v=b2a01854:757:13
+    at div
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-2K77HOHX.js?v=b2a01854:79:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-2K77HOHX.js?v=b2a01854:56:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-TPYHSINA.js?v=b2a01854:39:15
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-select.js?v=b2a01854:300:58
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-2K77HOHX.js?v=b2a01854:79:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-2K77HOHX.js?v=b2a01854:56:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=b2a01854:42:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-G76BAGTM.js?v=b2a01854:260:22
+    at SelectPortal
+    at _c7 (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/components/ui/select.tsx:123:12)
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at CollectionProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-TPYHSINA.js?v=b2a01854:29:13)
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at Popper (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-TSMXHQXX.js?v=b2a01854:1921:11)
+    at Select (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-select.js?v=b2a01854:88:5)
+    at div
+    at div
+    at div
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=b2a01854:42:13
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-collapsible.js?v=b2a01854:112:11
+    at Presence (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-E4UC4BFD.js?v=b2a01854:24:11)
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-collapsible.js?v=b2a01854:105:13
+    at div
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=b2a01854:42:13
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-collapsible.js?v=b2a01854:46:7
+    at div
+    at div
+    at div
+    at FilterControls (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/components/filter-controls.tsx:35:3)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=b2a01854:42:13
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=b2a01854:54:7
+    at div
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=b2a01854:42:13
+    at Presence (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-E4UC4BFD.js?v=b2a01854:24:11)
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=b2a01854:176:13
+    at _c5 (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/components/ui/tabs.tsx:72:12)
+    at div
+    at div
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=b2a01854:42:13
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=b2a01854:54:7
+    at div
+    at Home (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/pages/home.tsx:907:32)
+    at Route (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=b2a01854:323:16)
+    at Switch (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=b2a01854:379:17)
+    at main
+    at div
+    at div
+    at div
+    at div
+    at div
+    at MainLayout (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/components/layout/main-layout.tsx:25:38)
+    at AppRoutes (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/App.tsx?v=rMq1Og5TYM1AOedzTdDoi:43:48)
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=b2a01854:38:15)
+    at TooltipProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=b2a01854:64:5)
+    at AuthProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/context/auth-context.tsx:21:32)
+    at QueryClientProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=b2a01854:2805:3)
+    at App
+    at AuthProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/context/auth-context.tsx?v=rMq1Og5TYM1AOedzTdDoi:21:32)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-RPCDYKBN.js?v=b2a01854:14032
+update.callback @ chunk-RPCDYKBN.js?v=b2a01854:14052
+callCallback @ chunk-RPCDYKBN.js?v=b2a01854:11248
+commitUpdateQueue @ chunk-RPCDYKBN.js?v=b2a01854:11265
+commitLayoutEffectOnFiber @ chunk-RPCDYKBN.js?v=b2a01854:17093
+commitLayoutMountEffects_complete @ chunk-RPCDYKBN.js?v=b2a01854:17980
+commitLayoutEffects_begin @ chunk-RPCDYKBN.js?v=b2a01854:17969
+commitLayoutEffects @ chunk-RPCDYKBN.js?v=b2a01854:17920
+commitRootImpl @ chunk-RPCDYKBN.js?v=b2a01854:19353
+commitRoot @ chunk-RPCDYKBN.js?v=b2a01854:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=b2a01854:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=b2a01854:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=b2a01854:18627Understand this errorAI
+chunk-RPCDYKBN.js?v=b2a01854:9129 Uncaught Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at @radix-ui_react-select.js?v=b2a01854:873:13
+    at renderWithHooks (chunk-RPCDYKBN.js?v=b2a01854:11548:26)
+    at updateForwardRef (chunk-RPCDYKBN.js?v=b2a01854:14325:28)
+    at beginWork (chunk-RPCDYKBN.js?v=b2a01854:15946:22)
+    at beginWork$1 (chunk-RPCDYKBN.js?v=b2a01854:19753:22)
+    at performUnitOfWork (chunk-RPCDYKBN.js?v=b2a01854:19198:20)
+    at workLoopSync (chunk-RPCDYKBN.js?v=b2a01854:19137:13)
+    at renderRootSync (chunk-RPCDYKBN.js?v=b2a01854:19116:15)
+    at recoverFromConcurrentError (chunk-RPCDYKBN.js?v=b2a01854:18736:28)
+    at performSyncWorkOnRoot (chunk-RPCDYKBN.js?v=b2a01854:18879:28)

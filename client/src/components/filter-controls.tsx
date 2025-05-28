@@ -94,7 +94,7 @@ export function FilterControls({
                         <SelectValue placeholder="部署選択" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">全部署</SelectItem>
+                        <SelectItem value="all">全部署</SelectItem>
                         {departments.map((dept) => (
                           <SelectItem key={dept.id} value={dept.name}>
                             {dept.name}

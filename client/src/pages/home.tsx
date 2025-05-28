@@ -739,7 +739,9 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   }))).sort();
 
   // 検索とフィルタリング用の部署リスト
-  const departmentOptions = uniqueDepartments.map(dept => ({ id: dept, name: dept }));
+  const departmentOptions = uniqueDepartments
+    .filter(dept => dept != null)
+    .map(dept => ({ id: dept!, name: dept! }));
 
   // カード検索とフィルタリング機能
   const filterCards = (cards: CardWithRelations[]) => {
@@ -756,8 +758,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
         }
       }
 
-      // 部署でフィルタリング
-      if (departmentFilter) {
+      // 部署でフィルタリング（"all"以外の場合のみ）
+      if (departmentFilter && departmentFilter !== "all") {
         const allCardUsers = [card.sender, card.recipient, ...(card.additionalRecipients || [])].filter(Boolean);
         const hasDepartmentMatch = allCardUsers.some(user => 
           typeof user === 'object' && user && 'department' in user && user.department === departmentFilter
