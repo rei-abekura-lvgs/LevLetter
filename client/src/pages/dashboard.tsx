@@ -20,9 +20,6 @@ interface PersonalInteraction {
 interface DashboardStats {
   monthly: {
     pointConversionRate: number;
-    reactionRate: number;
-    cardSenders: any[];
-    likeSenders: any[];
     userCardRank: number;
     userLikeRank: number;
   };

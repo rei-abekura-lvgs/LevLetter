@@ -1271,6 +1271,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // ダッシュボード統計API
+  app.get("/api/dashboard/stats", weeklyPointsResetMiddleware, authenticate, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const stats = await storage.getDashboardStats(user.id);
+      return res.json(stats);
+    } catch (error) {
+      console.error("ダッシュボード統計取得エラー:", error);
+      return res.status(500).json({ message: "ダッシュボード統計の取得に失敗しました" });
+    }
+  });
+
   // カード削除API
   app.delete("/api/cards/:id", authenticate, async (req, res) => {
     try {
