@@ -283,6 +283,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     await apiRequest('POST', `/api/cards/${card.id}/likes`);
                     // サーバーからの正確なデータで更新
                     onRefresh?.();
+                    // ユーザー情報のキャッシュも無効化してポイント表示を更新
+                    queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
                     toast({ 
                       title: "いいねしました！✨", 
                       description: "2pt使用しました",

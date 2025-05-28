@@ -911,6 +911,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 週次ポイントリセット（管理者専用テスト機能）
+  app.post("/api/admin/reset-weekly-points", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const userCount = await storage.getUserCount();
+      await storage.resetUserWeeklyPoints();
+      console.log(`✅ 管理者による週次ポイントリセット実行完了 - ${userCount}人`);
+      
+      return res.json({ 
+        message: `全ユーザー（${userCount}人）の週次ポイントを500ptにリセットしました`,
+        resetCount: userCount
+      });
+    } catch (error) {
+      console.error("週次ポイントリセットエラー:", error);
+      return res.status(500).json({ message: "週次ポイントリセット処理中にエラーが発生しました" });
+    }
+  });
+
   // チーム関連API
   app.get("/api/teams", authenticate, async (req, res) => {
     try {
