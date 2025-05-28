@@ -79,7 +79,7 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
                 <span className="text-lg font-bold text-green-700">{user.totalPointsReceived}pt</span>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">カードへのいいねで受け取ったポイント</p>
+            <p className="text-xs text-gray-500 mt-2">カードの受信やいいねで受け取ったポイント</p>
           </div>
 
           {/* 下部アクションエリア */}
