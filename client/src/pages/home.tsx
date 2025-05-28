@@ -277,12 +277,6 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                   </span>
                 )}
               </Button>
-              
-              {totalLikes > 0 && (
-                <span className="text-xs font-medium text-gray-600 ml-1">
-                  {totalLikes}
-                </span>
-              )}
             </div>
             
 
