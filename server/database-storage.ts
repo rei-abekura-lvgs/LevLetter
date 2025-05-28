@@ -975,8 +975,15 @@ export class DatabaseStorage implements IStorage {
       const user = await this.getUser(userId);
       if (!user) throw new Error('ユーザーが見つかりません');
 
-      // ポイント消費率（500ptが最大）
-      const pointConversionRate = Math.min(100, ((500 - user.weeklyPoints) / 500) * 100);
+      // 今週のポイント情報
+      const weeklyPointsUsed = 500 - user.weeklyPoints;
+      
+      // 今月の開始日を取得
+      const now = new Date();
+      const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const nextMonthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      
+      console.log('📅 今月の期間:', thisMonthStart, 'から', nextMonthStart);
 
       // 実際のデータから個人的なやりとり統計を取得
       const sentCardsData = await db
