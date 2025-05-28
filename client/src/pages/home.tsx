@@ -585,9 +585,9 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [filterBy, setFilterBy] = useState<"all" | "person" | "department">("all");
   const [filterValue, setFilterValue] = useState<string>("");
-  const [personSearchOpen, setPersonSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<{type: 'person' | 'department', value: string} | null>(null);
   const { toast } = useToast();
   
   // 既読カードIDを管理（localStorageに保存）
@@ -686,17 +686,17 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     if (activeTab === "sent" && card.senderId !== user.id) return false;
     if (activeTab === "liked" && !(card.likes?.some(like => like.userId === user.id) || false)) return false;
     
-    // 人・部署フィルター
-    if (filterBy === "person" && filterValue) {
-      const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-      const hasMatchingPerson = allUsers.some(user => (user.displayName || user.name) === filterValue);
-      if (!hasMatchingPerson) return false;
-    }
-    
-    if (filterBy === "department" && filterValue) {
-      const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-      const hasMatchingDepartment = allUsers.some(user => user.department === filterValue);
-      if (!hasMatchingDepartment) return false;
+    // 統合検索フィルター
+    if (selectedFilter) {
+      if (selectedFilter.type === "person") {
+        const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+        const hasMatchingPerson = allUsers.some(user => (user.displayName || user.name) === selectedFilter.value);
+        if (!hasMatchingPerson) return false;
+      } else if (selectedFilter.type === "department") {
+        const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+        const hasMatchingDepartment = allUsers.some(user => user.department === selectedFilter.value);
+        if (!hasMatchingDepartment) return false;
+      }
     }
     
     return true;
@@ -881,82 +881,82 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   <SelectItem value="popular">人気順</SelectItem>
                 </SelectContent>
               </Select>
-              <Select defaultValue="all" onValueChange={(value) => setFilterBy(value as "all" | "person" | "department")}>
-                <SelectTrigger className="w-[100px] h-8 text-sm">
-                  <SelectValue placeholder="全て" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">全て</SelectItem>
-                  <SelectItem value="person">人で絞込</SelectItem>
-                  <SelectItem value="department">部署で絞込</SelectItem>
-                </SelectContent>
-              </Select>
-              {filterBy !== 'all' && (
-                filterBy === 'person' ? (
-                  <Popover open={personSearchOpen} onOpenChange={setPersonSearchOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={personSearchOpen}
-                        className="w-[200px] h-8 text-sm justify-between"
-                      >
-                        {filterValue 
-                          ? uniquePeople.find((person) => person === filterValue)
-                          : "人を選択..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput placeholder="名前で検索..." />
-                        <CommandList>
-                          <CommandEmpty>見つかりませんでした。</CommandEmpty>
-                          <CommandGroup>
-                            {uniquePeople.map((person: string) => (
-                              <CommandItem
-                                key={person}
-                                value={person}
-                                onSelect={(currentValue) => {
-                                  setFilterValue(currentValue === filterValue ? "" : currentValue);
-                                  setPersonSearchOpen(false);
-                                }}
-                              >
-                                <Check
-                                  className={`mr-2 h-4 w-4 ${
-                                    filterValue === person ? "opacity-100" : "opacity-0"
-                                  }`}
-                                />
-                                {person}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                ) : (
-                  <Select defaultValue="" onValueChange={setFilterValue}>
-                    <SelectTrigger className="w-[120px] h-8 text-sm">
-                      <SelectValue placeholder="部署を選択" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {uniqueDepartments.map((dept: string) => (
-                        <SelectItem key={dept} value={dept}>{dept}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )
-              )}
+              {/* 統合検索ボックス */}
+              <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={searchOpen}
+                    className="w-[250px] h-8 text-sm justify-between"
+                  >
+                    {selectedFilter 
+                      ? `${selectedFilter.type === 'person' ? '👤' : '🏢'} ${selectedFilter.value}`
+                      : "人名・部署名で検索..."}
+                    <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0">
+                  <Command>
+                    <CommandInput placeholder="人名または部署名を入力..." />
+                    <CommandList>
+                      <CommandEmpty>見つかりませんでした。</CommandEmpty>
+                      
+                      {/* 人名セクション */}
+                      <CommandGroup heading="👤 人名">
+                        {uniquePeople.map((person: string) => (
+                          <CommandItem
+                            key={`person-${person}`}
+                            value={person}
+                            onSelect={(currentValue) => {
+                              setSelectedFilter({type: 'person', value: currentValue});
+                              setSearchOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={`mr-2 h-4 w-4 ${
+                                selectedFilter?.type === 'person' && selectedFilter?.value === person ? "opacity-100" : "opacity-0"
+                              }`}
+                            />
+                            <UserIcon className="mr-2 h-4 w-4 text-blue-500" />
+                            {person}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                      
+                      {/* 部署セクション */}
+                      <CommandGroup heading="🏢 部署">
+                        {uniqueDepartments.map((dept: string) => (
+                          <CommandItem
+                            key={`dept-${dept}`}
+                            value={dept}
+                            onSelect={(currentValue) => {
+                              setSelectedFilter({type: 'department', value: currentValue});
+                              setSearchOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={`mr-2 h-4 w-4 ${
+                                selectedFilter?.type === 'department' && selectedFilter?.value === dept ? "opacity-100" : "opacity-0"
+                              }`}
+                            />
+                            <Activity className="mr-2 h-4 w-4 text-green-500" />
+                            {dept}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               
               {/* フィルタークリアボタン */}
-              {filterValue && (
+              {selectedFilter && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    setFilterValue("");
-                    setFilterBy("all");
+                    setSelectedFilter(null);
                   }}
                   className="h-8 px-2 text-sm text-gray-500 hover:text-gray-700"
                 >
