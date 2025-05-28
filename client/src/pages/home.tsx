@@ -690,8 +690,9 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             {activeTab === "all" && "カードがありません"}
-            {activeTab === "received" && "受け取ったカードがありません"}
+            {activeTab === "received" && "もらったカードがありません"}
             {activeTab === "sent" && "送ったカードがありません"}
+            {activeTab === "liked" && "いいねしたカードがありません"}
           </h3>
           <p className="text-gray-500 text-sm max-w-sm">
             {activeTab === "sent" 
@@ -815,10 +816,11 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             className="flex flex-col flex-1 overflow-hidden" 
             onValueChange={setActiveTab}
           >
-            <TabsList className="grid w-full grid-cols-3 mx-4 mb-4 flex-shrink-0">
+            <TabsList className="grid w-full grid-cols-4 mx-4 mb-4 flex-shrink-0">
               <TabsTrigger value="all">すべて</TabsTrigger>
               <TabsTrigger value="sent">送った</TabsTrigger>
-              <TabsTrigger value="received">受け取った</TabsTrigger>
+              <TabsTrigger value="received">もらった</TabsTrigger>
+              <TabsTrigger value="liked">いいね</TabsTrigger>
             </TabsList>
 
             <div 
@@ -840,6 +842,12 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               </TabsContent>
               
               <TabsContent value="sent" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
+                <div className="flex-1 overflow-y-auto px-4 pb-20">
+                  {renderCardList()}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="liked" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
                 <div className="flex-1 overflow-y-auto px-4 pb-20">
                   {renderCardList()}
                 </div>
