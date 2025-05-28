@@ -16,11 +16,10 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
   const { user: authUser, isAuthenticated } = useAuth();
   
   // サイドバー用にリアルタイムでユーザー情報を取得
-  const { data: currentUser } = useQuery<User>({
+  const { data: currentUser, refetch } = useQuery<User>({
     queryKey: ['/api/auth/me'],
     enabled: isAuthenticated,
     refetchOnWindowFocus: true,
-    refetchInterval: 5000, // 5秒ごとに更新
     staleTime: 0, // 常に最新データを使用
   });
   
