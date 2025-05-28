@@ -29,6 +29,7 @@ import { useToast } from "@/hooks/use-toast";
 // 管理者ページのコンポーネントをインポート
 import UserManagement from "./user-management";
 import DepartmentManagement from "./department-management";
+import OrganizationManagement from "./organization-management";
 import EmployeeImport from "./employee-import";
 
 export default function AdminDashboard() {
@@ -163,14 +164,18 @@ export default function AdminDashboard() {
         onValueChange={setActiveTab}
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-3 mb-8">
+        <TabsList className="grid w-full grid-cols-4 mb-8">
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             <span>ユーザー管理</span>
           </TabsTrigger>
+          <TabsTrigger value="organizations" className="flex items-center gap-2">
+            <Building2 className="h-4 w-4" />
+            <span>5階層組織管理</span>
+          </TabsTrigger>
           <TabsTrigger value="departments" className="flex items-center gap-2">
             <Building2 className="h-4 w-4" />
-            <span>部署管理</span>
+            <span>部署管理（旧）</span>
           </TabsTrigger>
           <TabsTrigger value="import" className="flex items-center gap-2">
             <FileSpreadsheet className="h-4 w-4" />
@@ -180,6 +185,10 @@ export default function AdminDashboard() {
 
         <TabsContent value="users">
           <UserManagement />
+        </TabsContent>
+
+        <TabsContent value="organizations">
+          <OrganizationManagement />
         </TabsContent>
 
         <TabsContent value="departments">

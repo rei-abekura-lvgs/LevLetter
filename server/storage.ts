@@ -80,6 +80,18 @@ export interface IStorage {
   getLike(cardId: number, userId: number): Promise<Like | undefined>;
   createLike(like: InsertLike): Promise<Like>;
   deleteLike(id: number): Promise<void>;
+
+  // 組織階層管理
+  getAllOrganizations(): Promise<OrganizationHierarchy[]>;
+  createOrganization(data: InsertOrganization): Promise<OrganizationHierarchy>;
+  updateOrganization(id: number, data: Partial<InsertOrganization>): Promise<OrganizationHierarchy | null>;
+  deleteOrganization(id: number): Promise<void>;
+  getOrganizationByNameAndLevel(name: string, level: number): Promise<OrganizationHierarchy | null>;
+
+  // ユーザー部署関連
+  getUserDepartments(userId: number): Promise<UserDepartment[]>;
+  assignUserToDepartment(data: InsertUserDepartment): Promise<UserDepartment>;
+  removeUserFromDepartment(userId: number, organizationId: number): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
