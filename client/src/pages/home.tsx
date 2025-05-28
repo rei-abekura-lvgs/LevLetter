@@ -580,17 +580,29 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     return allUsers.map(user => user.department).filter(Boolean);
   }))].sort();
 
-  // 各タブの通知数を計算
+  // 各タブの通知数を計算（重要な通知のみ目立たせる）
   const getTabCounts = () => {
+    // 受信したカード数（目立つ通知）
+    const receivedCards = cards.filter(card => {
+      const recipients = [card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+      const recipientIds = recipients.map(r => r?.id).filter(Boolean);
+      return recipientIds.includes(user.id);
+    });
+
+    // 自分の送信カードがいいねされた数（目立つ通知）
+    const sentCardsWithLikes = cards.filter(card => 
+      card.senderId === user.id && 
+      (card.likes?.length || 0) > 0
+    );
+
     const counts = {
-      all: cards.length,
-      sent: cards.filter(card => card.senderId === user.id).length,
-      received: cards.filter(card => {
-        const recipients = [card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-        const recipientIds = recipients.map(r => r?.id).filter(Boolean);
-        return recipientIds.includes(user.id);
-      }).length,
-      liked: cards.filter(card => card.likes?.some(like => like.userId === user.id) || false).length
+      all: cards.length, // 控えめ表示
+      sent: cards.filter(card => card.senderId === user.id).length, // 控えめ表示
+      received: receivedCards.length, // 目立つ表示
+      liked: cards.filter(card => card.likes?.some(like => like.userId === user.id) || false).length, // 控えめ表示
+      // 通知の重要度フラグ
+      isReceivedImportant: receivedCards.length > 0,
+      isSentImportant: sentCardsWithLikes.length > 0
     };
     return counts;
   };
@@ -837,31 +849,39 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               <TabsTrigger value="all" className="relative">
                 すべて
                 {tabCounts.all > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-blue-100 text-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
                     {tabCounts.all > 99 ? '99+' : tabCounts.all}
                   </span>
                 )}
               </TabsTrigger>
               <TabsTrigger value="sent" className="relative">
                 送った
-                {tabCounts.sent > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-orange-100 text-orange-600 text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                {tabCounts.isSentImportant ? (
+                  <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
+                    !
+                  </span>
+                ) : tabCounts.sent > 0 ? (
+                  <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
                     {tabCounts.sent > 99 ? '99+' : tabCounts.sent}
                   </span>
-                )}
+                ) : null}
               </TabsTrigger>
               <TabsTrigger value="received" className="relative">
                 もらった
-                {tabCounts.received > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-100 text-red-600 text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                {tabCounts.isReceivedImportant ? (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
                     {tabCounts.received > 99 ? '99+' : tabCounts.received}
                   </span>
-                )}
+                ) : tabCounts.received > 0 ? (
+                  <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
+                    {tabCounts.received > 99 ? '99+' : tabCounts.received}
+                  </span>
+                ) : null}
               </TabsTrigger>
               <TabsTrigger value="liked" className="relative">
                 いいね
                 {tabCounts.liked > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-pink-100 text-pink-600 text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
                     {tabCounts.liked > 99 ? '99+' : tabCounts.liked}
                   </span>
                 )}
