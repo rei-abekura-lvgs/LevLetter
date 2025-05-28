@@ -875,13 +875,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // 6段階組織階層情報を抽出
           const organizationData = {
-            organizationLevel1: employee['所属階層１'] || null,
-            organizationLevel2: employee['所属階層２'] || null,
-            organizationLevel3: employee['所属階層３'] || null,
-            organizationLevel4: employee['所属階層４'] || null,
-            organizationLevel5: employee['所属階層５'] || null,
-            organizationLevel6: employee['所属階層６'] || null,
+            organizationLevel1: employee.organizationLevel1 || null,
+            organizationLevel2: employee.organizationLevel2 || null,
+            organizationLevel3: employee.organizationLevel3 || null,
+            organizationLevel4: employee.organizationLevel4 || null,
+            organizationLevel5: employee.organizationLevel5 || null,
+            organizationLevel6: employee.organizationLevel6 || null,
           };
+          
+          console.log(`📊 ユーザー${employee.email}の組織階層データ:`, organizationData);
           
           if (existingUser) {
             // 既存ユーザーの更新（パスワードは維持）
