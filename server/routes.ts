@@ -1481,15 +1481,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 通知関連のAPI
   app.get("/api/notifications", authenticate, async (req, res) => {
     try {
+      console.log("📨 通知API呼び出し開始");
       const currentUser = await storage.getUser(req.session.userId!);
       if (!currentUser) {
+        console.log("❌ 通知API: 認証失敗");
         return res.status(401).json({ message: "認証が必要です" });
       }
 
-      const notifications = await storage.getNotifications(currentUser.id);
+      console.log(`📨 ユーザーID ${currentUser.id} の通知を取得中...`);
+      
+      // 簡単な通知実装：受信したカードを通知として表示
+      const receivedCards = await storage.getReceivedCards(currentUser.id);
+      console.log(`📨 受信カード数: ${receivedCards.length}`);
+      
+      const notifications = receivedCards.map((card, index) => ({
+        id: card.id,
+        userId: currentUser.id,
+        type: 'new_card',
+        title: 'カードが届きました',
+        message: `${card.sender.name}さんからカードが届きました`,
+        isRead: false,
+        createdAt: card.createdAt.toISOString(),
+        relatedCardId: card.id,
+        relatedUser: {
+          id: card.sender.id,
+          name: card.sender.name,
+          displayName: card.sender.displayName,
+          customAvatarUrl: card.sender.customAvatarUrl,
+          avatarColor: card.sender.avatarColor
+        }
+      }));
+      
+      console.log(`📨 通知データ作成完了: ${notifications.length}件`);
       res.json(notifications);
     } catch (error) {
-      console.error("通知取得エラー:", error);
+      console.error("❌ 通知取得エラー:", error);
       res.status(500).json({ message: "通知取得中にエラーが発生しました" });
     }
   });
