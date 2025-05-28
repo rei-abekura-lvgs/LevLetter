@@ -838,11 +838,30 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     // 検索フィルター
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
+      
+      // 送信者名の検索対象を拡張
       const senderName = (typeof card.sender === 'object' && card.sender?.name) ? card.sender.name.toLowerCase() : '';
+      const senderDisplayName = (typeof card.sender === 'object' && card.sender?.displayName) ? card.sender.displayName.toLowerCase() : '';
+      const senderEmail = (typeof card.sender === 'object' && card.sender?.email) ? card.sender.email.toLowerCase() : '';
+      
+      // 受信者名の検索対象を拡張
       const recipientName = (typeof card.recipient === 'object' && card.recipient?.name) ? card.recipient.name.toLowerCase() : '';
+      const recipientDisplayName = (typeof card.recipient === 'object' && card.recipient?.displayName) ? card.recipient.displayName.toLowerCase() : '';
+      const recipientEmail = (typeof card.recipient === 'object' && card.recipient?.email) ? card.recipient.email.toLowerCase() : '';
+      
+      // メッセージ内容
       const message = card.message.toLowerCase();
       
-      if (!senderName.includes(query) && !recipientName.includes(query) && !message.includes(query)) {
+      // すべての検索対象をチェック
+      const searchTargets = [
+        senderName, senderDisplayName, senderEmail,
+        recipientName, recipientDisplayName, recipientEmail,
+        message
+      ];
+      
+      const hasMatch = searchTargets.some(target => target.includes(query));
+      
+      if (!hasMatch) {
         return false;
       }
     }
