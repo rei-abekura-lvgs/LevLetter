@@ -42,7 +42,13 @@ interface CompanyEmployee {
   email: string;
   // 所属部門
   department?: string;
-  // その他のフィールドは必要に応じて追加
+  // 6段階の組織階層情報
+  organizationLevel1?: string | null;
+  organizationLevel2?: string | null;
+  organizationLevel3?: string | null;
+  organizationLevel4?: string | null;
+  organizationLevel5?: string | null;
+  organizationLevel6?: string | null;
 }
 
 // 従業員データをインポートする関数

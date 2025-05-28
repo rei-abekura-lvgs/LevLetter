@@ -1,0 +1,76 @@
+タブ区切り判定: false
+employee-import.tsx:157 ■■■■■■ パース結果詳細 ■■■■■■
+employee-import.tsx:158 パース結果: {data: Array(49), errors: Array(0), meta: {…}}
+employee-import.tsx:159 パース結果のヘッダー: (18) ['社員番号', '氏名', '職場氏名', '会社メールアドレス', '所属部門', '所属コード', '所属階層１', '所属階層２', '所属階層３', '所属階層４', '所属階層５', '勤務地コード', '勤務地名', '職種コード', '職種名', '雇用区分', '入社日', 'PLコード']
+employee-import.tsx:160 行数: 49
+employee-import.tsx:162 パース結果の最初の行: {社員番号: '324138', 氏名: '大滝　圭修', 職場氏名: '大滝　圭修', 会社メールアドレス: 'keishu.otaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:163 データ型: object
+employee-import.tsx:165 プロパティ一覧: (18) ['社員番号', '氏名', '職場氏名', '会社メールアドレス', '所属部門', '所属コード', '所属階層１', '所属階層２', '所属階層３', '所属階層４', '所属階層５', '勤務地コード', '勤務地名', '職種コード', '職種名', '雇用区分', '入社日', 'PLコード']
+employee-import.tsx:171 処理中の行: {社員番号: '324138', 氏名: '大滝　圭修', 職場氏名: '大滝　圭修', 会社メールアドレス: 'keishu.otaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '324219', 氏名: '原田　将貴', 職場氏名: '原田　将貴', 会社メールアドレス: 'masaki.harada@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '324312', 氏名: '内垣　佑介', 職場氏名: '内垣　佑介', 会社メールアドレス: 'yusuke.uchigaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '324508', 氏名: '森下　研人', 職場氏名: '森下　研人', 会社メールアドレス: 'kento.morishita@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '324778', 氏名: '竹下　義晃', 職場氏名: '竹下　義晃', 会社メールアドレス: 'yoshiteru.takeshita@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325077', 氏名: '齋藤　匠', 職場氏名: '齋藤　匠', 会社メールアドレス: 'takumi.saito@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325210', 氏名: '石田　貴義', 職場氏名: '石田　貴義', 会社メールアドレス: 'takayoshi.ishida@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325279', 氏名: '加藤　智也', 職場氏名: '加藤　智也', 会社メールアドレス: 'tomoya.kato@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325293', 氏名: '德永　眞哉', 職場氏名: '德永　眞哉', 会社メールアドレス: 'shinya.tokunaga@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325294', 氏名: '塚本　貴之', 職場氏名: '塚本　貴之', 会社メールアドレス: 'takayuki.tsukamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325323', 氏名: '川口　耀平', 職場氏名: '川口　耀平', 会社メールアドレス: 'yohei.kawaguchi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325412', 氏名: '井上　萌々香', 職場氏名: '井上　萌々香', 会社メールアドレス: 'momoka.inoue@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325572', 氏名: '関口　一騎', 職場氏名: '関口　一騎', 会社メールアドレス: 'kazuki.sekiguchi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325679', 氏名: '下畑　剣一郎', 職場氏名: '下畑　剣一郎', 会社メールアドレス: 'kenichiro.shimohata@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325684', 氏名: '稲村　麟', 職場氏名: '稲村　麟', 会社メールアドレス: 'rin.inamura@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325692', 氏名: '柳澤　伸哉', 職場氏名: '柳澤　伸哉', 会社メールアドレス: 'nobuya.yanagisawa@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325701', 氏名: '香川　淳', 職場氏名: '香川　淳', 会社メールアドレス: 'jun.kagawa@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325714', 氏名: '中野　竜之介', 職場氏名: '中野　竜之介', 会社メールアドレス: 'ryunosuke.nakano@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325719', 氏名: '三口　廉', 職場氏名: '三口　廉', 会社メールアドレス: 'ren.miguchi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325764', 氏名: '田中　瑚大', 職場氏名: '田中　瑚大', 会社メールアドレス: 'godai.tanaka@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '325899', 氏名: '岡本　侑樹', 職場氏名: '岡本　侑樹', 会社メールアドレス: 'yuki.okamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326182', 氏名: '縄巻　一鴻', 職場氏名: '縄巻　一鴻', 会社メールアドレス: 'kazutoki.nawamaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326329', 氏名: '山本　龍雄', 職場氏名: '山本　龍雄', 会社メールアドレス: 'tatsuo.yamamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326361', 氏名: '桐生　直輝', 職場氏名: '桐生　直輝', 会社メールアドレス: 'naoki.kiryu@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326428', 氏名: '山下　翔', 職場氏名: '山下　翔', 会社メールアドレス: 'sho.yamashita@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326432', 氏名: '淺霧　一真', 職場氏名: '淺霧　一真', 会社メールアドレス: 'kazuma.asagiri@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326455', 氏名: '佐々木　美奈', 職場氏名: '佐々木　美奈', 会社メールアドレス: 'mina.sasaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326457', 氏名: '山本　寛太', 職場氏名: '山本　寛太', 会社メールアドレス: 'kanta.yamamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326608', 氏名: '岡島　喜希', 職場氏名: '岡島　喜希', 会社メールアドレス: 'yoshiki.okajima@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326611', 氏名: '三村　優人', 職場氏名: '竹村　優人', 会社メールアドレス: 'yuto.takemura@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326672', 氏名: '牧野　航大', 職場氏名: '牧野　航大', 会社メールアドレス: 'kota.makino@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326829', 氏名: '岩本　健太郎', 職場氏名: '岩本　健太郎', 会社メールアドレス: 'kentaro.iwamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326838', 氏名: '稲垣　慶亮', 職場氏名: '稲垣　慶亮', 会社メールアドレス: 'keisuke.inagaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '326854', 氏名: '??田　球花', 職場氏名: '??田　球花', 会社メールアドレス: 'tamaka.yoshida@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327076', 氏名: '矢野　貴大', 職場氏名: '矢野　貴大', 会社メールアドレス: 'takahiro.yano.a@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327380', 氏名: '宇田　知生', 職場氏名: '宇田　知生', 会社メールアドレス: 'tomoki.uda@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327671', 氏名: '鈴木　直澄', 職場氏名: '鈴木　直澄', 会社メールアドレス: 'naozumi.suzuki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327697', 氏名: '瀬上　真宏', 職場氏名: '瀬上　真宏', 会社メールアドレス: 'masahiro.senoue@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327756', 氏名: '斉藤　方軌', 職場氏名: '斉藤　方軌', 会社メールアドレス: 'masaki.saito@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327777', 氏名: '安藤　弘輝', 職場氏名: '安藤　弘輝', 会社メールアドレス: 'hiroki.ando@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327802', 氏名: '于　原駿', 職場氏名: '于　原駿', 会社メールアドレス: 'genshun.u@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327855', 氏名: 'LEE　SANGHYUK', 職場氏名: 'LEE　SANGHYUK', 会社メールアドレス: 'sanghyuk.lee@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327899', 氏名: '有坂　亮汰', 職場氏名: '有坂　亮汰', 会社メールアドレス: 'ryota.arisaka@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327900', 氏名: '永安　修也', 職場氏名: '永安　修也', 会社メールアドレス: 'shuya.nagayasu@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327946', 氏名: '横江　健太', 職場氏名: '横江　健太', 会社メールアドレス: 'kenta.yokoe@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '327989', 氏名: '小林　巧', 職場氏名: '小林　巧', 会社メールアドレス: 'takumi.kobayashi@leverages.jp', 所属部門: 'SY', …}PLコード: "MSS"会社メールアドレス: "takumi.kobayashi@leverages.jp"入社日: "2025/03/01 0:00:00"勤務地コード: "69"勤務地名: "渋谷一丁目支店4階"所属コード: "SY1701060000"所属部門: "SY"所属階層１: "システム本部"所属階層２: "NALYSYS開発部"所属階層３: "NALYSYSエンジニアリングチーム"所属階層４: "第6ユニット"所属階層５: ""氏名: "小林　巧"社員番号: "327989"職場氏名: "小林　巧"職種コード: "2"職種名: "内勤開発"雇用区分: "正社員"[[Prototype]]: Object
+employee-import.tsx:171 処理中の行: {社員番号: '328638', 氏名: '修　浩毅', 職場氏名: '修　浩毅', 会社メールアドレス: 'hiroki.shu@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '328641', 氏名: '逸見　裕章', 職場氏名: '逸見　裕章', 会社メールアドレス: 'hiroaki.hemmi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:171 処理中の行: {社員番号: '328642', 氏名: '苑田　朝彰', 職場氏名: '苑田　朝彰', 会社メールアドレス: 'tomotada.sonoda@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:206 マッピング後のデータ: (3) [{…}, {…}, {…}]
+employee-import.tsx:217 有効なデータ件数: 49
+employee-import.tsx:374 インポート対象データ件数: 49
+employee-import.tsx:51 ■■■■■■ インポート前のデータ詳細 ■■■■■■
+employee-import.tsx:52 データ件数: 49
+employee-import.tsx:53 データサンプル: (3) [{…}, {…}, {…}]
+employee-import.tsx:55 1件目の内容: {
+  "email": "keishu.otaki@leverages.jp",
+  "name": "大滝　圭修",
+  "employeeId": "324138",
+  "displayName": "大滝　圭修",
+  "department": "システム本部/NALYSYS開発部/NALYSYSプロダクトチーム"
+}
+employee-import.tsx:56 データ型: object
+employee-import.tsx:57 プロパティ一覧: (5) ['email', 'name', 'employeeId', 'displayName', 'department']
+employee-import.tsx:59 ■■■■■■ インポート前のデータ詳細(終わり) ■■■■■■
+queryClient.ts:42 API POST リクエスト: /api/admin/users/import データあり
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 17, unreadCount: 5}
