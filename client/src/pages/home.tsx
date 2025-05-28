@@ -950,8 +950,12 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             </TabsList>
 
             {/* テキストボックス風の投稿エリア */}
-            <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100 flex-shrink-0">
-              <div className="flex items-center gap-4">
+            <div className="p-4 bg-gradient-to-br from-slate-50 via-white to-gray-50/80 border-b border-gray-200/60 flex-shrink-0 backdrop-blur-sm relative overflow-hidden">
+              {/* 背景装飾 */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/20 to-indigo-100/20 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-50/30 to-indigo-50/30 rounded-full translate-y-12 -translate-x-12"></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-4">
                 {/* テキストボックス風の投稿ボタン */}
                 <div 
                   onClick={() => setIsCardFormOpen(true)}
@@ -982,6 +986,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
               </div>
             </div>
 
