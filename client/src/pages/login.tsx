@@ -16,7 +16,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const { fetchUser, setUser } = useAuth();
+  const { login: authLogin, refreshUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showEmailPassword, setShowEmailPassword] = useState(false);
@@ -73,26 +73,33 @@ export default function Login() {
     setIsLoading(true);
     try {
       console.log("ログイン試行:", data.email);
-      const response = await login(data.email, data.password);
-      console.log("ログイン成功:", response);
-
-      // 成功メッセージを表示
-      toast({
-        title: "ログイン成功",
-        description: "LevLetterへようこそ！",
-      });
-
-      // 認証コンテキストにユーザー情報を直接設定
-      setUser(response.user);
-      console.log("認証情報更新完了:", response.user);
-
-      // 画面遷移の準備
-      console.log("ホーム画面への遷移準備中...");
       
-      // 少し遅延してから確実に遷移
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 200);
+      // auth contextのlogin関数を使用
+      const success = await authLogin(data.email, data.password);
+      
+      if (success) {
+        console.log("ログイン成功");
+        
+        // 成功メッセージを表示
+        toast({
+          title: "ログイン成功",
+          description: "LevLetterへようこそ！",
+        });
+
+        // 認証情報を更新
+        await refreshUser();
+        console.log("認証情報更新完了");
+
+        // 画面遷移の準備
+        console.log("ホーム画面への遷移準備中...");
+        
+        // 少し遅延してから確実に遷移
+        setTimeout(() => {
+          setLocation("/");
+        }, 200);
+      } else {
+        throw new Error("ログインに失敗しました");
+      }
     } catch (error) {
       console.error("ログインエラー:", error);
       toast({
