@@ -744,8 +744,15 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const getTabCounts = () => {
     // 受信したカード数（未読のみ）
     const receivedCards = cards.filter(card => {
-      const recipients = [card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-      const recipientIds = recipients.map(r => r?.id).filter(Boolean);
+      // additionalRecipientsが数値配列かユーザーオブジェクト配列かを判定
+      const additionalRecipients = Array.isArray(card.additionalRecipients) 
+        ? card.additionalRecipients.map(item => 
+            typeof item === 'number' ? users?.find(u => u.id === item) : item
+          ).filter(Boolean)
+        : [];
+      
+      const recipients = [card.recipient, ...additionalRecipients].filter(Boolean);
+      const recipientIds = recipients.map(r => typeof r === 'object' && r && 'id' in r ? r.id : null).filter(Boolean);
       return recipientIds.includes(user.id);
     });
 
@@ -780,8 +787,15 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
 
   // フィルタリングロジック
   const filteredCards = cards.filter((card) => {
-    const recipients = [card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-    const recipientIds = recipients.map(r => r?.id).filter(Boolean);
+    // additionalRecipientsが数値配列かユーザーオブジェクト配列かを判定
+    const additionalRecipients = Array.isArray(card.additionalRecipients) 
+      ? card.additionalRecipients.map(item => 
+          typeof item === 'number' ? users?.find(u => u.id === item) : item
+        ).filter(Boolean)
+      : [];
+    
+    const recipients = [card.recipient, ...additionalRecipients].filter(Boolean);
+    const recipientIds = recipients.map(r => typeof r === 'object' && r && 'id' in r ? r.id : null).filter(Boolean);
     
     // タブフィルター
     if (activeTab === "received" && !recipientIds.includes(user.id)) return false;
