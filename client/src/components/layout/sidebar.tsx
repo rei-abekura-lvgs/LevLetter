@@ -50,7 +50,7 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
               <p className="text-sm text-gray-600">今週の残りポイント</p>
               <span className="text-xs text-gray-500">週次リセット</span>
             </div>
-            <p className="text-2xl font-bold text-[#3990EA] mb-1">{user.weeklyPoints}pt</p>
+            <p className="text-2xl font-bold text-[#3990EA] mb-1">{user?.weeklyPoints || 0}pt</p>
             <div className="text-xs text-gray-500">
               <p>毎週月曜日に500ptが付与されます</p>
               <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
