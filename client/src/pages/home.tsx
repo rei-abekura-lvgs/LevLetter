@@ -113,7 +113,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   // 送信者と受信者の確認
   const isSender = card.senderId === currentUser.id;
   const isRecipient = allRecipients.some(recipient => recipient.id === currentUser.id);
-  const canLike = !isSender && !isRecipient;
+  // 送信者のみいいね禁止、受信者はいいね可能に変更
+  const canLike = !isSender;
 
   // いいねボタンのテキスト
   const getLikeButtonText = () => {
@@ -301,9 +302,9 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                 disabled={totalLikes >= 50 || !canLike}
               >
                 <Heart className={`h-4 w-4 ${userHasLiked ? 'fill-current' : ''}`} />
-                {userLikeCount > 0 && (
+                {totalLikes > 0 && (
                   <span className="text-xs font-medium ml-1">
-                    {userLikeCount}
+                    {totalLikes}
                   </span>
                 )}
               </Button>
