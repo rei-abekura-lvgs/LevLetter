@@ -159,6 +159,72 @@ export function NotificationBell() {
   // 最新10件を表示
   const recentNotifications = notifications.slice(0, 10);
 
+  // 通知アイテムコンポーネント（Intersection Observer付き）
+  const NotificationItem = ({ notification, isRead, onMarkAsRead, onClick }: {
+    notification: any;
+    isRead: boolean;
+    onMarkAsRead: () => void;
+    onClick: () => void;
+  }) => {
+    const itemRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && !isRead) {
+              // 1秒後に既読化（スクロール時の誤動作を防ぐため）
+              setTimeout(() => {
+                onMarkAsRead();
+              }, 1000);
+            }
+          });
+        },
+        { threshold: 0.7 } // 70%表示された時に発動
+      );
+
+      if (itemRef.current) {
+        observer.observe(itemRef.current);
+      }
+
+      return () => {
+        if (itemRef.current) {
+          observer.unobserve(itemRef.current);
+        }
+      };
+    }, [isRead, onMarkAsRead]);
+
+    return (
+      <DropdownMenuItem
+        ref={itemRef}
+        className="flex flex-col items-start p-3 cursor-pointer hover:bg-gray-50"
+        onClick={onClick}
+      >
+        <div className="flex items-start gap-2 w-full">
+          <div className="flex-shrink-0 mt-1">
+            {notification.type === "new_card" ? (
+              <Mail className="h-4 w-4 text-blue-500" />
+            ) : (
+              <Heart className="h-4 w-4 text-red-500" />
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 mb-1">
+              {truncateMessage(notification.message)}
+            </p>
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <Clock className="h-3 w-3" />
+              {formatTime(notification.createdAt)}
+            </div>
+          </div>
+          {!isRead && (
+            <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0 mt-2"></div>
+          )}
+        </div>
+      </DropdownMenuItem>
+    );
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -193,33 +259,20 @@ export function NotificationBell() {
         ) : (
           <>
             {recentNotifications.map((notification) => (
-              <DropdownMenuItem
+              <NotificationItem
                 key={notification.id}
-                className="flex flex-col items-start p-3 cursor-pointer hover:bg-gray-50"
+                notification={notification}
+                isRead={clearedNotifications.has(notification.id)}
+                onMarkAsRead={() => {
+                  if (!clearedNotifications.has(notification.id)) {
+                    console.log("👁️ 通知を表示で既読化:", notification.id);
+                    const newClearedNotifications = new Set([...clearedNotifications, notification.id]);
+                    setClearedNotifications(newClearedNotifications);
+                    localStorage.setItem('clearedNotifications', JSON.stringify(Array.from(newClearedNotifications)));
+                  }
+                }}
                 onClick={() => handleNotificationClick(notification)}
-              >
-                <div className="flex items-start gap-2 w-full">
-                  <div className="flex-shrink-0 mt-1">
-                    {notification.type === "new_card" ? (
-                      <Mail className="h-4 w-4 text-blue-500" />
-                    ) : (
-                      <Heart className="h-4 w-4 text-red-500" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 mb-1">
-                      {truncateMessage(notification.message)}
-                    </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Clock className="h-3 w-3" />
-                      {formatTime(notification.createdAt)}
-                    </div>
-                  </div>
-                  {!notification.isRead && (
-                    <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0 mt-2"></div>
-                  )}
-                </div>
-              </DropdownMenuItem>
+              />
             ))}
             
             <DropdownMenuSeparator />
