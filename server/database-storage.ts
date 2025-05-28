@@ -9,7 +9,7 @@ import {
   type CardWithRelations
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, asc, sql, gte, or, not, inArray } from "drizzle-orm";
+import { eq, and, desc, asc, sql, gte, lt, ne, or, not, inArray } from "drizzle-orm";
 import * as crypto from "crypto";
 
 const DEFAULT_AVATAR_COLORS = [
@@ -1149,7 +1149,7 @@ export class DatabaseStorage implements IStorage {
             likes: totalReceivedLikes.count
           },
           sent: {
-            points: user.totalPoints || 0,
+            points: 0, // TODO: 送信ポイントの累計を計算
             cards: totalSentCards.count,
             likes: totalSentLikes.count
           }
