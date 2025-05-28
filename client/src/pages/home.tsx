@@ -835,7 +835,28 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     if (activeTab === "sent" && card.senderId !== user.id) return false;
     if (activeTab === "liked" && !(card.likes?.some(like => like.userId === user.id) || false)) return false;
     
-    // 検索フィルターは今後実装予定
+    // 検索フィルター
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const senderName = (typeof card.sender === 'object' && card.sender?.name) ? card.sender.name.toLowerCase() : '';
+      const recipientName = (typeof card.recipient === 'object' && card.recipient?.name) ? card.recipient.name.toLowerCase() : '';
+      const message = card.message.toLowerCase();
+      
+      if (!senderName.includes(query) && !recipientName.includes(query) && !message.includes(query)) {
+        return false;
+      }
+    }
+
+    // 部署フィルター
+    if (departmentFilter && departmentFilter !== "all") {
+      const allCardUsers = [card.sender, card.recipient, ...additionalRecipients].filter(Boolean);
+      const hasDepartmentMatch = allCardUsers.some(user => 
+        typeof user === 'object' && user && 'department' in user && user.department === departmentFilter
+      );
+      if (!hasDepartmentMatch) {
+        return false;
+      }
+    }
     
     return true;
   }).sort((a, b) => {
