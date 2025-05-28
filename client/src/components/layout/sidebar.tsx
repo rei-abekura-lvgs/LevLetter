@@ -52,7 +52,7 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
             </div>
             <p className="text-2xl font-bold text-[#3990EA] mb-1">{user.weeklyPoints}pt</p>
             <div className="text-xs text-gray-500">
-              <p>毎週500ptが付与されます</p>
+              <p>毎週月曜日に500ptが付与されます</p>
               <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
                 <div 
                   className="bg-[#3990EA] h-1.5 rounded-full transition-all duration-300" 

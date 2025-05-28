@@ -953,7 +953,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // カード関連API
-  app.get("/api/cards", authenticate, async (req, res) => {
+  app.get("/api/cards", weeklyPointsResetMiddleware, authenticate, async (req, res) => {
     try {
       const { limit = 50, offset = 0, sender, recipient, view } = req.query;
       const currentUser = (req as any).user;
@@ -1008,7 +1008,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/cards", authenticate, async (req, res) => {
+  app.post("/api/cards", weeklyPointsResetMiddleware, authenticate, async (req, res) => {
     try {
       const data = cardFormSchema.parse(req.body);
       const sender = (req as any).user;
@@ -1174,7 +1174,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // いいね機能：複数回可能、最大50回まで、2pt固定
-  app.post("/api/cards/:id/likes", authenticate, async (req, res) => {
+  app.post("/api/cards/:id/likes", weeklyPointsResetMiddleware, authenticate, async (req, res) => {
     try {
       const cardId = parseInt(req.params.id);
       const user = (req as any).user;
