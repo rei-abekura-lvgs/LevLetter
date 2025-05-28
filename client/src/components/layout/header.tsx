@@ -41,7 +41,7 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
   const [location] = useLocation();
 
   // ダッシュボード統計データを取得してポイント表示を統一
-  const { data: dashboardStats } = useQuery<{ weekly: { currentPoints: number } }>({
+  const { data: dashboardStats } = useQuery<DashboardStats>({
     queryKey: ["/api/dashboard/stats"],
     enabled: !!user, // ユーザーがログインしている場合のみ実行
   });

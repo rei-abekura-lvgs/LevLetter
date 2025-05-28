@@ -1,22 +1,19 @@
 import { Badge } from "@/components/ui/badge";
-
-interface TabCounts {
-  all: number;
-  sent: number;
-  received: number;
-  liked: number;
-  isReceivedImportant: boolean;
-  isSentImportant: boolean;
-}
+import { TabType, TabCounts } from "@/types/common";
 
 interface TabNavigationProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
+  activeTab: TabType;
+  onTabChange: (tab: TabType) => void;
   tabCounts: TabCounts;
 }
 
 export function TabNavigation({ activeTab, onTabChange, tabCounts }: TabNavigationProps) {
-  const tabs = [
+  const tabs: Array<{
+    id: TabType;
+    label: string;
+    count: number;
+    important: boolean;
+  }> = [
     { 
       id: "all", 
       label: "すべて", 
@@ -48,7 +45,7 @@ export function TabNavigation({ activeTab, onTabChange, tabCounts }: TabNavigati
       {tabs.map((tab) => (
         <button
           key={tab.id}
-          onClick={() => onTabChange(tab.id)}
+          onClick={() => onTabChange(tab.id as TabType)}
           className={`
             relative flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 min-w-[80px]
             ${activeTab === tab.id

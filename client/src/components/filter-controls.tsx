@@ -7,10 +7,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowUpDown, Calendar, TrendingUp } from "lucide-react";
+import { SortOrder } from "@/types/common";
 
 interface FilterControlsProps {
-  sortOrder: "newest" | "popular";
-  onSortChange: (order: "newest" | "popular") => void;
+  sortOrder: SortOrder;
+  onSortChange: (order: SortOrder) => void;
 }
 
 export function FilterControls({ sortOrder, onSortChange }: FilterControlsProps) {
