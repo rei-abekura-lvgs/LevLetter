@@ -279,16 +279,9 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
               </Button>
               
               {totalLikes > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 px-2 text-gray-600 hover:text-pink-500 hover:bg-pink-50"
-                  onClick={() => setShowDetailsDialog(true)}
-                >
-                  <span className="text-xs font-medium">
-                    {totalLikes}
-                  </span>
-                </Button>
+                <span className="text-xs font-medium text-gray-600 ml-1">
+                  {totalLikes}
+                </span>
               )}
             </div>
             
