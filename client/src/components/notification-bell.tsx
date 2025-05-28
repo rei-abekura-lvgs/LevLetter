@@ -86,14 +86,33 @@ export function NotificationBell() {
       // 現在のページがホームページでない場合は、まずホームに移動
       if (window.location.pathname !== '/') {
         setLocation('/');
-        // 少し遅延してからカードジャンプのパラメータを設定
+        // 少し遅延してからカードジャンプを実行
         setTimeout(() => {
-          setLocation(`/?cardId=${notification.relatedCardId}`);
-        }, 100);
+          jumpToCard(notification.relatedCardId);
+        }, 500);
       } else {
         // すでにホームページの場合は直接ジャンプ
-        setLocation(`/?cardId=${notification.relatedCardId}`);
+        jumpToCard(notification.relatedCardId);
       }
+    }
+  };
+
+  // カードジャンプ機能
+  const jumpToCard = (cardId: number) => {
+    console.log(`🎯 カード${cardId}への直接ジャンプ実行`);
+    
+    // カード要素を検索
+    const cardElement = document.getElementById(`card-${cardId}`);
+    if (cardElement) {
+      console.log("✅ カード要素発見 - スクロール実行");
+      cardElement.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
+    } else {
+      console.log("❌ カード要素が見つからない - URLパラメータでリトライ");
+      // カード要素が見つからない場合はURLパラメータ方式を使用
+      setLocation(`/?cardId=${cardId}`);
     }
   };
 
@@ -133,8 +152,8 @@ export function NotificationBell() {
     }
   };
 
-  // 最新5件のみ表示
-  const recentNotifications = notifications.slice(0, 5);
+  // 最新10件を表示
+  const recentNotifications = notifications.slice(0, 10);
 
   return (
     <DropdownMenu>
