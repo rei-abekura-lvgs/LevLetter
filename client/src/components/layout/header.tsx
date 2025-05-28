@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { User } from "@shared/schema";
-import { useAuth } from "@/context/auth-context-new";
+import { useAuth } from "@/context/auth-context";
 import { BearAvatar } from "@/components/ui/bear-avatar";
 import { BearLogo } from "@/components/bear-logo";
 import { NotificationBell } from "@/components/notification-bell";

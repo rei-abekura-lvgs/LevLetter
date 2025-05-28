@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/context/auth-context-new";
+import { useAuth } from "@/context/auth-context";
 import { Trophy, Medal, Award, Heart, Send, ArrowUpDown, Crown, Users } from "lucide-react";
 import UnifiedAvatar from "@/components/unified-avatar";
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "@/context/auth-context-new";
+import { useAuth } from "@/context/auth-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,

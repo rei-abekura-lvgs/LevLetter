@@ -20,7 +20,7 @@ import DashboardNew from "@/pages/dashboard-new";
 import Ranking from "@/pages/ranking";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
-import { AuthProvider, useAuth } from "@/context/auth-context-new";
+import { AuthProvider, useAuth } from "@/context/auth-context";
 import { useEffect, useState } from "react";
 
 function AppRoutes() {
