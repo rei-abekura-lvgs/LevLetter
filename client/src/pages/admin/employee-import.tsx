@@ -194,7 +194,7 @@ export default function EmployeeImport() {
                   departmentPath
                 });
                 
-                return {
+                const mappedEmployee = {
                   email: row["会社メールアドレス"] || '',
                   name: row["職場氏名"] || row["氏名"] || '',
                   employeeId: String(row["社員番号"] || ''),
@@ -206,6 +206,20 @@ export default function EmployeeImport() {
                   organizationLevel5: dept4, // チームレベル
                   organizationLevel6: dept5  // ユニットレベル
                 };
+                
+                console.log('🏢 マッピング後の組織階層データ:', {
+                  email: mappedEmployee.email,
+                  levels: {
+                    level1: mappedEmployee.organizationLevel1,
+                    level2: mappedEmployee.organizationLevel2,
+                    level3: mappedEmployee.organizationLevel3,
+                    level4: mappedEmployee.organizationLevel4,
+                    level5: mappedEmployee.organizationLevel5,
+                    level6: mappedEmployee.organizationLevel6
+                  }
+                });
+                
+                return mappedEmployee;
               } else {
                 // 従来のCSV形式の場合はそのまま
                 return row;
