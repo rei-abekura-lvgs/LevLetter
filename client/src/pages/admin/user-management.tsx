@@ -317,48 +317,23 @@ export default function UserManagement() {
                         )}
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
-                      <TableCell>
-                        {(() => {
-                          // 6段階組織階層情報を表示
-                          const organizationLevels = [
-                            (user as any).organizationLevel1,
-                            (user as any).organizationLevel2, 
-                            (user as any).organizationLevel3,
-                            (user as any).organizationLevel4,
-                            (user as any).organizationLevel5,
-                            (user as any).organizationLevel6,
-                          ].filter(Boolean); // 空の値を除外
-                          
-                          if (organizationLevels.length > 0) {
-                            return (
-                              <div className="max-w-md text-xs space-y-0.5">
-                                {organizationLevels.map((level, index) => (
-                                  <div key={index} className={`${index > 0 ? 'pl-4' : ''} ${index === 0 ? 'text-emerald-700 font-medium' : index === 1 ? 'text-emerald-600' : 'text-gray-600'}`}>
-                                    {level}
-                                  </div>
-                                ))}
-                              </div>
-                            );
-                          }
-                          
-                          // フォールバック: 旧形式の部署名を表示
-                          if (user.department) {
-                            const deptString = String(user.department);
-                            const hierarchyLevels = deptString.split('/');
-                            
-                            return (
-                              <div className="max-w-md text-xs space-y-0.5">
-                                {hierarchyLevels.map((level, index) => (
-                                  <div key={index} className={`${index > 0 ? 'pl-4' : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
-                                    {level.trim()}
-                                  </div>
-                                ))}
-                              </div>
-                            );
-                          }
-                          
-                          return <div className="text-gray-400 text-xs">（組織情報なし）</div>;
-                        })()}
+                      <TableCell className="text-xs">
+                        {(user as any).organizationLevel1 || "-"}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {(user as any).organizationLevel2 || "-"}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {(user as any).organizationLevel3 || "-"}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {(user as any).organizationLevel4 || "-"}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {(user as any).organizationLevel5 || "-"}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {(user as any).organizationLevel6 || "-"}
                       </TableCell>
                       <TableCell>
                         {user.isActive ? (
