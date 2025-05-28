@@ -632,26 +632,28 @@ export class DatabaseStorage implements IStorage {
 
   // カード関連
   async getCards(options: { limit?: number; offset?: number; senderId?: number; recipientId?: number; } = {}): Promise<CardWithRelations[]> {
-    // カードの基本情報を取得
+    // ベースクエリから開始
     let query = db.select().from(cards);
     
-    // フィルター適用
+    // 条件を順次適用
     if (options.senderId !== undefined) {
       query = query.where(eq(cards.senderId, options.senderId));
     }
     
     if (options.recipientId !== undefined) {
-      query = query.where(eq(cards.recipientId, options.recipientId));
+      if (options.senderId !== undefined) {
+        query = query.where(and(eq(cards.senderId, options.senderId), eq(cards.recipientId, options.recipientId)));
+      } else {
+        query = query.where(eq(cards.recipientId, options.recipientId));
+      }
     }
     
-    // 新しい順にソート
+    // ソートとページネーション
     query = query.orderBy(desc(cards.createdAt));
     
-    // ページネーション
     if (options.offset !== undefined) {
       query = query.offset(options.offset);
     }
-    
     if (options.limit !== undefined) {
       query = query.limit(options.limit);
     }
