@@ -47,7 +47,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
   // いいね詳細データを取得
   const { data: likeDetails } = useQuery({
-    queryKey: [`/api/cards/${card.id}/likes/details`],
+    queryKey: [`/api/cards/${card.id}/likes`],
     enabled: showDetailsDialog,
   });
 
