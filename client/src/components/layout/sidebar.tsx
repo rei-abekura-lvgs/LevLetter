@@ -5,6 +5,7 @@ import { Home, Settings, UserCircle, LogOut, Bell, BarChart3, Trophy, Shield } f
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
 import { BearLogo } from "@/components/bear-logo";
+import { useQuery } from "@tanstack/react-query";
 
 interface SidebarProps {
   user: User | null;
@@ -12,7 +13,18 @@ interface SidebarProps {
 
 export default function Sidebar({ user: propUser }: SidebarProps) {
   const [location] = useLocation();
-  const { user } = useAuth();
+  const { user: authUser, isAuthenticated } = useAuth();
+  
+  // サイドバー用にリアルタイムでユーザー情報を取得
+  const { data: currentUser } = useQuery<User>({
+    queryKey: ['/api/auth/me'],
+    enabled: isAuthenticated,
+    refetchOnWindowFocus: false,
+    staleTime: 0, // 常に最新データを使用
+  });
+  
+  // 最新のユーザー情報を使用（キャッシュが更新された場合は即座に反映）
+  const user = currentUser || authUser;
 
   const handleLogout = async () => {
     await logout();
@@ -48,7 +60,6 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
           <div className="bg-blue-50 rounded-lg p-4 mb-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm text-gray-600">今週の残りポイント</p>
-              <span className="text-xs text-gray-500">週次リセット</span>
             </div>
             <p className="text-2xl font-bold text-[#3990EA] mb-1">{user?.weeklyPoints || 0}pt</p>
             <div className="text-xs text-gray-500">
