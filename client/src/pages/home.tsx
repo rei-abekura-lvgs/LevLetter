@@ -521,6 +521,7 @@ interface HomeProps {
 
 export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCardFormOpen: propSetIsCardFormOpen }: HomeProps) {
   const { updateUser } = useAuth();
+  const { addLikeOptimistically } = useOptimisticUpdates();
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
   const [localIsCardFormOpen, setLocalIsCardFormOpen] = useState(false);
   
