@@ -1033,27 +1033,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
         </TabsContent>
         </div>
 
-        {/* フッタータブナビゲーション */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-20">
-          <TabsList className="grid w-full grid-cols-3 h-16 bg-white rounded-none">
-            <TabsTrigger value="timeline" className="flex flex-col items-center gap-1 text-xs py-2 h-full data-[state=active]:bg-blue-50 data-[state=active]:text-[#3990EA]">
-              <Activity className="h-5 w-5" />
-              タイムライン
-            </TabsTrigger>
-            <TabsTrigger value="dashboard" className="flex flex-col items-center gap-1 text-xs py-2 h-full data-[state=active]:bg-blue-50 data-[state=active]:text-[#3990EA]">
-              <BarChart3 className="h-5 w-5" />
-              ダッシュボード
-            </TabsTrigger>
-            <TabsTrigger value="ranking" className="flex flex-col items-center gap-1 text-xs py-2 h-full data-[state=active]:bg-blue-50 data-[state=active]:text-[#3990EA]">
-              <TrendingUp className="h-5 w-5" />
-              ランキング
-            </TabsTrigger>
-          </TabsList>
-        </div>
       </Tabs>
-
-      {/* コンテンツ下部のパディング（フッターと重ならないように） */}
-      <div className="h-16"></div>
     </div>
   );
 }
