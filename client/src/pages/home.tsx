@@ -12,7 +12,7 @@ import {
 import { 
   Calendar, Clock, Heart, MessageSquare, RotateCcw, 
   User as UserIcon, Send, Plus, Eye, EyeOff, Trash2,
-  BarChart3, TrendingUp, Activity
+  BarChart3, TrendingUp, Activity, Info
 } from "lucide-react";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
@@ -107,7 +107,7 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
   // いいね状況を確認
   const userLikeCount = card.likes?.filter(like => like.userId === currentUser.id).length || 0;
-  const totalLikes = card.totalLikes || 0;
+  const totalLikes = card.likes?.length || 0;
   const userHasLiked = userLikeCount > 0;
   
   // 送信者と受信者の確認
@@ -296,18 +296,16 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
           </div>
           
           <div className="flex items-center gap-2">
-            {/* いいね詳細ボタン */}
-            {totalLikes > 0 && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-6 px-2 text-xs text-gray-500"
-                onClick={() => setShowDetailsDialog(true)}
-              >
-                <Heart className="h-3 w-3 mr-1" />
-                詳細
-              </Button>
-            )}
+            {/* 詳細ボタン - 全カードに表示 */}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-6 px-2 text-xs text-gray-500"
+              onClick={() => setShowDetailsDialog(true)}
+            >
+              <Info className="h-3 w-3 mr-1" />
+              詳細
+            </Button>
             
             {allRecipients.length > displayRecipients.length && (
               <Dialog>
