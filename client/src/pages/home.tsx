@@ -975,15 +975,6 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               </TabsTrigger>
               <TabsTrigger value="received" className="relative">
                 もらった
-                {tabCounts.isReceivedImportant ? (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                    {tabCounts.received > 99 ? '99+' : tabCounts.received}
-                  </span>
-                ) : tabCounts.received > 0 ? (
-                  <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
-                    {tabCounts.received > 99 ? '99+' : tabCounts.received}
-                  </span>
-                ) : null}
               </TabsTrigger>
               <TabsTrigger value="liked" className="relative">
                 いいね
