@@ -905,36 +905,15 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
         <div className="flex-1 overflow-hidden">
 
         <TabsContent value="timeline" className="flex flex-col h-full overflow-hidden m-0">
-          {/* タイムラインタイトル */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-100 flex-shrink-0">
-            <h2 className="text-xl font-bold text-gray-800">タイムライン</h2>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
-                {filteredCards.length}件のカード
-              </Badge>
-              <Select defaultValue="newest" onValueChange={handleSortChange}>
-                <SelectTrigger className="w-[100px] h-8 text-sm">
-                  <SelectValue placeholder="新しい順" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">新しい順</SelectItem>
-                  <SelectItem value="popular">人気順</SelectItem>
-                </SelectContent>
-              </Select>
-              {/* 検索機能は今後の改善で実装予定 */}
-            </div>
-          </div>
-
-
-
-          {/* タブ切り替えとカードリスト */}
+          {/* Twitter風レイアウト - タブを最上部に配置 */}
           <Tabs 
             value={activeTab} 
             className="flex flex-col flex-1 overflow-hidden" 
             onValueChange={setActiveTab}
           >
-            <TabsList className="grid w-full grid-cols-4 mx-4 mb-4 flex-shrink-0">
-              <TabsTrigger value="all" className="relative">
+            {/* Twitter風タブナビゲーション */}
+            <TabsList className="grid w-full grid-cols-4 border-b border-gray-200 bg-white flex-shrink-0 rounded-none">
+              <TabsTrigger value="all" className="relative border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent rounded-none">
                 すべて
                 {tabCounts.all > 0 && (
                   <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
@@ -942,7 +921,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="sent" className="relative">
+              <TabsTrigger value="sent" className="relative border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent rounded-none">
                 送った
                 {tabCounts.isSentImportant ? (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
@@ -954,7 +933,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </span>
                 ) : null}
               </TabsTrigger>
-              <TabsTrigger value="received" className="relative">
+              <TabsTrigger value="received" className="relative border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent rounded-none">
                 もらった
                 {tabCounts.isReceivedImportant ? (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
@@ -966,7 +945,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </span>
                 ) : null}
               </TabsTrigger>
-              <TabsTrigger value="liked" className="relative">
+              <TabsTrigger value="liked" className="relative border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent rounded-none">
                 いいね
                 {tabCounts.liked > 0 && (
                   <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
@@ -975,6 +954,33 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                 )}
               </TabsTrigger>
             </TabsList>
+
+            {/* Twitter風コントロールエリア */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-white flex-shrink-0">
+              {/* 投稿ボタン */}
+              <Button 
+                onClick={() => setIsCardFormOpen(true)} 
+                className="bg-[#3990EA] hover:bg-[#2980D9] text-white px-6 py-2 rounded-full font-medium"
+              >
+                感謝の気持ちを伝える
+              </Button>
+              
+              {/* カード数とソート */}
+              <div className="flex items-center gap-3">
+                <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
+                  {filteredCards.length}件
+                </Badge>
+                <Select defaultValue="newest" onValueChange={handleSortChange}>
+                  <SelectTrigger className="w-[100px] h-8 text-sm border-gray-200">
+                    <SelectValue placeholder="新しい順" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">新しい順</SelectItem>
+                    <SelectItem value="popular">人気順</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
             <div 
               className="flex-1 overflow-hidden"
