@@ -964,11 +964,6 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             <TabsList className="grid w-full grid-cols-4 mx-4 mb-4 flex-shrink-0 bg-gray-50 rounded-lg">
               <TabsTrigger value="all" className="relative">
                 すべて
-                {tabCounts.all > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
-                    {tabCounts.all > 99 ? '99+' : tabCounts.all}
-                  </span>
-                )}
               </TabsTrigger>
               <TabsTrigger value="sent" className="relative">
                 送った
@@ -978,11 +973,6 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               </TabsTrigger>
               <TabsTrigger value="liked" className="relative">
                 いいね
-                {tabCounts.liked > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
-                    {tabCounts.liked > 99 ? '99+' : tabCounts.liked}
-                  </span>
-                )}
               </TabsTrigger>
             </TabsList>
 

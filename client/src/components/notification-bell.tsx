@@ -259,26 +259,7 @@ export function NotificationBell() {
               </div>
             </DropdownMenuItem>
             
-            <DropdownMenuItem
-              className="w-full text-center py-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
-              onClick={() => {
-                setClearedNotifications(new Set());
-                try {
-                  localStorage.removeItem('clearedNotifications');
-                } catch (error) {
-                  console.log("ローカルストレージ削除エラー:", error);
-                }
-                console.log("🔄 通知バッジをリセット");
-                toast({
-                  description: "通知バッジをリセットしました",
-                });
-              }}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <Bell className="h-4 w-4" />
-                バッジをリセット
-              </div>
-            </DropdownMenuItem>
+
           </>
         )}
       </DropdownMenuContent>
