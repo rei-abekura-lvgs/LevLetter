@@ -171,7 +171,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
   const totalPoints = card.points || 0;
 
   return (
-    <Card ref={cardRef} className="mb-4 last:mb-0 border-none shadow-sm bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-200">
+    <Card ref={cardRef} id={`card-${card.id}`} className="mb-4 last:mb-0 border-none shadow-sm bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-200">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 flex-1">
@@ -684,6 +684,55 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const { data: allUsers = [] } = useQuery<User[]>({
     queryKey: ['/api/users'],
   });
+
+  // URLパラメータを処理してカードにジャンプ
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cardId = urlParams.get('cardId');
+    
+    console.log("🎯 URLパラメータチェック:", { cardId, cardsLength: cards.length });
+    
+    if (cardId && cards.length > 0) {
+      const targetCard = cards.find(card => card.id === parseInt(cardId));
+      console.log("🔍 対象カード検索:", { targetCard: targetCard ? `ID${targetCard.id}` : '見つからない' });
+      
+      if (targetCard) {
+        // カードの送信者が現在のユーザーかどうかで適切なタブを設定
+        const isReceivedCard = targetCard.recipientId === user.id || 
+                              (targetCard.additionalRecipients && targetCard.additionalRecipients.includes(user.id));
+        
+        console.log("📋 タブ判定:", { isReceivedCard, recipientId: targetCard.recipientId, userId: user.id });
+        
+        if (isReceivedCard) {
+          setActiveTab("received");
+          console.log("✅ 受信タブに切り替え");
+        } else {
+          setActiveTab("sent");
+          console.log("✅ 送信タブに切り替え");
+        }
+        
+        // タイムラインタブに切り替え
+        setMainTab("timeline");
+        console.log("✅ タイムラインタブに切り替え");
+        
+        // 少し遅延してからスクロール（DOM更新を待つ）
+        setTimeout(() => {
+          const cardElement = document.getElementById(`card-${cardId}`);
+          console.log("🎯 スクロール対象要素:", cardElement ? '発見' : '見つからない');
+          if (cardElement) {
+            cardElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center' 
+            });
+            console.log("✅ カードにスクロール完了");
+            // URLパラメータをクリア
+            window.history.replaceState({}, '', window.location.pathname);
+            console.log("🧹 URLパラメータクリア完了");
+          }
+        }, 500);
+      }
+    }
+  }, [cards, user.id]);
 
   // 部署のユニークリストを生成（カードから）
   const uniqueDepartments = [...new Set(cards.flatMap(card => {
