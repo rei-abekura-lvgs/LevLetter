@@ -369,44 +369,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
               詳細
             </Button>
             
-            {allRecipients.length > displayRecipients.length && (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-gray-500">
-                    <UserIcon className="h-3 w-3 mr-1" />
-                    全員表示
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>受信者一覧</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-2">
-                    {allRecipients.map((user: User, index) => (
-                      <div key={user.id} className="flex items-center gap-3 p-2 rounded-lg bg-gray-50">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage 
-                            src={user.customAvatarUrl || bearAvatarUrl} 
-                            alt={user.displayName || user.name}
-                            className="object-cover"
-                          />
-                          <AvatarFallback style={{ backgroundColor: user.avatarColor }}>
-                            {(user.displayName || user.name || "?").charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <div className="text-sm font-medium">{user.displayName || user.name}</div>
-                          {user.department && (
-                            <div className="text-xs text-gray-500">{user.department}</div>
-                          )}
-                        </div>
 
-                      </div>
-                    ))}
-                  </div>
-                </DialogContent>
-              </Dialog>
-            )}
           </div>
         </div>
       </CardFooter>
