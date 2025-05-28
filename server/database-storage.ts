@@ -715,7 +715,7 @@ export class DatabaseStorage implements IStorage {
           ...card,
           sender: sender!,
           recipient: recipient!,
-          additionalRecipients: additionalRecipientUsers?.map(u => u.id) || null,
+          additionalRecipientUsers: additionalRecipientUsers || null,
           likes: cardLikes,
           totalPoints
         };
