@@ -409,7 +409,13 @@ export default function EmployeeImport() {
                       name: row["氏名"] || '',
                       employeeId: String(row["社員番号"] || ''),
                       displayName: row["職場氏名"] || '',
-                      department: departmentPath
+                      department: departmentPath,
+                      organizationLevel1: "レバレジーズ株式会社",
+                      organizationLevel2: dept1 || null,
+                      organizationLevel3: dept2 || null,
+                      organizationLevel4: dept3 || null,
+                      organizationLevel5: dept4 || null,
+                      organizationLevel6: dept5 || null
                     };
                   } else {
                     return row;
