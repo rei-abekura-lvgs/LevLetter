@@ -587,6 +587,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [filterBy, setFilterBy] = useState<"all" | "person" | "department">("all");
   const [filterValue, setFilterValue] = useState<string>("");
+  const [personSearchOpen, setPersonSearchOpen] = useState(false);
   const { toast } = useToast();
   
   // 既読カードIDを管理（localStorageに保存）
@@ -891,21 +892,77 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                 </SelectContent>
               </Select>
               {filterBy !== 'all' && (
-                <Select defaultValue="" onValueChange={setFilterValue}>
-                  <SelectTrigger className="w-[120px] h-8 text-sm">
-                    <SelectValue placeholder={filterBy === 'person' ? '人を選択' : '部署を選択'} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {filterBy === 'person' ? 
-                      uniquePeople.map((person: string) => (
-                        <SelectItem key={person} value={person}>{person}</SelectItem>
-                      )) :
-                      uniqueDepartments.map((dept: string) => (
+                filterBy === 'person' ? (
+                  <Popover open={personSearchOpen} onOpenChange={setPersonSearchOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={personSearchOpen}
+                        className="w-[200px] h-8 text-sm justify-between"
+                      >
+                        {filterValue 
+                          ? uniquePeople.find((person) => person === filterValue)
+                          : "人を選択..."}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                      <Command>
+                        <CommandInput placeholder="名前で検索..." />
+                        <CommandList>
+                          <CommandEmpty>見つかりませんでした。</CommandEmpty>
+                          <CommandGroup>
+                            {uniquePeople.map((person: string) => (
+                              <CommandItem
+                                key={person}
+                                value={person}
+                                onSelect={(currentValue) => {
+                                  setFilterValue(currentValue === filterValue ? "" : currentValue);
+                                  setPersonSearchOpen(false);
+                                }}
+                              >
+                                <Check
+                                  className={`mr-2 h-4 w-4 ${
+                                    filterValue === person ? "opacity-100" : "opacity-0"
+                                  }`}
+                                />
+                                {person}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                ) : (
+                  <Select defaultValue="" onValueChange={setFilterValue}>
+                    <SelectTrigger className="w-[120px] h-8 text-sm">
+                      <SelectValue placeholder="部署を選択" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {uniqueDepartments.map((dept: string) => (
                         <SelectItem key={dept} value={dept}>{dept}</SelectItem>
-                      ))
-                    }
-                  </SelectContent>
-                </Select>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )
+              )}
+              
+              {/* フィルタークリアボタン */}
+              {filterValue && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setFilterValue("");
+                    setFilterBy("all");
+                  }}
+                  className="h-8 px-2 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  クリア
+                </Button>
               )}
             </div>
           </div>
