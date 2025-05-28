@@ -645,8 +645,11 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     // 未読のいいね通知
     const unreadLikeNotifications = sentCardsWithLikes.filter(card => !readCardIds.has(card.id));
 
+    // 「すべて」タブ用の未読カード数（受信＋いいね通知）
+    const allUnreadCount = unreadReceivedCards.length + unreadLikeNotifications.length;
+
     const counts = {
-      all: cards.length, // 控えめ表示
+      all: allUnreadCount, // 未読の合計数のみ表示
       sent: unreadLikeNotifications.length, // 未読のいいね通知数のみ表示
       received: unreadReceivedCards.length, // 未読の受信カード数のみ表示
       liked: cards.filter(card => card.likes?.some(like => like.userId === user.id) || false).length, // 控えめ表示
@@ -785,15 +788,21 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
 
     return (
       <div className="space-y-4 pb-6">
-        {filteredCards.map((card) => (
-          <CardItem 
-            key={card.id} 
-            card={card} 
-            currentUser={user} 
-            onRefresh={refreshCards}
-            onMarkAsRead={markCardAsRead}
-          />
-        ))}
+        {filteredCards.map((card) => {
+          // カードが未読かどうかを判定
+          const isUnread = !readCardIds.has(card.id);
+          
+          return (
+            <CardItem 
+              key={card.id} 
+              card={card} 
+              currentUser={user} 
+              isUnread={isUnread}
+              onRefresh={refreshCards}
+              onMarkAsRead={markCardAsRead}
+            />
+          );
+        })}
       </div>
     );
   };
