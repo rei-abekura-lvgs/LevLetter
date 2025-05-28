@@ -34,8 +34,20 @@ export default function NotificationPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: notifications = [], isLoading } = useQuery<Notification[]>({
+  const { data: notifications = [], isLoading, error } = useQuery<Notification[]>({
     queryKey: ["/api/notifications"],
+    queryFn: async () => {
+      console.log("📨 通知データ取得開始");
+      const response = await fetch("/api/notifications", {
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        throw new Error(`通知取得エラー: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("📨 通知データ取得完了:", data);
+      return data;
+    }
   });
 
   const markAsRead = async (notificationId: number) => {
