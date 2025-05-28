@@ -839,25 +839,43 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       
-      // 送信者名の検索対象を拡張
-      const senderName = (typeof card.sender === 'object' && card.sender?.name) ? card.sender.name.toLowerCase() : '';
-      const senderDisplayName = (typeof card.sender === 'object' && card.sender?.displayName) ? card.sender.displayName.toLowerCase() : '';
-      const senderEmail = (typeof card.sender === 'object' && card.sender?.email) ? card.sender.email.toLowerCase() : '';
+      // 検索対象テキストを収集
+      const searchTargets: string[] = [];
       
-      // 受信者名の検索対象を拡張
-      const recipientName = (typeof card.recipient === 'object' && card.recipient?.name) ? card.recipient.name.toLowerCase() : '';
-      const recipientDisplayName = (typeof card.recipient === 'object' && card.recipient?.displayName) ? card.recipient.displayName.toLowerCase() : '';
-      const recipientEmail = (typeof card.recipient === 'object' && card.recipient?.email) ? card.recipient.email.toLowerCase() : '';
+      // 送信者情報
+      if (typeof card.sender === 'object' && card.sender?.name) {
+        searchTargets.push(card.sender.name.toLowerCase());
+        // スペースを除去した名前も追加
+        searchTargets.push(card.sender.name.replace(/\s+/g, '').toLowerCase());
+        
+        // Userタイプの場合のみ追加フィールドをチェック
+        if ('email' in card.sender && card.sender.email) {
+          searchTargets.push(card.sender.email.toLowerCase());
+          // メールアドレスの@より前の部分も検索対象に
+          const emailPrefix = card.sender.email.split('@')[0].toLowerCase();
+          searchTargets.push(emailPrefix);
+          // ドットで区切られている場合は個別の部分も追加
+          emailPrefix.split('.').forEach(part => searchTargets.push(part));
+        }
+        if ('displayName' in card.sender && card.sender.displayName) {
+          searchTargets.push(card.sender.displayName.toLowerCase());
+        }
+      }
+      
+      // 受信者情報
+      if (typeof card.recipient === 'object' && card.recipient?.name) {
+        searchTargets.push(card.recipient.name.toLowerCase());
+        // Userタイプの場合のみ追加フィールドをチェック
+        if ('email' in card.recipient && card.recipient.email) {
+          searchTargets.push(card.recipient.email.toLowerCase());
+        }
+        if ('displayName' in card.recipient && card.recipient.displayName) {
+          searchTargets.push(card.recipient.displayName.toLowerCase());
+        }
+      }
       
       // メッセージ内容
-      const message = card.message.toLowerCase();
-      
-      // すべての検索対象をチェック
-      const searchTargets = [
-        senderName, senderDisplayName, senderEmail,
-        recipientName, recipientDisplayName, recipientEmail,
-        message
-      ];
+      searchTargets.push(card.message.toLowerCase());
       
       const hasMatch = searchTargets.some(target => target.includes(query));
       
