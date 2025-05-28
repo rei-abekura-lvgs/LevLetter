@@ -971,6 +971,7 @@ export class DatabaseStorage implements IStorage {
   // ダッシュボード統計データ取得
   async getDashboardStats(userId: number) {
     try {
+      console.log('🔍 getDashboardStats開始 - ユーザーID:', userId);
       const user = await this.getUser(userId);
       if (!user) throw new Error('ユーザーが見つかりません');
 
@@ -1023,6 +1024,7 @@ export class DatabaseStorage implements IStorage {
         })
       );
 
+      console.log('📊 いいね送信先ランキング処理開始');
       // いいね送信先ランキング（自分がいいねしたカードの関係者ランキング）
       // まず自分がいいねしたカードの情報を取得
       const myLikedCards = await db
@@ -1034,6 +1036,7 @@ export class DatabaseStorage implements IStorage {
         .from(likes)
         .innerJoin(cards, eq(likes.cardId, cards.id))
         .where(eq(likes.userId, userId));
+      console.log('✅ いいね送信先データ取得完了:', myLikedCards.length, '件');
 
       // JavaScript で集計
       const sentLikesCount: Record<number, number> = {};
@@ -1051,24 +1054,46 @@ export class DatabaseStorage implements IStorage {
         .sort((a, b) => b.count - a.count)
         .slice(0, 10);
 
+      console.log('📊 いいね受信元ランキング処理開始');
       // いいね受信元ランキング（自分のカードにいいねした人のランキング）
-      const receivedLikesData = await db
-        .select({
-          fromUserId: likes.userId,
-          count: sql<number>`count(*)`.as('count')
-        })
-        .from(likes)
-        .innerJoin(cards, eq(likes.cardId, cards.id))
-        .where(and(
-          or(
-            eq(cards.senderId, userId),
-            eq(cards.recipientId, userId)
-          ),
-          not(eq(likes.userId, userId)) // 自分自身を除外
-        ))
-        .groupBy(likes.userId)
-        .orderBy(desc(sql`count(*)`))
-        .limit(10);
+      // 自分のカードを取得
+      const myCards = await db
+        .select({ id: cards.id })
+        .from(cards)
+        .where(or(
+          eq(cards.senderId, userId),
+          eq(cards.recipientId, userId)
+        ));
+      
+      const myCardIds = myCards.map(c => c.id);
+      console.log('✅ 自分のカード取得完了:', myCardIds.length, '件');
+      
+      // 自分のカードにいいねした人のデータを取得（自分は除外）
+      let receivedLikesData: { fromUserId: number; count: number }[] = [];
+      if (myCardIds.length > 0) {
+        const receivedLikes = await db
+          .select({
+            fromUserId: likes.userId,
+            cardId: likes.cardId
+          })
+          .from(likes)
+          .where(and(
+            inArray(likes.cardId, myCardIds),
+            not(eq(likes.userId, userId))
+          ));
+        
+        // JavaScript で集計
+        const receivedLikesCount: Record<number, number> = {};
+        for (const like of receivedLikes) {
+          receivedLikesCount[like.fromUserId] = (receivedLikesCount[like.fromUserId] || 0) + 1;
+        }
+        
+        receivedLikesData = Object.entries(receivedLikesCount)
+          .map(([fromUserId, count]) => ({ fromUserId: parseInt(fromUserId), count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10);
+      }
+      console.log('✅ いいね受信元データ処理完了:', receivedLikesData.length, '件');
 
       // ユーザー情報を取得して結合（いいね送信先）
       const sentLikes = await Promise.all(
