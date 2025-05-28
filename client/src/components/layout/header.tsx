@@ -90,29 +90,7 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
               </Button>
             </Link>
 
-            {/* 感謝の気持ちを伝えるボタン - ヘッダー用シンプルデザイン */}
-            <div className="group cursor-pointer transition-all duration-200" onClick={() => {
-              console.log('感謝の気持ちを伝えるボタンがクリックされました');
-              onCardFormOpen?.();
-            }}>
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
-                <div className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <div className="text-gray-700 text-sm font-medium">
-                      感謝の気持ちを伝える
-                    </div>
-                    <div className="text-gray-500 text-xs">
-                      新しいサンクスカードを作成
-                    </div>
-                  </div>
-                  <div className="w-8 h-8 bg-[#3990EA] rounded-full flex items-center justify-center">
-                    <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
+
           </>
         )}
       </div>
