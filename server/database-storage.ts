@@ -715,7 +715,7 @@ export class DatabaseStorage implements IStorage {
           ...card,
           sender: sender!,
           recipient: recipient!,
-          additionalRecipientUsers,
+          additionalRecipients: additionalRecipientUsers || undefined,
           likes: cardLikes,
           totalPoints
         };
@@ -787,7 +787,7 @@ export class DatabaseStorage implements IStorage {
       ...card,
       sender: sender!,
       recipient: recipient!,
-      additionalRecipientUsers,
+      additionalRecipients: additionalRecipientUsers || undefined,
       likes: cardLikes,
       totalPoints
     };
@@ -796,10 +796,7 @@ export class DatabaseStorage implements IStorage {
   async createCard(insertCard: InsertCard): Promise<Card> {
     const [card] = await db
       .insert(cards)
-      .values({
-        ...insertCard,
-        hidden: false // デフォルトでは表示状態
-      })
+      .values(insertCard)
       .returning();
     
     return card;

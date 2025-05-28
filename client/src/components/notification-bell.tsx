@@ -244,6 +244,7 @@ export function NotificationBell() {
                 key={notification.id}
                 notification={notification}
                 isRead={clearedNotifications.has(notification.id)}
+                onMarkAsRead={() => handleMarkAsRead(notification.id)}
                 onClick={() => handleNotificationClick(notification)}
               />
             ))}
