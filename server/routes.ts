@@ -873,6 +873,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // 部署情報の設定（未設定の場合は"その他"）
           const department = employee.department || employee['所属階層３'] || "その他";
           
+          // 6段階組織階層情報を抽出
+          const organizationData = {
+            organizationLevel1: employee['所属階層１'] || null,
+            organizationLevel2: employee['所属階層２'] || null,
+            organizationLevel3: employee['所属階層３'] || null,
+            organizationLevel4: employee['所属階層４'] || null,
+            organizationLevel5: employee['所属階層５'] || null,
+            organizationLevel6: employee['所属階層６'] || null,
+          };
+          
           if (existingUser) {
             // 既存ユーザーの更新（パスワードは維持）
             await storage.updateUser(existingUser.id, {
@@ -880,6 +890,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               displayName: employee.displayName || null,
               department,
               employeeId: employee.employeeId || null,
+              ...organizationData,
             });
             results.updatedUsers++;
           } else {
@@ -890,8 +901,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
               displayName: employee.displayName || null,
               department,
               employeeId: employee.employeeId || null,
+              ...organizationData,
               password: null, // パスワードなし = 初回登録が必要
-              passwordInitialized: false,
               isAdmin: false,
               isActive: true,
               cognitoSub: null,

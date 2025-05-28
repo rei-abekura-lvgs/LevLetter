@@ -8,7 +8,14 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
   displayName: text("display_name"),
-  department: text("department"),
+  department: text("department"), // 旧形式の部署情報（後方互換性のため保持）
+  // 6段階組織階層情報
+  organizationLevel1: text("organization_level1"), // レベル1: 会社
+  organizationLevel2: text("organization_level2"), // レベル2: 本部
+  organizationLevel3: text("organization_level3"), // レベル3: 部
+  organizationLevel4: text("organization_level4"), // レベル4: グループ
+  organizationLevel5: text("organization_level5"), // レベル5: チーム
+  organizationLevel6: text("organization_level6"), // レベル6: ユニット
   avatarColor: text("avatar_color").notNull().default("primary-500"),
   customAvatarUrl: text("custom_avatar_url"), // カスタムアバター画像のURL
   weeklyPoints: integer("weekly_points").notNull().default(500), // 今週の利用可能ポイント

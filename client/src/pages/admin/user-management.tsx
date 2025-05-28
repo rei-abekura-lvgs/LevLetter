@@ -313,56 +313,47 @@ export default function UserManagement() {
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>
-                        {user.department ? (
-                          <div className="max-w-md text-xs">
-                            {(() => {
-                              // 文字列として部署名を処理
-                              const deptString = String(user.department);
-                              
-                              // 部署名を階層に分割（スラッシュで区切られている場合）
-                              const hierarchyLevels = deptString.split('/');
-                              
-                              if (hierarchyLevels.length > 0) {
-                                return (
-                                  <div className="space-y-0.5">
-                                    {hierarchyLevels.map((level, index) => (
-                                      <div key={index} className={`${index > 0 ? `pl-${index * 4}` : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
-                                        {level.trim()}
-                                      </div>
-                                    ))}
+                        {(() => {
+                          // 6段階組織階層情報を表示
+                          const organizationLevels = [
+                            (user as any).organizationLevel1,
+                            (user as any).organizationLevel2, 
+                            (user as any).organizationLevel3,
+                            (user as any).organizationLevel4,
+                            (user as any).organizationLevel5,
+                            (user as any).organizationLevel6,
+                          ].filter(Boolean); // 空の値を除外
+                          
+                          if (organizationLevels.length > 0) {
+                            return (
+                              <div className="max-w-md text-xs space-y-0.5">
+                                {organizationLevels.map((level, index) => (
+                                  <div key={index} className={`${index > 0 ? 'pl-4' : ''} ${index === 0 ? 'text-emerald-700 font-medium' : index === 1 ? 'text-emerald-600' : 'text-gray-600'}`}>
+                                    {level}
                                   </div>
-                                );
-                              }
-                              
-                              // 部署IDかどうかを確認
-                              const deptId = Number(user.department);
-                              if (!isNaN(deptId)) {
-                                // 部署情報を取得
-                                const dept = departments.find((d: any) => d.id === deptId);
-                                if (dept) {
-                                  // 部署名を階層に分割
-                                  const deptLevels = dept.name ? dept.name.split('/') : [];
-                                  
-                                  return (
-                                    <div className="space-y-0.5">
-                                      {deptLevels.map((level, index) => (
-                                        <div key={index} className={`${index > 0 ? `pl-${index * 4}` : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
-                                          {level.trim()}
-                                        </div>
-                                      ))}
-                                      {deptLevels.length === 0 && <div className="text-gray-400">（部署なし）</div>}
-                                    </div>
-                                  );
-                                }
-                              }
-                              
-                              // どちらにも該当しない場合はそのまま表示
-                              return deptString;
-                            })()}
-                          </div>
-                        ) : (
-                          "未設定"
-                        )}
+                                ))}
+                              </div>
+                            );
+                          }
+                          
+                          // フォールバック: 旧形式の部署名を表示
+                          if (user.department) {
+                            const deptString = String(user.department);
+                            const hierarchyLevels = deptString.split('/');
+                            
+                            return (
+                              <div className="max-w-md text-xs space-y-0.5">
+                                {hierarchyLevels.map((level, index) => (
+                                  <div key={index} className={`${index > 0 ? 'pl-4' : ''} ${index === 0 ? 'text-emerald-700 font-medium' : 'text-emerald-600'}`}>
+                                    {level.trim()}
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          
+                          return <div className="text-gray-400 text-xs">（組織情報なし）</div>;
+                        })()}
                       </TableCell>
                       <TableCell>
                         {user.isActive ? (
