@@ -43,7 +43,7 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
   // ユーザーの最新ポイント情報を定期的に取得
   const { data: currentUser } = useQuery<User>({
     queryKey: ['/api/auth/me'],
-    refetchInterval: 30000, // 30秒ごとに更新
+    refetchInterval: 5000, // 5秒ごとに更新（即座の楽観的更新も併用）
     enabled: !!user, // ユーザーがログインしている場合のみ実行
   });
 

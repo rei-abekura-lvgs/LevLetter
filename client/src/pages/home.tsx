@@ -320,10 +320,13 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                     // ヘッダーのポイント表示も即座に更新
                     queryClient.setQueryData(['/api/auth/me'], (oldUser: any) => {
                       if (!oldUser) return oldUser;
-                      return {
+                      console.log('楽観的更新前のポイント:', oldUser.weeklyPoints);
+                      const newUser = {
                         ...oldUser,
                         weeklyPoints: Math.max(0, oldUser.weeklyPoints - 2)
                       };
+                      console.log('楽観的更新後のポイント:', newUser.weeklyPoints);
+                      return newUser;
                     });
                   };
                   
