@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/context/auth-context-new";
 import { Trophy, Medal, Award, Heart, Send, ArrowUpDown, Crown, Users } from "lucide-react";
-import { UnifiedAvatar } from "@/components/unified-avatar";
+import UnifiedAvatar from "@/components/unified-avatar";
 
 interface User {
   id: number;
