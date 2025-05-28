@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CardWithRelations, User } from "@shared/schema";
 import { useAuth } from "@/context/auth-context";
 import { useSearch } from "@/hooks/useSearch";
+import { useOptimisticUpdates } from "@/hooks/use-optimistic-updates";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -296,54 +297,10 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                 onClick={async () => {
                   if (!canLike || totalLikes >= 50) return;
                   
-                  // 楽観的更新：即座にUIを更新
-                  const optimisticUpdate = () => {
-                    // カード一覧のキャッシュを即座に更新
-                    queryClient.setQueryData(['/api/cards'], (oldData: any) => {
-                      if (!oldData) return oldData;
-                      return oldData.map((oldCard: any) => {
-                        if (oldCard.id === card.id) {
-                          const newLike = {
-                            id: Date.now(),
-                            userId: currentUser.id,
-                            points: 2,
-                            user: currentUser
-                          };
-                          return {
-                            ...oldCard,
-                            likes: [...(oldCard.likes || []), newLike]
-                          };
-                        }
-                        return oldCard;
-                      });
-                    });
-                    
-                    // ヘッダーのポイント表示も即座に更新（認証コンテキストのユーザー情報を更新）
-                    console.log('楽観的更新前のポイント:', currentUser.weeklyPoints);
-                    const updatedUser = {
-                      ...currentUser,
-                      weeklyPoints: Math.max(0, currentUser.weeklyPoints - 2)
-                    };
-                    console.log('楽観的更新後のポイント:', updatedUser.weeklyPoints);
-                    
-                    // クエリキャッシュも更新
-                    queryClient.setQueryData(['/api/auth/me'], updatedUser);
-                    
-                    // ダッシュボードのキャッシュも同時に更新
-                    queryClient.setQueryData(['/api/dashboard/stats'], (oldStats: any) => {
-                      if (!oldStats) return oldStats;
-                      return {
-                        ...oldStats,
-                        weekly: {
-                          ...oldStats.weekly,
-                          currentPoints: Math.max(0, oldStats.weekly.currentPoints - 2)
-                        }
-                      };
-                    });
-                  };
-                  
-                  // 即座にUIを更新
-                  optimisticUpdate();
+                  // カスタムフックを使用して楽観的更新を実行
+                  console.log('楽観的更新前のポイント:', currentUser.weeklyPoints);
+                  const updatedUser = addLikeOptimistically(card.id, currentUser);
+                  console.log('楽観的更新後のポイント:', updatedUser.weeklyPoints);
                   
                   try {
                     await apiRequest('POST', `/api/cards/${card.id}/likes`);
