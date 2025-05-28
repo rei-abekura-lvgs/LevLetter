@@ -404,33 +404,53 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
             
             {/* いいね情報 */}
             <TabsContent value="likes" className="space-y-4">
-              {likeDetails && Array.isArray(likeDetails) && likeDetails.length > 0 ? (
-                likeDetails.map((like: any, index: number) => (
+              {(() => {
+                if (!likeDetails || !Array.isArray(likeDetails) || likeDetails.length === 0) {
+                  return <p className="text-gray-500 text-center py-4">まだいいねがありません</p>;
+                }
+
+                // 同じユーザーからのいいねを集約
+                const groupedLikes = likeDetails.reduce((acc: any, like: any) => {
+                  const userId = like.userId;
+                  if (acc[userId]) {
+                    acc[userId].count += 1;
+                  } else {
+                    acc[userId] = {
+                      user: like.user,
+                      count: 1,
+                      latestCreatedAt: like.createdAt
+                    };
+                  }
+                  return acc;
+                }, {});
+
+                const aggregatedLikes = Object.values(groupedLikes).sort((a: any, b: any) => 
+                  new Date(b.latestCreatedAt).getTime() - new Date(a.latestCreatedAt).getTime()
+                );
+
+                return aggregatedLikes.map((likeGroup: any, index: number) => (
                   <div key={index} className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
                     <Avatar className="h-10 w-10">
                       <AvatarImage 
-                        src={like.user.customAvatarUrl || bearAvatarUrl} 
-                        alt={like.user.displayName || like.user.name}
+                        src={likeGroup.user.customAvatarUrl || bearAvatarUrl} 
+                        alt={likeGroup.user.displayName || likeGroup.user.name}
                         className="object-cover"
                       />
-                      <AvatarFallback style={{ backgroundColor: like.user.avatarColor }}>
-                        {(like.user.displayName || like.user.name || "?").charAt(0)}
+                      <AvatarFallback style={{ backgroundColor: likeGroup.user.avatarColor }}>
+                        {(likeGroup.user.displayName || likeGroup.user.name || "?").charAt(0)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                      <p className="font-medium">{like.user.displayName || like.user.name}</p>
-                      <p className="text-sm text-gray-500">{like.user.department}</p>
-                      <p className="text-xs text-gray-400">{like.user.email}</p>
+                      <p className="font-medium">{likeGroup.user.displayName || likeGroup.user.name}</p>
+                      <p className="text-sm text-gray-500">{likeGroup.user.department}</p>
                     </div>
                     <div className="flex items-center gap-1">
                       <Heart className="h-4 w-4 text-pink-500 fill-current" />
-                      <span className="text-sm font-medium">{like.count}回</span>
+                      <span className="text-sm font-medium">{likeGroup.count}回</span>
                     </div>
                   </div>
-                ))
-              ) : (
-                <p className="text-gray-500 text-center py-4">まだいいねがありません</p>
-              )}
+                ));
+              })()}
               {totalLikes > 0 && (
                 <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                   <p className="text-sm text-blue-700">
