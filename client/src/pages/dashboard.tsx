@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/context/auth-context-new";
-import { TrendingUp, Users, Heart, Award, ArrowUp, ArrowDown } from "lucide-react";
+import { TrendingUp, Users, Heart, Award, ArrowUp, ArrowDown, Mail } from "lucide-react";
 
 interface UserInfo {
   id: number;
