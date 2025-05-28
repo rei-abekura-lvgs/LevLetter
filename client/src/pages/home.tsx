@@ -865,9 +865,17 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
       // 受信者情報
       if (typeof card.recipient === 'object' && card.recipient?.name) {
         searchTargets.push(card.recipient.name.toLowerCase());
+        // スペースを除去した名前も追加
+        searchTargets.push(card.recipient.name.replace(/\s+/g, '').toLowerCase());
+        
         // Userタイプの場合のみ追加フィールドをチェック
         if ('email' in card.recipient && card.recipient.email) {
           searchTargets.push(card.recipient.email.toLowerCase());
+          // メールアドレスの@より前の部分も検索対象に
+          const emailPrefix = card.recipient.email.split('@')[0].toLowerCase();
+          searchTargets.push(emailPrefix);
+          // ドットで区切られている場合は個別の部分も追加
+          emailPrefix.split('.').forEach(part => searchTargets.push(part));
         }
         if ('displayName' in card.recipient && card.recipient.displayName) {
           searchTargets.push(card.recipient.displayName.toLowerCase());
