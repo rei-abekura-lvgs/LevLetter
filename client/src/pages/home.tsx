@@ -589,6 +589,51 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const [searchOpen, setSearchOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<{type: 'person' | 'department', value: string} | null>(null);
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
+  
+  // 日本語名をローマ字に変換する汎用関数
+  const convertToRomaji = (name: string): string => {
+    if (!name) return '';
+    
+    // 基本的な漢字→ローマ字変換マッピング
+    return name
+      .replace(/阿部倉/g, 'abekura')
+      .replace(/怜/g, 'rei')
+      .replace(/田中/g, 'tanaka')
+      .replace(/佐藤/g, 'sato')
+      .replace(/鈴木/g, 'suzuki')
+      .replace(/高橋/g, 'takahashi')
+      .replace(/山田/g, 'yamada')
+      .replace(/小林/g, 'kobayashi')
+      .replace(/加藤/g, 'kato')
+      .replace(/吉田/g, 'yoshida')
+      .replace(/山本/g, 'yamamoto')
+      .replace(/中村/g, 'nakamura')
+      .replace(/小川/g, 'ogawa')
+      .replace(/斎藤/g, 'saito')
+      .replace(/松本/g, 'matsumoto')
+      .replace(/井上/g, 'inoue')
+      .replace(/木村/g, 'kimura')
+      .replace(/林/g, 'hayashi')
+      .replace(/清水/g, 'shimizu')
+      .replace(/山口/g, 'yamaguchi')
+      .replace(/森/g, 'mori')
+      .replace(/太郎/g, 'taro')
+      .replace(/次郎/g, 'jiro')
+      .replace(/三郎/g, 'saburo')
+      .replace(/花子/g, 'hanako')
+      .replace(/美香/g, 'mika')
+      .replace(/真一/g, 'shinichi')
+      .replace(/健太/g, 'kenta')
+      .replace(/優/g, 'yu')
+      .replace(/翔/g, 'sho')
+      .replace(/愛/g, 'ai')
+      .replace(/恵/g, 'megumi')
+      .replace(/修/g, 'osamu')
+      .replace(/聡/g, 'satoshi')
+      .replace(/誠/g, 'makoto')
+      .replace(/牧野/g, 'makino')
+      .replace(/康太/g, 'kota');
+  };
   const { toast } = useToast();
   
   // 既読カードIDを管理（localStorageに保存）
@@ -628,12 +673,12 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     refetchInterval: 30000,
   });
 
-  // 人・部署のユニークリストを生成
-  const uniquePeople = [...new Set(cards.flatMap(card => {
-    const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-    return allUsers.map(user => user.displayName || user.name);
-  }))].sort();
+  // 全ユーザーデータを取得して検索用に使用
+  const { data: allUsers = [] } = useQuery<User[]>({
+    queryKey: ['/api/users'],
+  });
 
+  // 部署のユニークリストを生成（カードから）
   const uniqueDepartments = [...new Set(cards.flatMap(card => {
     const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
     return allUsers.map(user => user.department).filter(Boolean);
@@ -903,43 +948,29 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                     <CommandList>
                       <CommandEmpty>見つかりませんでした。</CommandEmpty>
                       
-                      {/* 人名セクション */}
+                      {/* 人名セクション - 検索語が入力された時のみ表示 */}
                       <CommandGroup heading="👤 人名">
-                        {uniquePeople.map((person: string) => {
-                          // 日本語名をローマ字に変換するための簡単なマッピング（実際のプロジェクトではより正確な変換が必要）
-                          const romanjiKeywords = (person || '')
-                            .replace(/阿部倉/g, 'abekura')
-                            .replace(/怜/g, 'rei')
-                            .replace(/田中/g, 'tanaka')
-                            .replace(/佐藤/g, 'sato')
-                            .replace(/鈴木/g, 'suzuki')
-                            .replace(/高橋/g, 'takahashi')
-                            .replace(/山田/g, 'yamada')
-                            .replace(/小林/g, 'kobayashi')
-                            .replace(/加藤/g, 'kato')
-                            .replace(/吉田/g, 'yoshida')
-                            .replace(/山本/g, 'yamamoto');
+                        {allUsers.map((user: User) => {
+                          const displayName = user.displayName || user.name;
+                          const romanjiKeywords = convertToRomaji(displayName);
                           
                           return (
                             <CommandItem
-                              key={`person-${person}`}
-                              value={`${person || ''} ${romanjiKeywords || ''}`}
-                              keywords={[person || '', romanjiKeywords || '']}
+                              key={`person-${user.id}`}
+                              value={`${displayName} ${romanjiKeywords}`}
+                              keywords={[displayName, romanjiKeywords]}
                               onSelect={() => {
-                                setSelectedFilter({type: 'person', value: person});
+                                setSelectedFilter({type: 'person', value: displayName});
                                 setSearchOpen(false);
                               }}
                             >
                               <Check
                                 className={`mr-2 h-4 w-4 ${
-                                  selectedFilter?.type === 'person' && selectedFilter?.value === person ? "opacity-100" : "opacity-0"
+                                  selectedFilter?.type === 'person' && selectedFilter?.value === displayName ? "opacity-100" : "opacity-0"
                                 }`}
                               />
                               <UserIcon className="mr-2 h-4 w-4 text-blue-500" />
-                              {person}
-                              <span className="ml-auto text-xs text-gray-400">
-                                {romanjiKeywords !== person ? romanjiKeywords : ''}
-                              </span>
+                              {displayName}
                             </CommandItem>
                           );
                         })}
