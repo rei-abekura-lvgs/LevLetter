@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import { useAuth } from "@/context/auth-context-new";
 import Sidebar from "./sidebar";
+import RightSidebar from "./right-sidebar";
 import MobileNav from "./mobile-nav";
 import Header from "./header";
 import Footer from "./footer";
@@ -45,14 +46,21 @@ export default function MainLayout({ children, onCardFormOpen }: MainLayoutProps
           <div className="flex-1 flex flex-col overflow-hidden">
             {isMobile && <MobileNav user={user} />}
             
-            <div className="flex-1 flex flex-col overflow-hidden">
-              <main className="flex-1 overflow-y-auto p-4 md:p-6 max-w-6xl mx-auto w-full">
+            <div className="flex flex-1 overflow-hidden">
+              <main className="flex-1 overflow-y-auto p-4 md:p-6 max-w-4xl mx-auto w-full">
                 {children}
               </main>
               
-              {/* モバイル時のみフッター表示 */}
-              {isMobile && <Footer />}
+              {/* PC時のみ右側サイドバー表示 */}
+              {!isMobile && (
+                <div className="w-80 flex-shrink-0">
+                  <RightSidebar user={user} />
+                </div>
+              )}
             </div>
+            
+            {/* モバイル時のみフッター表示 */}
+            {isMobile && <Footer />}
           </div>
         </div>
       </div>
