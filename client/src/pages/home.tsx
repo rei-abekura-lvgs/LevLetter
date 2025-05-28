@@ -915,6 +915,9 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
       {/* 統一されたCardFormダイアログ */}
       <Dialog open={isCardFormOpen} onOpenChange={setIsCardFormOpen}>
         <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-sm">
+          <DialogHeader className="sr-only">
+            <DialogTitle>サンクスカードを送る</DialogTitle>
+          </DialogHeader>
           <CardForm onSent={() => {
             setIsCardFormOpen(false);
             refetch();
