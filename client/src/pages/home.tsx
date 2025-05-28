@@ -34,7 +34,7 @@ import Dashboard from "@/pages/dashboard";
 import Ranking from "@/pages/ranking";
 
 // カードコンポーネント
-const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, currentUser: User, onRefresh?: () => void }) => {
+const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWithRelations, currentUser: User, onRefresh?: () => void, onMarkAsRead?: (cardId: number) => void }) => {
   const formattedDate = format(new Date(card.createdAt), 'yyyy年MM月dd日', { locale: ja });
   const timeFromNow = format(new Date(card.createdAt), 'HH:mm', { locale: ja });
 
@@ -44,6 +44,34 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   const [detailsTab, setDetailsTab] = useState<"recipients" | "likes">("recipients");
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Intersection Observerで既読状態を管理
+  useEffect(() => {
+    const cardElement = cardRef.current;
+    if (!cardElement || !onMarkAsRead) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+            // カードの50%以上が表示されたら既読にする
+            onMarkAsRead(card.id);
+          }
+        });
+      },
+      {
+        threshold: 0.5, // 50%表示されたら発火
+        rootMargin: '0px'
+      }
+    );
+
+    observer.observe(cardElement);
+
+    return () => {
+      observer.unobserve(cardElement);
+    };
+  }, [card.id, onMarkAsRead]);
 
   // いいね詳細データを取得
   const { data: likeDetails } = useQuery({
@@ -547,6 +575,22 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const [filterBy, setFilterBy] = useState<"all" | "person" | "department">("all");
   const [filterValue, setFilterValue] = useState<string>("");
   const { toast } = useToast();
+  
+  // 既読カードIDを管理（localStorageに保存）
+  const [readCardIds, setReadCardIds] = useState<Set<number>>(() => {
+    const saved = localStorage.getItem(`readCards_${user.id}`);
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
+
+  // 既読状態をlocalStorageに保存
+  useEffect(() => {
+    localStorage.setItem(`readCards_${user.id}`, JSON.stringify([...readCardIds]));
+  }, [readCardIds, user.id]);
+
+  // カードを既読にする関数
+  const markCardAsRead = (cardId: number) => {
+    setReadCardIds(prev => new Set([...prev, cardId]));
+  };
 
   // URLパラメータから成功メッセージを読み取り
   useEffect(() => {
@@ -582,27 +626,33 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
 
   // 各タブの通知数を計算（重要な通知のみ目立たせる）
   const getTabCounts = () => {
-    // 受信したカード数（目立つ通知）
+    // 受信したカード数（未読のみ）
     const receivedCards = cards.filter(card => {
       const recipients = [card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
       const recipientIds = recipients.map(r => r?.id).filter(Boolean);
       return recipientIds.includes(user.id);
     });
 
-    // 自分の送信カードがいいねされた数（目立つ通知）
+    // 未読の受信カード
+    const unreadReceivedCards = receivedCards.filter(card => !readCardIds.has(card.id));
+
+    // 自分の送信カードがいいねされた数（未読のみ）
     const sentCardsWithLikes = cards.filter(card => 
       card.senderId === user.id && 
       (card.likes?.length || 0) > 0
     );
 
+    // 未読のいいね通知
+    const unreadLikeNotifications = sentCardsWithLikes.filter(card => !readCardIds.has(card.id));
+
     const counts = {
       all: cards.length, // 控えめ表示
       sent: cards.filter(card => card.senderId === user.id).length, // 控えめ表示
-      received: receivedCards.length, // 目立つ表示
+      received: receivedCards.length, // 総数表示
       liked: cards.filter(card => card.likes?.some(like => like.userId === user.id) || false).length, // 控えめ表示
-      // 通知の重要度フラグ
-      isReceivedImportant: receivedCards.length > 0,
-      isSentImportant: sentCardsWithLikes.length > 0
+      // 通知の重要度フラグ（未読があるかどうか）
+      isReceivedImportant: unreadReceivedCards.length > 0,
+      isSentImportant: unreadLikeNotifications.length > 0
     };
     return counts;
   };
@@ -857,8 +907,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               <TabsTrigger value="sent" className="relative">
                 送った
                 {tabCounts.isSentImportant ? (
-                  <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
-                    !
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse">
+                    {tabCounts.sent > 99 ? '99+' : tabCounts.sent}
                   </span>
                 ) : tabCounts.sent > 0 ? (
                   <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
