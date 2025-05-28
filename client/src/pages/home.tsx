@@ -327,7 +327,9 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                     console.log('楽観的更新後のポイント:', updatedUser.weeklyPoints);
                     
                     // 認証コンテキストのユーザー情報を直接更新してヘッダーを即座に更新
-                    updateUser(updatedUser);
+                    if (updateUser) {
+                      updateUser(updatedUser);
+                    }
                     
                     // クエリキャッシュも更新
                     queryClient.setQueryData(['/api/auth/me'], updatedUser);
