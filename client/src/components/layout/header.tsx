@@ -5,6 +5,7 @@ import { useAuth } from "@/context/auth-context";
 import { BearAvatar } from "@/components/ui/bear-avatar";
 import { BearLogo } from "@/components/bear-logo";
 import { NotificationBell } from "@/components/notification-bell";
+import { useQuery } from "@tanstack/react-query";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +39,13 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
   const { user, logout } = useAuth();
   const isMobile = useIsMobile();
   const [location] = useLocation();
+
+  // ユーザーの最新ポイント情報を定期的に取得
+  const { data: currentUser } = useQuery<User>({
+    queryKey: ['/api/auth/me'],
+    refetchInterval: 30000, // 30秒ごとに更新
+    enabled: !!user, // ユーザーがログインしている場合のみ実行
+  });
 
 
   // getInitialsはutilsから使用
@@ -85,7 +93,7 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
                 <span className="text-sm font-medium text-[#3990EA]">
-                  {user.weeklyPoints}pt/500pt
+                  {currentUser?.weeklyPoints ?? user.weeklyPoints}pt/500pt
                 </span>
                 
                 {/* ツールチップ */}
@@ -94,7 +102,7 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
                     <div className="font-medium">今週の残りポイント</div>
                     <div className="text-gray-300 mt-1">毎週月曜日に500pt付与</div>
                     <div className="text-gray-300">クリックで詳細表示</div>
-                    <div className="text-orange-300 mt-2 text-[11px]">💡 最新情報はブラウザ更新で確認</div>
+                    <div className="text-green-300 mt-2 text-[11px]">✨ 30秒ごとに自動更新</div>
                   </div>
                   {/* 矢印 */}
                   <div className="absolute bottom-full right-4 border-4 border-transparent border-b-gray-800"></div>
