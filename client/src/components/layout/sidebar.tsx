@@ -87,22 +87,6 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
             </div>
           </nav>
 
-          {/* LevLetterブランド情報 */}
-          <div className="mb-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
-            <div className="flex items-center space-x-2 mb-2">
-              <Heart className="h-4 w-4 text-[#3990EA]" />
-              <span className="text-sm font-bold text-gray-800">LevLetter</span>
-            </div>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              社内コミュニケーションを促進するフィードバックカード
-            </p>
-            <div className="mt-2 pt-2 border-t border-blue-200">
-              <p className="text-xs text-gray-500">
-                © 2025 LevLetter. All rights reserved.
-              </p>
-            </div>
-          </div>
-
           {/* 下部アクションエリア */}
           <div className="mt-auto pt-4 pb-6 border-t border-gray-200">
             <div className="space-y-2">
@@ -139,6 +123,20 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
                 <LogOut className="h-4 w-4" />
                 ログアウト
               </button>
+            </div>
+
+            {/* LevLetterブランド情報 */}
+            <div className="mt-4 p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
+              <div className="flex items-center space-x-2 mb-1">
+                <Heart className="h-3 w-3 text-[#3990EA]" />
+                <span className="text-xs font-bold text-gray-800">LevLetter</span>
+              </div>
+              <p className="text-xs text-gray-600 leading-relaxed mb-2">
+                社内コミュニケーションを促進するフィードバックカード
+              </p>
+              <p className="text-xs text-gray-500">
+                © 2025 LevLetter. All rights reserved.
+              </p>
             </div>
           </div>
         </div>
