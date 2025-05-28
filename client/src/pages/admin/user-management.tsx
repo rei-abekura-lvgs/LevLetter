@@ -273,7 +273,12 @@ export default function UserManagement() {
                     </TableHead>
                     <TableHead>名前</TableHead>
                     <TableHead>メールアドレス</TableHead>
-                    <TableHead>部署</TableHead>
+                    <TableHead>会社</TableHead>
+                    <TableHead>本部</TableHead>
+                    <TableHead>部</TableHead>
+                    <TableHead>グループ</TableHead>
+                    <TableHead>チーム</TableHead>
+                    <TableHead>ユニット</TableHead>
                     <TableHead>ステータス</TableHead>
                     <TableHead>作成日</TableHead>
                     <TableHead className="w-[80px]"></TableHead>
@@ -282,7 +287,7 @@ export default function UserManagement() {
                 <TableBody>
                 {filteredUsers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
+                    <TableCell colSpan={12} className="text-center py-4 text-muted-foreground">
                       ユーザーが見つかりませんでした
                     </TableCell>
                   </TableRow>
