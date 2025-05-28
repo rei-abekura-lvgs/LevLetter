@@ -18,9 +18,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Users, Building2, FileSpreadsheet } from "lucide-react";
+import { AlertTriangle, Users, Building2, FileSpreadsheet, RefreshCw } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 // 管理者ページのコンポーネントをインポート
 import UserManagement from "./user-management";
@@ -31,6 +35,33 @@ export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [_, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("users");
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // 週次ポイントリセット機能
+  const resetPointsMutation = useMutation({
+    mutationFn: async () => {
+      return apiRequest("POST", "/api/admin/reset-weekly-points", {});
+    },
+    onSuccess: (data) => {
+      // ユーザー情報のキャッシュを無効化してサイドバーも更新
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
+      
+      toast({
+        title: "ポイントリセット完了！✨",
+        description: data.message,
+        duration: 4000
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "エラーが発生しました",
+        description: error.message || "ポイントリセットに失敗しました",
+        variant: "destructive"
+      });
+    }
+  });
 
   // 認証・権限チェック
   if (isLoading) {
@@ -94,6 +125,38 @@ export default function AdminDashboard() {
           このページでの変更はシステム全体に影響します。操作には十分注意してください。
         </AlertDescription>
       </Alert>
+
+      {/* 週次ポイントリセット機能 */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <RefreshCw className="h-5 w-5" />
+            週次ポイントリセット（テスト機能）
+          </CardTitle>
+          <CardDescription>
+            全ユーザーの週次ポイントを500ptにリセットします。通常は毎週月曜日に自動実行されますが、テスト目的で手動実行できます。
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            onClick={() => resetPointsMutation.mutate()}
+            disabled={resetPointsMutation.isPending}
+            className="bg-[#3990EA] hover:bg-[#2980d9]"
+          >
+            {resetPointsMutation.isPending ? (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                実行中...
+              </>
+            ) : (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4" />
+                ポイントリセット実行
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
 
       <Tabs
         value={activeTab}
