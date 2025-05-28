@@ -738,6 +738,39 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     return allCardUsers.map(user => (typeof user === 'object' && user && 'department' in user) ? user.department : null).filter(Boolean);
   }))).sort();
 
+  // 検索とフィルタリング用の部署リスト
+  const departmentOptions = uniqueDepartments.map(dept => ({ id: dept, name: dept }));
+
+  // カード検索とフィルタリング機能
+  const filterCards = (cards: CardWithRelations[]) => {
+    return cards.filter(card => {
+      // 検索クエリでフィルタリング
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const senderName = (typeof card.sender === 'object' && card.sender?.name) ? card.sender.name.toLowerCase() : '';
+        const recipientName = (typeof card.recipient === 'object' && card.recipient?.name) ? card.recipient.name.toLowerCase() : '';
+        const message = card.message.toLowerCase();
+        
+        if (!senderName.includes(query) && !recipientName.includes(query) && !message.includes(query)) {
+          return false;
+        }
+      }
+
+      // 部署でフィルタリング
+      if (departmentFilter) {
+        const allCardUsers = [card.sender, card.recipient, ...(card.additionalRecipients || [])].filter(Boolean);
+        const hasDepartmentMatch = allCardUsers.some(user => 
+          typeof user === 'object' && user && 'department' in user && user.department === departmentFilter
+        );
+        if (!hasDepartmentMatch) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  };
+
   // 各タブの通知数を計算（重要な通知のみ目立たせる）
   const getTabCounts = () => {
     // 受信したカード数（未読のみ）
@@ -1009,20 +1042,22 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </div>
                 </div>
                 
-                {/* カード数とソート */}
+                {/* カード数、ソート、検索 */}
                 <div className="flex items-center gap-3">
                   <Badge variant="outline" className="text-xs text-gray-600 bg-white/70 border-gray-300">
                     {filteredCards.length}件
                   </Badge>
-                  <Select defaultValue="newest" onValueChange={handleSortChange}>
-                    <SelectTrigger className="w-[110px] h-9 text-sm bg-white/70 border-gray-300">
-                      <SelectValue placeholder="新しい順" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="newest">新しい順</SelectItem>
-                      <SelectItem value="popular">人気順</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  
+                  {/* 新しいFilterControlsコンポーネントを使用 */}
+                  <FilterControls
+                    sortOrder={sortOrder}
+                    onSortChange={(order: SortOrder) => setSortOrder(order)}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    departmentFilter={departmentFilter}
+                    onDepartmentChange={setDepartmentFilter}
+                    departments={departmentOptions}
+                  />
                 </div>
               </div>
               </div>
