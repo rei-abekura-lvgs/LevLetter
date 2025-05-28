@@ -49,7 +49,23 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
       return;
     }
 
+    console.log("🚀 いいね処理開始 - カードID:", cardId, "ユーザー:", user.name);
     setIsSubmitting(true);
+    
+    // 楽観的更新: ユーザーのポイントを即座に減少（最優先で実行）
+    console.log("💰 楽観的更新開始 - ポイント減少");
+    queryClient.setQueryData(["/api/auth/me"], (oldData: any) => {
+      console.log("💰 現在のユーザーデータ:", oldData);
+      if (!oldData) {
+        console.log("❌ ユーザーデータが存在しません");
+        return oldData;
+      }
+      const newWeeklyPoints = Math.max(0, oldData.weeklyPoints - 2);
+      console.log("💰 ユーザーポイント更新:", oldData.weeklyPoints, "→", newWeeklyPoints);
+      const updatedData = { ...oldData, weeklyPoints: newWeeklyPoints };
+      console.log("💰 更新後のユーザーデータ:", updatedData);
+      return updatedData;
+    });
     
     // 楽観的更新: カードのいいね数を即座に増加
     queryClient.setQueryData(["/api/cards"], (oldData: any) => {
@@ -73,20 +89,6 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
         }
         return card;
       });
-    });
-
-    // 楽観的更新: ユーザーのポイントを即座に減少
-    queryClient.setQueryData(["/api/auth/me"], (oldData: any) => {
-      console.log("💰 現在のユーザーデータ:", oldData);
-      if (!oldData) {
-        console.log("❌ ユーザーデータが存在しません");
-        return oldData;
-      }
-      const newWeeklyPoints = Math.max(0, oldData.weeklyPoints - 2);
-      console.log("💰 ユーザーポイント更新:", oldData.weeklyPoints, "→", newWeeklyPoints);
-      const updatedData = { ...oldData, weeklyPoints: newWeeklyPoints };
-      console.log("💰 更新後のユーザーデータ:", updatedData);
-      return updatedData;
     });
 
     try {
