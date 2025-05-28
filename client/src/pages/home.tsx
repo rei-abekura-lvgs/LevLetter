@@ -251,8 +251,36 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                 }`}
                 onClick={async () => {
                   if (!canLike || totalLikes >= 50) return;
+                  
+                  // 楽観的更新：即座にUIを更新
+                  const optimisticUpdate = () => {
+                    // カード一覧のキャッシュを即座に更新
+                    queryClient.setQueryData(['/api/cards'], (oldData: any) => {
+                      if (!oldData) return oldData;
+                      return oldData.map((oldCard: any) => {
+                        if (oldCard.id === card.id) {
+                          const newLike = {
+                            id: Date.now(),
+                            userId: currentUser.id,
+                            points: 2,
+                            user: currentUser
+                          };
+                          return {
+                            ...oldCard,
+                            likes: [...(oldCard.likes || []), newLike]
+                          };
+                        }
+                        return oldCard;
+                      });
+                    });
+                  };
+                  
+                  // 即座にUIを更新
+                  optimisticUpdate();
+                  
                   try {
                     await apiRequest('POST', `/api/cards/${card.id}/likes`);
+                    // サーバーからの正確なデータで更新
                     onRefresh?.();
                     toast({ 
                       title: "いいねしました！✨", 
@@ -261,6 +289,8 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
                     });
                   } catch (error) {
                     console.error('Like error:', error);
+                    // エラー時は元の状態に戻す
+                    onRefresh?.();
                     toast({ 
                       title: "エラーが発生しました",
                       description: "いいねの送信に失敗しました",
