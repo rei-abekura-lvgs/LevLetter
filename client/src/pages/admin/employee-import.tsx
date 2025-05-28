@@ -189,7 +189,13 @@ export default function EmployeeImport() {
                   email: row["会社メールアドレス"] || '',
                   name: row["職場氏名"] || row["氏名"] || '',
                   employeeId: String(row["社員番号"] || ''),
-                  department: departmentPath
+                  department: departmentPath,
+                  organizationLevel1: dept1 || null,
+                  organizationLevel2: dept2 || null,
+                  organizationLevel3: dept3 || null,
+                  organizationLevel4: dept4 || null,
+                  organizationLevel5: dept5 || null,
+                  organizationLevel6: null  // レベル6は現在のCSVにはないのでnull
                 };
               } else {
                 // 従来のCSV形式の場合はそのまま
