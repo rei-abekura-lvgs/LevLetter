@@ -964,8 +964,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   className="flex-1 max-w-lg bg-white border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-[#3990EA] hover:bg-blue-50/50 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
                   <div className="flex items-center gap-3 text-gray-500">
-                    <svg className="w-5 h-5 text-[#3990EA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    <svg className="w-5 h-5 text-[#3990EA]" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                     </svg>
                     <span className="text-sm">感謝の手紙を作成する...</span>
                   </div>
