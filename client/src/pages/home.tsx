@@ -269,7 +269,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
         
         {card.tags && card.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
-            {card.tags.map((tag, index) => (
+            {card.tags.map((tag: string, index: number) => (
               <Badge key={index} variant="secondary" className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 hover:bg-blue-200">
                 {tag}
               </Badge>
@@ -651,12 +651,12 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
 
   // 既読状態をlocalStorageに保存
   useEffect(() => {
-    localStorage.setItem(`readCards_${user.id}`, JSON.stringify([...readCardIds]));
+    localStorage.setItem(`readCards_${user.id}`, JSON.stringify(Array.from(readCardIds)));
   }, [readCardIds, user.id]);
 
   // カードを既読にする関数
   const markCardAsRead = (cardId: number) => {
-    setReadCardIds(prev => new Set([...prev, cardId]));
+    setReadCardIds(prev => new Set(Array.from(prev).concat(cardId)));
   };
 
   // URLパラメータから成功メッセージを読み取り
