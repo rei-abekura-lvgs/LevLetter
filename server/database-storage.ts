@@ -1,11 +1,13 @@
 import {
-  users, teams, cards, likes, teamMembers, departments,
+  users, teams, cards, likes, teamMembers, departments, organizationHierarchy, userDepartments,
   type User, type InsertUser,
   type Card, type InsertCard,
   type Like, type InsertLike,
   type Team, type InsertTeam,
   type TeamMember, type InsertTeamMember,
   type Department, type InsertDepartment,
+  type OrganizationHierarchy, type InsertOrganization,
+  type UserDepartment, type InsertUserDepartment,
   type CardWithRelations
 } from "@shared/schema";
 import { db } from "./db";
@@ -1254,5 +1256,54 @@ export class DatabaseStorage implements IStorage {
       console.error('❌ getReceivedLikes エラー:', error);
       throw error;
     }
+  }
+
+  // 組織階層管理メソッド
+  async getAllOrganizations(): Promise<OrganizationHierarchy[]> {
+    return await db.select().from(organizationHierarchy).orderBy(asc(organizationHierarchy.level), asc(organizationHierarchy.name));
+  }
+
+  async createOrganization(data: InsertOrganization): Promise<OrganizationHierarchy> {
+    const [organization] = await db.insert(organizationHierarchy).values({
+      ...data,
+      updatedAt: new Date()
+    }).returning();
+    return organization;
+  }
+
+  async updateOrganization(id: number, data: Partial<InsertOrganization>): Promise<OrganizationHierarchy | null> {
+    const [organization] = await db.update(organizationHierarchy)
+      .set({
+        ...data,
+        updatedAt: new Date()
+      })
+      .where(eq(organizationHierarchy.id, id))
+      .returning();
+    return organization || null;
+  }
+
+  async deleteOrganization(id: number): Promise<void> {
+    await db.delete(organizationHierarchy).where(eq(organizationHierarchy.id, id));
+  }
+
+  async getOrganizationByNameAndLevel(name: string, level: number): Promise<OrganizationHierarchy | null> {
+    const [organization] = await db.select().from(organizationHierarchy)
+      .where(and(eq(organizationHierarchy.name, name), eq(organizationHierarchy.level, level)));
+    return organization || null;
+  }
+
+  // ユーザー部署関連メソッド
+  async getUserDepartments(userId: number): Promise<UserDepartment[]> {
+    return await db.select().from(userDepartments).where(eq(userDepartments.userId, userId));
+  }
+
+  async assignUserToDepartment(data: InsertUserDepartment): Promise<UserDepartment> {
+    const [userDepartment] = await db.insert(userDepartments).values(data).returning();
+    return userDepartment;
+  }
+
+  async removeUserFromDepartment(userId: number, organizationId: number): Promise<void> {
+    await db.delete(userDepartments)
+      .where(and(eq(userDepartments.userId, userId), eq(userDepartments.organizationId, organizationId)));
   }
 }

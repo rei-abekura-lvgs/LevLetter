@@ -1,11 +1,13 @@
 import {
-  users, teams, cards, likes, teamMembers, departments,
+  users, teams, cards, likes, teamMembers, departments, organizationHierarchy, userDepartments,
   type User, type InsertUser,
   type Card, type InsertCard,
   type Like, type InsertLike,
   type Team, type InsertTeam,
   type TeamMember, type InsertTeamMember,
   type Department, type InsertDepartment,
+  type OrganizationHierarchy, type InsertOrganization,
+  type UserDepartment, type InsertUserDepartment,
   type CardWithRelations
 } from "@shared/schema";
 import * as crypto from "crypto";
