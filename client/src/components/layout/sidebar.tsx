@@ -19,7 +19,8 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
   const { data: currentUser } = useQuery<User>({
     queryKey: ['/api/auth/me'],
     enabled: isAuthenticated,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: 5000, // 5秒ごとに更新
     staleTime: 0, // 常に最新データを使用
   });
   
