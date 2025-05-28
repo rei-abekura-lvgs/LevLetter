@@ -12,9 +12,10 @@ import { toast } from "@/hooks/use-toast";
 interface CardItemProps {
   card: CardWithRelations;
   currentUser: User;
+  isUnread?: boolean;
 }
 
-export default function CardItem({ card, currentUser }: CardItemProps) {
+export default function CardItem({ card, currentUser, isUnread = false }: CardItemProps) {
   const queryClient = useQueryClient();
   
   // 自分がいいねしたか
@@ -147,7 +148,7 @@ export default function CardItem({ card, currentUser }: CardItemProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+    <div className={`bg-white rounded-lg shadow p-3 sm:p-4 ${isUnread ? 'border-l-4 border-blue-200' : ''}`}>
       {/* 送信者情報 */}
       <div className="flex items-center mb-3">
         <Avatar className="h-8 w-8 sm:h-10 sm:w-10 mr-2 sm:mr-3 flex-shrink-0">
