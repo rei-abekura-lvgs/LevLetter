@@ -296,6 +296,19 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
           </div>
           
           <div className="flex items-center gap-2">
+            {/* いいね詳細ボタン */}
+            {totalLikes > 0 && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-6 px-2 text-xs text-gray-500"
+                onClick={() => setShowDetailsDialog(true)}
+              >
+                <Heart className="h-3 w-3 mr-1" />
+                詳細
+              </Button>
+            )}
+            
             {allRecipients.length > displayRecipients.length && (
               <Dialog>
                 <DialogTrigger asChild>
