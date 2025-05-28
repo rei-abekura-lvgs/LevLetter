@@ -923,8 +923,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                           return (
                             <CommandItem
                               key={`person-${person}`}
-                              value={`${person} ${romanjiKeywords}`}
-                              keywords={[person, romanjiKeywords]}
+                              value={`${person || ''} ${romanjiKeywords || ''}`}
+                              keywords={[person || '', romanjiKeywords || '']}
                               onSelect={() => {
                                 setSelectedFilter({type: 'person', value: person});
                                 setSearchOpen(false);
