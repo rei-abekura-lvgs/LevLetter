@@ -1316,4 +1316,54 @@ export class DatabaseStorage implements IStorage {
     const [organization] = await db.select().from(organizationHierarchy).where(condition);
     return organization || null;
   }
+
+  // 組織階層取得（実際のユーザーデータから動的に取得）
+  async getOrganizationHierarchy(): Promise<any[]> {
+    try {
+      // 実際のユーザーデータから組織階層を動的に生成
+      const result = await db.select({
+        organizationLevel1: users.organizationLevel1,
+        organizationLevel2: users.organizationLevel2,
+        organizationLevel3: users.organizationLevel3,
+        organizationLevel4: users.organizationLevel4,
+        organizationLevel5: users.organizationLevel5
+      }).from(users).where(ne(users.organizationLevel1, null));
+
+      // 階層データを構造化
+      const hierarchyMap = new Map();
+      
+      for (const row of result) {
+        const levels = [
+          row.organizationLevel1,
+          row.organizationLevel2,
+          row.organizationLevel3,
+          row.organizationLevel4,
+          row.organizationLevel5
+        ].filter(Boolean);
+
+        // 各階層を順番に処理
+        let currentPath = '';
+        for (let i = 0; i < levels.length; i++) {
+          const level = levels[i];
+          const fullPath = currentPath ? `${currentPath} > ${level}` : level;
+          
+          if (!hierarchyMap.has(fullPath)) {
+            hierarchyMap.set(fullPath, {
+              id: fullPath,
+              name: level,
+              fullPath: fullPath,
+              level: i + 1,
+              parent: currentPath || null
+            });
+          }
+          currentPath = fullPath;
+        }
+      }
+
+      return Array.from(hierarchyMap.values()).sort((a, b) => a.fullPath.localeCompare(b.fullPath));
+    } catch (error) {
+      console.error("組織階層取得エラー:", error);
+      return [];
+    }
+  }
 }

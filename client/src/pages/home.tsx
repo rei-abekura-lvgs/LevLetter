@@ -683,6 +683,11 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     queryKey: ['/api/users'],
   });
 
+  // 組織階層データを取得（実際の5階層部署管理システムから）
+  const { data: organizationHierarchy = [] } = useQuery<any[]>({
+    queryKey: ['/api/organizations'],
+  });
+
   // URLパラメータを処理してカードにジャンプ
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
