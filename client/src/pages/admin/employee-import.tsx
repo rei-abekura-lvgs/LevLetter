@@ -176,32 +176,35 @@ export default function EmployeeImport() {
             const mappedData = results.data.map((row: any) => {
               console.log('処理中の行:', row);
             
-              // 会社DBの形式かチェック（TSVと思われる場合）
-              if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
-                // 社内DB形式の場合、フィールドをマッピング
-                // 所属階層1～5を連結して部署として使用
-                const dept1 = row["所属階層１"] || 'その他';
-                const dept2 = row["所属階層２"] || '';
-                const dept3 = row["所属階層３"] || '';
-                const dept4 = row["所属階層４"] || '';
-                const dept5 = row["所属階層５"] || '';
+              // 会社DBの形式かチェック（CSVファイルの場合）
+              if (row["メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
+                // 所属部門データを階層に分解
+                const departmentPath = row["所属部門"] || '';
+                const departmentParts = departmentPath.split('/').filter((part: string) => part.trim() !== '');
                 
-                // 階層をスラッシュで連結（空の階層は除外）
-                const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== '');
-                const departmentPath = departmentParts.join('/');
+                const dept1 = departmentParts[0] || null; // 本部
+                const dept2 = departmentParts[1] || null; // 部
+                const dept3 = departmentParts[2] || null; // グループ
+                const dept4 = departmentParts[3] || null; // チーム
+                const dept5 = departmentParts[4] || null; // ユニット
                 
-                // 職場氏名をユーザー名として使用、なければ氏名を使用
+                console.log('部門階層分解:', {
+                  original: departmentPath,
+                  split: departmentParts,
+                  levels: { dept1, dept2, dept3, dept4, dept5 }
+                });
+                
                 return {
-                  email: row["会社メールアドレス"] || '',
-                  name: row["職場氏名"] || row["氏名"] || '',
+                  email: row["メールアドレス"] || '',
+                  name: row["氏名"] || '',
                   employeeId: String(row["社員番号"] || ''),
                   department: departmentPath,
                   organizationLevel1: "レバレジーズ株式会社", // 会社レベル
-                  organizationLevel2: dept1 || null, // 本部レベル
-                  organizationLevel3: dept2 || null, // 部門レベル
-                  organizationLevel4: dept3 || null, // グループレベル
-                  organizationLevel5: dept4 || null, // チームレベル
-                  organizationLevel6: dept5 || null  // ユニットレベル
+                  organizationLevel2: dept1, // 本部レベル
+                  organizationLevel3: dept2, // 部門レベル
+                  organizationLevel4: dept3, // グループレベル
+                  organizationLevel5: dept4, // チームレベル
+                  organizationLevel6: dept5  // ユニットレベル
                 };
               } else {
                 // 従来のCSV形式の場合はそのまま
