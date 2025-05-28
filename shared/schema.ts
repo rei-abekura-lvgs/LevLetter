@@ -49,12 +49,9 @@ export const likes = pgTable("likes", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// 部署テーブル用IDの型を定義
-const departmentId = serial("id").primaryKey();
-
-// 部署テーブル
+// 部署テーブル（後で新しい構造に移行予定）
 export const departments = pgTable("departments", {
-  id: departmentId,
+  id: serial("id").primaryKey(),
   name: text("name").notNull().unique(), // 正式名称 (例: "情報システム部")
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow().notNull()
