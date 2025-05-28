@@ -61,6 +61,16 @@ async function importEmployeesData(employees: CsvEmployee[]): Promise<ImportResu
     console.log('1件目の内容:', JSON.stringify(employees[0], null, 2));
     console.log('データ型:', typeof employees[0]);
     console.log('プロパティ一覧:', Object.keys(employees[0]));
+    
+    // 組織階層データの詳細チェック
+    console.log('🏢 1件目の組織階層データ詳細:', {
+      organizationLevel1: employees[0].organizationLevel1,
+      organizationLevel2: employees[0].organizationLevel2,
+      organizationLevel3: employees[0].organizationLevel3,
+      organizationLevel4: employees[0].organizationLevel4,
+      organizationLevel5: employees[0].organizationLevel5,
+      organizationLevel6: employees[0].organizationLevel6
+    });
   }
   console.log('■■■■■■ インポート前のデータ詳細(終わり) ■■■■■■');
   

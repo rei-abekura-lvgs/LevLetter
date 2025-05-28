@@ -1,0 +1,58 @@
+ マッピング後の組織階層データ: {email: 'masahiro.senoue@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327756', 氏名: '斉藤　方軌', 職場氏名: '斉藤　方軌', 会社メールアドレス: 'masaki.saito@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: 'SREチーム', dept4: 'サポートユニット', dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'masaki.saito@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327777', 氏名: '安藤　弘輝', 職場氏名: '安藤　弘輝', 会社メールアドレス: 'hiroki.ando@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: 'AIMLエンジニアリングチーム', dept4: null, dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'hiroki.ando@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327802', 氏名: '于　原駿', 職場氏名: '于　原駿', 会社メールアドレス: 'genshun.u@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: 'データエンジニアリンググループ', dept4: null, dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'genshun.u@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327855', 氏名: 'LEE　SANGHYUK', 職場氏名: 'LEE　SANGHYUK', 会社メールアドレス: 'sanghyuk.lee@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: 'SREチーム', dept4: 'プラットフォームユニット', dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'sanghyuk.lee@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327899', 氏名: '有坂　亮汰', 職場氏名: '有坂　亮汰', 会社メールアドレス: 'ryota.arisaka@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: 'SREチーム', dept4: 'プラットフォームユニット', dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'ryota.arisaka@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327900', 氏名: '永安　修也', 職場氏名: '永安　修也', 会社メールアドレス: 'shuya.nagayasu@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: '先端技術チーム', dept4: null, dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'shuya.nagayasu@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327946', 氏名: '横江　健太', 職場氏名: '横江　健太', 会社メールアドレス: 'kenta.yokoe@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: 'SREチーム', dept4: 'サポートユニット', dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'kenta.yokoe@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327989', 氏名: '小林　巧', 職場氏名: '小林　巧', 会社メールアドレス: 'takumi.kobayashi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'NALYSYS開発部', dept3: 'NALYSYSエンジニアリングチーム', dept4: '第6ユニット', dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'takumi.kobayashi@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '328638', 氏名: '修　浩毅', 職場氏名: '修　浩毅', 会社メールアドレス: 'hiroki.shu@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: '先端技術チーム', dept4: null, dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'hiroki.shu@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '328641', 氏名: '逸見　裕章', 職場氏名: '逸見　裕章', 会社メールアドレス: 'hiroaki.hemmi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: 'TQCチーム', dept4: null, dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'hiroaki.hemmi@leverages.jp', levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '328642', 氏名: '苑田　朝彰', 職場氏名: '苑田　朝彰', 会社メールアドレス: 'tomotada.sonoda@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:192 部門階層分解: {dept1: 'システム本部', dept2: 'テクノロジー戦略室', dept3: 'AIMLエンジニアリングチーム', dept4: null, dept5: null, …}
+employee-import.tsx:210 🏢 マッピング後の組織階層データ: {email: 'tomotada.sonoda@leverages.jp', levels: {…}}
+employee-import.tsx:229 マッピング後のデータ: (3) [{…}, {…}, {…}]
+employee-import.tsx:240 有効なデータ件数: 49
+employee-import.tsx:397 インポート対象データ件数: 49
+employee-import.tsx:57 ■■■■■■ インポート前のデータ詳細 ■■■■■■
+employee-import.tsx:58 データ件数: 49
+employee-import.tsx:59 データサンプル: (3) [{…}, {…}, {…}]
+employee-import.tsx:61 1件目の内容: {
+  "email": "keishu.otaki@leverages.jp",
+  "name": "大滝　圭修",
+  "employeeId": "324138",
+  "displayName": "大滝　圭修",
+  "department": "システム本部/NALYSYS開発部/NALYSYSプロダクトチーム"
+}
+employee-import.tsx:62 データ型: object
+employee-import.tsx:63 プロパティ一覧: (5) ['email', 'name', 'employeeId', 'displayName', 'department']
+employee-import.tsx:65 ■■■■■■ インポート前のデータ詳細(終わり) ■■■■■■
+queryClient.ts:42 API POST リクエスト: /api/admin/users/import データあり
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 0, unreadCount: 0}error: undefinedisLoading: falsetotalNotifications: 0unreadCount: 0[[Prototype]]: Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 0, unreadCount: 0}
+queryClient.ts:42 API GET リクエスト: /api/admin/users データなし
+queryClient.ts:42 API GET リクエスト: /api/admin/departments データなし
+queryClient.ts:42 API GET リクエスト: /api/admin/users データなし
