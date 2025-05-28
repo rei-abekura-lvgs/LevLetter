@@ -173,31 +173,7 @@ export function NotificationBell() {
   }) => {
     const itemRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !isRead) {
-              // 1秒後に既読化（スクロール時の誤動作を防ぐため）
-              setTimeout(() => {
-                onMarkAsRead();
-              }, 1000);
-            }
-          });
-        },
-        { threshold: 0.7 } // 70%表示された時に発動
-      );
-
-      if (itemRef.current) {
-        observer.observe(itemRef.current);
-      }
-
-      return () => {
-        if (itemRef.current) {
-          observer.unobserve(itemRef.current);
-        }
-      };
-    }, [isRead, onMarkAsRead]);
+    // 自動既読化機能を削除（手動削除のみ）
 
     return (
       <DropdownMenuItem
@@ -268,20 +244,6 @@ export function NotificationBell() {
                 key={notification.id}
                 notification={notification}
                 isRead={clearedNotifications.has(notification.id)}
-                onMarkAsRead={() => {
-                  if (!clearedNotifications.has(notification.id)) {
-                    console.log("👁️ 通知を表示で既読化:", notification.id);
-                    const newClearedNotifications = new Set([...clearedNotifications, notification.id]);
-                    setClearedNotifications(newClearedNotifications);
-                    
-                    // ローカルストレージに安全に保存
-                    try {
-                      localStorage.setItem('clearedNotifications', JSON.stringify(Array.from(newClearedNotifications)));
-                    } catch (error) {
-                      console.log("ローカルストレージ保存エラー:", error);
-                    }
-                  }
-                }}
                 onClick={() => handleNotificationClick(notification)}
               />
             ))}
