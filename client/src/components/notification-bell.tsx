@@ -82,8 +82,18 @@ export function NotificationBell() {
     console.log("🔔 通知クリック:", notification);
     if (notification.relatedCardId) {
       console.log(`🎯 カード${notification.relatedCardId}にジャンプ開始`);
-      // カードが存在する場合、ホームページに移動してカードにスクロール
-      setLocation(`/?cardId=${notification.relatedCardId}`);
+      
+      // 現在のページがホームページでない場合は、まずホームに移動
+      if (window.location.pathname !== '/') {
+        setLocation('/');
+        // 少し遅延してからカードジャンプのパラメータを設定
+        setTimeout(() => {
+          setLocation(`/?cardId=${notification.relatedCardId}`);
+        }, 100);
+      } else {
+        // すでにホームページの場合は直接ジャンプ
+        setLocation(`/?cardId=${notification.relatedCardId}`);
+      }
     }
   };
 
