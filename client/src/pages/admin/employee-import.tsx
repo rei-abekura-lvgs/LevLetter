@@ -195,7 +195,7 @@ export default function EmployeeImport() {
                   organizationLevel3: dept3 || null,
                   organizationLevel4: dept4 || null,
                   organizationLevel5: dept5 || null,
-                  organizationLevel6: null  // レベル6は現在のCSVにはないのでnull
+                  organizationLevel6: row["所属階層６"] || null
                 };
               } else {
                 // 従来のCSV形式の場合はそのまま
@@ -273,7 +273,14 @@ export default function EmployeeImport() {
                 email: row["会社メールアドレス"] || '',
                 name: row["職場氏名"] || row["氏名"] || '',
                 employeeId: String(row["社員番号"] || ''),
-                department: departmentPath
+                department: departmentPath,
+                // 6段階の組織階層情報を個別に保存
+                organizationLevel1: row["所属階層１"] || null,
+                organizationLevel2: row["所属階層２"] || null,
+                organizationLevel3: row["所属階層３"] || null,
+                organizationLevel4: row["所属階層４"] || null,
+                organizationLevel5: row["所属階層５"] || null,
+                organizationLevel6: row["所属階層６"] || null,
               };
             } else {
               // 従来の形式の場合はそのまま
