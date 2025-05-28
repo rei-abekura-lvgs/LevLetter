@@ -911,9 +911,9 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             className="flex flex-col flex-1 overflow-hidden" 
             onValueChange={setActiveTab}
           >
-            {/* Twitter風タブナビゲーション */}
-            <TabsList className="grid w-full grid-cols-4 border-b border-gray-200 bg-white flex-shrink-0 rounded-none">
-              <TabsTrigger value="all" className="relative border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent rounded-none">
+            {/* 美しいタブナビゲーション */}
+            <TabsList className="grid w-full grid-cols-4 mx-4 mb-4 flex-shrink-0 bg-gray-50 rounded-lg">
+              <TabsTrigger value="all" className="relative">
                 すべて
                 {tabCounts.all > 0 && (
                   <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
@@ -921,7 +921,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="sent" className="relative border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent rounded-none">
+              <TabsTrigger value="sent" className="relative">
                 送った
                 {tabCounts.isSentImportant ? (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
@@ -933,7 +933,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </span>
                 ) : null}
               </TabsTrigger>
-              <TabsTrigger value="received" className="relative border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent rounded-none">
+              <TabsTrigger value="received" className="relative">
                 もらった
                 {tabCounts.isReceivedImportant ? (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
@@ -945,7 +945,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </span>
                 ) : null}
               </TabsTrigger>
-              <TabsTrigger value="liked" className="relative border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent rounded-none">
+              <TabsTrigger value="liked" className="relative">
                 いいね
                 {tabCounts.liked > 0 && (
                   <span className="absolute -top-1 -right-1 bg-gray-100 text-gray-500 text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
@@ -955,30 +955,35 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               </TabsTrigger>
             </TabsList>
 
-            {/* Twitter風コントロールエリア */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-white flex-shrink-0">
-              {/* 投稿ボタン */}
-              <Button 
-                onClick={() => setIsCardFormOpen(true)} 
-                className="bg-[#3990EA] hover:bg-[#2980D9] text-white px-6 py-2 rounded-full font-medium"
-              >
-                感謝の気持ちを伝える
-              </Button>
-              
-              {/* カード数とソート */}
-              <div className="flex items-center gap-3">
-                <Badge variant="outline" className="text-xs text-gray-500 bg-gray-50">
-                  {filteredCards.length}件
-                </Badge>
-                <Select defaultValue="newest" onValueChange={handleSortChange}>
-                  <SelectTrigger className="w-[100px] h-8 text-sm border-gray-200">
-                    <SelectValue placeholder="新しい順" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">新しい順</SelectItem>
-                    <SelectItem value="popular">人気順</SelectItem>
-                  </SelectContent>
-                </Select>
+            {/* 魅力的な投稿エリア */}
+            <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100 flex-shrink-0">
+              <div className="flex items-center gap-4">
+                {/* 魅力的な投稿ボタン */}
+                <Button 
+                  onClick={() => setIsCardFormOpen(true)} 
+                  className="bg-gradient-to-r from-[#3990EA] to-[#5BA3F5] hover:from-[#2980D9] hover:to-[#4A92E4] text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  感謝を伝える
+                </Button>
+                
+                {/* カード数とソート */}
+                <div className="flex items-center gap-3 ml-auto">
+                  <Badge variant="outline" className="text-xs text-gray-600 bg-white/70 border-gray-300">
+                    {filteredCards.length}件のカード
+                  </Badge>
+                  <Select defaultValue="newest" onValueChange={handleSortChange}>
+                    <SelectTrigger className="w-[110px] h-9 text-sm bg-white/70 border-gray-300">
+                      <SelectValue placeholder="新しい順" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="newest">新しい順</SelectItem>
+                      <SelectItem value="popular">人気順</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
