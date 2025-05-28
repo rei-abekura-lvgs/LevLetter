@@ -99,16 +99,16 @@ export default function Dashboard() {
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">リアクション率</p>
-              <p className="text-3xl font-bold text-green-600">{stats.monthly.reactionRate}%</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">カード送信順位</p>
+              <p className="text-3xl font-bold text-green-600">#{stats.monthly.userCardRank || '?'}</p>
             </div>
             <div className="p-3 bg-green-50 rounded-full">
-              <Heart className="h-6 w-6 text-green-600" />
+              <Mail className="h-6 w-6 text-green-600" />
             </div>
           </div>
           <div className="mt-4">
             <div className="flex items-center text-sm text-gray-500">
-              <span>いいね率</span>
+              <span>過去1ヶ月の順位</span>
             </div>
           </div>
         </div>
@@ -116,16 +116,16 @@ export default function Dashboard() {
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">カード送信ランク</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">カード送信順位</p>
               <p className="text-3xl font-bold text-purple-600">#{stats.monthly.userCardRank || '?'}</p>
             </div>
             <div className="p-3 bg-purple-50 rounded-full">
-              <Award className="h-6 w-6 text-purple-600" />
+              <Mail className="h-6 w-6 text-purple-600" />
             </div>
           </div>
           <div className="mt-4">
             <div className="flex items-center text-sm text-gray-500">
-              <span>全社でのランキング</span>
+              <span>過去1ヶ月の順位</span>
             </div>
           </div>
         </div>
@@ -133,16 +133,16 @@ export default function Dashboard() {
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">いいねランク</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">いいね送信順位</p>
               <p className="text-3xl font-bold text-orange-600">#{stats.monthly.userLikeRank || '?'}</p>
             </div>
             <div className="p-3 bg-orange-50 rounded-full">
-              <Users className="h-6 w-6 text-orange-600" />
+              <Heart className="h-6 w-6 text-orange-600" />
             </div>
           </div>
           <div className="mt-4">
             <div className="flex items-center text-sm text-gray-500">
-              <span>全社でのランキング</span>
+              <span>過去1ヶ月の順位</span>
             </div>
           </div>
         </div>
