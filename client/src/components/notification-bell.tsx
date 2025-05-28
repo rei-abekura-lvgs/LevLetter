@@ -34,9 +34,15 @@ interface Notification {
 export function NotificationBell() {
   console.log("🔔 通知ベルコンポーネントレンダリング");
   const [, setLocation] = useLocation();
+  
+  // 削除された通知のIDを管理
+  const [clearedNotifications, setClearedNotifications] = useState<Set<string>>(() => {
+    const cleared = localStorage.getItem('clearedNotifications');
+    return cleared ? new Set(JSON.parse(cleared)) : new Set();
+  });
 
   // 通知データを取得
-  const { data: notifications = [], isLoading, error } = useQuery<Notification[]>({
+  const { data: allNotifications = [], isLoading, error } = useQuery<Notification[]>({
     queryKey: ["/api/notifications"],
     queryFn: async () => {
       console.log("📨 通知データ取得開始（ベルコンポーネント）");
@@ -55,8 +61,11 @@ export function NotificationBell() {
     refetchOnWindowFocus: false
   });
 
+  // 削除されていない通知のみを表示
+  const notifications = allNotifications.filter(n => !clearedNotifications.has(n.id));
+
   // 未読通知の数を計算
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const unreadCount = notifications.length;
   
   console.log("🔔 通知ベル状態:", { 
     isLoading, 
