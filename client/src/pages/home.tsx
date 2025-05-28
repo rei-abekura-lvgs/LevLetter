@@ -587,7 +587,59 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
+
   const { toast } = useToast();
+  
+  // 日本語名をローマ字に変換する関数
+  const convertToRomaji = (name: string): string => {
+    if (!name) return '';
+    
+    // 基本的な漢字→ローマ字変換マッピング
+    return name
+      .replace(/阿部倉/g, 'abekura')
+      .replace(/怜/g, 'rei')
+      .replace(/田中/g, 'tanaka')
+      .replace(/佐藤/g, 'sato')
+      .replace(/鈴木/g, 'suzuki')
+      .replace(/高橋/g, 'takahashi')
+      .replace(/山田/g, 'yamada')
+      .replace(/小林/g, 'kobayashi')
+      .replace(/加藤/g, 'kato')
+      .replace(/吉田/g, 'yoshida')
+      .replace(/山本/g, 'yamamoto')
+      .replace(/中村/g, 'nakamura')
+      .replace(/小川/g, 'ogawa')
+      .replace(/斎藤/g, 'saito')
+      .replace(/松本/g, 'matsumoto')
+      .replace(/井上/g, 'inoue')
+      .replace(/木村/g, 'kimura')
+      .replace(/林/g, 'hayashi')
+      .replace(/清水/g, 'shimizu')
+      .replace(/山口/g, 'yamaguchi')
+      .replace(/森/g, 'mori')
+      .replace(/太郎/g, 'taro')
+      .replace(/次郎/g, 'jiro')
+      .replace(/三郎/g, 'saburo')
+      .replace(/花子/g, 'hanako')
+      .replace(/美香/g, 'mika')
+      .replace(/真一/g, 'shinichi')
+      .replace(/健太/g, 'kenta')
+      .replace(/優/g, 'yu')
+      .replace(/翔/g, 'sho')
+      .replace(/愛/g, 'ai')
+      .replace(/恵/g, 'megumi')
+      .replace(/修/g, 'osamu')
+      .replace(/聡/g, 'satoshi')
+      .replace(/誠/g, 'makoto')
+      .replace(/牧野/g, 'makino')
+      .replace(/康太/g, 'kota')
+      .replace(/石田/g, 'ishida')
+      .replace(/安藤/g, 'ando')
+      .replace(/稲垣/g, 'inagaki')
+      .replace(/弘輝/g, 'hiroki')
+      .replace(/貴義/g, 'takayoshi')
+      .replace(/啓介/g, 'keisuke');
+  };
   
   // 既読カードIDを管理（localStorageに保存）
   const [readCardIds, setReadCardIds] = useState<Set<number>>(() => {
@@ -631,21 +683,11 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     queryKey: ['/api/users'],
   });
 
-  // 検索機能のカスタムフック
-  const {
-    filterValue,
-    setFilterValue,
-    searchOpen,
-    setSearchOpen,
-    selectedFilter,
-    selectedDepartment,
-    uniqueDepartments,
-    searchableUsers,
-    departmentMembers,
-    clearFilters,
-    applyPersonFilter,
-    applyDepartmentFilter,
-  } = useSearch(allUsers);
+  // 部署のユニークリストを生成（カードから）
+  const uniqueDepartments = [...new Set(cards.flatMap(card => {
+    const allCardUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+    return allCardUsers.map(user => user.department).filter(Boolean);
+  }))].sort();
 
   // 各タブの通知数を計算（重要な通知のみ目立たせる）
   const getTabCounts = () => {
@@ -695,18 +737,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     if (activeTab === "sent" && card.senderId !== user.id) return false;
     if (activeTab === "liked" && !(card.likes?.some(like => like.userId === user.id) || false)) return false;
     
-    // 統合検索フィルター
-    if (selectedFilter) {
-      if (selectedFilter.type === "person") {
-        const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-        const hasMatchingPerson = allUsers.some(user => (user.displayName || user.name) === selectedFilter.value);
-        if (!hasMatchingPerson) return false;
-      } else if (selectedFilter.type === "department") {
-        const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-        const hasMatchingDepartment = allUsers.some(user => user.department === selectedFilter.value);
-        if (!hasMatchingDepartment) return false;
-      }
-    }
+    // 検索フィルターは今後実装予定
     
     return true;
   }).sort((a, b) => {
@@ -890,111 +921,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   <SelectItem value="popular">人気順</SelectItem>
                 </SelectContent>
               </Select>
-              {/* 統合検索ボックス */}
-              <Popover open={searchOpen} onOpenChange={setSearchOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={searchOpen}
-                    className="w-[250px] h-8 text-sm justify-between"
-                  >
-                    {selectedFilter 
-                      ? `${selectedFilter.type === 'person' ? '👤' : '🏢'} ${selectedFilter.value}`
-                      : "人名・部署名で検索..."}
-                    <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0">
-                  <Command>
-                    <CommandInput placeholder="人名または部署名を入力..." />
-                    <CommandList>
-                      <CommandEmpty>見つかりませんでした。</CommandEmpty>
-                      
-                      {/* 人名セクション - 検索語が入力された時のみ表示 */}
-                      <CommandGroup heading="👤 人名">
-                        {allUsers.map((user: User) => {
-                          const displayName = user.displayName || user.name;
-                          const romanjiKeywords = convertToRomaji(displayName);
-                          
-                          return (
-                            <CommandItem
-                              key={`person-${user.id}`}
-                              value={`${displayName} ${romanjiKeywords}`}
-                              keywords={[displayName, romanjiKeywords]}
-                              onSelect={() => {
-                                setSelectedFilter({type: 'person', value: displayName});
-                                setSearchOpen(false);
-                              }}
-                            >
-                              <Check
-                                className={`mr-2 h-4 w-4 ${
-                                  selectedFilter?.type === 'person' && selectedFilter?.value === displayName ? "opacity-100" : "opacity-0"
-                                }`}
-                              />
-                              <UserIcon className="mr-2 h-4 w-4 text-blue-500" />
-                              {displayName}
-                            </CommandItem>
-                          );
-                        })}
-                      </CommandGroup>
-                      
-                      {/* 部署セクション */}
-                      <CommandGroup heading="🏢 部署">
-                        {uniqueDepartments.map((dept: string) => {
-                          // この部署の人たち
-                          const deptMembers = [...new Set(cards.flatMap(card => {
-                            const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-                            return allUsers.filter(user => user.department === dept).map(user => user.displayName || user.name);
-                          }))].sort();
-                          
-                          return (
-                            <CommandItem
-                              key={`dept-${dept}`}
-                              value={dept}
-                              onSelect={(currentValue) => {
-                                setSelectedFilter({type: 'department', value: currentValue});
-                                setSelectedDepartment(currentValue);
-                                setSearchOpen(false);
-                              }}
-                            >
-                              <Check
-                                className={`mr-2 h-4 w-4 ${
-                                  selectedFilter?.type === 'department' && selectedFilter?.value === dept ? "opacity-100" : "opacity-0"
-                                }`}
-                              />
-                              <Activity className="mr-2 h-4 w-4 text-green-500" />
-                              <div className="flex flex-col items-start">
-                                <span className="font-medium">{dept}</span>
-                                <span className="text-xs text-gray-500">
-                                  {deptMembers.length}名: {deptMembers.slice(0, 3).join(", ")}
-                                  {deptMembers.length > 3 && " など"}
-                                </span>
-                              </div>
-                            </CommandItem>
-                          );
-                        })}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              
-              {/* フィルタークリアボタン */}
-              {selectedFilter && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedFilter(null);
-                    setSelectedDepartment(null);
-                  }}
-                  className="h-8 px-2 text-sm text-gray-500 hover:text-gray-700"
-                >
-                  <X className="h-4 w-4 mr-1" />
-                  クリア
-                </Button>
-              )}
+              {/* 検索機能は今後の改善で実装予定 */}
             </div>
           </div>
 
