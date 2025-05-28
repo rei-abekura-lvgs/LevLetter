@@ -128,11 +128,6 @@ export default function Dashboard() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">ダッシュボード</h1>
           <p className="text-gray-600">期間: {periodText}</p>
-          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
-              💡 <strong>ポイント情報について:</strong> 最新のポイント残高や統計データが反映されていない場合は、ブラウザを更新してください。
-            </p>
-          </div>
         </div>
 
         {/* 統計カード */}
