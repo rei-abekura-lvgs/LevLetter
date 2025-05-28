@@ -1,0 +1,555 @@
+要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+handleRefreshPoints @ sidebar.tsx:25
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+sidebar.tsx:26 🔄 ポイント手動更新完了
+2queryClient.ts:42 API POST リクエスト: /api/cards/141/likes データなし
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+onClick @ home.tsx:315
+await in onClick
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+queryClient.ts:42 API POST リクエスト: /api/cards/141/likes データなし
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+onClick @ home.tsx:315
+await in onClick
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+handleRefreshPoints @ sidebar.tsx:25
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+sidebar.tsx:26 🔄 ポイント手動更新完了
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+onClick @ home.tsx:315
+await in onClick
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+handleRefreshPoints @ sidebar.tsx:25
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+sidebar.tsx:26 🔄 ポイント手動更新完了
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+handleRefreshPoints @ sidebar.tsx:25
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+sidebar.tsx:26 🔄 ポイント手動更新完了
+queryClient.ts:42 API POST リクエスト: /api/cards/142/likes データなし
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+onClick @ home.tsx:315
+await in onClick
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+handleRefreshPoints @ sidebar.tsx:25
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+sidebar.tsx:26 🔄 ポイント手動更新完了
+queryClient.ts:42 API POST リクエスト: /api/cards/141/likes データなし
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+onClick @ home.tsx:315
+await in onClick
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+handleRefreshPoints @ sidebar.tsx:25
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+sidebar.tsx:26 🔄 ポイント手動更新完了
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+handleRefreshPoints @ sidebar.tsx:25
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+sidebar.tsx:26 🔄 ポイント手動更新完了
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=35b0b27e:840:14)
+    at run (@tanstack_react-query.js?v=35b0b27e:494:49)
+    at Object.start (@tanstack_react-query.js?v=35b0b27e:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=35b0b27e:926:41)
+    at @tanstack_react-query.js?v=35b0b27e:1726:29
+    at Array.map (<anonymous>)
+    at @tanstack_react-query.js?v=35b0b27e:1725:101
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=35b0b27e:840
+run @ @tanstack_react-query.js?v=35b0b27e:494
+start @ @tanstack_react-query.js?v=35b0b27e:536
+fetch @ @tanstack_react-query.js?v=35b0b27e:926
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1726
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1725
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+refetchQueries @ @tanstack_react-query.js?v=35b0b27e:1724
+(anonymous) @ @tanstack_react-query.js?v=35b0b27e:1716
+batch @ @tanstack_react-query.js?v=35b0b27e:583
+invalidateQueries @ @tanstack_react-query.js?v=35b0b27e:1705
+handleRefreshPoints @ sidebar.tsx:25
+callCallback2 @ chunk-RPCDYKBN.js?v=35b0b27e:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=35b0b27e:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=35b0b27e:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=35b0b27e:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=35b0b27e:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=35b0b27e:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=35b0b27e:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=35b0b27e:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=35b0b27e:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=35b0b27e:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=35b0b27e:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=35b0b27e:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=35b0b27e:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=35b0b27e:5449Understand this error
+sidebar.tsx:26 🔄 ポイント手動更新完了
