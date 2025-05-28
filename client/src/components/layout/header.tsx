@@ -101,7 +101,6 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
                     <div className="font-medium">今週の残りポイント</div>
                     <div className="text-gray-300 mt-1">毎週月曜日に500pt付与</div>
                     <div className="text-gray-300">クリックで詳細表示</div>
-                    <div className="text-green-300 mt-2 text-[11px]">✨ 30秒ごとに自動更新</div>
                   </div>
                   {/* 矢印 */}
                   <div className="absolute bottom-full right-4 border-4 border-transparent border-b-gray-800"></div>
