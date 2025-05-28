@@ -70,7 +70,7 @@ export function NotificationBell() {
   console.log("🔔 通知ベル状態:", { 
     isLoading, 
     error: error?.message, 
-    totalNotifications: notifications.length,
+    totalNotifications: allNotifications.length,
     unreadCount 
   });
 
