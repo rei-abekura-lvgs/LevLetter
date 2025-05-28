@@ -62,7 +62,7 @@ export function NotificationBell() {
   });
 
   // 削除されていない通知のみを表示
-  const notifications = allNotifications.filter(n => !clearedNotifications.has(n.id));
+  const notifications = allNotifications.filter(n => !clearedNotifications.has(String(n.id)));
 
   // 未読通知の数を計算
   const unreadCount = notifications.length;
@@ -88,11 +88,15 @@ export function NotificationBell() {
         setLocation('/');
         // 少し遅延してからカードジャンプを実行
         setTimeout(() => {
-          jumpToCard(notification.relatedCardId);
+          if (notification.relatedCardId) {
+            jumpToCard(notification.relatedCardId);
+          }
         }, 500);
       } else {
         // すでにホームページの場合は直接ジャンプ
-        jumpToCard(notification.relatedCardId);
+        if (notification.relatedCardId) {
+          jumpToCard(notification.relatedCardId);
+        }
       }
     }
   };
@@ -121,7 +125,7 @@ export function NotificationBell() {
     console.log("🗑️ すべての通知を削除開始");
     
     // 現在の通知IDをすべてクリア済みとしてマーク
-    const allNotificationIds = new Set([...Array.from(clearedNotifications), ...notifications.map(n => n.id)]);
+    const allNotificationIds = new Set([...Array.from(clearedNotifications), ...notifications.map(n => String(n.id))]);
     setClearedNotifications(allNotificationIds);
     
     // ローカルストレージに保存

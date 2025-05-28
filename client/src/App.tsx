@@ -171,12 +171,12 @@ function App() {
   // QueryClientProviderがルートレベルに配置され、すべてのコンポーネントにQueryClientを提供します
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <TooltipProvider>
           <Toaster />
           <AppRoutes />
-        </AuthProvider>
-      </TooltipProvider>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
