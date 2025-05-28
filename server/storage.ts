@@ -92,6 +92,9 @@ export interface IStorage {
   getUserDepartments(userId: number): Promise<UserDepartment[]>;
   assignUserToDepartment(data: InsertUserDepartment): Promise<UserDepartment>;
   removeUserFromDepartment(userId: number, organizationId: number): Promise<void>;
+  
+  // 組織階層取得（実際のユーザーデータから動的に取得）
+  getOrganizationHierarchy(): Promise<any[]>;
 }
 
 export class MemStorage implements IStorage {

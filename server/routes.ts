@@ -1181,6 +1181,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 組織階層情報を取得するAPI
+  app.get("/api/organizations", authenticate, async (req, res) => {
+    try {
+      const organizationHierarchy = await storage.getOrganizationHierarchy();
+      return res.json(organizationHierarchy);
+    } catch (error) {
+      console.error("組織階層取得エラー:", error);
+      return res.status(500).json({ message: "組織階層情報の取得に失敗しました" });
+    }
+  });
+
   // カード関連API
   app.get("/api/cards", weeklyPointsResetMiddleware, authenticate, async (req, res) => {
     try {
