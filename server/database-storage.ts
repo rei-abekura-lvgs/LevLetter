@@ -1023,36 +1023,33 @@ export class DatabaseStorage implements IStorage {
         })
       );
 
-      // いいね送信先ランキング（自分がいいねしたカードの送信者・受信者ランキング）
-      const sentLikesData = await db
+      // いいね送信先ランキング（自分がいいねしたカードの関係者ランキング）
+      // まず自分がいいねしたカードの情報を取得
+      const myLikedCards = await db
         .select({
-          targetUserId: sql<number>`
-            CASE 
-              WHEN cards.sender_id = ${userId} THEN cards.recipient_id
-              ELSE cards.sender_id
-            END
-          `.as('targetUserId'),
-          count: sql<number>`count(*)`.as('count')
+          cardId: likes.cardId,
+          senderId: cards.senderId,
+          recipientId: cards.recipientId
         })
         .from(likes)
         .innerJoin(cards, eq(likes.cardId, cards.id))
-        .where(and(
-          eq(likes.userId, userId),
-          sql`
-            CASE 
-              WHEN cards.sender_id = ${userId} THEN cards.recipient_id
-              ELSE cards.sender_id
-            END != ${userId}
-          `
-        ))
-        .groupBy(sql`
-          CASE 
-            WHEN cards.sender_id = ${userId} THEN cards.recipient_id
-            ELSE cards.sender_id
-          END
-        `)
-        .orderBy(desc(sql`count(*)`))
-        .limit(10);
+        .where(eq(likes.userId, userId));
+
+      // JavaScript で集計
+      const sentLikesCount: Record<number, number> = {};
+      for (const card of myLikedCards) {
+        if (card.senderId !== userId) {
+          sentLikesCount[card.senderId] = (sentLikesCount[card.senderId] || 0) + 1;
+        }
+        if (card.recipientId !== userId) {
+          sentLikesCount[card.recipientId] = (sentLikesCount[card.recipientId] || 0) + 1;
+        }
+      }
+
+      const sentLikesData = Object.entries(sentLikesCount)
+        .map(([targetUserId, count]) => ({ targetUserId: parseInt(targetUserId), count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10);
 
       // いいね受信元ランキング（自分のカードにいいねした人のランキング）
       const receivedLikesData = await db
