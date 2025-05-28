@@ -28,6 +28,12 @@ interface CsvEmployee {
   employeeId: string;
   displayName?: string;
   department?: string;
+  organizationLevel1?: string | null;
+  organizationLevel2?: string | null;
+  organizationLevel3?: string | null;
+  organizationLevel4?: string | null;
+  organizationLevel5?: string | null;
+  organizationLevel6?: string | null;
 }
 
 // 社内DBの形式に合わせた型定義
@@ -231,8 +237,19 @@ export default function EmployeeImport() {
                 
                 return mappedEmployee;
               } else {
-                // 従来のCSV形式の場合はそのまま
-                return row;
+                // 従来のCSV形式の場合（組織階層データなし）
+                return {
+                  email: row.email || '',
+                  name: row.name || '',
+                  employeeId: String(row.employeeId || ''),
+                  department: row.department || '',
+                  organizationLevel1: null,
+                  organizationLevel2: null,
+                  organizationLevel3: null,
+                  organizationLevel4: null,
+                  organizationLevel5: null,
+                  organizationLevel6: null
+                };
               }
             });
             
