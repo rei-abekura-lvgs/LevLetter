@@ -35,10 +35,15 @@ export function NotificationBell() {
   console.log("🔔 通知ベルコンポーネントレンダリング");
   const [, setLocation] = useLocation();
   
-  // 削除された通知のIDを管理
+  // 削除された通知のIDを管理（環境に依存しない初期化）
   const [clearedNotifications, setClearedNotifications] = useState<Set<string>>(() => {
-    const cleared = localStorage.getItem('clearedNotifications');
-    return cleared ? new Set(JSON.parse(cleared)) : new Set();
+    try {
+      const cleared = localStorage.getItem('clearedNotifications');
+      return cleared ? new Set(JSON.parse(cleared)) : new Set();
+    } catch (error) {
+      console.log("ローカルストレージアクセスエラー、空のSetで初期化");
+      return new Set();
+    }
   });
 
   // 通知データを取得
@@ -268,7 +273,13 @@ export function NotificationBell() {
                     console.log("👁️ 通知を表示で既読化:", notification.id);
                     const newClearedNotifications = new Set([...clearedNotifications, notification.id]);
                     setClearedNotifications(newClearedNotifications);
-                    localStorage.setItem('clearedNotifications', JSON.stringify(Array.from(newClearedNotifications)));
+                    
+                    // ローカルストレージに安全に保存
+                    try {
+                      localStorage.setItem('clearedNotifications', JSON.stringify(Array.from(newClearedNotifications)));
+                    } catch (error) {
+                      console.log("ローカルストレージ保存エラー:", error);
+                    }
                   }
                 }}
                 onClick={() => handleNotificationClick(notification)}
@@ -283,6 +294,27 @@ export function NotificationBell() {
               <div className="flex items-center justify-center gap-2">
                 <Trash2 className="h-4 w-4" />
                 すべての通知を消す
+              </div>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem
+              className="w-full text-center py-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+              onClick={() => {
+                setClearedNotifications(new Set());
+                try {
+                  localStorage.removeItem('clearedNotifications');
+                } catch (error) {
+                  console.log("ローカルストレージ削除エラー:", error);
+                }
+                console.log("🔄 通知バッジをリセット");
+                toast({
+                  description: "通知バッジをリセットしました",
+                });
+              }}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <Bell className="h-4 w-4" />
+                バッジをリセット
               </div>
             </DropdownMenuItem>
           </>
