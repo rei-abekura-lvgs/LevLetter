@@ -115,6 +115,18 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
   const isRecipient = allRecipients.some(recipient => recipient.id === currentUser.id);
   // 送信者と受信者はいいね禁止、第三者のみいいね可能
   const canLike = !isSender && !isRecipient;
+  
+  // デバッグ用ログ
+  console.log(`カードID ${card.id}:`, {
+    currentUserId: currentUser.id,
+    senderId: card.senderId,
+    recipientIds: allRecipients.map(r => r.id),
+    isSender,
+    isRecipient,
+    canLike,
+    totalLikes,
+    disabled: totalLikes >= 50 || !canLike
+  });
 
   // いいねボタンのテキスト
   const getLikeButtonText = () => {
