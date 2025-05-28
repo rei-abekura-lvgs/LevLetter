@@ -34,6 +34,8 @@ export default function NotificationPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  console.log("🔔 通知ページレンダリング");
+
   const { data: notifications = [], isLoading, error } = useQuery<Notification[]>({
     queryKey: ["/api/notifications"],
     queryFn: async () => {
@@ -42,12 +44,21 @@ export default function NotificationPage() {
         credentials: 'include'
       });
       if (!response.ok) {
+        console.error("❌ 通知取得失敗:", response.status, response.statusText);
         throw new Error(`通知取得エラー: ${response.status}`);
       }
       const data = await response.json();
       console.log("📨 通知データ取得完了:", data);
       return data;
-    }
+    },
+    retry: false,
+    refetchOnWindowFocus: false
+  });
+
+  console.log("🔔 通知状態:", { 
+    isLoading, 
+    error: error?.message, 
+    notificationsCount: notifications.length 
   });
 
   const markAsRead = async (notificationId: number) => {
