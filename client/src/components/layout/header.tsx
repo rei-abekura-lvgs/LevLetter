@@ -4,6 +4,7 @@ import { User } from "@shared/schema";
 import { useAuth } from "@/context/auth-context-new";
 import { BearAvatar } from "@/components/ui/bear-avatar";
 import { BearLogo } from "@/components/bear-logo";
+import { NotificationBell } from "@/components/notification-bell";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +17,6 @@ import {
   Settings, 
   User as UserIcon, 
   LogOut, 
-  Bell, 
   Menu, 
   Home, 
   FileText, 
@@ -38,7 +38,7 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
   const { user, logout } = useAuth();
   const isMobile = useIsMobile();
   const [location] = useLocation();
-  const [notifications, setNotifications] = useState<number>(2); // 仮の通知数
+
 
   // getInitialsはutilsから使用
 
@@ -101,17 +101,7 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
               </div>
             </Link>
 
-            {/* 通知ボタン */}
-            <Link href="/notifications">
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                {notifications > 0 && (
-                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
-                    {notifications}
-                  </span>
-                )}
-              </Button>
-            </Link>
+
 
 
           </>
