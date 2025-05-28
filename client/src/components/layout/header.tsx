@@ -40,10 +40,9 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
   const isMobile = useIsMobile();
   const [location] = useLocation();
 
-  // ユーザーの最新ポイント情報を定期的に取得
-  const { data: currentUser } = useQuery<User>({
-    queryKey: ['/api/auth/me'],
-    refetchInterval: 5000, // 5秒ごとに更新（即座の楽観的更新も併用）
+  // ダッシュボード統計データを取得してポイント表示を統一
+  const { data: dashboardStats } = useQuery({
+    queryKey: ["/api/dashboard/stats"],
     enabled: !!user, // ユーザーがログインしている場合のみ実行
   });
 
@@ -93,7 +92,7 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
                 <span className="text-sm font-medium text-[#3990EA]">
-                  {user.weeklyPoints}pt/500pt
+                  {dashboardStats?.weekly?.currentPoints ?? user.weeklyPoints}pt/500pt
                 </span>
                 
                 {/* ツールチップ */}
