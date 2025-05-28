@@ -1,0 +1,187 @@
+
+chunk-RPCDYKBN.js?v=d0471f00:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:57 アプリ状態: 
+Object
+auth-context.tsx:120 🚀 認証初期化開始
+auth-context.tsx:32 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:150 📊 認証状態更新: 
+Object
+auth-context.tsx:120 🚀 認証初期化開始
+auth-context.tsx:32 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:150 📊 認証状態更新: 
+Object
+auth-context.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:127 🎯 認証初期化完了: 阿部倉 怜
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+notification-bell.tsx:53 📨 通知データ取得開始（ベルコンポーネント）
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:42 API GET リクエスト: /api/users データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+App.tsx:57 アプリ状態: 
+Object
+auth-context.tsx:150 📊 認証状態更新: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+auth-context.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:127 🎯 認証初期化完了: 阿部倉 怜
+auth-context.tsx:150 📊 認証状態更新: 
+Object
+notification-bell.tsx:62 📨 通知データ取得完了（ベルコンポーネント）: 
+Array(1)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+queryClient.ts:42 API GET リクエスト: /api/dashboard/stats データなし
+App.tsx:57 アプリ状態: 
+Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:42 API GET リクエスト: /api/users データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+App.tsx:57 アプリ状態: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+2
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+Object
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:42 API POST リクエスト: /api/cards/200/likes データなし
+home.tsx:670 🎯 URLパラメータチェック: 
+Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング

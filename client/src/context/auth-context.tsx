@@ -11,6 +11,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   refreshUser: () => Promise<void>;
+  updateUser: (updatedUser: User) => void;
 }
 
 // 認証コンテキストの作成
@@ -155,6 +156,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     });
   }, [user, isLoading, error]);
 
+  // ユーザー情報を更新する関数
+  const updateUser = (updatedUser: User) => {
+    setUser(updatedUser);
+    console.log('🔄 ユーザー情報更新:', updatedUser.name, 'ポイント:', updatedUser.weeklyPoints);
+  };
+
   const contextValue: AuthContextType = {
     user,
     isAuthenticated: !!user,
@@ -163,6 +170,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     logout,
     refreshUser,
+    updateUser,
   };
 
   return (

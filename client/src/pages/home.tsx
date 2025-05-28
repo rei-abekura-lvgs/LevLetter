@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CardWithRelations, User } from "@shared/schema";
+import { useAuth } from "@/context/auth-context";
 import { useSearch } from "@/hooks/useSearch";
 import { Button } from "@/components/ui/button";
 import {
@@ -317,17 +318,19 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                       });
                     });
                     
-                    // ヘッダーのポイント表示も即座に更新
-                    queryClient.setQueryData(['/api/auth/me'], (oldUser: any) => {
-                      if (!oldUser) return oldUser;
-                      console.log('楽観的更新前のポイント:', oldUser.weeklyPoints);
-                      const newUser = {
-                        ...oldUser,
-                        weeklyPoints: Math.max(0, oldUser.weeklyPoints - 2)
-                      };
-                      console.log('楽観的更新後のポイント:', newUser.weeklyPoints);
-                      return newUser;
-                    });
+                    // ヘッダーのポイント表示も即座に更新（認証コンテキストのユーザー情報を更新）
+                    console.log('楽観的更新前のポイント:', currentUser.weeklyPoints);
+                    const updatedUser = {
+                      ...currentUser,
+                      weeklyPoints: Math.max(0, currentUser.weeklyPoints - 2)
+                    };
+                    console.log('楽観的更新後のポイント:', updatedUser.weeklyPoints);
+                    
+                    // 認証コンテキストのユーザー情報を直接更新してヘッダーを即座に更新
+                    updateUser(updatedUser);
+                    
+                    // クエリキャッシュも更新
+                    queryClient.setQueryData(['/api/auth/me'], updatedUser);
                   };
                   
                   // 即座にUIを更新
