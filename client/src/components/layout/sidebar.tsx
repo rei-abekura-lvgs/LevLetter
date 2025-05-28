@@ -132,7 +132,7 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
                 <span className="text-xs font-bold text-gray-800">LevLetter</span>
               </div>
               <p className="text-xs text-gray-600 leading-relaxed mb-2">
-                社内コミュニケーションを促進するフィードバックカード
+                感謝の気持ちを伝え、チームワークを育む
               </p>
               <p className="text-xs text-gray-500">
                 © 2025 LevLetter. All rights reserved.
