@@ -9,7 +9,7 @@ import {
   type CardWithRelations
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, asc, sql, gte, or, not } from "drizzle-orm";
+import { eq, and, desc, asc, sql, gte, or, not, inArray } from "drizzle-orm";
 import * as crypto from "crypto";
 
 const DEFAULT_AVATAR_COLORS = [
