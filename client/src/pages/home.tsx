@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CardWithRelations, User } from "@shared/schema";
+import { useSearch } from "@/hooks/useSearch";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -585,55 +586,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [filterValue, setFilterValue] = useState<string>("");
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState<{type: 'person' | 'department', value: string} | null>(null);
-  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
-  
-  // 日本語名をローマ字に変換する汎用関数
-  const convertToRomaji = (name: string): string => {
-    if (!name) return '';
-    
-    // 基本的な漢字→ローマ字変換マッピング
-    return name
-      .replace(/阿部倉/g, 'abekura')
-      .replace(/怜/g, 'rei')
-      .replace(/田中/g, 'tanaka')
-      .replace(/佐藤/g, 'sato')
-      .replace(/鈴木/g, 'suzuki')
-      .replace(/高橋/g, 'takahashi')
-      .replace(/山田/g, 'yamada')
-      .replace(/小林/g, 'kobayashi')
-      .replace(/加藤/g, 'kato')
-      .replace(/吉田/g, 'yoshida')
-      .replace(/山本/g, 'yamamoto')
-      .replace(/中村/g, 'nakamura')
-      .replace(/小川/g, 'ogawa')
-      .replace(/斎藤/g, 'saito')
-      .replace(/松本/g, 'matsumoto')
-      .replace(/井上/g, 'inoue')
-      .replace(/木村/g, 'kimura')
-      .replace(/林/g, 'hayashi')
-      .replace(/清水/g, 'shimizu')
-      .replace(/山口/g, 'yamaguchi')
-      .replace(/森/g, 'mori')
-      .replace(/太郎/g, 'taro')
-      .replace(/次郎/g, 'jiro')
-      .replace(/三郎/g, 'saburo')
-      .replace(/花子/g, 'hanako')
-      .replace(/美香/g, 'mika')
-      .replace(/真一/g, 'shinichi')
-      .replace(/健太/g, 'kenta')
-      .replace(/優/g, 'yu')
-      .replace(/翔/g, 'sho')
-      .replace(/愛/g, 'ai')
-      .replace(/恵/g, 'megumi')
-      .replace(/修/g, 'osamu')
-      .replace(/聡/g, 'satoshi')
-      .replace(/誠/g, 'makoto')
-      .replace(/牧野/g, 'makino')
-      .replace(/康太/g, 'kota');
-  };
+
   const { toast } = useToast();
   
   // 既読カードIDを管理（localStorageに保存）
@@ -673,16 +626,26 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     refetchInterval: 30000,
   });
 
-  // 全ユーザーデータを取得して検索用に使用
+  // 全ユーザーデータを取得
   const { data: allUsers = [] } = useQuery<User[]>({
     queryKey: ['/api/users'],
   });
 
-  // 部署のユニークリストを生成（カードから）
-  const uniqueDepartments = [...new Set(cards.flatMap(card => {
-    const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-    return allUsers.map(user => user.department).filter(Boolean);
-  }))].sort();
+  // 検索機能のカスタムフック
+  const {
+    filterValue,
+    setFilterValue,
+    searchOpen,
+    setSearchOpen,
+    selectedFilter,
+    selectedDepartment,
+    uniqueDepartments,
+    searchableUsers,
+    departmentMembers,
+    clearFilters,
+    applyPersonFilter,
+    applyDepartmentFilter,
+  } = useSearch(allUsers);
 
   // 各タブの通知数を計算（重要な通知のみ目立たせる）
   const getTabCounts = () => {
