@@ -1023,37 +1023,36 @@ export class DatabaseStorage implements IStorage {
         })
       );
 
-      // いいね送信先ランキング（自分がいいねした相手のランキング）
-      const sentLikesData = await db
+      // いいね送信先ランキング（自分がいいねしたカードのユーザーランキング）
+      const sentLikesQuery = db
         .select({
-          targetUserId: sql<number>`
-            CASE 
-              WHEN cards.sender_id = ${userId} THEN cards.recipient_id
-              WHEN cards.recipient_id = ${userId} THEN cards.sender_id
-              ELSE NULL 
-            END
-          `.as('targetUserId'),
-          count: sql<number>`count(*)`.as('count')
+          cardId: likes.cardId,
+          senderId: cards.senderId,
+          recipientId: cards.recipientId
         })
         .from(likes)
         .innerJoin(cards, eq(likes.cardId, cards.id))
-        .where(and(
-          eq(likes.userId, userId),
-          sql`CASE 
-            WHEN cards.sender_id = ${userId} THEN cards.recipient_id
-            WHEN cards.recipient_id = ${userId} THEN cards.sender_id
-            ELSE NULL 
-          END IS NOT NULL`
-        ))
-        .groupBy(sql`
-          CASE 
-            WHEN cards.sender_id = ${userId} THEN cards.recipient_id
-            WHEN cards.recipient_id = ${userId} THEN cards.sender_id
-            ELSE NULL 
-          END
-        `)
-        .orderBy(desc(sql`count(*)`))
-        .limit(10);
+        .where(eq(likes.userId, userId));
+
+      const sentLikesResults = await sentLikesQuery;
+      
+      // いいねした相手を集計（送信者と受信者両方）
+      const sentLikesCount: Record<number, number> = {};
+      for (const like of sentLikesResults) {
+        // 自分以外の関係者をカウント
+        if (like.senderId !== userId) {
+          sentLikesCount[like.senderId] = (sentLikesCount[like.senderId] || 0) + 1;
+        }
+        if (like.recipientId !== userId) {
+          sentLikesCount[like.recipientId] = (sentLikesCount[like.recipientId] || 0) + 1;
+        }
+      }
+
+      // トップ10を抽出
+      const sentLikesData = Object.entries(sentLikesCount)
+        .map(([userId, count]) => ({ targetUserId: parseInt(userId), count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10);
 
       // いいね受信元ランキング（自分のカードにいいねした人のランキング）
       const receivedLikesData = await db
