@@ -351,42 +351,108 @@ const CardItem = ({ card, currentUser, onRefresh }: { card: CardWithRelations, c
 
 
 
-      {/* いいね詳細ダイアログ */}
+      {/* カード詳細ダイアログ */}
       <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>いいね詳細</DialogTitle>
+            <DialogTitle>カード詳細</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            {likeDetails && Array.isArray(likeDetails) && likeDetails.length > 0 ? (
-              likeDetails.map((like: any, index: number) => (
-                <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                  <Avatar className="h-8 w-8">
+          
+          <Tabs defaultValue="sender" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="sender">送信者</TabsTrigger>
+              <TabsTrigger value="recipients">受信者</TabsTrigger>
+              <TabsTrigger value="likes">いいね</TabsTrigger>
+            </TabsList>
+            
+            {/* 送信者情報 */}
+            <TabsContent value="sender" className="space-y-4">
+              <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage 
+                    src={card.sender.customAvatarUrl || bearAvatarUrl} 
+                    alt={card.sender.displayName || card.sender.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback style={{ backgroundColor: card.sender.avatarColor }}>
+                    {(card.sender.displayName || card.sender.name).charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <p className="font-medium text-lg">{card.sender.displayName || card.sender.name}</p>
+                  <p className="text-sm text-gray-500">{card.sender.department}</p>
+                  <p className="text-xs text-gray-400">{card.sender.email}</p>
+                </div>
+              </div>
+              <div className="text-sm text-gray-600">
+                <p><strong>送信日時:</strong> {format(new Date(card.createdAt), "yyyy年M月d日 HH:mm", { locale: ja })}</p>
+              </div>
+            </TabsContent>
+            
+            {/* 受信者情報 */}
+            <TabsContent value="recipients" className="space-y-4">
+              {allRecipients.map((recipient: any, index: number) => (
+                <div key={recipient.id} className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+                  <Avatar className="h-10 w-10">
                     <AvatarImage 
-                      src={like.user.customAvatarUrl || bearAvatarUrl} 
-                      alt={like.user.displayName || like.user.name}
+                      src={recipient.customAvatarUrl || bearAvatarUrl} 
+                      alt={recipient.displayName || recipient.name}
                       className="object-cover"
                     />
-                    <AvatarFallback style={{ backgroundColor: like.user.avatarColor }}>
-                      {(like.user.displayName || like.user.name || "?").charAt(0)}
+                    <AvatarFallback style={{ backgroundColor: recipient.avatarColor }}>
+                      {(recipient.displayName || recipient.name).charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <div className="text-sm font-medium">{like.user.displayName || like.user.name}</div>
-                    <div className="text-xs text-gray-500">{like.user.department}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-medium text-pink-600">{like.count}回</div>
-                    <div className="text-xs text-gray-500">{like.count * 2}pt</div>
+                    <p className="font-medium">{recipient.displayName || recipient.name}</p>
+                    <p className="text-sm text-gray-500">{recipient.department}</p>
+                    <p className="text-xs text-gray-400">{recipient.email}</p>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-500 py-4">
-                いいねがありません
-              </div>
-            )}
-          </div>
+              ))}
+              {allRecipients.length === 0 && (
+                <p className="text-gray-500 text-center py-4">受信者情報がありません</p>
+              )}
+            </TabsContent>
+            
+            {/* いいね情報 */}
+            <TabsContent value="likes" className="space-y-4">
+              {likeDetails && Array.isArray(likeDetails) && likeDetails.length > 0 ? (
+                likeDetails.map((like: any, index: number) => (
+                  <div key={index} className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage 
+                        src={like.user.customAvatarUrl || bearAvatarUrl} 
+                        alt={like.user.displayName || like.user.name}
+                        className="object-cover"
+                      />
+                      <AvatarFallback style={{ backgroundColor: like.user.avatarColor }}>
+                        {(like.user.displayName || like.user.name || "?").charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <p className="font-medium">{like.user.displayName || like.user.name}</p>
+                      <p className="text-sm text-gray-500">{like.user.department}</p>
+                      <p className="text-xs text-gray-400">{like.user.email}</p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Heart className="h-4 w-4 text-pink-500 fill-current" />
+                      <span className="text-sm font-medium">{like.count}回</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 text-center py-4">まだいいねがありません</p>
+              )}
+              {totalLikes > 0 && (
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                  <p className="text-sm text-blue-700">
+                    <strong>合計いいね数:</strong> {totalLikes}回
+                  </p>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
 
