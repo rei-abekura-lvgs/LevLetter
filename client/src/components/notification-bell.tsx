@@ -125,6 +125,14 @@ export function NotificationBell() {
     }
   };
 
+  // 個別の通知を既読にする処理
+  const handleMarkAsRead = (notificationId: string | number) => {
+    const id = String(notificationId);
+    const newClearedNotifications = new Set(Array.from(clearedNotifications).concat([id]));
+    setClearedNotifications(newClearedNotifications);
+    localStorage.setItem('clearedNotifications', JSON.stringify(Array.from(newClearedNotifications)));
+  };
+
   // すべての通知を削除する処理（ローカルストレージベース）
   const clearAllNotifications = () => {
     console.log("🗑️ すべての通知を削除開始");
@@ -243,7 +251,7 @@ export function NotificationBell() {
               <NotificationItem
                 key={notification.id}
                 notification={notification}
-                isRead={clearedNotifications.has(notification.id)}
+                isRead={clearedNotifications.has(String(notification.id))}
                 onMarkAsRead={() => handleMarkAsRead(notification.id)}
                 onClick={() => handleNotificationClick(notification)}
               />

@@ -28,7 +28,7 @@ export default function RightSidebar({ user }: RightSidebarProps) {
   const today = new Date().toDateString();
   
   // 今日送信したカード数を計算
-  const todaySentCards = cards?.filter((card: any) => 
+  const todaySentCards = (cards as any[])?.filter((card: any) => 
     card.senderId === user.id && 
     new Date(card.createdAt).toDateString() === today
   ).length || 0;
@@ -37,7 +37,7 @@ export default function RightSidebar({ user }: RightSidebarProps) {
   const todayLikes = Math.floor(todaySentCards * 1.5);
 
   // 最近のカードをアクティビティとして表示（最新5件）
-  const recentActivities = cards?.slice(0, 5).map((card: any) => ({
+  const recentActivities = (cards as any[])?.slice(0, 5).map((card: any) => ({
     message: `${card.sender?.name}さんが${card.recipient?.name}さんにカードを送信`,
     time: new Date(card.createdAt).toLocaleString('ja-JP', {
       month: 'short',

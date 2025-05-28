@@ -63,9 +63,7 @@ export default function NotificationPage() {
 
   const markAsRead = async (notificationId: number) => {
     try {
-      await apiRequest(`/api/notifications/${notificationId}/read`, {
-        method: 'PATCH',
-      });
+      await apiRequest(`/api/notifications/${notificationId}/read`, 'PATCH');
       
       queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
       toast({ title: "通知を既読にしました" });
@@ -81,9 +79,7 @@ export default function NotificationPage() {
 
   const markAllAsRead = async () => {
     try {
-      await apiRequest('/api/notifications/mark-all-read', {
-        method: 'PATCH',
-      });
+      await apiRequest('/api/notifications/mark-all-read', 'PATCH');
       
       queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
       toast({ title: "すべての通知を既読にしました" });

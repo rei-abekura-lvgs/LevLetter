@@ -203,7 +203,7 @@ export default function CardForm({ onSent }: CardFormProps) {
         recipientType: "user",
         message: data.message,
         points: data.points, // ポイントを追加
-        public: true, // すべて公開に設定
+
         additionalRecipients: additionalRecipientIds.length > 0 ? additionalRecipientIds : undefined
       });
       
