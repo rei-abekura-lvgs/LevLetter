@@ -6,6 +6,7 @@ import { BearAvatar } from "@/components/ui/bear-avatar";
 import { BearLogo } from "@/components/bear-logo";
 import { NotificationBell } from "@/components/notification-bell";
 import { useQuery } from "@tanstack/react-query";
+import { DashboardStats } from "@/types/common";
 import {
   DropdownMenu,
   DropdownMenuContent,

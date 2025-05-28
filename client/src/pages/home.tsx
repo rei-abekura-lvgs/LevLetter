@@ -7,6 +7,7 @@ import { useOptimisticUpdates } from "@/hooks/use-optimistic-updates";
 import { CardList } from "@/components/card-list";
 import { TabNavigation } from "@/components/tab-navigation";
 import { FilterControls } from "@/components/filter-controls";
+import { TabType, SortOrder, TabCounts } from "@/types/common";
 import { Button } from "@/components/ui/button";
 import {
   Select,
