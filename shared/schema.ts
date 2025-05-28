@@ -20,7 +20,7 @@ export const users = pgTable("users", {
   password: text("password"),
   cognitoSub: text("cognito_sub").unique(),
   googleId: text("google_id").unique(),
-  employeeId: text("employee_id").unique(), // 従業員番号（既存ユーザーはnull許容）
+  employeeId: text("employee_id"), // 従業員番号（既存ユーザーはnull許容）
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
@@ -49,7 +49,29 @@ export const likes = pgTable("likes", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// 部署テーブル（後で新しい構造に移行予定）
+// 5階層組織構造テーブル（本部・部・グループ・チーム・ユニット）
+export const organizationHierarchy = pgTable("organization_hierarchy", {
+  id: serial("id").primaryKey(),
+  level: integer("level").notNull(), // 1:本部, 2:部, 3:グループ, 4:チーム, 5:ユニット
+  name: text("name").notNull(),
+  code: text("code"), // 組織コード
+  parentId: integer("parent_id").references(() => organizationHierarchy.id), // 親組織への参照
+  description: text("description"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// ユーザー部署関連テーブル（複数部署対応）
+export const userDepartments = pgTable("user_departments", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  organizationId: integer("organization_id").notNull().references(() => organizationHierarchy.id),
+  isPrimary: boolean("is_primary").notNull().default(false), // 主たる所属部署
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// 部署テーブル（後方互換性のため残す）
 export const departments = pgTable("departments", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(), // 正式名称 (例: "情報システム部")
@@ -106,6 +128,17 @@ export const insertDepartmentSchema = createInsertSchema(departments).omit({
   createdAt: true
 });
 
+export const insertOrganizationSchema = createInsertSchema(organizationHierarchy).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+
+export const insertUserDepartmentSchema = createInsertSchema(userDepartments).omit({
+  id: true,
+  createdAt: true
+});
+
 // カスタムスキーマ
 export const loginSchema = z.object({
   email: z.string().email({ message: "有効なメールアドレスを入力してください" }),
@@ -151,6 +184,10 @@ export type TeamMember = typeof teamMembers.$inferSelect;
 export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
 export type Department = typeof departments.$inferSelect;
 export type InsertDepartment = z.infer<typeof insertDepartmentSchema>;
+export type OrganizationHierarchy = typeof organizationHierarchy.$inferSelect;
+export type InsertOrganization = z.infer<typeof insertOrganizationSchema>;
+export type UserDepartment = typeof userDepartments.$inferSelect;
+export type InsertUserDepartment = z.infer<typeof insertUserDepartmentSchema>;
 
 // カスタム型
 export type CardWithRelations = Card & {
