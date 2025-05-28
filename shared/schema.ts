@@ -49,10 +49,10 @@ export const likes = pgTable("likes", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
-// 5階層組織構造テーブル（本部・部・グループ・チーム・ユニット）
+// 6階層組織構造テーブル（会社・本部・部・グループ・チーム・ユニット）
 export const organizationHierarchy = pgTable("organization_hierarchy", {
   id: serial("id").primaryKey(),
-  level: integer("level").notNull(), // 1:本部, 2:部, 3:グループ, 4:チーム, 5:ユニット
+  level: integer("level").notNull(), // 1:会社, 2:本部, 3:部, 4:グループ, 5:チーム, 6:ユニット
   name: text("name").notNull(),
   code: text("code"), // 組織コード
   parentId: integer("parent_id").references(() => organizationHierarchy.id), // 親組織への参照
