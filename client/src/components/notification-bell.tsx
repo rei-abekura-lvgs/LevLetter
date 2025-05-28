@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Bell, Mail, Heart, Clock } from "lucide-react";
+import { Bell, Mail, Heart, Clock, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
 import { ja } from "date-fns/locale";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface Notification {
   id: number;
@@ -63,13 +65,46 @@ export function NotificationBell() {
     unreadCount 
   });
 
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
   // 通知をクリックしたときの処理
   const handleNotificationClick = (notification: Notification) => {
+    console.log("🔔 通知クリック:", notification);
     if (notification.relatedCardId) {
+      console.log(`🎯 カード${notification.relatedCardId}にジャンプ開始`);
       // カードが存在する場合、ホームページに移動してカードにスクロール
       setLocation(`/?cardId=${notification.relatedCardId}`);
     }
   };
+
+  // すべての通知を削除する処理
+  const clearAllNotificationsMutation = useMutation({
+    mutationFn: async () => {
+      console.log("🗑️ すべての通知を削除開始");
+      const response = await apiRequest("/api/notifications/clear-all", {
+        method: "POST"
+      });
+      return response;
+    },
+    onSuccess: () => {
+      console.log("✅ すべての通知を削除完了");
+      // 通知データをリフレッシュ
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
+      toast({
+        title: "通知を削除しました",
+        description: "すべての通知が削除されました",
+      });
+    },
+    onError: (error) => {
+      console.error("❌ 通知削除エラー:", error);
+      toast({
+        title: "エラー",
+        description: "通知の削除に失敗しました",
+        variant: "destructive",
+      });
+    }
+  });
 
   // 通知の表示テキストを短縮
   const truncateMessage = (message: string, maxLength: number = 40) => {
@@ -155,10 +190,15 @@ export function NotificationBell() {
             ))}
             
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/notifications" className="w-full text-center py-2 text-blue-600 hover:text-blue-800">
-                すべての通知を見る
-              </Link>
+            <DropdownMenuItem
+              className="w-full text-center py-2 text-red-600 hover:text-red-800 hover:bg-red-50"
+              onClick={() => clearAllNotificationsMutation.mutate()}
+              disabled={clearAllNotificationsMutation.isPending}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <Trash2 className="h-4 w-4" />
+                {clearAllNotificationsMutation.isPending ? "削除中..." : "すべての通知を消す"}
+              </div>
             </DropdownMenuItem>
           </>
         )}
