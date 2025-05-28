@@ -50,7 +50,8 @@ export default function MainLayout({ children, onCardFormOpen }: MainLayoutProps
                 {children}
               </main>
               
-              <Footer />
+              {/* モバイル時のみフッター表示 */}
+              {isMobile && <Footer />}
             </div>
           </div>
         </div>
