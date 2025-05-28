@@ -273,7 +273,6 @@ export default function UserManagement() {
                     </TableHead>
                     <TableHead>名前</TableHead>
                     <TableHead>メールアドレス</TableHead>
-                    <TableHead>会社</TableHead>
                     <TableHead>本部</TableHead>
                     <TableHead>部</TableHead>
                     <TableHead>グループ</TableHead>
@@ -317,9 +316,6 @@ export default function UserManagement() {
                         )}
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
-                      <TableCell className="text-xs">
-                        {(user as any).organizationLevel1 || "-"}
-                      </TableCell>
                       <TableCell className="text-xs">
                         {(user as any).organizationLevel2 || "-"}
                       </TableCell>
