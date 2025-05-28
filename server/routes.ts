@@ -800,7 +800,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         newUsers: 0,
         updatedUsers: 0,
+        newOrganizations: 0,
         errors: [] as string[]
+      };
+
+      // 組織階層データを同時に更新する関数
+      const updateOrganizationHierarchy = async (employee: any) => {
+        try {
+          // CSVから組織階層データを抽出（6レベル）
+          const levels = [
+            employee['所属階層１'] || null, // レベル1: 会社
+            employee['所属階層２'] || null, // レベル2: 本部
+            employee['所属階層３'] || null, // レベル3: 部
+            employee['所属階層４'] || null, // レベル4: グループ
+            employee['所属階層５'] || null, // レベル5: チーム
+            employee['所属階層６'] || null  // レベル6: ユニット
+          ];
+
+          let parentId: number | null = null;
+
+          // 各レベルを順番に処理して組織階層を構築
+          for (let i = 0; i < levels.length; i++) {
+            const levelName = levels[i];
+            if (!levelName || levelName.trim() === '') continue;
+
+            const level = i + 1;
+            
+            // 既存の組織を検索
+            const existingOrg = await storage.findOrganizationByNameAndParent(levelName, parentId);
+            
+            if (!existingOrg) {
+              // 新しい組織を作成
+              const newOrg = await storage.createOrganization({
+                level,
+                name: levelName,
+                parent_id: parentId,
+                is_active: true,
+                code: null
+              });
+              parentId = newOrg.id;
+              results.newOrganizations++;
+            } else {
+              parentId = existingOrg.id;
+            }
+          }
+        } catch (orgError) {
+          console.error(`組織階層更新エラー(${employee.email}):`, orgError);
+          // 組織階層の更新エラーは非致命的として処理を続行
+        }
       };
 
       for (const employee of employees) {
@@ -817,11 +864,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
             continue;
           }
 
+          // 組織階層データを更新
+          await updateOrganizationHierarchy(employee);
+
           // 既存ユーザーの確認
           const existingUser = await storage.getUserByEmail(employee.email);
           
           // 部署情報の設定（未設定の場合は"その他"）
-          const department = employee.department || "その他";
+          const department = employee.department || employee['所属階層３'] || "その他";
           
           if (existingUser) {
             // 既存ユーザーの更新（パスワードは維持）
