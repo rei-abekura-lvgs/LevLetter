@@ -20,6 +20,19 @@ import {
   likeFormSchema
 } from "@shared/schema";
 
+// 週次ポイントリセットミドルウェア
+const weeklyPointsResetMiddleware = async (req: Request, res: Response, next: Function) => {
+  try {
+    // 週次ポイントリセットを確認・実行
+    await storage.resetWeeklyPointsIfNeeded();
+    next();
+  } catch (error) {
+    console.error("週次ポイントリセットエラー:", error);
+    // エラーが発生してもリクエストを継続
+    next();
+  }
+};
+
 // 認証ミドルウェア
 const authenticate = async (req: Request, res: Response, next: Function) => {
   console.log("🔐 認証チェック開始");

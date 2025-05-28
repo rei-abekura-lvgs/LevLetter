@@ -967,4 +967,51 @@ export class DatabaseStorage implements IStorage {
       .delete(likes)
       .where(eq(likes.id, id));
   }
+
+  // 週次ポイントリセット機能（月曜日実行）
+  async resetWeeklyPointsIfNeeded(): Promise<void> {
+    try {
+      const now = new Date();
+      const monday = new Date(now);
+      
+      // 今週の月曜日を計算
+      const dayOfWeek = now.getDay();
+      const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // 日曜日の場合は6日前
+      monday.setDate(now.getDate() - daysFromMonday);
+      monday.setHours(0, 0, 0, 0);
+
+      console.log(`📅 週次ポイントリセット確認: 今週の月曜日 = ${monday.toISOString()}`);
+
+      // まだリセットしていないユーザーを確認
+      const usersToReset = await db
+        .select()
+        .from(users)
+        .where(
+          sql`${users.lastWeeklyPointsReset} IS NULL OR ${users.lastWeeklyPointsReset} < ${monday}`
+        );
+
+      if (usersToReset.length > 0) {
+        console.log(`💰 ${usersToReset.length}人のユーザーの週次ポイントをリセット中...`);
+
+        // バッチでポイントリセット
+        await db
+          .update(users)
+          .set({
+            weeklyPoints: 500,
+            weeklyPointsReceived: 0,
+            lastWeeklyPointsReset: now
+          })
+          .where(
+            sql`${users.lastWeeklyPointsReset} IS NULL OR ${users.lastWeeklyPointsReset} < ${monday}`
+          );
+
+        console.log(`✅ 週次ポイントリセット完了: ${usersToReset.length}人`);
+      } else {
+        console.log(`ℹ️ 今週はすでにポイントリセット済み`);
+      }
+    } catch (error) {
+      console.error("週次ポイントリセットエラー:", error);
+      throw error;
+    }
+  }
 }
