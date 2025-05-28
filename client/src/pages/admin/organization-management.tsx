@@ -26,11 +26,12 @@ interface OrganizationHierarchy {
 }
 
 const LEVEL_NAMES = {
-  1: "本部",
-  2: "部",
-  3: "グループ",
-  4: "チーム",
-  5: "ユニット"
+  1: "会社",
+  2: "本部",
+  3: "部",
+  4: "グループ",
+  5: "チーム",
+  6: "ユニット"
 };
 
 const LEVEL_COLORS = {
@@ -38,7 +39,8 @@ const LEVEL_COLORS = {
   2: "bg-orange-100 text-orange-800", 
   3: "bg-yellow-100 text-yellow-800",
   4: "bg-green-100 text-green-800",
-  5: "bg-blue-100 text-blue-800"
+  5: "bg-blue-100 text-blue-800",
+  6: "bg-purple-100 text-purple-800"
 };
 
 interface OrganizationFormData {
