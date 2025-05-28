@@ -316,6 +316,15 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                         return oldCard;
                       });
                     });
+                    
+                    // ヘッダーのポイント表示も即座に更新
+                    queryClient.setQueryData(['/api/auth/me'], (oldUser: any) => {
+                      if (!oldUser) return oldUser;
+                      return {
+                        ...oldUser,
+                        weeklyPoints: Math.max(0, oldUser.weeklyPoints - 2)
+                      };
+                    });
                   };
                   
                   // 即座にUIを更新
@@ -325,8 +334,10 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                     await apiRequest('POST', `/api/cards/${card.id}/likes`);
                     // サーバーからの正確なデータで更新
                     onRefresh?.();
-                    // ユーザー情報のキャッシュも無効化してポイント表示を更新
+                    // ヘッダーのポイント表示を即座に更新
                     queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+                    // ヘッダーのポイント情報を強制的にリフェッチして即座に更新
+                    queryClient.refetchQueries({ queryKey: ['/api/auth/me'] });
                     toast({ 
                       title: "いいねしました！✨", 
                       description: "2pt使用しました",
@@ -345,7 +356,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                 }}
                 disabled={totalLikes >= 50 || !canLike}
               >
-                <Heart className={`h-4 w-4 transition-all duration-200 ${userHasLiked ? 'fill-current animate-pulse' : ''}`} />
+                <Heart className={`h-4 w-4 transition-all duration-200 ${userHasLiked ? 'fill-current' : ''}`} />
                 {totalLikes > 0 && (
                   <span className="text-xs font-medium ml-1">
                     {totalLikes}
