@@ -75,10 +75,7 @@ export default function OrganizationManagement() {
 
   // 組織作成・更新
   const createMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("/api/admin/organizations", {
-      method: "POST",
-      body: JSON.stringify(data)
-    }),
+    mutationFn: (data: any) => apiRequest("POST", "/api/admin/organizations", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/organizations"] });
       resetForm();
@@ -88,10 +85,7 @@ export default function OrganizationManagement() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: any }) => 
-      apiRequest(`/api/admin/organizations/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(data)
-      }),
+      apiRequest("PUT", `/api/admin/organizations/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/organizations"] });
       resetForm();
@@ -100,9 +94,7 @@ export default function OrganizationManagement() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => apiRequest(`/api/admin/organizations/${id}`, {
-      method: "DELETE"
-    }),
+    mutationFn: (id: number) => apiRequest("DELETE", `/api/admin/organizations/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/organizations"] });
       toast({ title: "組織を削除しました" });
@@ -111,10 +103,7 @@ export default function OrganizationManagement() {
 
   // 一括インポート
   const importMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("/api/admin/organizations/import", {
-      method: "POST",
-      body: JSON.stringify(data)
-    }),
+    mutationFn: (data: any) => apiRequest("POST", "/api/admin/organizations/import", data),
     onSuccess: (result: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/organizations"] });
       setImportData("");
