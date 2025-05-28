@@ -82,9 +82,7 @@ export function NotificationBell() {
   const clearAllNotificationsMutation = useMutation({
     mutationFn: async () => {
       console.log("🗑️ すべての通知を削除開始");
-      const response = await apiRequest("/api/notifications/clear-all", {
-        method: "POST"
-      });
+      const response = await apiRequest("POST", "/api/notifications/clear-all");
       return response;
     },
     onSuccess: () => {
