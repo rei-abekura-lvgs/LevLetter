@@ -1200,4 +1200,60 @@ export class DatabaseStorage implements IStorage {
       throw error;
     }
   }
+
+  // 通知機能: 受信したカードを取得
+  async getReceivedCards(userId: number, limit: number = 10) {
+    console.log(`📨 getReceivedCards開始 - ユーザーID: ${userId}, 制限: ${limit}`);
+    try {
+      const receivedCards = await db
+        .select({
+          id: cards.id,
+          message: cards.message,
+          createdAt: cards.createdAt,
+          senderId: cards.senderId,
+          senderName: users.name,
+          senderDisplayName: users.displayName
+        })
+        .from(cards)
+        .leftJoin(users, eq(cards.senderId, users.id))
+        .where(eq(cards.recipientId, userId))
+        .orderBy(desc(cards.createdAt))
+        .limit(limit);
+
+      console.log(`📨 getReceivedCards完了 - ${receivedCards.length}件取得`);
+      return receivedCards;
+    } catch (error) {
+      console.error('❌ getReceivedCards エラー:', error);
+      throw error;
+    }
+  }
+
+  // 通知機能: 受信したいいねを取得
+  async getReceivedLikes(userId: number, limit: number = 10) {
+    console.log(`❤️ getReceivedLikes開始 - ユーザーID: ${userId}, 制限: ${limit}`);
+    try {
+      const receivedLikes = await db
+        .select({
+          id: likes.id,
+          createdAt: likes.createdAt,
+          cardId: likes.cardId,
+          userId: likes.userId,
+          userName: users.name,
+          userDisplayName: users.displayName,
+          cardMessage: cards.message
+        })
+        .from(likes)
+        .leftJoin(users, eq(likes.userId, users.id))
+        .leftJoin(cards, eq(likes.cardId, cards.id))
+        .where(eq(cards.recipientId, userId))
+        .orderBy(desc(likes.createdAt))
+        .limit(limit);
+
+      console.log(`❤️ getReceivedLikes完了 - ${receivedLikes.length}件取得`);
+      return receivedLikes;
+    } catch (error) {
+      console.error('❌ getReceivedLikes エラー:', error);
+      throw error;
+    }
+  }
 }

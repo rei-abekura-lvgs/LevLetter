@@ -1490,27 +1490,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`📨 ユーザーID ${currentUser.id} の通知を取得中...`);
       
-      // 簡単な通知実装：受信したカードを通知として表示
-      const receivedCards = await storage.getReceivedCards(currentUser.id);
+      // 受信したカードを取得
+      const receivedCards = await storage.getReceivedCards(currentUser.id, 10);
       console.log(`📨 受信カード数: ${receivedCards.length}`);
       
-      const notifications = receivedCards.map((card, index) => ({
-        id: card.id,
+      // 受信したいいねを取得
+      const receivedLikes = await storage.getReceivedLikes(currentUser.id, 10);
+      console.log(`❤️ 受信いいね数: ${receivedLikes.length}`);
+      
+      // カード通知を作成
+      const cardNotifications = receivedCards.map((card) => ({
+        id: `card_${card.id}`,
         userId: currentUser.id,
-        type: 'new_card',
-        title: 'カードが届きました',
-        message: `${card.sender.name}さんからカードが届きました`,
+        type: 'new_card' as const,
+        message: `${card.senderDisplayName || card.senderName}さんからカードが届きました`,
         isRead: false,
         createdAt: card.createdAt.toISOString(),
         relatedCardId: card.id,
         relatedUser: {
-          id: card.sender.id,
-          name: card.sender.name,
-          displayName: card.sender.displayName,
-          customAvatarUrl: card.sender.customAvatarUrl,
-          avatarColor: card.sender.avatarColor
+          id: card.senderId,
+          name: card.senderName,
+          displayName: card.senderDisplayName
         }
       }));
+
+      // いいね通知を作成
+      const likeNotifications = receivedLikes.map((like) => ({
+        id: `like_${like.id}`,
+        userId: currentUser.id,
+        type: 'card_like' as const,
+        message: `${like.userDisplayName || like.userName}さんがあなたのカードにいいねしました`,
+        isRead: false,
+        createdAt: like.createdAt.toISOString(),
+        relatedCardId: like.cardId,
+        relatedUser: {
+          id: like.userId,
+          name: like.userName,
+          displayName: like.userDisplayName
+        }
+      }));
+
+      // 通知をマージして日時順でソート
+      const notifications = [...cardNotifications, ...likeNotifications]
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 20); // 最新20件まで
       
       console.log(`📨 通知データ作成完了: ${notifications.length}件`);
       res.json(notifications);
