@@ -746,8 +746,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     const receivedCards = cards.filter(card => {
       // additionalRecipientsが数値配列かユーザーオブジェクト配列かを判定
       const additionalRecipients = Array.isArray(card.additionalRecipients) 
-        ? card.additionalRecipients.map(item => 
-            typeof item === 'number' ? users?.find(u => u.id === item) : item
+        ? card.additionalRecipients.map((item: any) => 
+            typeof item === 'number' ? allUsers?.find((u: User) => u.id === item) : item
           ).filter(Boolean)
         : [];
       
@@ -789,8 +789,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const filteredCards = cards.filter((card) => {
     // additionalRecipientsが数値配列かユーザーオブジェクト配列かを判定
     const additionalRecipients = Array.isArray(card.additionalRecipients) 
-      ? card.additionalRecipients.map(item => 
-          typeof item === 'number' ? users?.find(u => u.id === item) : item
+      ? card.additionalRecipients.map((item: any) => 
+          typeof item === 'number' ? allUsers?.find((u: User) => u.id === item) : item
         ).filter(Boolean)
       : [];
     
@@ -915,8 +915,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             <CardItem 
               key={card.id} 
               card={card} 
-              currentUser={user} 
-              isUnread={isUnread}
+              currentUser={user}
             />
           );
         })}

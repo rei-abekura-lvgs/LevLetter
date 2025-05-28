@@ -191,7 +191,7 @@ export default function ProfileForm({ user, open, onOpenChange }: ProfileFormPro
       console.log("アップロード成功:", updatedUser);
       
       // 即座にユーザー情報を更新
-      queryClient.setQueryData(["/api/auth/me"], updatedUser.user);
+      queryClient.setQueryData(["/api/auth/me"], updatedUser);
       
       // 全てのキャッシュを更新して確実に反映させる
       queryClient.invalidateQueries({
