@@ -41,7 +41,7 @@ const authenticate = async (req: Request, res: Response, next: Function) => {
   console.log("📋 セッション全体:", JSON.stringify(req.session, null, 2));
   
   // セッションからユーザーIDを取得
-  const userId = req.session.userId;
+  const userId = (req.session as any).userId;
   console.log("👤 セッションから取得したユーザーID:", userId);
   
   if (!userId) {
@@ -162,7 +162,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log("🔄 新規ユーザー登録プロセス開始");
         
         // セッションにGoogle認証情報を一時保存
-        req.session.pendingGoogleAuth = {
+        (req.session as any).pendingGoogleAuth = {
           cognitoSub: cognitoUser.id,
           email: cognitoUser.email,
           name: cognitoUser.name,

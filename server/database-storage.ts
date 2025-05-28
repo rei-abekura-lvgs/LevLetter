@@ -715,7 +715,7 @@ export class DatabaseStorage implements IStorage {
           ...card,
           sender: sender!,
           recipient: recipient!,
-          additionalRecipients: additionalRecipientUsers || undefined,
+          additionalRecipients: additionalRecipientUsers?.map(u => u.id) || null,
           likes: cardLikes,
           totalPoints
         };
@@ -787,7 +787,7 @@ export class DatabaseStorage implements IStorage {
       ...card,
       sender: sender!,
       recipient: recipient!,
-      additionalRecipients: additionalRecipientUsers || undefined,
+      additionalRecipients: additionalRecipientUsers?.map(u => u.id) || null,
       likes: cardLikes,
       totalPoints
     };
@@ -796,7 +796,7 @@ export class DatabaseStorage implements IStorage {
   async createCard(insertCard: InsertCard): Promise<Card> {
     const [card] = await db
       .insert(cards)
-      .values(insertCard)
+      .values([insertCard])
       .returning();
     
     return card;
