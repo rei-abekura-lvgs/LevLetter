@@ -989,7 +989,7 @@ export class DatabaseStorage implements IStorage {
         .where(and(
           eq(cards.recipientId, userId),
           gte(cards.createdAt, thisMonthStart),
-          sql`${cards.createdAt} < ${nextMonthStart}`
+          lt(cards.createdAt, nextMonthStart)
         ));
 
       // 今月のカード送信数  
@@ -999,7 +999,7 @@ export class DatabaseStorage implements IStorage {
         .where(and(
           eq(cards.senderId, userId),
           gte(cards.createdAt, thisMonthStart),
-          sql`${cards.createdAt} < ${nextMonthStart}`
+          lt(cards.createdAt, nextMonthStart)
         ));
 
       // 今月の受信いいね数（自分のカードへのいいね）
@@ -1009,9 +1009,9 @@ export class DatabaseStorage implements IStorage {
         .innerJoin(cards, eq(likes.cardId, cards.id))
         .where(and(
           or(eq(cards.senderId, userId), eq(cards.recipientId, userId)),
-          sql`${likes.userId} != ${userId}`,
+          ne(likes.userId, userId),
           gte(likes.createdAt, thisMonthStart),
-          sql`${likes.createdAt} < ${nextMonthStart}`
+          lt(likes.createdAt, nextMonthStart)
         ));
 
       // 今月の送信いいね数
@@ -1021,7 +1021,7 @@ export class DatabaseStorage implements IStorage {
         .where(and(
           eq(likes.userId, userId),
           gte(likes.createdAt, thisMonthStart),
-          sql`${likes.createdAt} < ${nextMonthStart}`
+          lt(likes.createdAt, nextMonthStart)
         ));
 
       // 全期間の累計
@@ -1041,7 +1041,7 @@ export class DatabaseStorage implements IStorage {
         .innerJoin(cards, eq(likes.cardId, cards.id))
         .where(and(
           or(eq(cards.senderId, userId), eq(cards.recipientId, userId)),
-          sql`${likes.userId} != ${userId}`
+          ne(likes.userId, userId)
         ));
 
       const totalSentLikes = await db
