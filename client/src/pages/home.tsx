@@ -326,11 +326,20 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                     };
                     console.log('楽観的更新後のポイント:', updatedUser.weeklyPoints);
                     
-                    // 認証コンテキストのユーザー情報を直接更新してヘッダーを即座に更新
-                    // updateUser(updatedUser); // 一時的にコメントアウト
-                    
                     // クエリキャッシュも更新
                     queryClient.setQueryData(['/api/auth/me'], updatedUser);
+                    
+                    // ダッシュボードのキャッシュも同時に更新
+                    queryClient.setQueryData(['/api/dashboard/stats'], (oldStats: any) => {
+                      if (!oldStats) return oldStats;
+                      return {
+                        ...oldStats,
+                        weekly: {
+                          ...oldStats.weekly,
+                          currentPoints: Math.max(0, oldStats.weekly.currentPoints - 2)
+                        }
+                      };
+                    });
                   };
                   
                   // 即座にUIを更新
