@@ -189,7 +189,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // セッションにユーザーIDを保存
-      req.session.userId = user.id;
+      (req.session as any).userId = user.id;
       console.log("💾 セッション保存:", { userId: user.id, sessionId: req.sessionID });
       
       // ログイン成功メッセージと共にメインページにリダイレクト
@@ -204,7 +204,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Google認証の一時情報を取得
   app.get('/api/auth/google-pending', async (req: Request, res: Response) => {
     try {
-      const pendingAuth = req.session.pendingGoogleAuth;
+      const pendingAuth = (req.session as any).pendingGoogleAuth;
       if (!pendingAuth) {
         return res.status(404).json({ message: "Google認証情報が見つかりません" });
       }
@@ -217,7 +217,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // 認証関連API
-  app.post("/api/auth/login", async (req, res) => {
+  app.post("/api/auth/login", async (req: any, res: any) => {
     try {
       console.log("🔐 ログイン試行開始");
       console.log("📝 リクエストボディ:", JSON.stringify(req.body, null, 2));
