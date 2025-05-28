@@ -1,7 +1,7 @@
 import { User } from "@shared/schema";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/context/auth-context-new";
-import { Home, Settings, UserCircle, LogOut, Bell, BarChart3, Trophy, Shield } from "lucide-react";
+import { Home, Settings, UserCircle, LogOut, Bell, BarChart3, TrendingUp, Shield, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/auth";
 import { BearLogo } from "@/components/bear-logo";
@@ -30,6 +30,13 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
     await logout();
     window.location.href = "/login";
   };
+
+  // ナビゲーション項目
+  const navigationItems = [
+    { path: "/", icon: Home, label: "タイムライン" },
+    { path: "/dashboard", icon: BarChart3, label: "ダッシュボード" },
+    { path: "/ranking", icon: TrendingUp, label: "ランキング" }
+  ];
 
   return (
     <div className="w-64 border-r bg-white h-full p-4 flex flex-col">
