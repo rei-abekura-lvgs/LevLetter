@@ -1,0 +1,196 @@
+
+App.tsx:57 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/'}
+auth-context.tsx:121 🚀 認証初期化開始
+auth-context.tsx:33 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:151 📊 認証状態更新: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:121 🚀 認証初期化開始
+auth-context.tsx:33 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:151 📊 認証状態更新: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:46 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:128 🎯 認証初期化完了: 阿部倉 怜
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+notification-bell.tsx:53 📨 通知データ取得開始（ベルコンポーネント）
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:42 API GET リクエスト: /api/users データなし
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 0}
+App.tsx:57 アプリ状態: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, 現在のパス: '/'}
+auth-context.tsx:151 📊 認証状態更新: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+auth-context.tsx:46 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:128 🎯 認証初期化完了: 阿部倉 怜
+auth-context.tsx:151 📊 認証状態更新: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+notification-bell.tsx:62 📨 通知データ取得完了（ベルコンポーネント）: 
+[{…}]
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 0}
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 50}
+home.tsx:322 楽観的更新前のポイント: 390
+home.tsx:327 楽観的更新後のポイント: 388
+queryClient.ts:42 API POST リクエスト: /api/cards/332/likes データなし
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 50}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+home.tsx:322 楽観的更新前のポイント: 390
+home.tsx:327 楽観的更新後のポイント: 388
+queryClient.ts:42 API POST リクエスト: /api/cards/332/likes データなし
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 50}
+home.tsx:322 楽観的更新前のポイント: 390
+home.tsx:327 楽観的更新後のポイント: 388
+queryClient.ts:42 API POST リクエスト: /api/cards/332/likes データなし
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 50}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+home.tsx:322 楽観的更新前のポイント: 390
+home.tsx:327 楽観的更新後のポイント: 388
+queryClient.ts:42 API POST リクエスト: /api/cards/332/likes データなし
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 50}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+home.tsx:322 楽観的更新前のポイント: 390
+home.tsx:327 楽観的更新後のポイント: 388
+queryClient.ts:42 API POST リクエスト: /api/cards/332/likes データなし
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 50}
+home.tsx:322 楽観的更新前のポイント: 390
+home.tsx:327 楽観的更新後のポイント: 388
+queryClient.ts:42 API POST リクエスト: /api/cards/332/likes データなし
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 50}
+home.tsx:322 楽観的更新前のポイント: 390
+home.tsx:327 楽観的更新後のポイント: 388
+queryClient.ts:42 API POST リクエスト: /api/cards/332/likes データなし
+home.tsx:674 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 50}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Array.map (<anonymous>)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 1, unreadCount: 1}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
