@@ -341,7 +341,7 @@ export default function OrganizationManagement() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileUpload className="h-5 w-5" />
+                <Upload className="h-5 w-5" />
                 組織一括インポート
               </CardTitle>
             </CardHeader>
