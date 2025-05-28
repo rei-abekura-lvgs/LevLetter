@@ -1023,36 +1023,36 @@ export class DatabaseStorage implements IStorage {
         })
       );
 
-      // いいね送信先ランキング（自分がいいねしたカードのユーザーランキング）
-      const sentLikesQuery = db
+      // いいね送信先ランキング（自分がいいねしたカードの送信者・受信者ランキング）
+      const sentLikesData = await db
         .select({
-          cardId: likes.cardId,
-          senderId: cards.senderId,
-          recipientId: cards.recipientId
+          targetUserId: sql<number>`
+            CASE 
+              WHEN ${cards.senderId} = ${userId} THEN ${cards.recipientId}
+              ELSE ${cards.senderId}
+            END
+          `.as('targetUserId'),
+          count: sql<number>`count(*)`.as('count')
         })
         .from(likes)
         .innerJoin(cards, eq(likes.cardId, cards.id))
-        .where(eq(likes.userId, userId));
-
-      const sentLikesResults = await sentLikesQuery;
-      
-      // いいねした相手を集計（送信者と受信者両方）
-      const sentLikesCount: Record<number, number> = {};
-      for (const like of sentLikesResults) {
-        // 自分以外の関係者をカウント
-        if (like.senderId !== userId) {
-          sentLikesCount[like.senderId] = (sentLikesCount[like.senderId] || 0) + 1;
-        }
-        if (like.recipientId !== userId) {
-          sentLikesCount[like.recipientId] = (sentLikesCount[like.recipientId] || 0) + 1;
-        }
-      }
-
-      // トップ10を抽出
-      const sentLikesData = Object.entries(sentLikesCount)
-        .map(([userId, count]) => ({ targetUserId: parseInt(userId), count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 10);
+        .where(and(
+          eq(likes.userId, userId),
+          sql`
+            CASE 
+              WHEN ${cards.senderId} = ${userId} THEN ${cards.recipientId}
+              ELSE ${cards.senderId}
+            END != ${userId}
+          `
+        ))
+        .groupBy(sql`
+          CASE 
+            WHEN ${cards.senderId} = ${userId} THEN ${cards.recipientId}
+            ELSE ${cards.senderId}
+          END
+        `)
+        .orderBy(desc(sql`count(*)`))
+        .limit(10);
 
       // いいね受信元ランキング（自分のカードにいいねした人のランキング）
       const receivedLikesData = await db
