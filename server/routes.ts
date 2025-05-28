@@ -873,6 +873,155 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 組織階層管理API
+  app.get("/api/admin/organizations", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const organizations = await storage.getAllOrganizations();
+      res.json(organizations);
+    } catch (error) {
+      console.error("組織取得エラー:", error);
+      res.status(500).json({ message: "組織データの取得に失敗しました" });
+    }
+  });
+
+  app.post("/api/admin/organizations", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const { level, name, code, parentId, description } = req.body;
+      
+      if (!level || !name) {
+        return res.status(400).json({ message: "レベルと名前は必須です" });
+      }
+
+      if (level < 1 || level > 5) {
+        return res.status(400).json({ message: "レベルは1〜5の範囲で指定してください" });
+      }
+
+      const organization = await storage.createOrganization({
+        level,
+        name,
+        code: code || null,
+        parentId: parentId || null,
+        description: description || null,
+        isActive: true
+      });
+
+      res.status(201).json(organization);
+    } catch (error) {
+      console.error("組織作成エラー:", error);
+      res.status(500).json({ message: "組織の作成に失敗しました" });
+    }
+  });
+
+  app.put("/api/admin/organizations/:id", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const organizationId = parseInt(req.params.id);
+      const { level, name, code, parentId, description, isActive } = req.body;
+
+      if (isNaN(organizationId)) {
+        return res.status(400).json({ message: "無効な組織IDです" });
+      }
+
+      const organization = await storage.updateOrganization(organizationId, {
+        level,
+        name,
+        code,
+        parentId,
+        description,
+        isActive
+      });
+
+      if (!organization) {
+        return res.status(404).json({ message: "組織が見つかりません" });
+      }
+
+      res.json(organization);
+    } catch (error) {
+      console.error("組織更新エラー:", error);
+      res.status(500).json({ message: "組織の更新に失敗しました" });
+    }
+  });
+
+  app.delete("/api/admin/organizations/:id", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const organizationId = parseInt(req.params.id);
+
+      if (isNaN(organizationId)) {
+        return res.status(400).json({ message: "無効な組織IDです" });
+      }
+
+      await storage.deleteOrganization(organizationId);
+      res.json({ message: "組織を削除しました" });
+    } catch (error) {
+      console.error("組織削除エラー:", error);
+      res.status(500).json({ message: "組織の削除に失敗しました" });
+    }
+  });
+
+  // 組織階層インポートAPI
+  app.post("/api/admin/organizations/import", authenticate, checkAdmin, async (req, res) => {
+    try {
+      const { organizations } = req.body;
+
+      if (!Array.isArray(organizations)) {
+        return res.status(400).json({ message: "組織データは配列である必要があります" });
+      }
+
+      const results = {
+        success: true,
+        imported: 0,
+        updated: 0,
+        errors: [] as string[]
+      };
+
+      for (const org of organizations) {
+        try {
+          if (!org.level || !org.name) {
+            results.errors.push(`無効な組織データ: ${JSON.stringify(org)}`);
+            continue;
+          }
+
+          // 既存の組織をチェック（名前とレベルで）
+          const existing = await storage.getOrganizationByNameAndLevel(org.name, org.level);
+          
+          if (existing) {
+            await storage.updateOrganization(existing.id, {
+              code: org.code || null,
+              parentId: org.parentId || null,
+              description: org.description || null,
+              isActive: org.isActive !== false
+            });
+            results.updated++;
+          } else {
+            await storage.createOrganization({
+              level: org.level,
+              name: org.name,
+              code: org.code || null,
+              parentId: org.parentId || null,
+              description: org.description || null,
+              isActive: org.isActive !== false
+            });
+            results.imported++;
+          }
+        } catch (orgError) {
+          results.errors.push(`組織処理エラー(${org.name}): ${orgError}`);
+        }
+      }
+
+      if (results.errors.length > 0) {
+        results.success = false;
+      }
+
+      res.json(results);
+    } catch (error) {
+      console.error("組織インポートエラー:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "組織のインポート中にエラーが発生しました",
+        error: `${error}`
+      });
+    }
+  });
+
   // 管理者権限更新API
   app.patch("/api/admin/users/:id/admin", authenticate, checkAdmin, async (req, res) => {
     try {
