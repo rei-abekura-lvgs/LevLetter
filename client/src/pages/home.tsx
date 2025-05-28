@@ -1121,7 +1121,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                     {filteredCards.length}件
                   </Badge>
                   
-                  {/* 新しいFilterControlsコンポーネントを使用 */}
+                  {/* 実際の5階層部署管理システムを活用した検索可能フィルタ */}
                   <FilterControls
                     sortOrder={sortOrder}
                     onSortChange={(order: SortOrder) => setSortOrder(order)}
@@ -1130,6 +1130,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                     departmentFilter={departmentFilter}
                     onDepartmentChange={setDepartmentFilter}
                     departments={departmentOptions}
+                    organizationHierarchy={organizationHierarchy}
                   />
                 </div>
               </div>
