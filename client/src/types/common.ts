@@ -93,4 +93,5 @@ export interface CardFilters {
   tab: TabType;
   sortOrder: SortOrder;
   searchQuery?: string;
+  departmentFilter?: string;
 }

@@ -571,6 +571,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const { updateUser } = useAuth();
   const { addLikeOptimistically } = useOptimisticUpdates();
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [departmentFilter, setDepartmentFilter] = useState<string>("");
   const [localIsCardFormOpen, setLocalIsCardFormOpen] = useState(false);
   
   // プロップスで状態が渡された場合はそれを使用、そうでなければローカル状態を使用
