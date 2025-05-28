@@ -70,7 +70,6 @@ export default function Sidebar({ user: propUser }: SidebarProps) {
                   style={{ width: `${(user.weeklyPoints / 500) * 100}%` }}
                 ></div>
               </div>
-              <p className="mt-1">{user.weeklyPoints}/500pt 残り</p>
             </div>
           </div>
 
