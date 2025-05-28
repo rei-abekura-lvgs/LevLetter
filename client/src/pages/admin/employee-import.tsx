@@ -190,12 +190,12 @@ export default function EmployeeImport() {
                   name: row["職場氏名"] || row["氏名"] || '',
                   employeeId: String(row["社員番号"] || ''),
                   department: departmentPath,
-                  organizationLevel1: dept1 || null,
-                  organizationLevel2: dept2 || null,
-                  organizationLevel3: dept3 || null,
-                  organizationLevel4: dept4 || null,
-                  organizationLevel5: dept5 || null,
-                  organizationLevel6: row["所属階層６"] || null
+                  organizationLevel1: "レバレジーズ株式会社", // 会社レベル
+                  organizationLevel2: dept1 || null, // 本部レベル
+                  organizationLevel3: dept2 || null, // 部門レベル
+                  organizationLevel4: dept3 || null, // グループレベル
+                  organizationLevel5: dept4 || null, // チームレベル
+                  organizationLevel6: dept5 || null  // ユニットレベル
                 };
               } else {
                 // 従来のCSV形式の場合はそのまま
@@ -274,13 +274,13 @@ export default function EmployeeImport() {
                 name: row["職場氏名"] || row["氏名"] || '',
                 employeeId: String(row["社員番号"] || ''),
                 department: departmentPath,
-                // 6段階の組織階層情報を個別に保存
-                organizationLevel1: row["所属階層１"] || null,
-                organizationLevel2: row["所属階層２"] || null,
-                organizationLevel3: row["所属階層３"] || null,
-                organizationLevel4: row["所属階層４"] || null,
-                organizationLevel5: row["所属階層５"] || null,
-                organizationLevel6: row["所属階層６"] || null,
+                // 6段階の組織階層情報を個別に保存（会社レベルを追加）
+                organizationLevel1: "レバレジーズ株式会社", // 会社レベル
+                organizationLevel2: row["所属階層１"] || null, // 本部レベル  
+                organizationLevel3: row["所属階層２"] || null, // 部門レベル
+                organizationLevel4: row["所属階層３"] || null, // グループレベル
+                organizationLevel5: row["所属階層４"] || null, // チームレベル
+                organizationLevel6: row["所属階層５"] || null, // ユニットレベル
               };
             } else {
               // 従来の形式の場合はそのまま
