@@ -588,6 +588,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
 
+
+
   const { toast } = useToast();
   
   // 日本語名をローマ字に変換する関数
