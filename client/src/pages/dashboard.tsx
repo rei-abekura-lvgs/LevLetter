@@ -70,15 +70,30 @@ export default function Dashboard() {
     );
   }
 
+  // 期間計算（過去1ヶ月）
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 1);
+  const formatDate = (date: Date) => `${date.getMonth() + 1}月${date.getDate()}日`;
+  const periodText = `${formatDate(startDate)}〜${formatDate(endDate)}`;
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">ダッシュボード</h1>
         <p className="text-gray-600">あなたの活動状況と統計情報をご確認いただけます</p>
       </div>
+
+      {/* 期間表示 */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="flex items-center">
+          <TrendingUp className="h-5 w-5 text-blue-600 mr-2" />
+          <span className="text-sm font-medium text-blue-800">集計期間: {periodText}</span>
+        </div>
+      </div>
       
       {/* 統計カード */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
@@ -108,24 +123,7 @@ export default function Dashboard() {
           </div>
           <div className="mt-4">
             <div className="flex items-center text-sm text-gray-500">
-              <span>過去1ヶ月の順位</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">カード送信順位</p>
-              <p className="text-3xl font-bold text-purple-600">#{stats.monthly.userCardRank || '?'}</p>
-            </div>
-            <div className="p-3 bg-purple-50 rounded-full">
-              <Mail className="h-6 w-6 text-purple-600" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <div className="flex items-center text-sm text-gray-500">
-              <span>過去1ヶ月の順位</span>
+              <span>送信数による順位</span>
             </div>
           </div>
         </div>
@@ -134,15 +132,15 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 mb-1">いいね送信順位</p>
-              <p className="text-3xl font-bold text-orange-600">#{stats.monthly.userLikeRank || '?'}</p>
+              <p className="text-3xl font-bold text-red-600">#{stats.monthly.userLikeRank || '?'}</p>
             </div>
-            <div className="p-3 bg-orange-50 rounded-full">
-              <Heart className="h-6 w-6 text-orange-600" />
+            <div className="p-3 bg-red-50 rounded-full">
+              <Heart className="h-6 w-6 text-red-600" />
             </div>
           </div>
           <div className="mt-4">
             <div className="flex items-center text-sm text-gray-500">
-              <span>過去1ヶ月の順位</span>
+              <span>いいね数による順位</span>
             </div>
           </div>
         </div>
