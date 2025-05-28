@@ -1,0 +1,48 @@
+Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+dashboard:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+dashboard:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+dashboard:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context-new.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context-new.tsx:139 🎯 認証初期化完了: 阿部倉 怜
+queryClient.ts:42 API GET リクエスト: /api/dashboard/stats データなし
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+App.tsx:57 アプリ状態: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, 現在のパス: '/dashboard'}
+auth-context-new.tsx:162 📊 認証状態更新: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=2faf1ac7:840:14)
+    at run (@tanstack_react-query.js?v=2faf1ac7:494:49)
+    at Object.start (@tanstack_react-query.js?v=2faf1ac7:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=2faf1ac7:926:41)
+    at _a9.executeFetch_fn (@tanstack_react-query.js?v=2faf1ac7:2211:51)
+    at _a9.onSubscribe (@tanstack_react-query.js?v=2faf1ac7:1898:74)
+    at _a9.subscribe (@tanstack_react-query.js?v=2faf1ac7:24:10)
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=2faf1ac7:840
+run @ @tanstack_react-query.js?v=2faf1ac7:494
+start @ @tanstack_react-query.js?v=2faf1ac7:536
+fetch @ @tanstack_react-query.js?v=2faf1ac7:926
+executeFetch_fn @ @tanstack_react-query.js?v=2faf1ac7:2211
+onSubscribe @ @tanstack_react-query.js?v=2faf1ac7:1898
+subscribe @ @tanstack_react-query.js?v=2faf1ac7:24
+(anonymous) @ @tanstack_react-query.js?v=2faf1ac7:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=2faf1ac7:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=2faf1ac7:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=2faf1ac7:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=2faf1ac7:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=2faf1ac7:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=2faf1ac7:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=2faf1ac7:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=2faf1ac7:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=2faf1ac7:19328
+workLoop @ chunk-RPCDYKBN.js?v=2faf1ac7:197
+flushWork @ chunk-RPCDYKBN.js?v=2faf1ac7:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=2faf1ac7:384Understand this error
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:42 API GET リクエスト: /api/users データなし
+App.tsx:57 アプリ状態: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, 現在のパス: '/'}
+App.tsx:57 アプリ状態: {認証済み: true, ユ

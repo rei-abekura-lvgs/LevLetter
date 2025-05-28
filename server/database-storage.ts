@@ -1071,20 +1071,25 @@ export class DatabaseStorage implements IStorage {
       // 自分のカードにいいねした人のデータを取得（自分は除外）
       let receivedLikesData: { fromUserId: number; count: number }[] = [];
       if (myCardIds.length > 0) {
-        const receivedLikes = await db
-          .select({
-            fromUserId: likes.userId,
-            cardId: likes.cardId
-          })
-          .from(likes)
-          .where(and(
-            inArray(likes.cardId, myCardIds),
-            not(eq(likes.userId, userId))
-          ));
+        // 各カードIDに対して個別にクエリを実行してマージ
+        const allReceivedLikes = [];
+        for (const cardId of myCardIds) {
+          const cardLikes = await db
+            .select({
+              fromUserId: likes.userId,
+              cardId: likes.cardId
+            })
+            .from(likes)
+            .where(and(
+              eq(likes.cardId, cardId),
+              not(eq(likes.userId, userId))
+            ));
+          allReceivedLikes.push(...cardLikes);
+        }
         
         // JavaScript で集計
         const receivedLikesCount: Record<number, number> = {};
-        for (const like of receivedLikes) {
+        for (const like of allReceivedLikes) {
           receivedLikesCount[like.fromUserId] = (receivedLikesCount[like.fromUserId] || 0) + 1;
         }
         
