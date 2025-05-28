@@ -9,7 +9,7 @@ import {
   type CardWithRelations
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, asc, sql, gte } from "drizzle-orm";
+import { eq, and, desc, asc, sql, gte, or, not } from "drizzle-orm";
 import * as crypto from "crypto";
 
 const DEFAULT_AVATAR_COLORS = [
@@ -1023,19 +1023,80 @@ export class DatabaseStorage implements IStorage {
         })
       );
 
-      // いいねランキングのデモデータ（実際のデータベースクエリは複雑なので一時的にデモデータ）
-      const demoUsers = await db.select().from(users).limit(5);
-      const sentLikes = demoUsers.map((demoUser, index) => ({
-        user: demoUser,
-        count: Math.max(1, 15 - index * 3),
-        rank: index + 1
-      }));
+      // いいね送信先ランキング（自分がいいねした相手のランキング）
+      const sentLikesData = await db
+        .select({
+          targetUserId: sql<number>`
+            CASE 
+              WHEN cards.sender_id = ${userId} THEN cards.recipient_id
+              WHEN cards.recipient_id = ${userId} THEN cards.sender_id
+              ELSE NULL 
+            END
+          `.as('targetUserId'),
+          count: sql<number>`count(*)`.as('count')
+        })
+        .from(likes)
+        .innerJoin(cards, eq(likes.cardId, cards.id))
+        .where(and(
+          eq(likes.userId, userId),
+          sql`CASE 
+            WHEN cards.sender_id = ${userId} THEN cards.recipient_id
+            WHEN cards.recipient_id = ${userId} THEN cards.sender_id
+            ELSE NULL 
+          END IS NOT NULL`
+        ))
+        .groupBy(sql`
+          CASE 
+            WHEN cards.sender_id = ${userId} THEN cards.recipient_id
+            WHEN cards.recipient_id = ${userId} THEN cards.sender_id
+            ELSE NULL 
+          END
+        `)
+        .orderBy(desc(sql`count(*)`))
+        .limit(10);
 
-      const receivedLikes = demoUsers.slice().reverse().map((demoUser, index) => ({
-        user: demoUser,
-        count: Math.max(1, 12 - index * 2),
-        rank: index + 1
-      }));
+      // いいね受信元ランキング（自分のカードにいいねした人のランキング）
+      const receivedLikesData = await db
+        .select({
+          fromUserId: likes.userId,
+          count: sql<number>`count(*)`.as('count')
+        })
+        .from(likes)
+        .innerJoin(cards, eq(likes.cardId, cards.id))
+        .where(and(
+          or(
+            eq(cards.senderId, userId),
+            eq(cards.recipientId, userId)
+          ),
+          not(eq(likes.userId, userId)) // 自分自身を除外
+        ))
+        .groupBy(likes.userId)
+        .orderBy(desc(sql`count(*)`))
+        .limit(10);
+
+      // ユーザー情報を取得して結合（いいね送信先）
+      const sentLikes = await Promise.all(
+        sentLikesData.map(async (item, index) => {
+          const targetUser = await this.getUser(item.targetUserId);
+          return targetUser ? {
+            user: targetUser,
+            count: item.count,
+            rank: index + 1
+          } : null;
+        })
+      );
+
+      // ユーザー情報を取得して結合（いいね受信元）
+      const receivedLikes = await Promise.all(
+        receivedLikesData.map(async (item, index) => {
+          const fromUser = await this.getUser(item.fromUserId);
+          return fromUser ? {
+            user: fromUser,
+            count: item.count,
+            rank: index + 1
+          } : null;
+        })
+      );
 
       return {
         monthly: {
@@ -1046,8 +1107,8 @@ export class DatabaseStorage implements IStorage {
         personal: {
           sentCards: sentCards.filter(item => item !== null),
           receivedCards: receivedCards.filter(item => item !== null),
-          sentLikes: sentLikes,
-          receivedLikes: receivedLikes
+          sentLikes: sentLikes.filter(item => item !== null),
+          receivedLikes: receivedLikes.filter(item => item !== null)
         }
       };
     } catch (error) {
