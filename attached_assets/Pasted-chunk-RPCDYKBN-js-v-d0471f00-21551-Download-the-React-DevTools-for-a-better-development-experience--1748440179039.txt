@@ -1,0 +1,225 @@
+chunk-RPCDYKBN.js?v=d0471f00:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:57 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/admin'}
+auth-context.tsx:120 🚀 認証初期化開始
+auth-context.tsx:32 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:150 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:120 🚀 認証初期化開始
+auth-context.tsx:32 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:150 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+admin:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+admin:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+admin:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+admin:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:127 🎯 認証初期化完了: 阿部倉 怜
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+notification-bell.tsx:53 📨 通知データ取得開始（ベルコンポーネント）
+queryClient.ts:42 API GET リクエスト: /api/admin/users データなし
+queryClient.ts:42 API GET リクエスト: /api/admin/departments データなし
+App.tsx:57 アプリ状態: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, 現在のパス: '/admin'}
+auth-context.tsx:150 📊 認証状態更新: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=d0471f00:840:14)
+    at run (@tanstack_react-query.js?v=d0471f00:494:49)
+    at Object.start (@tanstack_react-query.js?v=d0471f00:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=d0471f00:926:41)
+    at _a9.executeFetch_fn (@tanstack_react-query.js?v=d0471f00:2211:51)
+    at _a9.onSubscribe (@tanstack_react-query.js?v=d0471f00:1898:74)
+    at _a9.subscribe (@tanstack_react-query.js?v=d0471f00:24:10)
+(anonymous) @ queryClient.ts:110
+await in (anonymous)
+queryFn @ queryClient.ts:130
+fetchFn @ @tanstack_react-query.js?v=d0471f00:840
+run @ @tanstack_react-query.js?v=d0471f00:494
+start @ @tanstack_react-query.js?v=d0471f00:536
+fetch @ @tanstack_react-query.js?v=d0471f00:926
+executeFetch_fn @ @tanstack_react-query.js?v=d0471f00:2211
+onSubscribe @ @tanstack_react-query.js?v=d0471f00:1898
+subscribe @ @tanstack_react-query.js?v=d0471f00:24
+(anonymous) @ @tanstack_react-query.js?v=d0471f00:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=d0471f00:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=d0471f00:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=d0471f00:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=d0471f00:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=d0471f00:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=d0471f00:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=d0471f00:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=d0471f00:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=d0471f00:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=d0471f00:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=d0471f00:19432
+commitRoot @ chunk-RPCDYKBN.js?v=d0471f00:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=d0471f00:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=d0471f00:18718
+workLoop @ chunk-RPCDYKBN.js?v=d0471f00:197
+flushWork @ chunk-RPCDYKBN.js?v=d0471f00:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=d0471f00:384Understand this error
+auth-context.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:127 🎯 認証初期化完了: 阿部倉 怜
+auth-context.tsx:150 📊 認証状態更新: {認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+notification-bell.tsx:62 📨 通知データ取得完了（ベルコンポーネント）: []
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 0, unreadCount: 0}
+employee-import.tsx:133 ファイル情報: {名前: '無題のスプレッドシート - シート1 (1).csv', 拡張子: 'csv', タイプ: 'text/csv', サイズ: '12.23 KB'}
+employee-import.tsx:151 ファイル内容サンプル: (5) ['社員番号,氏名,職場氏名,会社メールアドレス,所属部門,所属コード,所属階層１,所属階層２,所属階層…所属階層４,所属階層５,勤務地コード,勤務地名,職種コード,職種名,雇用区分,入社日,PLコード\r', '324138,大滝　圭修,大滝　圭修,keishu.otaki@leverages.jp,SY,SY…,,69,渋谷一丁目支店4階,2,内勤開発,正社員,2023/03/01 0:00:00,MSS\r', '324219,原田　将貴,原田　将貴,masaki.harada@leverages.jp,SY,S…,,68,渋谷一丁目支店3階,2,内勤開発,正社員,2019/04/01 0:00:00,MSS\r', '324312,内垣　佑介,内垣　佑介,yusuke.uchigaki@leverages.jp,SY…,,68,渋谷一丁目支店3階,2,内勤開発,正社員,2019/04/15 0:00:00,MSS\r', '324508,森下　研人,森下　研人,kento.morishita@leverages.jp,SY…,,68,渋谷一丁目支店3階,2,内勤開発,正社員,2019/11/01 0:00:00,MSS\r']
+employee-import.tsx:155 タブ区切り判定: false
+employee-import.tsx:163 ■■■■■■ パース結果詳細 ■■■■■■
+employee-import.tsx:164 パース結果: {data: Array(49), errors: Array(0), meta: {…}}
+employee-import.tsx:165 パース結果のヘッダー: (18) ['社員番号', '氏名', '職場氏名', '会社メールアドレス', '所属部門', '所属コード', '所属階層１', '所属階層２', '所属階層３', '所属階層４', '所属階層５', '勤務地コード', '勤務地名', '職種コード', '職種名', '雇用区分', '入社日', 'PLコード']
+employee-import.tsx:166 行数: 49
+employee-import.tsx:168 パース結果の最初の行: {社員番号: '324138', 氏名: '大滝　圭修', 職場氏名: '大滝　圭修', 会社メールアドレス: 'keishu.otaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:169 データ型: object
+employee-import.tsx:171 プロパティ一覧: (18) ['社員番号', '氏名', '職場氏名', '会社メールアドレス', '所属部門', '所属コード', '所属階層１', '所属階層２', '所属階層３', '所属階層４', '所属階層５', '勤務地コード', '勤務地名', '職種コード', '職種名', '雇用区分', '入社日', 'PLコード']
+employee-import.tsx:177 処理中の行: {社員番号: '324138', 氏名: '大滝　圭修', 職場氏名: '大滝　圭修', 会社メールアドレス: 'keishu.otaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '324219', 氏名: '原田　将貴', 職場氏名: '原田　将貴', 会社メールアドレス: 'masaki.harada@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '324312', 氏名: '内垣　佑介', 職場氏名: '内垣　佑介', 会社メールアドレス: 'yusuke.uchigaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '324508', 氏名: '森下　研人', 職場氏名: '森下　研人', 会社メールアドレス: 'kento.morishita@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '324778', 氏名: '竹下　義晃', 職場氏名: '竹下　義晃', 会社メールアドレス: 'yoshiteru.takeshita@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325077', 氏名: '齋藤　匠', 職場氏名: '齋藤　匠', 会社メールアドレス: 'takumi.saito@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325210', 氏名: '石田　貴義', 職場氏名: '石田　貴義', 会社メールアドレス: 'takayoshi.ishida@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325279', 氏名: '加藤　智也', 職場氏名: '加藤　智也', 会社メールアドレス: 'tomoya.kato@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325293', 氏名: '德永　眞哉', 職場氏名: '德永　眞哉', 会社メールアドレス: 'shinya.tokunaga@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325294', 氏名: '塚本　貴之', 職場氏名: '塚本　貴之', 会社メールアドレス: 'takayuki.tsukamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325323', 氏名: '川口　耀平', 職場氏名: '川口　耀平', 会社メールアドレス: 'yohei.kawaguchi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325412', 氏名: '井上　萌々香', 職場氏名: '井上　萌々香', 会社メールアドレス: 'momoka.inoue@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325572', 氏名: '関口　一騎', 職場氏名: '関口　一騎', 会社メールアドレス: 'kazuki.sekiguchi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325679', 氏名: '下畑　剣一郎', 職場氏名: '下畑　剣一郎', 会社メールアドレス: 'kenichiro.shimohata@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325684', 氏名: '稲村　麟', 職場氏名: '稲村　麟', 会社メールアドレス: 'rin.inamura@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325692', 氏名: '柳澤　伸哉', 職場氏名: '柳澤　伸哉', 会社メールアドレス: 'nobuya.yanagisawa@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325701', 氏名: '香川　淳', 職場氏名: '香川　淳', 会社メールアドレス: 'jun.kagawa@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325714', 氏名: '中野　竜之介', 職場氏名: '中野　竜之介', 会社メールアドレス: 'ryunosuke.nakano@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325719', 氏名: '三口　廉', 職場氏名: '三口　廉', 会社メールアドレス: 'ren.miguchi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325764', 氏名: '田中　瑚大', 職場氏名: '田中　瑚大', 会社メールアドレス: 'godai.tanaka@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '325899', 氏名: '岡本　侑樹', 職場氏名: '岡本　侑樹', 会社メールアドレス: 'yuki.okamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326182', 氏名: '縄巻　一鴻', 職場氏名: '縄巻　一鴻', 会社メールアドレス: 'kazutoki.nawamaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326329', 氏名: '山本　龍雄', 職場氏名: '山本　龍雄', 会社メールアドレス: 'tatsuo.yamamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326361', 氏名: '桐生　直輝', 職場氏名: '桐生　直輝', 会社メールアドレス: 'naoki.kiryu@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326428', 氏名: '山下　翔', 職場氏名: '山下　翔', 会社メールアドレス: 'sho.yamashita@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326432', 氏名: '淺霧　一真', 職場氏名: '淺霧　一真', 会社メールアドレス: 'kazuma.asagiri@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326455', 氏名: '佐々木　美奈', 職場氏名: '佐々木　美奈', 会社メールアドレス: 'mina.sasaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326457', 氏名: '山本　寛太', 職場氏名: '山本　寛太', 会社メールアドレス: 'kanta.yamamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326608', 氏名: '岡島　喜希', 職場氏名: '岡島　喜希', 会社メールアドレス: 'yoshiki.okajima@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326611', 氏名: '三村　優人', 職場氏名: '竹村　優人', 会社メールアドレス: 'yuto.takemura@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326672', 氏名: '牧野　航大', 職場氏名: '牧野　航大', 会社メールアドレス: 'kota.makino@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326829', 氏名: '岩本　健太郎', 職場氏名: '岩本　健太郎', 会社メールアドレス: 'kentaro.iwamoto@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326838', 氏名: '稲垣　慶亮', 職場氏名: '稲垣　慶亮', 会社メールアドレス: 'keisuke.inagaki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '326854', 氏名: '??田　球花', 職場氏名: '??田　球花', 会社メールアドレス: 'tamaka.yoshida@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327076', 氏名: '矢野　貴大', 職場氏名: '矢野　貴大', 会社メールアドレス: 'takahiro.yano.a@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327380', 氏名: '宇田　知生', 職場氏名: '宇田　知生', 会社メールアドレス: 'tomoki.uda@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327671', 氏名: '鈴木　直澄', 職場氏名: '鈴木　直澄', 会社メールアドレス: 'naozumi.suzuki@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327697', 氏名: '瀬上　真宏', 職場氏名: '瀬上　真宏', 会社メールアドレス: 'masahiro.senoue@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327756', 氏名: '斉藤　方軌', 職場氏名: '斉藤　方軌', 会社メールアドレス: 'masaki.saito@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327777', 氏名: '安藤　弘輝', 職場氏名: '安藤　弘輝', 会社メールアドレス: 'hiroki.ando@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327802', 氏名: '于　原駿', 職場氏名: '于　原駿', 会社メールアドレス: 'genshun.u@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327855', 氏名: 'LEE　SANGHYUK', 職場氏名: 'LEE　SANGHYUK', 会社メールアドレス: 'sanghyuk.lee@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327899', 氏名: '有坂　亮汰', 職場氏名: '有坂　亮汰', 会社メールアドレス: 'ryota.arisaka@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327900', 氏名: '永安　修也', 職場氏名: '永安　修也', 会社メールアドレス: 'shuya.nagayasu@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327946', 氏名: '横江　健太', 職場氏名: '横江　健太', 会社メールアドレス: 'kenta.yokoe@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '327989', 氏名: '小林　巧', 職場氏名: '小林　巧', 会社メールアドレス: 'takumi.kobayashi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '328638', 氏名: '修　浩毅', 職場氏名: '修　浩毅', 会社メールアドレス: 'hiroki.shu@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '328641', 氏名: '逸見　裕章', 職場氏名: '逸見　裕章', 会社メールアドレス: 'hiroaki.hemmi@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:177 処理中の行: {社員番号: '328642', 氏名: '苑田　朝彰', 職場氏名: '苑田　朝彰', 会社メールアドレス: 'tomotada.sonoda@leverages.jp', 所属部門: 'SY', …}
+employee-import.tsx:191 部門階層分解: {original: 'SY', split: Array(1), levels: {…}}
+employee-import.tsx:215 マッピング後のデータ: (3) [{…}, {…}, {…}]
+employee-import.tsx:221 無効なデータ行: {email: '', name: '大滝　圭修', employeeId: '324138', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '原田　将貴', employeeId: '324219', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '内垣　佑介', employeeId: '324312', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '森下　研人', employeeId: '324508', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '竹下　義晃', employeeId: '324778', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '齋藤　匠', employeeId: '325077', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '石田　貴義', employeeId: '325210', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '加藤　智也', employeeId: '325279', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '德永　眞哉', employeeId: '325293', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '塚本　貴之', employeeId: '325294', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '川口　耀平', employeeId: '325323', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '井上　萌々香', employeeId: '325412', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '関口　一騎', employeeId: '325572', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '下畑　剣一郎', employeeId: '325679', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '稲村　麟', employeeId: '325684', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '柳澤　伸哉', employeeId: '325692', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '香川　淳', employeeId: '325701', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '中野　竜之介', employeeId: '325714', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '三口　廉', employeeId: '325719', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '田中　瑚大', employeeId: '325764', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '岡本　侑樹', employeeId: '325899', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '縄巻　一鴻', employeeId: '326182', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '山本　龍雄', employeeId: '326329', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '桐生　直輝', employeeId: '326361', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '山下　翔', employeeId: '326428', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '淺霧　一真', employeeId: '326432', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '佐々木　美奈', employeeId: '326455', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '山本　寛太', employeeId: '326457', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '岡島　喜希', employeeId: '326608', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '三村　優人', employeeId: '326611', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '牧野　航大', employeeId: '326672', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '岩本　健太郎', employeeId: '326829', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '稲垣　慶亮', employeeId: '326838', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '??田　球花', employeeId: '326854', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '矢野　貴大', employeeId: '327076', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '宇田　知生', employeeId: '327380', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '鈴木　直澄', employeeId: '327671', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '瀬上　真宏', employeeId: '327697', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '斉藤　方軌', employeeId: '327756', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '安藤　弘輝', employeeId: '327777', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '于　原駿', employeeId: '327802', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: 'LEE　SANGHYUK', employeeId: '327855', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '有坂　亮汰', employeeId: '327899', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '永安　修也', employeeId: '327900', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '横江　健太', employeeId: '327946', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '小林　巧', employeeId: '327989', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '修　浩毅', employeeId: '328638', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '逸見　裕章', employeeId: '328641', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:221 無効なデータ行: {email: '', name: '苑田　朝彰', employeeId: '328642', department: 'SY', organizationLevel1: 'レバレジーズ株式会社', …}
+employee-import.tsx:226 有効なデータ件数: 0

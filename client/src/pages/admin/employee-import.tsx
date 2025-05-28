@@ -177,26 +177,26 @@ export default function EmployeeImport() {
               console.log('処理中の行:', row);
             
               // 会社DBの形式かチェック（CSVファイルの場合）
-              if (row["メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
-                // 所属部門データを階層に分解
-                const departmentPath = row["所属部門"] || '';
-                const departmentParts = departmentPath.split('/').filter((part: string) => part.trim() !== '');
+              if (row["会社メールアドレス"] !== undefined || row["社員番号"] !== undefined) {
+                // 所属階層１〜５から組織階層を取得
+                const dept1 = row["所属階層１"] || null; // 本部
+                const dept2 = row["所属階層２"] || null; // 部
+                const dept3 = row["所属階層３"] || null; // グループ
+                const dept4 = row["所属階層４"] || null; // チーム
+                const dept5 = row["所属階層５"] || null; // ユニット
                 
-                const dept1 = departmentParts[0] || null; // 本部
-                const dept2 = departmentParts[1] || null; // 部
-                const dept3 = departmentParts[2] || null; // グループ
-                const dept4 = departmentParts[3] || null; // チーム
-                const dept5 = departmentParts[4] || null; // ユニット
+                // 階層をスラッシュで連結（空の階層は除外）
+                const departmentParts = [dept1, dept2, dept3, dept4, dept5].filter(d => d !== null && d !== '');
+                const departmentPath = departmentParts.join('/');
                 
                 console.log('部門階層分解:', {
-                  original: departmentPath,
-                  split: departmentParts,
-                  levels: { dept1, dept2, dept3, dept4, dept5 }
+                  dept1, dept2, dept3, dept4, dept5,
+                  departmentPath
                 });
                 
                 return {
-                  email: row["メールアドレス"] || '',
-                  name: row["氏名"] || '',
+                  email: row["会社メールアドレス"] || '',
+                  name: row["職場氏名"] || row["氏名"] || '',
                   employeeId: String(row["社員番号"] || ''),
                   department: departmentPath,
                   organizationLevel1: "レバレジーズ株式会社", // 会社レベル
