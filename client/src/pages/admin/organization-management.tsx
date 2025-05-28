@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Building, Building2, Users, Upload, Plus, Edit, Trash2, AlertCircle } from "lucide-react";
+import { Building, Building2, Users, Upload, Plus, Edit, Trash2, AlertCircle, ChevronRight, ChevronDown } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -57,6 +57,7 @@ export default function OrganizationManagement() {
   const [editingOrg, setEditingOrg] = useState<OrganizationHierarchy | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [importData, setImportData] = useState("");
+  const [expandedNodes, setExpandedNodes] = useState<Set<number>>(new Set());
   const [formData, setFormData] = useState<OrganizationFormData>({
     level: 1,
     name: "",
@@ -198,45 +199,78 @@ export default function OrganizationManagement() {
 
   const hierarchyTree = buildHierarchy(organizations);
 
-  const renderHierarchyItem = (org: any, depth = 0) => (
-    <div key={org.id} className="mb-2">
-      <div 
-        className={`flex items-center justify-between p-3 border rounded-lg ${
-          !org.isActive ? 'bg-gray-50 opacity-60' : 'bg-white'
-        }`}
-        style={{ marginLeft: `${depth * 20}px` }}
-      >
-        <div className="flex items-center gap-3">
-          <Badge className={LEVEL_COLORS[org.level as keyof typeof LEVEL_COLORS]}>
-            Lv{org.level} {LEVEL_NAMES[org.level as keyof typeof LEVEL_NAMES]}
-          </Badge>
-          <div>
-            <h3 className="font-medium">{org.name}</h3>
-            {org.code && <p className="text-sm text-gray-500">コード: {org.code}</p>}
-            {org.description && <p className="text-sm text-gray-600 mt-1">{org.description}</p>}
+  const toggleExpanded = (orgId: number) => {
+    const newExpanded = new Set(expandedNodes);
+    if (newExpanded.has(orgId)) {
+      newExpanded.delete(orgId);
+    } else {
+      newExpanded.add(orgId);
+    }
+    setExpandedNodes(newExpanded);
+  };
+
+  const renderHierarchyItem = (org: any, depth = 0) => {
+    const hasChildren = org.children && org.children.length > 0;
+    const isExpanded = expandedNodes.has(org.id);
+    
+    return (
+      <div key={org.id} className="mb-2">
+        <div 
+          className={`flex items-center justify-between p-3 border rounded-lg ${
+            !org.isActive ? 'bg-gray-50 opacity-60' : 'bg-white'
+          }`}
+          style={{ marginLeft: `${depth * 20}px` }}
+        >
+          <div className="flex items-center gap-3">
+            {hasChildren && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => toggleExpanded(org.id)}
+                className="p-1 h-6 w-6"
+              >
+                {isExpanded ? (
+                  <ChevronDown className="h-4 w-4" />
+                ) : (
+                  <ChevronRight className="h-4 w-4" />
+                )}
+              </Button>
+            )}
+            {!hasChildren && <div className="w-6" />}
+            <Badge className={LEVEL_COLORS[org.level as keyof typeof LEVEL_COLORS]}>
+              Lv{org.level} {LEVEL_NAMES[org.level as keyof typeof LEVEL_NAMES]}
+            </Badge>
+            <div>
+              <h3 className="font-medium">{org.name}</h3>
+              {org.description && <p className="text-sm text-gray-600 mt-1">{org.description}</p>}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {!org.isActive && <Badge variant="secondary">無効</Badge>}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleEdit(org)}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => deleteMutation.mutate(org.id)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {!org.isActive && <Badge variant="secondary">無効</Badge>}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleEdit(org)}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => deleteMutation.mutate(org.id)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
+        {hasChildren && isExpanded && (
+          <div className="mt-2">
+            {org.children.map((child: any) => renderHierarchyItem(child, depth + 1))}
+          </div>
+        )}
       </div>
-      {org.children?.map((child: any) => renderHierarchyItem(child, depth + 1))}
-    </div>
-  );
+    );
+  };
 
   if (isLoading) {
     return <div className="flex items-center justify-center h-64">読み込み中...</div>;
