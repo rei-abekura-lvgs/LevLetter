@@ -588,6 +588,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const [filterValue, setFilterValue] = useState<string>("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<{type: 'person' | 'department', value: string} | null>(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const { toast } = useToast();
   
   // 既読カードIDを管理（localStorageに保存）
@@ -904,46 +905,81 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                       
                       {/* 人名セクション */}
                       <CommandGroup heading="👤 人名">
-                        {uniquePeople.map((person: string) => (
-                          <CommandItem
-                            key={`person-${person}`}
-                            value={person}
-                            onSelect={(currentValue) => {
-                              setSelectedFilter({type: 'person', value: currentValue});
-                              setSearchOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={`mr-2 h-4 w-4 ${
-                                selectedFilter?.type === 'person' && selectedFilter?.value === person ? "opacity-100" : "opacity-0"
-                              }`}
-                            />
-                            <UserIcon className="mr-2 h-4 w-4 text-blue-500" />
-                            {person}
-                          </CommandItem>
-                        ))}
+                        {uniquePeople.map((person: string) => {
+                          // 日本語名をローマ字に変換するための簡単なマッピング（実際のプロジェクトではより正確な変換が必要）
+                          const romanjiKeywords = (person || '')
+                            .replace(/阿部倉/g, 'abekura')
+                            .replace(/怜/g, 'rei')
+                            .replace(/田中/g, 'tanaka')
+                            .replace(/佐藤/g, 'sato')
+                            .replace(/鈴木/g, 'suzuki')
+                            .replace(/高橋/g, 'takahashi')
+                            .replace(/山田/g, 'yamada')
+                            .replace(/小林/g, 'kobayashi')
+                            .replace(/加藤/g, 'kato')
+                            .replace(/吉田/g, 'yoshida')
+                            .replace(/山本/g, 'yamamoto');
+                          
+                          return (
+                            <CommandItem
+                              key={`person-${person}`}
+                              value={`${person} ${romanjiKeywords}`}
+                              keywords={[person, romanjiKeywords]}
+                              onSelect={() => {
+                                setSelectedFilter({type: 'person', value: person});
+                                setSearchOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={`mr-2 h-4 w-4 ${
+                                  selectedFilter?.type === 'person' && selectedFilter?.value === person ? "opacity-100" : "opacity-0"
+                                }`}
+                              />
+                              <UserIcon className="mr-2 h-4 w-4 text-blue-500" />
+                              {person}
+                              <span className="ml-auto text-xs text-gray-400">
+                                {romanjiKeywords !== person ? romanjiKeywords : ''}
+                              </span>
+                            </CommandItem>
+                          );
+                        })}
                       </CommandGroup>
                       
                       {/* 部署セクション */}
                       <CommandGroup heading="🏢 部署">
-                        {uniqueDepartments.map((dept: string) => (
-                          <CommandItem
-                            key={`dept-${dept}`}
-                            value={dept}
-                            onSelect={(currentValue) => {
-                              setSelectedFilter({type: 'department', value: currentValue});
-                              setSearchOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={`mr-2 h-4 w-4 ${
-                                selectedFilter?.type === 'department' && selectedFilter?.value === dept ? "opacity-100" : "opacity-0"
-                              }`}
-                            />
-                            <Activity className="mr-2 h-4 w-4 text-green-500" />
-                            {dept}
-                          </CommandItem>
-                        ))}
+                        {uniqueDepartments.map((dept: string) => {
+                          // この部署の人たち
+                          const deptMembers = [...new Set(cards.flatMap(card => {
+                            const allUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
+                            return allUsers.filter(user => user.department === dept).map(user => user.displayName || user.name);
+                          }))].sort();
+                          
+                          return (
+                            <CommandItem
+                              key={`dept-${dept}`}
+                              value={dept}
+                              onSelect={(currentValue) => {
+                                setSelectedFilter({type: 'department', value: currentValue});
+                                setSelectedDepartment(currentValue);
+                                setSearchOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={`mr-2 h-4 w-4 ${
+                                  selectedFilter?.type === 'department' && selectedFilter?.value === dept ? "opacity-100" : "opacity-0"
+                                }`}
+                              />
+                              <Activity className="mr-2 h-4 w-4 text-green-500" />
+                              <div className="flex flex-col items-start">
+                                <span className="font-medium">{dept}</span>
+                                <span className="text-xs text-gray-500">
+                                  {deptMembers.length}名: {deptMembers.slice(0, 3).join(", ")}
+                                  {deptMembers.length > 3 && " など"}
+                                </span>
+                              </div>
+                            </CommandItem>
+                          );
+                        })}
                       </CommandGroup>
                     </CommandList>
                   </Command>
@@ -957,6 +993,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   size="sm"
                   onClick={() => {
                     setSelectedFilter(null);
+                    setSelectedDepartment(null);
                   }}
                   className="h-8 px-2 text-sm text-gray-500 hover:text-gray-700"
                 >
