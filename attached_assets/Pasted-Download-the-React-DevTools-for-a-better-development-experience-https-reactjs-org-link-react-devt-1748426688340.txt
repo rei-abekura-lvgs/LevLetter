@@ -1,0 +1,144 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:57 アプリ状態: Object
+auth-context-new.tsx:132 🚀 認証初期化開始
+auth-context-new.tsx:33 🔍 セッションからユーザー情報を取得中...
+auth-context-new.tsx:162 📊 認証状態更新: Object
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: Object
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2faf1ac7:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2faf1ac7:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2faf1ac7:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2faf1ac7:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2faf1ac7:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2faf1ac7:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2faf1ac7:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2faf1ac7:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2faf1ac7:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2faf1ac7:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: Object
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth-context.tsx:157 🔄 認証初期化開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2faf1ac7:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2faf1ac7:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2faf1ac7:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2faf1ac7:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2faf1ac7:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2faf1ac7:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2faf1ac7:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2faf1ac7:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2faf1ac7:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2faf1ac7:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+2auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:104 アプリ状態: Object
+auth.ts:41 🔍 認証ユーザー情報取得開始...
+auth-context.tsx:157 🔄 認証初期化開始...
+auth.ts:48 ❌ 認証ユーザー情報取得エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2faf1ac7:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2faf1ac7:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2faf1ac7:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2faf1ac7:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2faf1ac7:18109:11)
+getAuthenticatedUser @ auth.ts:48Understand this error
+auth.ts:54 ユーザー認証エラー: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at getAuthenticatedUser (auth.ts:44:26)
+    at auth-context.tsx:115:30
+    at initAuth (auth-context.tsx:161:34)
+    at auth-context.tsx:172:5
+    at commitHookEffectListMount (chunk-RPCDYKBN.js?v=2faf1ac7:16915:34)
+    at commitPassiveMountOnFiber (chunk-RPCDYKBN.js?v=2faf1ac7:18156:19)
+    at commitPassiveMountEffects_complete (chunk-RPCDYKBN.js?v=2faf1ac7:18129:17)
+    at commitPassiveMountEffects_begin (chunk-RPCDYKBN.js?v=2faf1ac7:18119:15)
+    at commitPassiveMountEffects (chunk-RPCDYKBN.js?v=2faf1ac7:18109:11)
+getAuthenticatedUser @ auth.ts:54Understand this error
+2auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+auth-context.tsx:157 🔄 認証初期化開始...
+auth-context.tsx:162 🔄 初期認証結果: 認証失敗
+/?success=%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AB%E6%88%90%E5%8A%9F%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+/?success=%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AB%E6%88%90%E5%8A%9F%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+/?success=%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AB%E6%88%90%E5%8A%9F%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+/?success=%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AB%E6%88%90%E5%8A%9F%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context-new.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context-new.tsx:139 🎯 認証初期化完了: 阿部倉 怜
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:70 🔔 通知ベル状態: Object
+notification-bell.tsx:48 📨 通知データ取得開始（ベルコンポーネント）
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:42 API GET リクエスト: /api/users データなし
+home.tsx:693 🎯 URLパラメータチェック: Object
+App.tsx:57 アプリ状態: Object
+auth-context-new.tsx:162 📊 認証状態更新: Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=2faf1ac7:840:14)
+    at run (@tanstack_react-query.js?v=2faf1ac7:494:49)
+    at Object.start (@tanstack_react-query.js?v=2faf1ac7:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=2faf1ac7:926:41)
+    at _a9.executeFetch_fn (@tanstack_react-query.js?v=2faf1ac7:2211:51)
+    at _a9.onSubscribe (@tanstack_react-query.js?v=2faf1ac7:1898:74)
+    at _a9.subscribe (@tanstack_react-query.js?v=2faf1ac7:24:10)
+(anonymous) @ queryClient.ts:110Understand this error
+notification-bell.tsx:57 📨 通知データ取得完了（ベルコンポーネント）: Array(17)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:70 🔔 通知ベル状態: Object
+home.tsx:693 🎯 URLパラメータチェック: Object
+home.tsx:693 🎯 URLパラメータチェック: Object
+notification-bell.tsx:82 🔔 通知クリック: Object
+notification-bell.tsx:84 🎯 カード179にジャンプ開始
+notification-bell.tsx:82 🔔 通知クリック: Object
+notification-bell.tsx:84 🎯 カード156にジャンプ開始
+notification-bell.tsx:82 🔔 通知クリック: {id: 'like_669', userId: 5, type: 'card_like', message: '德永　眞哉さんがあなたのカードにいいねしました', isRead: false, …}
+notification-bell.tsx:84 🎯 カード156にジャンプ開始
+notification-bell.tsx:82 🔔 通知クリック: {id: 'like_668', userId: 5, type: 'card_like', message: '加藤　智也さんがあなたのカードにいいねしました', isRead: false, …}
+notification-bell.tsx:84 🎯 カード158にジャンプ開始
+notification-bell.tsx:93 🗑️ すべての通知を削除開始
+queryClient.ts:42 API POST リクエスト: /api/notifications/clear-all データなし
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:70 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 17, unreadCount: 17}
+notification-bell.tsx:98 ✅ すべての通知を削除完了
+notification-bell.tsx:48 📨 通知データ取得開始（ベルコンポーネント）
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:70 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 17, unreadCount: 17}
+notification-bell.tsx:57 📨 通知データ取得完了（ベルコンポーネント）: (17) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:70 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 17, unreadCount: 17}
+queryClient.ts:42 API GET リクエスト: /api/cards データなし

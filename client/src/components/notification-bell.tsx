@@ -87,31 +87,24 @@ export function NotificationBell() {
     }
   };
 
-  // すべての通知を削除する処理
-  const clearAllNotificationsMutation = useMutation({
-    mutationFn: async () => {
-      console.log("🗑️ すべての通知を削除開始");
-      const response = await apiRequest("POST", "/api/notifications/clear-all");
-      return response;
-    },
-    onSuccess: () => {
-      console.log("✅ すべての通知を削除完了");
-      // 通知データをリフレッシュ
-      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
-      toast({
-        title: "通知を削除しました",
-        description: "すべての通知が削除されました",
-      });
-    },
-    onError: (error) => {
-      console.error("❌ 通知削除エラー:", error);
-      toast({
-        title: "エラー",
-        description: "通知の削除に失敗しました",
-        variant: "destructive",
-      });
-    }
-  });
+  // すべての通知を削除する処理（ローカルストレージベース）
+  const clearAllNotifications = () => {
+    console.log("🗑️ すべての通知を削除開始");
+    
+    // 現在の通知IDをすべてクリア済みとしてマーク
+    const allNotificationIds = new Set([...clearedNotifications, ...notifications.map(n => n.id)]);
+    setClearedNotifications(allNotificationIds);
+    
+    // ローカルストレージに保存
+    localStorage.setItem('clearedNotifications', JSON.stringify([...allNotificationIds]));
+    
+    console.log("✅ すべての通知を削除完了");
+    toast({
+      title: "通知を削除しました",
+      description: "すべての通知を削除しました",
+      duration: 2000,
+    });
+  };
 
   // 通知の表示テキストを短縮
   const truncateMessage = (message: string, maxLength: number = 40) => {
@@ -199,12 +192,11 @@ export function NotificationBell() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="w-full text-center py-2 text-red-600 hover:text-red-800 hover:bg-red-50"
-              onClick={() => clearAllNotificationsMutation.mutate()}
-              disabled={clearAllNotificationsMutation.isPending}
+              onClick={clearAllNotifications}
             >
               <div className="flex items-center justify-center gap-2">
                 <Trash2 className="h-4 w-4" />
-                {clearAllNotificationsMutation.isPending ? "削除中..." : "すべての通知を消す"}
+                すべての通知を消す
               </div>
             </DropdownMenuItem>
           </>
