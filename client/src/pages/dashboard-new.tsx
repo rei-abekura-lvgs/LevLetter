@@ -98,23 +98,55 @@ export default function DashboardNew() {
         <h1 className="text-2xl font-bold text-gray-900">ダッシュボード</h1>
       </div>
 
-      {/* 今週のポイント */}
-      <Card className="border-blue-200 bg-blue-50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-900">
-            <Calendar className="h-5 w-5" />
+      {/* 今週のポイント - おしゃれなデザイン */}
+      <Card className="bg-gradient-to-br from-blue-500 to-indigo-600 border-0 shadow-lg overflow-hidden relative">
+        {/* 背景装飾 */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
+        
+        <CardHeader className="pb-3 relative z-10">
+          <CardTitle className="flex items-center gap-2 text-white text-lg">
+            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+              <Calendar className="h-5 w-5" />
+            </div>
             今週のポイント（{getWeekPeriod()}）
           </CardTitle>
-          <CardDescription className="text-blue-700">
+          <CardDescription className="text-blue-100 flex items-center gap-1">
+            <Sparkles className="h-4 w-4" />
             毎週月曜日に500ptが支給されます
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold text-blue-900">
-            {stats.weekly.currentPoints}pt / {stats.weekly.maxPoints}pt
+        <CardContent className="space-y-6 relative z-10">
+          <div className="text-center">
+            <div className="text-4xl font-bold text-white mb-2 drop-shadow-sm">
+              {stats.weekly.currentPoints}pt 
+              <span className="text-xl text-blue-100 font-normal"> / {stats.weekly.maxPoints}pt</span>
+            </div>
+            <div className="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-2 backdrop-blur-sm">
+              <TrendingUp className="h-4 w-4 text-blue-100" />
+              <span className="text-sm text-blue-100">
+                使用済み: {stats.weekly.usedPoints}pt
+              </span>
+            </div>
           </div>
-          <div className="text-sm text-blue-600 mt-2">
-            使用済み: {stats.weekly.usedPoints}pt
+          
+          {/* おしゃれなプログレスバー */}
+          <div className="space-y-2">
+            <div className="w-full bg-white/20 rounded-full h-3 backdrop-blur-sm overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-yellow-300 to-orange-400 h-3 rounded-full transition-all duration-700 ease-out shadow-lg relative"
+                style={{
+                  width: `${(stats.weekly.currentPoints / stats.weekly.maxPoints) * 100}%`,
+                }}
+              >
+                <div className="absolute inset-0 bg-white/30 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            <div className="flex justify-between text-xs text-blue-100">
+              <span>0pt</span>
+              <span>{Math.round((stats.weekly.currentPoints / stats.weekly.maxPoints) * 100)}%</span>
+              <span>{stats.weekly.maxPoints}pt</span>
+            </div>
           </div>
         </CardContent>
       </Card>
