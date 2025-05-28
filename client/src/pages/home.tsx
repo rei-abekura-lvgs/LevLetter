@@ -735,10 +735,10 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   }, [cards, user.id]);
 
   // 部署のユニークリストを生成（カードから）
-  const uniqueDepartments = [...new Set(cards.flatMap(card => {
-    const allCardUsers = [card.sender, card.recipient, ...(card.additionalRecipients as User[] || [])].filter(Boolean);
-    return allCardUsers.map(user => user.department).filter(Boolean);
-  }))].sort();
+  const uniqueDepartments = Array.from(new Set(cards.flatMap(card => {
+    const allCardUsers = [card.sender, card.recipient, ...(card.additionalRecipients || [])].filter(Boolean);
+    return allCardUsers.map(user => 'department' in user ? user.department : null).filter(Boolean);
+  }))).sort();
 
   // 各タブの通知数を計算（重要な通知のみ目立たせる）
   const getTabCounts = () => {
@@ -903,8 +903,6 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               card={card} 
               currentUser={user} 
               isUnread={isUnread}
-              onRefresh={refreshCards}
-              onMarkAsRead={markCardAsRead}
             />
           );
         })}

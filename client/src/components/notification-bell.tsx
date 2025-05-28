@@ -121,11 +121,11 @@ export function NotificationBell() {
     console.log("🗑️ すべての通知を削除開始");
     
     // 現在の通知IDをすべてクリア済みとしてマーク
-    const allNotificationIds = new Set([...clearedNotifications, ...notifications.map(n => n.id)]);
+    const allNotificationIds = new Set([...Array.from(clearedNotifications), ...notifications.map(n => n.id)]);
     setClearedNotifications(allNotificationIds);
     
     // ローカルストレージに保存
-    localStorage.setItem('clearedNotifications', JSON.stringify([...allNotificationIds]));
+    localStorage.setItem('clearedNotifications', JSON.stringify(Array.from(allNotificationIds)));
     
     console.log("✅ すべての通知を削除完了");
     toast({
