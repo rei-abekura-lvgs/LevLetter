@@ -479,24 +479,15 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             </div>
           ) : (
             <div className="space-y-4">
-              {filteredCards.map((card) => {
-                const isUnread = activeTab === "received" && !readCardIds.has(card.id);
-                return (
-                  <CardItem
-                    key={card.id}
-                    card={card}
-                    currentUser={user}
-                    onRefresh={handleRefresh}
-                    onMarkAsRead={markAsRead}
-                    ref={observerRef.current && isUnread ? (el: HTMLDivElement | null) => {
-                      if (el) {
-                        el.setAttribute('data-card-id', card.id.toString());
-                        observerRef.current?.observe(el);
-                      }
-                    } : undefined}
-                  />
-                );
-              })}
+              {filteredCards.map((card) => (
+                <CardItem
+                  key={card.id}
+                  card={card}
+                  currentUser={user}
+                  onRefresh={handleRefresh}
+                  onMarkAsRead={markAsRead}
+                />
+              ))}
             </div>
           )}
         </TabsContent>
