@@ -79,14 +79,27 @@ export default function Header({ toggleSidebar, onCardFormOpen }: HeaderProps) {
         {user && (
           <>
             {/* ポイント表示 */}
-            <div className="flex items-center space-x-1 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-200">
-              <svg className="w-4 h-4 text-[#3990EA]" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-              </svg>
-              <span className="text-sm font-medium text-[#3990EA]">
-                {user.weeklyPoints}pt
-              </span>
-            </div>
+            <Link href="/dashboard">
+              <div className="flex items-center space-x-1 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-200 hover:bg-blue-100 transition-colors cursor-pointer group">
+                <svg className="w-4 h-4 text-[#3990EA]" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span className="text-sm font-medium text-[#3990EA]">
+                  {user.weeklyPoints}pt/500pt
+                </span>
+                
+                {/* ツールチップ */}
+                <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                  <div className="text-center">
+                    <div className="font-medium">今週の残りポイント</div>
+                    <div className="text-gray-300 mt-1">毎週月曜日に500pt付与</div>
+                    <div className="text-gray-300">クリックで詳細表示</div>
+                  </div>
+                  {/* 矢印 */}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-800"></div>
+                </div>
+              </div>
+            </Link>
 
             {/* 通知ボタン */}
             <Link href="/notifications">
