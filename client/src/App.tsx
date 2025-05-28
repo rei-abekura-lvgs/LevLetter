@@ -16,7 +16,7 @@ import Landing from "@/pages/landing";
 import Contact from "@/pages/contact";
 import Demo from "@/pages/demo";
 import Trial from "@/pages/trial";
-import Dashboard from "@/pages/dashboard";
+import DashboardNew from "@/pages/dashboard-new";
 import Ranking from "@/pages/ranking";
 import MainLayout from "@/components/layout/main-layout";
 import AuthLayout from "@/components/layout/auth-layout";
@@ -85,7 +85,7 @@ function AppRoutes() {
             <Settings />
           </Route>
           <Route path="/dashboard">
-            <Dashboard />
+            <DashboardNew />
           </Route>
           <Route path="/ranking">
             <Ranking />
