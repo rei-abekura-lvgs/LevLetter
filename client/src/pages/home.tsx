@@ -737,7 +737,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   // 部署のユニークリストを生成（カードから）
   const uniqueDepartments = Array.from(new Set(cards.flatMap(card => {
     const allCardUsers = [card.sender, card.recipient, ...(card.additionalRecipients || [])].filter(Boolean);
-    return allCardUsers.map(user => 'department' in user ? user.department : null).filter(Boolean);
+    return allCardUsers.map(user => (typeof user === 'object' && user && 'department' in user) ? user.department : null).filter(Boolean);
   }))).sort();
 
   // 各タブの通知数を計算（重要な通知のみ目立たせる）

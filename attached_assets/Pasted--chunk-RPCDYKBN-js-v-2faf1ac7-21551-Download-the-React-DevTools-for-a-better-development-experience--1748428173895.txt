@@ -1,0 +1,92 @@
+
+chunk-RPCDYKBN.js?v=2faf1ac7:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:57 アプリ状態: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/landing'}
+auth-context.tsx:120 🚀 認証初期化開始
+auth-context.tsx:32 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:150 📊 認証状態更新: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:120 🚀 認証初期化開始
+auth-context.tsx:32 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:150 📊 認証状態更新: 
+{認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+landing:1 Unchecked runtime.lastError: The message port closed before a response was received.
+landing:1 Unchecked runtime.lastError: The message port closed before a response was received.
+landing:1 Unchecked runtime.lastError: The message port closed before a response was received.
+landing:1 Unchecked runtime.lastError: The message port closed before a response was received.
+auth-context.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:127 🎯 認証初期化完了: 阿部倉 怜
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:70 🔔 通知ベル状態: 
+{isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+notification-bell.tsx:48 📨 通知データ取得開始（ベルコンポーネント）
+queryClient.ts:42 API GET リクエスト: /api/cards データなし
+queryClient.ts:42 API GET リクエスト: /api/users データなし
+home.tsx:693 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 0}
+App.tsx:57 アプリ状態: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, 現在のパス: '/landing'}
+auth-context.tsx:150 📊 認証状態更新: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:70 🔔 通知ベル状態: 
+{isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+home.tsx:693 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 0}
+App.tsx:57 アプリ状態: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, 現在のパス: '/'}
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+auth-context.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:127 🎯 認証初期化完了: 阿部倉 怜
+auth-context.tsx:150 📊 認証状態更新: 
+{認証済み: true, ユーザー: '阿部倉 怜', 読込中: false, エラー: null}
+notification-bell.tsx:57 📨 通知データ取得完了（ベルコンポーネント）: 
+(17) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:70 🔔 通知ベル状態: 
+{isLoading: false, error: undefined, totalNotifications: 17, unreadCount: 3}
+home.tsx:693 🎯 URLパラメータチェック: 
+{cardId: null, cardsLength: 0}
+home.tsx:740 Uncaught TypeError: Cannot use 'in' operator to search for 'department' in 322
+    at home.tsx:740:37
+    at Array.map (<anonymous>)
+    at home.tsx:740:25
+    at Array.flatMap (<anonymous>)
+    at Home (home.tsx:738:54)
+home.tsx:740 Uncaught TypeError: Cannot use 'in' operator to search for 'department' in 322
+    at home.tsx:740:37
+    at Array.map (<anonymous>)
+    at home.tsx:740:25
+    at Array.flatMap (<anonymous>)
+    at Home (home.tsx:738:54)
+chunk-RPCDYKBN.js?v=2faf1ac7:14032 The above error occurred in the <Home> component:
+
+    at Home (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/pages/home.tsx:991:32)
+    at Route (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=2faf1ac7:323:16)
+    at Switch (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=2faf1ac7:379:17)
+    at main
+    at div
+    at div
+    at div
+    at div
+    at div
+    at MainLayout (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/components/layout/main-layout.tsx?t=1748428051942:25:38)
+    at AppRoutes (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/App.tsx?t=1748428104199&v=G_Y7n9jrue9zqXq8Crt-z:43:48)
+    at Provider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=2faf1ac7:38:15)
+    at TooltipProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=2faf1ac7:64:5)
+    at AuthProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/context/auth-context.tsx:21:32)
+    at QueryClientProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=2faf1ac7:2805:3)
+    at App
+    at AuthProvider (https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/src/context/auth-context.tsx?v=G_Y7n9jrue9zqXq8Crt-z:21:32)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+chunk-RPCDYKBN.js?v=2faf1ac7:9129 Uncaught TypeError: Cannot use 'in' operator to search for 'department' in 322
+    at home.tsx:740:37
+    at Array.map (<anonymous>)
+    at home.tsx:740:25
+    at Array.flatMap (<anonymous>)
+    at Home (home.tsx:738:54)
