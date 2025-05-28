@@ -1,0 +1,294 @@
+📊 認証状態更新: Object
+admin:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+admin:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+admin:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+admin:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:127 🎯 認証初期化完了: 阿部倉 怜
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: Object
+notification-bell.tsx:53 📨 通知データ取得開始（ベルコンポーネント）
+queryClient.ts:42 API GET リクエスト: /api/admin/users データなし
+queryClient.ts:42 API GET リクエスト: /api/admin/departments データなし
+App.tsx:57 アプリ状態: Object
+auth-context.tsx:150 📊 認証状態更新: Object
+queryClient.ts:110 Error fetching /api/auth/me: Error: 認証が必要です
+    at apiRequest (queryClient.ts:39:11)
+    at queryClient.ts:108:20
+    at queryFn (queryClient.ts:130:67)
+    at Object.fetchFn [as fn] (@tanstack_react-query.js?v=d0471f00:840:14)
+    at run (@tanstack_react-query.js?v=d0471f00:494:49)
+    at Object.start (@tanstack_react-query.js?v=d0471f00:536:9)
+    at _a4.fetch (@tanstack_react-query.js?v=d0471f00:926:41)
+    at _a9.executeFetch_fn (@tanstack_react-query.js?v=d0471f00:2211:51)
+    at _a9.onSubscribe (@tanstack_react-query.js?v=d0471f00:1898:74)
+    at _a9.subscribe (@tanstack_react-query.js?v=d0471f00:24:10)
+(anonymous) @ queryClient.ts:110Understand this error
+auth-context.tsx:45 ✅ セッション認証成功: 阿部倉 怜
+auth-context.tsx:127 🎯 認証初期化完了: 阿部倉 怜
+auth-context.tsx:150 📊 認証状態更新: Object
+notification-bell.tsx:62 📨 通知データ取得完了（ベルコンポーネント）: Array(0)
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: Object
+employee-import.tsx:133 ファイル情報: Object
+employee-import.tsx:151 ファイル内容サンプル: Array(5)
+employee-import.tsx:155 タブ区切り判定: false
+employee-import.tsx:163 ■■■■■■ パース結果詳細 ■■■■■■
+employee-import.tsx:164 パース結果: Object
+employee-import.tsx:165 パース結果のヘッダー: Array(18)
+employee-import.tsx:166 行数: 49
+employee-import.tsx:168 パース結果の最初の行: Object
+employee-import.tsx:169 データ型: object
+employee-import.tsx:171 プロパティ一覧: Array(18)
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:215 マッピング後のデータ: Array(3)
+employee-import.tsx:226 有効なデータ件数: 49
+employee-import.tsx:383 インポート対象データ件数: 49
+employee-import.tsx:57 ■■■■■■ インポート前のデータ詳細 ■■■■■■
+employee-import.tsx:58 データ件数: 49
+employee-import.tsx:59 データサンプル: Array(3)
+employee-import.tsx:61 1件目の内容: {
+  "email": "keishu.otaki@leverages.jp",
+  "name": "大滝　圭修",
+  "employeeId": "324138",
+  "displayName": "大滝　圭修",
+  "department": "システム本部/NALYSYS開発部/NALYSYSプロダクトチーム"
+}
+employee-import.tsx:62 データ型: object
+employee-import.tsx:63 プロパティ一覧: Array(5)
+employee-import.tsx:65 ■■■■■■ インポート前のデータ詳細(終わり) ■■■■■■
+queryClient.ts:42 API POST リクエスト: /api/admin/users/import データあり
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: Object
+queryClient.ts:42 API GET リクエスト: /api/admin/users データなし
+queryClient.ts:42 API GET リクエスト: /api/admin/departments データなし
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: Object
+15queryClient.ts:42 API GET リクエスト: /api/admin/users データなし
+employee-import.tsx:133 ファイル情報: Object
+employee-import.tsx:151 ファイル内容サンプル: Array(5)
+employee-import.tsx:155 タブ区切り判定: false
+employee-import.tsx:163 ■■■■■■ パース結果詳細 ■■■■■■
+employee-import.tsx:164 パース結果: Object
+employee-import.tsx:165 パース結果のヘッダー: Array(18)
+employee-import.tsx:166 行数: 49
+employee-import.tsx:168 パース結果の最初の行: Object
+employee-import.tsx:169 データ型: object
+employee-import.tsx:171 プロパティ一覧: Array(18)
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:177 処理中の行: Object
+employee-import.tsx:192 部門階層分解: Object
+employee-import.tsx:215 マッピング後のデータ: Array(3)
+employee-import.tsx:226 有効なデータ件数: 49
+employee-import.tsx:383 インポート対象データ件数: 49
+employee-import.tsx:57 ■■■■■■ インポート前のデータ詳細 ■■■■■■
+employee-import.tsx:58 データ件数: 49
+employee-import.tsx:59 データサンプル: Array(3)
+employee-import.tsx:61 1件目の内容: {
+  "email": "keishu.otaki@leverages.jp",
+  "name": "大滝　圭修",
+  "employeeId": "324138",
+  "displayName": "大滝　圭修",
+  "department": "システム本部/NALYSYS開発部/NALYSYSプロダクトチーム"
+}
+employee-import.tsx:62 データ型: object
+employee-import.tsx:63 プロパティ一覧: Array(5)
+employee-import.tsx:65 ■■■■■■ インポート前のデータ詳細(終わり) ■■■■■■
+queryClient.ts:42 API POST リクエスト: /api/admin/users/import データあり
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: Object
+queryClient.ts:42 API GET リクエスト: /api/admin/users データなし
+queryClient.ts:42 API GET リクエスト: /api/admin/departments データなし
+3queryClient.ts:42 API GET リクエスト: /api/admin/users データなし
