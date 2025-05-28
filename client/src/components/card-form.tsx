@@ -119,11 +119,11 @@ export default function CardForm({ onSent }: CardFormProps) {
   const noResults = filteredUsers.length === 0 && (searchQuery !== "" || departmentFilter !== null);
   const showAllUsers = searchQuery === "" && departmentFilter === null;
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof cardFormSchema>>({
     resolver: zodResolver(cardFormSchema),
     defaultValues: {
       recipientId: "",
-      recipientType: "user",
+      recipientType: "user" as const,
       message: "",
       points: 0
     }
