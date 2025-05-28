@@ -157,7 +157,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
   const totalPoints = card.points || 0;
 
   return (
-    <Card className="mb-4 last:mb-0 border-none shadow-sm bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-200">
+    <Card ref={cardRef} className="mb-4 last:mb-0 border-none shadow-sm bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-200">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 flex-1">
@@ -791,6 +791,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             card={card} 
             currentUser={user} 
             onRefresh={refreshCards}
+            onMarkAsRead={markCardAsRead}
           />
         ))}
       </div>
