@@ -958,15 +958,15 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
             {/* 魅力的な投稿エリア */}
             <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100 flex-shrink-0">
               <div className="flex items-center gap-4">
-                {/* 魅力的な投稿ボタン */}
+                {/* 魅力的な投稿ボタン - モダンデザイン */}
                 <Button 
                   onClick={() => setIsCardFormOpen(true)} 
-                  className="bg-gradient-to-r from-[#3990EA] to-[#5BA3F5] hover:from-[#2980D9] hover:to-[#4A92E4] text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] flex items-center gap-2"
+                  className="bg-gradient-to-r from-[#3990EA] to-[#5BA3F5] hover:from-[#2980D9] hover:to-[#4A92E4] text-white px-8 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.03] hover:-translate-y-0.5 flex items-center gap-3 border-0"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                   </svg>
-                  感謝を伝える
+                  感謝の手紙を送る
                 </Button>
                 
                 {/* カード数とソート */}
