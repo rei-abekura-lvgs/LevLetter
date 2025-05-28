@@ -97,7 +97,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
   useEffect(() => {
     const checkDeletePermission = () => {
       // 管理者またはカード送信者のみ削除可能
-      const isAdmin = currentUser.role === 'admin';
+      const isAdmin = currentUser.isAdmin;
       const isSender = card.senderId === currentUser.id;
       setCanDelete(isAdmin || isSender);
     };

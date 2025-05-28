@@ -162,6 +162,7 @@ export type CardWithRelations = Card & {
   additionalRecipientUsers?: User[]; // 追加の受信者
   likes: Array<Like & { user: User }>;
   totalPoints: number;
+  tags?: string[]; // タグ配列を追加
 };
 
 export type LoginRequest = z.infer<typeof loginSchema>;
