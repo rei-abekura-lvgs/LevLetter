@@ -137,15 +137,10 @@ export function UserAutocomplete({
                             {(user.displayName || user.name).charAt(0)}
                           </AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col">
+                        <div className="flex-1">
                           <span className="text-sm font-medium">
                             {user.displayName || user.name}
                           </span>
-                          {user.department && (
-                            <span className="text-xs text-gray-500">
-                              {user.department}
-                            </span>
-                          )}
                         </div>
                       </CommandItem>
                     ))}
