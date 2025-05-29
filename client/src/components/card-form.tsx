@@ -192,6 +192,27 @@ export default function CardForm({ onSent }: CardFormProps) {
     }
     
     setIsSubmitting(true);
+    
+    // 楽観的更新: ユーザーのポイントを即座に減少
+    const totalPointsToDeduct = data.points * selectedRecipients.length;
+    queryClient.setQueryData(["/api/auth/me"], (oldData: any) => {
+      if (!oldData) return oldData;
+      const newWeeklyPoints = Math.max(0, oldData.weeklyPoints - totalPointsToDeduct);
+      return { ...oldData, weeklyPoints: newWeeklyPoints };
+    });
+    
+    // ダッシュボードのキャッシュも即座に更新
+    queryClient.setQueryData(["/api/dashboard/stats"], (oldStats: any) => {
+      if (!oldStats) return oldStats;
+      return {
+        ...oldStats,
+        weekly: {
+          ...oldStats.weekly,
+          currentPoints: Math.max(0, oldStats.weekly.currentPoints - totalPointsToDeduct)
+        }
+      };
+    });
+    
     try {
       // 最初の受信者をメイン受信者とし、残りを追加受信者として扱う
       const mainRecipient = selectedRecipients[0];
