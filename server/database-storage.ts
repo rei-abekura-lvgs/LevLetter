@@ -234,7 +234,12 @@ export class DatabaseStorage implements IStorage {
     }
     
     console.log(`🔐 パスワード検証中...`);
+    console.log(`📝 入力パスワード: "${password}"`);
+    console.log(`💾 DB保存ハッシュ: "${user.password}"`);
+    
     const hashedPassword = hashPassword(password);
+    console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
+    
     const isPasswordCorrect = user.password === hashedPassword;
     
     console.log(`🔑 パスワード検証結果: ${isPasswordCorrect ? '成功' : '失敗'}`);
