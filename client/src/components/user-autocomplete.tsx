@@ -106,23 +106,20 @@ export function UserAutocomplete({
       )}
 
       {/* 検索入力エリア */}
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              value={inputValue}
-              onChange={(e) => handleInputChange(e.target.value)}
-              placeholder={selectedUsers.length >= maxSelections ? `最大${maxSelections}人まで選択可能` : placeholder}
-              disabled={selectedUsers.length >= maxSelections}
-              className="pl-10"
-              onFocus={() => setIsOpen(filteredUsers.length > 0)}
-            />
-          </div>
-        </PopoverTrigger>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Input
+          value={inputValue}
+          onChange={(e) => handleInputChange(e.target.value)}
+          placeholder={selectedUsers.length >= maxSelections ? `最大${maxSelections}人まで選択可能` : placeholder}
+          disabled={selectedUsers.length >= maxSelections}
+          className="pl-10"
+          onFocus={() => setIsOpen(filteredUsers.length > 0)}
+        />
         
-        {filteredUsers.length > 0 && (
-          <PopoverContent className="w-full p-0" align="start">
+        {/* 検索結果ポップオーバー */}
+        {filteredUsers.length > 0 && isOpen && (
+          <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-[200px] overflow-auto">
             <Command>
               <CommandList className="max-h-[200px] overflow-auto">
                 {filteredUsers.length === 0 ? (
@@ -133,7 +130,7 @@ export function UserAutocomplete({
                       <CommandItem
                         key={user.id}
                         onSelect={() => handleUserSelect(user)}
-                        className="flex items-center gap-3 cursor-pointer"
+                        className="flex items-center gap-3 cursor-pointer p-2 hover:bg-gray-50"
                       >
                         <Avatar className="h-8 w-8">
                           <AvatarFallback className="bg-blue-100 text-blue-700">
@@ -156,9 +153,9 @@ export function UserAutocomplete({
                 )}
               </CommandList>
             </Command>
-          </PopoverContent>
+          </div>
         )}
-      </Popover>
+      </div>
 
       {/* 状態表示 */}
       <div className="flex justify-between items-center text-xs text-gray-500">
