@@ -186,13 +186,11 @@ export default function Register() {
       // 成功メッセージを表示
       toast({
         title: "登録成功",
-        description: "LevLetterへようこそ！",
+        description: "LevLetterへようこそ！自動的にリダイレクトします...",
       });
       
-      // 少し待ってからページをリロードして認証状態を更新
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1000);
+      // 即座にホームページにリダイレクト（エラーを避けるため）
+      window.location.replace("/");
     } catch (error) {
       console.error("登録エラー:", error);
       if (error instanceof Response) {
