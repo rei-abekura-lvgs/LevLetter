@@ -43,12 +43,20 @@ function AppRoutes() {
         return;
       }
       
-      // 認証済みかつログイン関連ページにいる場合はホームへリダイレクト
-      if (isAuthenticated && publicRoutes.includes(location)) {
-        setLocation('/');
+      // 認証済みユーザーのリダイレクト処理
+      if (isAuthenticated) {
+        // パスワード未設定の場合はパスワード設定ページへ
+        if (user && !user.passwordInitialized && location !== '/password-setup') {
+          setLocation('/password-setup');
+          return;
+        }
+        // パスワード設定済みでログイン関連ページにいる場合はホームへ
+        if (publicRoutes.includes(location)) {
+          setLocation('/');
+        }
       } 
       // 未認証かつ保護されたページにいる場合はランディングページへリダイレクト
-      else if (!isAuthenticated && !publicRoutes.includes(location)) {
+      else if (!isAuthenticated && !publicRoutes.includes(location) && !authRoutes.includes(location)) {
         setLocation('/landing');
       }
     }
@@ -85,6 +93,9 @@ function AppRoutes() {
           </Route>
           <Route path="/settings">
             <Settings />
+          </Route>
+          <Route path="/password-setup">
+            <PasswordSetup />
           </Route>
           <Route path="/dashboard">
             <DashboardNew />

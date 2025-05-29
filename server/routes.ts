@@ -327,6 +327,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // パスワードを更新
       await storage.updateUser(user.id, {
         password: newPasswordHash,
+        passwordInitialized: true,
         updatedAt: new Date()
       });
       
