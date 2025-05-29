@@ -353,13 +353,24 @@ export function UserAutocomplete({
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[480px] p-0 shadow-lg border">
-                  <div className="bg-white rounded-md">
+                <PopoverContent 
+                  className="w-[480px] p-0 shadow-lg border max-h-[420px] overflow-hidden"
+                  onOpenAutoFocus={(e) => e.preventDefault()}
+                >
+                  <div className="bg-white rounded-md h-full flex flex-col">
                     <div 
-                      className="max-h-[350px] overflow-y-scroll overscroll-contain"
-                      style={{ scrollbarWidth: 'thin' }}
+                      className="overflow-y-auto overscroll-contain"
+                      style={{ 
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#cbd5e1 transparent',
+                        maxHeight: '400px'
+                      }}
+                      onWheel={(e) => {
+                        // スクロールイベントが親に伝播するのを防ぐ
+                        e.stopPropagation();
+                      }}
                     >
-                      <div className="p-3 space-y-1">
+                      <div className="p-3 space-y-1 min-h-0">
                         {/* 全体選択 */}
                         <div
                           className={cn(
