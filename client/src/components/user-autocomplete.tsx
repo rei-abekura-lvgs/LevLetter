@@ -117,9 +117,9 @@ export function UserAutocomplete({
           onFocus={() => setIsOpen(filteredUsers.length > 0)}
         />
         
-        {/* 検索結果ポップオーバー（上向き表示） */}
+        {/* 検索結果ポップオーバー（フローティング表示） */}
         {filteredUsers.length > 0 && isOpen && (
-          <div className="absolute bottom-full left-0 right-0 z-50 mb-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-[200px] overflow-auto">
+          <div className="fixed top-20 left-4 right-4 z-[9999] bg-white border border-gray-200 rounded-md shadow-xl max-h-[300px] overflow-auto">
             <Command>
               <CommandList className="max-h-[200px] overflow-auto">
                 {filteredUsers.length === 0 ? (
