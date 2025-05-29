@@ -1223,11 +1223,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const cards = await storage.getCards(options);
       
-      // キャッシュを無効化するヘッダーを設定
+      // 強力なキャッシュ無効化ヘッダーを設定
       res.set({
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
         'Pragma': 'no-cache',
-        'Expires': '0'
+        'Expires': '0',
+        'ETag': `"${Date.now()}-${Math.random()}"`,
+        'Last-Modified': new Date().toUTCString()
       });
       
       return res.json(cards);
