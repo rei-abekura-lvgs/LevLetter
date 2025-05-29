@@ -251,17 +251,32 @@ export function UserAutocomplete({
       }
     }
 
-    if (!inputValue.trim()) return usersToFilter.slice(0, 10); // 初期状態では10人まで表示
+    // ランダムシャッフル関数
+    const shuffleArray = (array: UserType[]) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    if (!inputValue.trim()) {
+      // 初期状態ではランダムに並び替えて50人まで表示
+      return shuffleArray(usersToFilter).slice(0, 50);
+    }
     
     const searchTerm = inputValue.toLowerCase().trim();
     
-    return usersToFilter
+    const filtered = usersToFilter
       .filter(user => 
         user.searchKeywords.includes(searchTerm) ||
         user.email?.toLowerCase().includes(searchTerm) ||
         user.department?.toLowerCase().includes(searchTerm)
-      )
-      .slice(0, 10); // 最大10件まで表示
+      );
+    
+    // 検索結果もランダムに並び替えて50件まで表示
+    return shuffleArray(filtered).slice(0, 50);
   }, [searchableUsers, inputValue, selectedDepartment, hierarchyTree, organizationHierarchy, users]);
 
   const handleUserSelect = (user: UserType) => {
@@ -469,8 +484,11 @@ export function UserAutocomplete({
             {/* 検索結果 */}
             <div className="flex-1 min-h-0 border rounded-lg bg-gray-50">
               <div 
-                className="h-full overflow-y-scroll overscroll-contain"
-                style={{ scrollbarWidth: 'thin' }}
+                className="h-full overflow-y-auto overscroll-contain"
+                style={{ 
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#cbd5e1 transparent'
+                }}
               >
                 <div className="p-2">
                   {filteredUsers.length === 0 ? (
@@ -481,31 +499,36 @@ export function UserAutocomplete({
                       </div>
                     </div>
                   ) : (
-                    <div className="space-y-1">
-                      {filteredUsers.map((user) => (
-                        <div
-                          key={user.id}
-                          onClick={() => handleUserSelect(user)}
-                          className="flex items-center gap-3 p-3 cursor-pointer rounded-lg bg-white hover:bg-blue-50 active:bg-blue-100 transition-colors border border-transparent hover:border-blue-200"
-                        >
-                          <Avatar className="h-10 w-10 flex-shrink-0">
-                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-sm font-medium">
-                              {(user.displayName || user.name).charAt(0)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-gray-900 truncate">
-                              {user.displayName || user.name}
-                            </div>
-                            {user.department && (
-                              <div className="text-xs text-gray-500 truncate mt-0.5">
-                                {user.department.replace("ANALYSIS", "NALYSIS")}
+                    <>
+                      <div className="text-xs text-gray-500 mb-2 px-1">
+                        {filteredUsers.length}人表示（ランダム順）
+                      </div>
+                      <div className="space-y-1">
+                        {filteredUsers.map((user) => (
+                          <div
+                            key={user.id}
+                            onClick={() => handleUserSelect(user)}
+                            className="flex items-center gap-3 p-3 cursor-pointer rounded-lg bg-white hover:bg-blue-50 active:bg-blue-100 transition-colors border border-transparent hover:border-blue-200"
+                          >
+                            <Avatar className="h-10 w-10 flex-shrink-0">
+                              <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-sm font-medium">
+                                {(user.displayName || user.name).charAt(0)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-medium text-gray-900 truncate">
+                                {user.displayName || user.name}
                               </div>
-                            )}
+                              {user.department && (
+                                <div className="text-xs text-gray-500 truncate mt-0.5">
+                                  {user.department.replace("ANALYSIS", "NALYSIS")}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
