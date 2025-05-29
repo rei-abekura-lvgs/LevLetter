@@ -10,6 +10,7 @@ import Register from "@/pages/register";
 import Profile from "@/pages/profile";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
+import PasswordSetup from "@/pages/password-setup";
 import Settings from "@/pages/settings";
 import AdminDashboard from "@/pages/admin";
 import Landing from "@/pages/landing";
@@ -32,6 +33,7 @@ function AppRoutes() {
   useEffect(() => {
     // 保護されたルートとパブリックルートの定義
     const publicRoutes = ['/landing', '/login', '/register', '/forgot-password', '/contact', '/demo', '/trial'];
+    const authRoutes = ['/password-setup']; // 認証済みユーザー専用だが特別な処理が必要なルート
     
     // 認証状態によるリダイレクト処理
     if (!isLoading) {
