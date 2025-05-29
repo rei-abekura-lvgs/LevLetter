@@ -1,0 +1,52 @@
+Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.Understand this warning
+index-DhqeqnK9.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/'}
+index-DhqeqnK9.js:408 🚀 認証初期化開始
+index-DhqeqnK9.js:408 🔍 セッションからユーザー情報を取得中...
+index-DhqeqnK9.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+index-DhqeqnK9.js:408 🚀 認証初期化開始
+index-DhqeqnK9.js:408 🔍 セッションからユーザー情報を取得中...
+index-DhqeqnK9.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+levletter.replit.app/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+levletter.replit.app/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+levletter.replit.app/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+levletter.replit.app/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+index-DhqeqnK9.js:408 
+            
+            
+           GET https://levletter.replit.app/api/auth/me 401 (Unauthorized)
+c @ index-DhqeqnK9.js:408
+(anonymous) @ index-DhqeqnK9.js:408
+(anonymous) @ index-DhqeqnK9.js:408
+fp @ index-DhqeqnK9.js:40
+Ic @ index-DhqeqnK9.js:40
+W_ @ index-DhqeqnK9.js:40
+Io @ index-DhqeqnK9.js:38
+p9 @ index-DhqeqnK9.js:40
+Qo @ index-DhqeqnK9.js:40
+Bj @ index-DhqeqnK9.js:40
+E @ index-DhqeqnK9.js:25
+A @ index-DhqeqnK9.js:25Understand this error
+index-DhqeqnK9.js:408 🔒 未認証状態
+index-DhqeqnK9.js:408 🎯 認証初期化完了: 未ログイン
+index-DhqeqnK9.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/'}
+index-DhqeqnK9.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+index-DhqeqnK9.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/landing'}
+index-DhqeqnK9.js:408 
+            
+            
+           GET https://levletter.replit.app/api/auth/me 401 (Unauthorized)
+c @ index-DhqeqnK9.js:408
+(anonymous) @ index-DhqeqnK9.js:408
+(anonymous) @ index-DhqeqnK9.js:408
+fp @ index-DhqeqnK9.js:40
+Ic @ index-DhqeqnK9.js:40
+W_ @ index-DhqeqnK9.js:40
+Io @ index-DhqeqnK9.js:38
+p9 @ index-DhqeqnK9.js:40
+Qo @ index-DhqeqnK9.js:40
+Bj @ index-DhqeqnK9.js:40
+E @ index-DhqeqnK9.js:25
+A @ index-DhqeqnK9.js:25Understand this error
+index-DhqeqnK9.js:408 🔒 未認証状態
+index-DhqeqnK9.js:408 🎯 認証初期化完了: 未ログイン
+index-DhqeqnK9.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}

@@ -88,9 +88,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: process.env.NODE_ENV === "production",
+        secure: false, // 本番環境でも一時的にfalseに設定
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1週間
+        sameSite: 'lax', // クロスサイトリクエストでの互換性向上
       },
     })
   );
