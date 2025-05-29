@@ -1,0 +1,155 @@
+Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+index-DhqeqnK9.js:408 
+            
+            
+           GET https://levletter.replit.app/api/auth/me 401 (Unauthorized)
+c @ index-DhqeqnK9.js:408
+(anonymous) @ index-DhqeqnK9.js:408
+(anonymous) @ index-DhqeqnK9.js:408
+fp @ index-DhqeqnK9.js:40
+Ic @ index-DhqeqnK9.js:40
+W_ @ index-DhqeqnK9.js:40
+Io @ index-DhqeqnK9.js:38
+p9 @ index-DhqeqnK9.js:40
+Qo @ index-DhqeqnK9.js:40
+Bj @ index-DhqeqnK9.js:40
+E @ index-DhqeqnK9.js:25
+A @ index-DhqeqnK9.js:25Understand this error
+index-DhqeqnK9.js:408 🔒 未認証状態
+index-DhqeqnK9.js:408 🎯 認証初期化完了: 未ログイン
+index-DhqeqnK9.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-DhqeqnK9.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+index-DhqeqnK9.js:408 
+            
+            
+           GET https://levletter.replit.app/api/auth/me 401 (Unauthorized)
+c @ index-DhqeqnK9.js:408
+(anonymous) @ index-DhqeqnK9.js:408
+(anonymous) @ index-DhqeqnK9.js:408
+fp @ index-DhqeqnK9.js:40
+Ic @ index-DhqeqnK9.js:40
+W_ @ index-DhqeqnK9.js:40
+Io @ index-DhqeqnK9.js:38
+p9 @ index-DhqeqnK9.js:40
+Qo @ index-DhqeqnK9.js:40
+Bj @ index-DhqeqnK9.js:40
+E @ index-DhqeqnK9.js:25
+A @ index-DhqeqnK9.js:25Understand this error
+index-DhqeqnK9.js:408 🔒 未認証状態
+index-DhqeqnK9.js:408 🎯 認証初期化完了: 未ログイン
+index-DhqeqnK9.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+index-DhqeqnK9.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/register'}
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.com) レスポンス: {exists: false, userExists: false, hasPassword: false, message: 'このメールアドレスは管理者によって事前登録されていません。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは管理者によって事前登録されていません。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.co) レスポンス: {exists: false, userExists: false, hasPassword: false, message: 'このメールアドレスは管理者によって事前登録されていません。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは管理者によって事前登録されていません。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.c) レスポンス: {exists: false, userExists: false, hasPassword: false, message: 'このメールアドレスは管理者によって事前登録されていません。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは管理者によって事前登録されていません。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.) レスポンス: {exists: false, userExists: false, hasPassword: false, message: 'このメールアドレスは管理者によって事前登録されていません。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは管理者によって事前登録されていません。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.j) レスポンス: {exists: false, userExists: false, hasPassword: false, message: 'このメールアドレスは管理者によって事前登録されていません。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは管理者によって事前登録されていません。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: false, message: 'このメールアドレスは事前登録されています。続けてパスワードを設定してください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは事前登録されています。続けてパスワードを設定してください。
+index-DhqeqnK9.js:452 送信データ: {email: 'ren.miguchi@leverages.jp', password: '00000000'}
+index-DhqeqnK9.js:48 API POST リクエスト: /api/auth/register?_t=1748490942676 データあり
+index-DhqeqnK9.js:452 登録成功レスポンス: {message: 'アカウント登録が完了しました', user: {…}}
+index-DhqeqnK9.js:452 登録エラー: TypeError: t is not a function
+    at _ (index-DhqeqnK9.js:452:277367)
+    at async index-DhqeqnK9.js:452:87433
+_ @ index-DhqeqnK9.js:452
+await in _
+(anonymous) @ index-DhqeqnK9.js:452
+await in (anonymous)
+DM @ index-DhqeqnK9.js:37
+OM @ index-DhqeqnK9.js:37
+MM @ index-DhqeqnK9.js:37
+m_ @ index-DhqeqnK9.js:37
+HC @ index-DhqeqnK9.js:37
+(anonymous) @ index-DhqeqnK9.js:37
+yy @ index-DhqeqnK9.js:40
+pC @ index-DhqeqnK9.js:37
+Ax @ index-DhqeqnK9.js:37
+X1 @ index-DhqeqnK9.js:37
+JM @ index-DhqeqnK9.js:37Understand this error
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: true, message: 'このメールアドレスは既に登録されています。ログインしてください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは既に登録されています。ログインしてください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: true, message: 'このメールアドレスは既に登録されています。ログインしてください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは既に登録されています。ログインしてください。
+index-DhqeqnK9.js:452 メール検証 (ren.miguchi@leverages.jp) レスポンス: {exists: true, userExists: true, hasPassword: true, message: 'このメールアドレスは既に登録されています。ログインしてください。'}
+index-DhqeqnK9.js:452 メール検証結果: このメールアドレスは既に登録されています。ログインしてください。
+index-DhqeqnK9.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-DhqeqnK9.js:452 ログイン試行: ren.miguchi@leverages.jp
+index-DhqeqnK9.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-DhqeqnK9.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+index-DhqeqnK9.js:408 
+            
+            
+           POST https://levletter.replit.app/api/auth/login 401 (Unauthorized)
+u @ index-DhqeqnK9.js:408
+h @ index-DhqeqnK9.js:452
+(anonymous) @ index-DhqeqnK9.js:452
+await in (anonymous)
+DM @ index-DhqeqnK9.js:37
+OM @ index-DhqeqnK9.js:37
+MM @ index-DhqeqnK9.js:37
+m_ @ index-DhqeqnK9.js:37
+HC @ index-DhqeqnK9.js:37
+(anonymous) @ index-DhqeqnK9.js:37
+yy @ index-DhqeqnK9.js:40
+pC @ index-DhqeqnK9.js:37
+Ax @ index-DhqeqnK9.js:37
+X1 @ index-DhqeqnK9.js:37
+JM @ index-DhqeqnK9.js:37Understand this error
+index-DhqeqnK9.js:452 ログインエラー: Error: ログインに失敗しました
+    at h (index-DhqeqnK9.js:452:271282)
+    at async index-DhqeqnK9.js:452:87433
+h @ index-DhqeqnK9.js:452
+await in h
+(anonymous) @ index-DhqeqnK9.js:452
+await in (anonymous)
+DM @ index-DhqeqnK9.js:37
+OM @ index-DhqeqnK9.js:37
+MM @ index-DhqeqnK9.js:37
+m_ @ index-DhqeqnK9.js:37
+HC @ index-DhqeqnK9.js:37
+(anonymous) @ index-DhqeqnK9.js:37
+yy @ index-DhqeqnK9.js:40
+pC @ index-DhqeqnK9.js:37
+Ax @ index-DhqeqnK9.js:37
+X1 @ index-DhqeqnK9.js:37
+JM @ index-DhqeqnK9.js:37Understand this error
+index-DhqeqnK9.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-DhqeqnK9.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: 'メールアドレスまたはパスワードが正しくありません'}
