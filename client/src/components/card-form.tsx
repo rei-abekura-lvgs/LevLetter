@@ -220,6 +220,8 @@ export default function CardForm({ onSent }: CardFormProps) {
       
       // カードリストを更新
       queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
+      // 強制的にキャッシュをクリアして再取得
+      queryClient.refetchQueries({ queryKey: ["/api/cards"] });
       
       // 送信完了コールバックがあれば呼び出す
       if (onSent) {
