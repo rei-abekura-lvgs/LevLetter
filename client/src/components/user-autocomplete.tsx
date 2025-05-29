@@ -4,8 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { X, Search, User } from "lucide-react";
+import { X, Search, User, Building2 } from "lucide-react";
 import { convertToSearchableFormats } from "@/hooks/useSearch";
 import type { User as UserType } from "@shared/schema";
 
@@ -28,12 +29,24 @@ export function UserAutocomplete({
 }: UserAutocompleteProps) {
   const [inputValue, setInputValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
 
   // 選択済みユーザーを除外したユーザーリスト
   const availableUsers = useMemo(() => {
     const selectedIds = new Set(selectedUsers.map(u => u.id));
     return users.filter(user => !selectedIds.has(user.id));
   }, [users, selectedUsers]);
+
+  // 部署リストを取得
+  const departments = useMemo(() => {
+    const deptSet = new Set<string>();
+    users.forEach(user => {
+      if (user.department) {
+        deptSet.add(user.department);
+      }
+    });
+    return Array.from(deptSet).sort();
+  }, [users]);
 
   // 検索可能な形式に変換されたユーザーデータ
   const searchableUsers = useMemo(() => {
@@ -51,18 +64,26 @@ export function UserAutocomplete({
 
   // 検索結果をフィルタリング
   const filteredUsers = useMemo(() => {
-    if (!inputValue.trim()) return searchableUsers.slice(0, 10); // 初期状態では10人まで表示
+    // 部署フィルタリング
+    let usersToFilter = searchableUsers;
+    if (selectedDepartment !== "all") {
+      usersToFilter = searchableUsers.filter(user => 
+        user.department === selectedDepartment
+      );
+    }
+
+    if (!inputValue.trim()) return usersToFilter.slice(0, 10); // 初期状態では10人まで表示
     
     const searchTerm = inputValue.toLowerCase().trim();
     
-    return searchableUsers
+    return usersToFilter
       .filter(user => 
         user.searchKeywords.includes(searchTerm) ||
         user.email?.toLowerCase().includes(searchTerm) ||
         user.department?.toLowerCase().includes(searchTerm)
       )
       .slice(0, 10); // 最大10件まで表示
-  }, [searchableUsers, inputValue]);
+  }, [searchableUsers, inputValue, selectedDepartment]);
 
   const handleUserSelect = (user: UserType) => {
     if (selectedUsers.length >= maxSelections) return;
@@ -78,6 +99,7 @@ export function UserAutocomplete({
   const openModal = () => {
     setIsModalOpen(true);
     setInputValue("");
+    setSelectedDepartment("all");
   };
 
   return (
@@ -128,6 +150,24 @@ export function UserAutocomplete({
           </DialogHeader>
           
           <div className="space-y-4">
+            {/* 部署選択 */}
+            <div className="flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-gray-400" />
+              <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="すべての部署" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">すべての部署</SelectItem>
+                  {departments.map((dept) => (
+                    <SelectItem key={dept} value={dept}>
+                      {dept}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* 検索入力 */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -141,9 +181,9 @@ export function UserAutocomplete({
             </div>
 
             {/* 検索結果 */}
-            <div className="max-h-[300px] overflow-auto border rounded-md">
+            <div className="border rounded-md">
               <Command>
-                <CommandList>
+                <CommandList className="max-h-[300px] overflow-auto">
                   {filteredUsers.length === 0 ? (
                     <CommandEmpty className="py-6">該当するユーザーが見つかりません</CommandEmpty>
                   ) : (
@@ -163,6 +203,11 @@ export function UserAutocomplete({
                             <span className="text-sm font-medium">
                               {user.displayName || user.name}
                             </span>
+                            {user.department && (
+                              <div className="text-xs text-gray-500">
+                                {user.department}
+                              </div>
+                            )}
                           </div>
                         </CommandItem>
                       ))}
