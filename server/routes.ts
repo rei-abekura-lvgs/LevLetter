@@ -512,6 +512,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // パスワード更新
       const hashedPassword = hashPassword(newPassword);
+      console.log(`🔐 パスワードリセット詳細:`, {
+        userId: user.id,
+        email: user.email,
+        newPassword: newPassword,
+        hashedPassword: hashedPassword
+      });
+      
       await storage.updateUser(user.id, {
         password: hashedPassword,
         passwordInitialized: true
