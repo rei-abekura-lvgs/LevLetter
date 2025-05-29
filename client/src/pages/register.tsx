@@ -38,7 +38,6 @@ interface GoogleAuthInfo {
 
 export default function Register() {
   const [, setLocation] = useLocation();
-  const { fetchUser } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [emailVerified, setEmailVerified] = useState<boolean | null>(null);
@@ -184,17 +183,16 @@ export default function Register() {
       
       console.log("登録成功レスポンス:", response);
       
-      // ユーザーコンテキストを更新
-      await fetchUser();
-      
       // 成功メッセージを表示
       toast({
         title: "登録成功",
         description: "LevLetterへようこそ！",
       });
       
-      // ホームページに遷移
-      setLocation("/");
+      // 少し待ってからページをリロードして認証状態を更新
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
     } catch (error) {
       console.error("登録エラー:", error);
       if (error instanceof Response) {
