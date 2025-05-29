@@ -199,11 +199,6 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateUser(id: number, updates: Partial<User>): Promise<User> {
-    // パスワードの更新がある場合はハッシュ化
-    if (updates.password) {
-      updates.password = hashPassword(updates.password);
-    }
-
     const [updatedUser] = await db
       .update(users)
       .set(updates)
