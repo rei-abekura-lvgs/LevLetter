@@ -84,6 +84,7 @@ export default function Login() {
         toast({
           title: "ログイン成功",
           description: "LevLetterへようこそ！",
+          duration: 3000,
         });
 
         // 認証情報を更新

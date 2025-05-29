@@ -183,8 +183,17 @@ export default function Register() {
       
       console.log("登録成功レスポンス:", response);
       
-      // 登録成功 - 即座にページ全体をリロードしてセッションを確立
-      window.location.href = "/";
+      // 成功メッセージを表示
+      toast({
+        title: "登録完了",
+        description: "アカウントが作成されました。LevLetterへようこそ！",
+        duration: 3000,
+      });
+      
+      // 登録成功 - 少し遅延してからページ全体をリロードしてセッションを確立
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
     } catch (error) {
       console.error("登録エラー:", error);
       if (error instanceof Response) {

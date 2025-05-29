@@ -44,6 +44,7 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
         title: "すでにいいね済みです",
         description: "このカードにはすでにいいねをしています",
         variant: "destructive",
+        duration: 3000,
       });
       onClose();
       return;
@@ -99,6 +100,7 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
       toast({
         title: "いいねしました！",
         description: "2ポイント消費して、送信者と受信者それぞれに1ポイントずつ贈られました",
+        duration: 3000,
       });
 
       // 正確なデータでキャッシュを更新
