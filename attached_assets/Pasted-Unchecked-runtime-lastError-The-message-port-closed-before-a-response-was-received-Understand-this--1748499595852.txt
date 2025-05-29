@@ -1,0 +1,74 @@
+Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+api/auth/me:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 ()Understand this error
+index-BijL6vyZ.js:408 🔒 未認証状態
+index-BijL6vyZ.js:408 🎯 認証初期化完了: 未ログイン
+index-BijL6vyZ.js:600 アプリ状態: Object
+index-BijL6vyZ.js:408 📊 認証状態更新: Object
+api/auth/me:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 ()Understand this error
+index-BijL6vyZ.js:408 🔒 未認証状態
+index-BijL6vyZ.js:408 🎯 認証初期化完了: 未ログイン
+index-BijL6vyZ.js:408 📊 認証状態更新: Object
+index-BijL6vyZ.js:452 ログイン試行: masaki.harada@leverages.jp
+index-BijL6vyZ.js:600 アプリ状態: Object
+index-BijL6vyZ.js:408 📊 認証状態更新: Object
+api/auth/login:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 ()Understand this error
+index-BijL6vyZ.js:452 ログインエラー: Error: ログインに失敗しました
+    at h (index-BijL6vyZ.js:452:271282)
+    at async index-BijL6vyZ.js:452:87433
+h @ index-BijL6vyZ.js:452Understand this error
+index-BijL6vyZ.js:600 アプリ状態: Object
+index-BijL6vyZ.js:408 📊 認証状態更新: Object
+index-BijL6vyZ.js:452 ログイン試行: masaki.harada@leverages.jp
+index-BijL6vyZ.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+index-BijL6vyZ.js:408 
+            
+            
+           POST https://levletter.replit.app/api/auth/login 401 (Unauthorized)
+u @ index-BijL6vyZ.js:408
+h @ index-BijL6vyZ.js:452
+(anonymous) @ index-BijL6vyZ.js:452
+await in (anonymous)
+DM @ index-BijL6vyZ.js:37
+OM @ index-BijL6vyZ.js:37
+MM @ index-BijL6vyZ.js:37
+m_ @ index-BijL6vyZ.js:37
+HC @ index-BijL6vyZ.js:37
+(anonymous) @ index-BijL6vyZ.js:37
+yy @ index-BijL6vyZ.js:40
+pC @ index-BijL6vyZ.js:37
+Ax @ index-BijL6vyZ.js:37
+X1 @ index-BijL6vyZ.js:37
+JM @ index-BijL6vyZ.js:37Understand this error
+index-BijL6vyZ.js:452 ログインエラー: Error: ログインに失敗しました
+    at h (index-BijL6vyZ.js:452:271282)
+    at async index-BijL6vyZ.js:452:87433
+h @ index-BijL6vyZ.js:452
+await in h
+(anonymous) @ index-BijL6vyZ.js:452
+await in (anonymous)
+DM @ index-BijL6vyZ.js:37
+OM @ index-BijL6vyZ.js:37
+MM @ index-BijL6vyZ.js:37
+m_ @ index-BijL6vyZ.js:37
+HC @ index-BijL6vyZ.js:37
+(anonymous) @ index-BijL6vyZ.js:37
+yy @ index-BijL6vyZ.js:40
+pC @ index-BijL6vyZ.js:37
+Ax @ index-BijL6vyZ.js:37
+X1 @ index-BijL6vyZ.js:37
+JM @ index-BijL6vyZ.js:37Understand this error
+index-BijL6vyZ.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: 'メールアドレスまたはパスワードが正しくありません'}
