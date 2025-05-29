@@ -10,6 +10,7 @@ interface AuthContextType {
   error: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  fetchUser: () => Promise<void>; // fetchUser関数を追加
   refreshUser: () => Promise<void>;
   updateUser: (updatedUser: User) => void;
 }
@@ -169,6 +170,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     error,
     login,
     logout,
+    fetchUser: refreshUser, // fetchUserをrefreshUserのエイリアスとして追加
     refreshUser,
     updateUser,
   };
