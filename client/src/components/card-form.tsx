@@ -219,9 +219,16 @@ export default function CardForm({ onSent }: CardFormProps) {
       setSelectedRecipients([]);
       
       // カードリストを更新
+      queryClient.removeQueries({ queryKey: ["/api/cards"] });
       queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
       // 強制的にキャッシュをクリアして再取得
-      queryClient.refetchQueries({ queryKey: ["/api/cards"] });
+      await queryClient.refetchQueries({ queryKey: ["/api/cards"] });
+      
+      // 一時的な解決策：少し待ってからもう一度リフェッチ
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
+        queryClient.refetchQueries({ queryKey: ["/api/cards"] });
+      }, 500);
       
       // 送信完了コールバックがあれば呼び出す
       if (onSent) {

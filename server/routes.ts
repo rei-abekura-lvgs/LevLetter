@@ -1222,6 +1222,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const cards = await storage.getCards(options);
+      
+      // キャッシュを無効化するヘッダーを設定
+      res.set({
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      });
+      
       return res.json(cards);
     } catch (error) {
       console.error("カード取得エラー:", error);
