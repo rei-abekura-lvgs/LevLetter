@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { X, Search, User } from "lucide-react";
 import { convertToSearchableFormats } from "@/hooks/useSearch";
@@ -26,7 +27,7 @@ export function UserAutocomplete({
   maxSelections = 10
 }: UserAutocompleteProps) {
   const [inputValue, setInputValue] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 選択済みユーザーを除外したユーザーリスト
   const availableUsers = useMemo(() => {
@@ -68,12 +69,15 @@ export function UserAutocomplete({
     
     onUserSelect(user);
     setInputValue("");
-    setIsOpen(false);
   };
 
   const handleInputChange = (value: string) => {
     setInputValue(value);
-    setIsOpen(value.length > 0 || filteredUsers.length > 0);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    setInputValue("");
   };
 
   return (
@@ -105,52 +109,71 @@ export function UserAutocomplete({
         </div>
       )}
 
-      {/* 検索入力エリア */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-        <Input
-          value={inputValue}
-          onChange={(e) => handleInputChange(e.target.value)}
-          placeholder={selectedUsers.length >= maxSelections ? `最大${maxSelections}人まで選択可能` : placeholder}
-          disabled={selectedUsers.length >= maxSelections}
-          className="pl-10"
-          onFocus={() => setIsOpen(filteredUsers.length > 0)}
-        />
-        
-        {/* 検索結果ポップオーバー（フローティング表示） */}
-        {filteredUsers.length > 0 && isOpen && (
-          <div className="fixed top-20 left-4 right-4 z-[9999] bg-white border border-gray-200 rounded-md shadow-xl max-h-[300px] overflow-auto">
-            <Command>
-              <CommandList className="max-h-[200px] overflow-auto">
-                {filteredUsers.length === 0 ? (
-                  <CommandEmpty>該当するユーザーが見つかりません</CommandEmpty>
-                ) : (
-                  <CommandGroup>
-                    {filteredUsers.map((user) => (
-                      <CommandItem
-                        key={user.id}
-                        onSelect={() => handleUserSelect(user)}
-                        className="flex items-center gap-3 cursor-pointer p-2 hover:bg-gray-50"
-                      >
-                        <Avatar className="h-8 w-8">
-                          <AvatarFallback className="bg-blue-100 text-blue-700">
-                            {(user.displayName || user.name).charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <span className="text-sm font-medium">
-                            {user.displayName || user.name}
-                          </span>
-                        </div>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                )}
-              </CommandList>
-            </Command>
+      {/* 検索ボタン */}
+      <Button 
+        variant="outline" 
+        onClick={openModal}
+        disabled={selectedUsers.length >= maxSelections}
+        className="w-full justify-start text-gray-500 font-normal"
+      >
+        <Search className="h-4 w-4 mr-2" />
+        {selectedUsers.length >= maxSelections ? `最大${maxSelections}人まで選択可能` : placeholder}
+      </Button>
+
+      {/* 検索モーダル */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[500px] max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>名前で検索</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {/* 検索入力 */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                value={inputValue}
+                onChange={(e) => handleInputChange(e.target.value)}
+                placeholder="名前（漢字・ひらがな・カタカナ・ローマ字）で検索..."
+                className="pl-10"
+                autoFocus
+              />
+            </div>
+
+            {/* 検索結果 */}
+            <div className="max-h-[300px] overflow-auto border rounded-md">
+              <Command>
+                <CommandList>
+                  {filteredUsers.length === 0 ? (
+                    <CommandEmpty className="py-6">該当するユーザーが見つかりません</CommandEmpty>
+                  ) : (
+                    <CommandGroup>
+                      {filteredUsers.map((user) => (
+                        <CommandItem
+                          key={user.id}
+                          onSelect={() => handleUserSelect(user)}
+                          className="flex items-center gap-3 cursor-pointer p-3 hover:bg-gray-50"
+                        >
+                          <Avatar className="h-8 w-8">
+                            <AvatarFallback className="bg-blue-100 text-blue-700">
+                              {(user.displayName || user.name).charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <span className="text-sm font-medium">
+                              {user.displayName || user.name}
+                            </span>
+                          </div>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                </CommandList>
+              </Command>
+            </div>
           </div>
-        )}
-      </div>
+        </DialogContent>
+      </Dialog>
 
       {/* 状態表示 */}
       <div className="flex justify-between items-center text-xs text-gray-500">
