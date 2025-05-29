@@ -26,9 +26,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ArrowUpDown, Calendar, TrendingUp, Search, ChevronDown, ChevronUp, Building2, Check } from "lucide-react";
+import { ArrowUpDown, Calendar, TrendingUp, Search, ChevronDown, ChevronUp, Building2, Check, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SortOrder } from "@/types/common";
+import { UserAutocomplete } from "./user-autocomplete";
+import type { User } from "@shared/schema";
 
 interface FilterControlsProps {
   sortOrder: SortOrder;

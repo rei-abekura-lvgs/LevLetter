@@ -1,53 +1,53 @@
 import { useState, useMemo } from 'react';
 import type { User } from '@shared/schema';
 
-// 日本語名をローマ字に変換する包括的な辞書
-const romajiDictionary = {
+// 日本語名をローマ字・ひらがな・カタカナに変換する包括的な辞書
+const nameConversionDictionary = {
   // 姓
-  '阿部倉': 'abekura',
-  '田中': 'tanaka',
-  '佐藤': 'sato',
-  '鈴木': 'suzuki',
-  '高橋': 'takahashi',
-  '山田': 'yamada',
-  '小林': 'kobayashi',
-  '加藤': 'kato',
-  '吉田': 'yoshida',
-  '山本': 'yamamoto',
-  '中村': 'nakamura',
-  '小川': 'ogawa',
-  '斎藤': 'saito',
-  '松本': 'matsumoto',
-  '井上': 'inoue',
-  '木村': 'kimura',
-  '林': 'hayashi',
-  '清水': 'shimizu',
-  '山口': 'yamaguchi',
-  '森': 'mori',
-  '牧野': 'makino',
-  '石田': 'ishida',
-  '安藤': 'ando',
-  '稲垣': 'inagaki',
+  '阿部倉': { romaji: 'abekura', hiragana: 'あべくら', katakana: 'アベクラ' },
+  '田中': { romaji: 'tanaka', hiragana: 'たなか', katakana: 'タナカ' },
+  '佐藤': { romaji: 'sato', hiragana: 'さとう', katakana: 'サトウ' },
+  '鈴木': { romaji: 'suzuki', hiragana: 'すずき', katakana: 'スズキ' },
+  '高橋': { romaji: 'takahashi', hiragana: 'たかはし', katakana: 'タカハシ' },
+  '山田': { romaji: 'yamada', hiragana: 'やまだ', katakana: 'ヤマダ' },
+  '小林': { romaji: 'kobayashi', hiragana: 'こばやし', katakana: 'コバヤシ' },
+  '加藤': { romaji: 'kato', hiragana: 'かとう', katakana: 'カトウ' },
+  '吉田': { romaji: 'yoshida', hiragana: 'よしだ', katakana: 'ヨシダ' },
+  '山本': { romaji: 'yamamoto', hiragana: 'やまもと', katakana: 'ヤマモト' },
+  '中村': { romaji: 'nakamura', hiragana: 'なかむら', katakana: 'ナカムラ' },
+  '小川': { romaji: 'ogawa', hiragana: 'おがわ', katakana: 'オガワ' },
+  '斎藤': { romaji: 'saito', hiragana: 'さいとう', katakana: 'サイトウ' },
+  '松本': { romaji: 'matsumoto', hiragana: 'まつもと', katakana: 'マツモト' },
+  '井上': { romaji: 'inoue', hiragana: 'いのうえ', katakana: 'イノウエ' },
+  '木村': { romaji: 'kimura', hiragana: 'きむら', katakana: 'キムラ' },
+  '林': { romaji: 'hayashi', hiragana: 'はやし', katakana: 'ハヤシ' },
+  '清水': { romaji: 'shimizu', hiragana: 'しみず', katakana: 'シミズ' },
+  '山口': { romaji: 'yamaguchi', hiragana: 'やまぐち', katakana: 'ヤマグチ' },
+  '森': { romaji: 'mori', hiragana: 'もり', katakana: 'モリ' },
+  '牧野': { romaji: 'makino', hiragana: 'まきの', katakana: 'マキノ' },
+  '石田': { romaji: 'ishida', hiragana: 'いしだ', katakana: 'イシダ' },
+  '安藤': { romaji: 'ando', hiragana: 'あんどう', katakana: 'アンドウ' },
+  '稲垣': { romaji: 'inagaki', hiragana: 'いながき', katakana: 'イナガキ' },
   // 名
-  '怜': 'rei',
-  '太郎': 'taro',
-  '次郎': 'jiro',
-  '三郎': 'saburo',
-  '花子': 'hanako',
-  '美香': 'mika',
-  '真一': 'shinichi',
-  '健太': 'kenta',
-  '康太': 'kota',
-  '優': 'yu',
-  '翔': 'sho',
-  '愛': 'ai',
-  '恵': 'megumi',
-  '修': 'osamu',
-  '聡': 'satoshi',
-  '誠': 'makoto',
-  '弘輝': 'hiroki',
-  '貴義': 'takayoshi',
-  '啓介': 'keisuke',
+  '怜': { romaji: 'rei', hiragana: 'れい', katakana: 'レイ' },
+  '太郎': { romaji: 'taro', hiragana: 'たろう', katakana: 'タロウ' },
+  '次郎': { romaji: 'jiro', hiragana: 'じろう', katakana: 'ジロウ' },
+  '三郎': { romaji: 'saburo', hiragana: 'さぶろう', katakana: 'サブロウ' },
+  '花子': { romaji: 'hanako', hiragana: 'はなこ', katakana: 'ハナコ' },
+  '美香': { romaji: 'mika', hiragana: 'みか', katakana: 'ミカ' },
+  '真一': { romaji: 'shinichi', hiragana: 'しんいち', katakana: 'シンイチ' },
+  '健太': { romaji: 'kenta', hiragana: 'けんた', katakana: 'ケンタ' },
+  '康太': { romaji: 'kota', hiragana: 'こうた', katakana: 'コウタ' },
+  '優': { romaji: 'yu', hiragana: 'ゆう', katakana: 'ユウ' },
+  '翔': { romaji: 'sho', hiragana: 'しょう', katakana: 'ショウ' },
+  '愛': { romaji: 'ai', hiragana: 'あい', katakana: 'アイ' },
+  '恵': { romaji: 'megumi', hiragana: 'めぐみ', katakana: 'メグミ' },
+  '修': { romaji: 'osamu', hiragana: 'おさむ', katakana: 'オサム' },
+  '聡': { romaji: 'satoshi', hiragana: 'さとし', katakana: 'サトシ' },
+  '誠': { romaji: 'makoto', hiragana: 'まこと', katakana: 'マコト' },
+  '弘輝': { romaji: 'hiroki', hiragana: 'ひろき', katakana: 'ヒロキ' },
+  '貴義': { romaji: 'takayoshi', hiragana: 'たかよし', katakana: 'タカヨシ' },
+  '啓介': { romaji: 'keisuke', hiragana: 'けいすけ', katakana: 'ケイスケ' },
 };
 
 export interface SearchFilter {
@@ -56,19 +56,39 @@ export interface SearchFilter {
 }
 
 /**
- * 日本語名をローマ字に変換する関数
+ * 日本語名を検索可能な形式に変換する関数
  */
-export const convertToRomaji = (name: string): string => {
-  if (!name) return '';
+export const convertToSearchableFormats = (name: string): {
+  romaji: string;
+  hiragana: string;
+  katakana: string;
+  combined: string;
+} => {
+  if (!name) return { romaji: '', hiragana: '', katakana: '', combined: '' };
   
-  let result = name;
+  let romaji = name;
+  let hiragana = name;
+  let katakana = name;
   
   // 辞書を使って変換
-  for (const [kanji, romaji] of Object.entries(romajiDictionary)) {
-    result = result.replace(new RegExp(kanji, 'g'), romaji);
+  for (const [kanji, conversions] of Object.entries(nameConversionDictionary)) {
+    const regex = new RegExp(kanji, 'g');
+    romaji = romaji.replace(regex, conversions.romaji);
+    hiragana = hiragana.replace(regex, conversions.hiragana);
+    katakana = katakana.replace(regex, conversions.katakana);
   }
   
-  return result;
+  // すべての形式を結合した検索用文字列
+  const combined = `${name} ${romaji} ${hiragana} ${katakana}`.toLowerCase();
+  
+  return { romaji, hiragana, katakana, combined };
+};
+
+/**
+ * 旧関数との互換性を保つためのラッパー
+ */
+export const convertToRomaji = (name: string): string => {
+  return convertToSearchableFormats(name).romaji;
 };
 
 /**
@@ -94,13 +114,13 @@ export const useSearch = (allUsers: User[] = []) => {
   const searchableUsers = useMemo(() => {
     return allUsers.map(user => {
       const displayName = user.displayName || user.name;
-      const romanjiKeywords = convertToRomaji(displayName);
+      const searchFormats = convertToSearchableFormats(displayName);
       
       return {
         ...user,
         displayName,
-        romanjiKeywords,
-        searchKeywords: `${displayName} ${romanjiKeywords}`.toLowerCase()
+        ...searchFormats,
+        searchKeywords: searchFormats.combined
       };
     });
   }, [allUsers]);
