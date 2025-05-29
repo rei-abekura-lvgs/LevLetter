@@ -7,6 +7,7 @@ import { useOptimisticUpdates } from "@/hooks/use-optimistic-updates";
 import { CardList } from "@/components/card-list";
 import { TabNavigation } from "@/components/tab-navigation";
 import { FilterControls } from "@/components/filter-controls";
+import { UserAutocomplete } from "@/components/user-autocomplete";
 import { TabType, SortOrder, TabCounts } from "@/types/common";
 import { Button } from "@/components/ui/button";
 import {
@@ -573,6 +574,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const [sortOrder, setSortOrder] = useState<"newest" | "popular">("newest");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [departmentFilter, setDepartmentFilter] = useState<string>("");
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [localIsCardFormOpen, setLocalIsCardFormOpen] = useState(false);
   
   // プロップスで状態が渡された場合はそれを使用、そうでなければローカル状態を使用
@@ -840,7 +842,22 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     if (activeTab === "sent" && card.senderId !== user.id) return false;
     if (activeTab === "liked" && !(card.likes?.some(like => like.userId === user.id) || false)) return false;
     
-    // 検索フィルター
+    // 名前検索フィルター（選択されたユーザー）
+    if (selectedUsers.length > 0) {
+      const selectedUserIds = selectedUsers.map(u => u.id);
+      const cardUserIds = [
+        card.senderId,
+        typeof card.recipient === 'object' && card.recipient ? card.recipient.id : null,
+        ...(card.additionalRecipients || [])
+      ].filter((id): id is number => id !== null);
+      
+      const hasSelectedUser = cardUserIds.some(id => selectedUserIds.includes(id));
+      if (!hasSelectedUser) {
+        return false;
+      }
+    }
+
+    // テキスト検索フィルター
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       
@@ -1131,6 +1148,10 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                     onDepartmentChange={setDepartmentFilter}
                     departments={departmentOptions}
                     organizationHierarchy={organizationHierarchy}
+                    users={allUsers}
+                    selectedUsers={selectedUsers}
+                    onUserSelect={(user) => setSelectedUsers(prev => [...prev, user])}
+                    onUserRemove={(userId) => setSelectedUsers(prev => prev.filter(u => u.id !== userId))}
                   />
                 </div>
               </div>
