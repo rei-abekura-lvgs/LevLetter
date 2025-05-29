@@ -176,20 +176,14 @@ export function FilterControls({
 
                 {/* 名前検索オートコンプリート */}
                 {users.length > 0 && onUserSelect && onUserRemove && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Users className="h-4 w-4 text-gray-600" />
-                      <span className="text-sm font-medium text-gray-700">名前で絞り込み</span>
-                    </div>
-                    <UserAutocomplete
-                      users={users}
-                      selectedUsers={selectedUsers}
-                      onUserSelect={onUserSelect}
-                      onUserRemove={onUserRemove}
-                      placeholder="名前（漢字・ひらがな・カタカナ・ローマ字）で検索..."
-                      maxSelections={5}
-                    />
-                  </div>
+                  <UserAutocomplete
+                    users={users}
+                    selectedUsers={selectedUsers}
+                    onUserSelect={onUserSelect}
+                    onUserRemove={onUserRemove}
+                    placeholder="名前（漢字・ひらがな・カタカナ・ローマ字）で検索..."
+                    maxSelections={5}
+                  />
                 )}
               </div>
             </CollapsibleContent>
