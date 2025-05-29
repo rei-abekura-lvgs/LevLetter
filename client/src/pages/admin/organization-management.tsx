@@ -241,7 +241,7 @@ export default function OrganizationManagement() {
               Lv{org.level} {LEVEL_NAMES[org.level as keyof typeof LEVEL_NAMES]}
             </Badge>
             <div>
-              <h3 className="font-medium">{org.name}</h3>
+              <h3 className="font-medium">{org.name.replace("ANALYSIS", "NALYSIS")}</h3>
               {org.description && <p className="text-sm text-gray-600 mt-1">{org.description}</p>}
             </div>
           </div>
@@ -352,7 +352,7 @@ export default function OrganizationManagement() {
                         Lv{org.level} {LEVEL_NAMES[org.level as keyof typeof LEVEL_NAMES]}
                       </Badge>
                       <div>
-                        <h3 className="font-medium">{org.name}</h3>
+                        <h3 className="font-medium">{org.name.replace("ANALYSIS", "NALYSIS")}</h3>
                         {org.code && <p className="text-sm text-gray-500">コード: {org.code}</p>}
                         {org.description && <p className="text-sm text-gray-600 mt-1">{org.description}</p>}
                       </div>
@@ -483,7 +483,7 @@ export default function OrganizationManagement() {
                         .filter((org: OrganizationHierarchy) => org.level < formData.level)
                         .map((org: OrganizationHierarchy) => (
                           <SelectItem key={org.id} value={org.id.toString()}>
-                            Lv{org.level} {org.name}
+                            Lv{org.level} {org.name.replace("ANALYSIS", "NALYSIS")}
                           </SelectItem>
                         ))}
                     </SelectContent>
