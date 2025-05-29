@@ -497,12 +497,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // トークンの検証
+      console.log(`トークン検証開始: ${token.substring(0, 20)}...`);
       const { verifyPasswordResetToken } = await import('./services/token');
       const tokenData = verifyPasswordResetToken(token);
       
       if (!tokenData.valid || !tokenData.userId) {
+        console.log(`❌ トークン検証失敗:`, tokenData);
         return res.status(400).json({ message: "無効または期限切れのトークンです" });
       }
+      
+      console.log(`✅ トークン検証成功:`, tokenData);
       
       // ユーザー取得
       const user = await storage.getUser(tokenData.userId);
