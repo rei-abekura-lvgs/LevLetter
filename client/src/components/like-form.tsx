@@ -129,6 +129,7 @@ export default function LikeForm({ cardId, onClose, hasLiked }: LikeFormProps) {
         title: "エラーが発生しました",
         description: errorMessage,
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsSubmitting(false);
