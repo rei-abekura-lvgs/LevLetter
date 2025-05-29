@@ -338,18 +338,19 @@ export function UserAutocomplete({
 
       {/* 検索モーダル */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[85vh] flex flex-col">
-          <DialogHeader className="flex-shrink-0">
-            <DialogTitle className="text-lg font-semibold">名前で検索</DialogTitle>
-          </DialogHeader>
-          
-          <div className="flex flex-col gap-4 flex-1 min-h-0">
-            {/* 部署・組織選択 */}
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <Building2 className="h-4 w-4 text-gray-500" />
-              <Popover open={isDepartmentOpen} onOpenChange={setIsDepartmentOpen}>
-                <PopoverTrigger asChild>
-                  <Button
+        <DialogContent className="sm:max-w-[600px] h-[85vh] p-0">
+          <div className="flex flex-col h-full">
+            <DialogHeader className="flex-shrink-0 p-6 pb-4">
+              <DialogTitle className="text-lg font-semibold">名前で検索</DialogTitle>
+            </DialogHeader>
+            
+            <div className="flex flex-col gap-4 flex-1 min-h-0 px-6 pb-6">
+              {/* 部署・組織選択 */}
+              <div className="flex items-center gap-3 flex-shrink-0">
+                <Building2 className="h-4 w-4 text-gray-500" />
+                <Popover open={isDepartmentOpen} onOpenChange={setIsDepartmentOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
                     variant="outline"
                     role="combobox"
                     aria-expanded={isDepartmentOpen}
@@ -532,6 +533,7 @@ export function UserAutocomplete({
                   )}
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </DialogContent>
