@@ -183,14 +183,8 @@ export default function Register() {
       
       console.log("登録成功レスポンス:", response);
       
-      // 成功メッセージを表示
-      toast({
-        title: "登録成功",
-        description: "LevLetterへようこそ！自動的にリダイレクトします...",
-      });
-      
-      // 即座にホームページにリダイレクト（エラーを避けるため）
-      window.location.replace("/");
+      // 登録成功 - 即座にページ全体をリロードしてセッションを確立
+      window.location.href = "/";
     } catch (error) {
       console.error("登録エラー:", error);
       if (error instanceof Response) {
