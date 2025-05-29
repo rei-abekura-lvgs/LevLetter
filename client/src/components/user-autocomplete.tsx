@@ -5,10 +5,93 @@ import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { X, Search, User, Building2 } from "lucide-react";
+import { X, Search, User, Building2, ChevronRight, ChevronDown, Check } from "lucide-react";
 import { convertToSearchableFormats } from "@/hooks/useSearch";
+import { useQuery } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 import type { User as UserType } from "@shared/schema";
+
+interface OrganizationTreeItemProps {
+  org: OrganizationHierarchy & { children: any[] };
+  selectedDepartment: string;
+  onSelect: (value: string) => void;
+  level: number;
+}
+
+function OrganizationTreeItem({ org, selectedDepartment, onSelect, level }: OrganizationTreeItemProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const hasChildren = org.children.length > 0;
+  const isSelected = selectedDepartment === `org_${org.id}`;
+  
+  const getLevelColor = (level: number) => {
+    const colors = [
+      "text-red-600", "text-orange-600", "text-yellow-600", 
+      "text-green-600", "text-blue-600", "text-purple-600"
+    ];
+    return colors[level] || "text-gray-600";
+  };
+
+  const getLevelIcon = (level: number) => {
+    if (level === 0) return "🏢"; // 会社
+    if (level === 1) return "🏬"; // 本部
+    if (level === 2) return "🏪"; // 部
+    if (level === 3) return "👥"; // グループ
+    if (level === 4) return "🔹"; // チーム
+    return "📍"; // ユニット
+  };
+
+  return (
+    <div>
+      <div
+        className={cn(
+          "flex items-center px-2 py-1.5 text-sm cursor-pointer rounded hover:bg-gray-100",
+          isSelected && "bg-blue-50"
+        )}
+        style={{ paddingLeft: `${8 + level * 16}px` }}
+        onClick={() => onSelect(`org_${org.id}`)}
+      >
+        <Check
+          className={cn(
+            "mr-2 h-4 w-4",
+            isSelected ? "opacity-100" : "opacity-0"
+          )}
+        />
+        {hasChildren && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsExpanded(!isExpanded);
+            }}
+            className="mr-1 p-0.5 rounded hover:bg-gray-200"
+          >
+            {isExpanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+          </button>
+        )}
+        <span className="mr-2">{getLevelIcon(level)}</span>
+        <span className={cn("font-medium", getLevelColor(level))}>
+          {org.name}
+        </span>
+        <span className="ml-2 text-xs text-gray-400">（全体）</span>
+      </div>
+      
+      {hasChildren && isExpanded && (
+        <div>
+          {org.children.map(child => (
+            <OrganizationTreeItem
+              key={child.id}
+              org={child}
+              selectedDepartment={selectedDepartment}
+              onSelect={onSelect}
+              level={level + 1}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface UserAutocompleteProps {
   users: UserType[];
@@ -17,6 +100,18 @@ interface UserAutocompleteProps {
   onUserRemove: (userId: number) => void;
   placeholder?: string;
   maxSelections?: number;
+}
+
+interface OrganizationHierarchy {
+  id: number;
+  level: number;
+  name: string;
+  code?: string;
+  parentId?: number;
+  description?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export function UserAutocomplete({
@@ -30,6 +125,7 @@ export function UserAutocomplete({
   const [inputValue, setInputValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
+  const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
 
   // 選択済みユーザーを除外したユーザーリスト
   const availableUsers = useMemo(() => {
@@ -37,7 +133,38 @@ export function UserAutocomplete({
     return users.filter(user => !selectedIds.has(user.id));
   }, [users, selectedUsers]);
 
-  // 部署リストを取得
+  // 組織階層データを取得
+  const { data: organizationHierarchy = [] } = useQuery<OrganizationHierarchy[]>({
+    queryKey: ["/api/admin/organizations"],
+    retry: false,
+  });
+
+  // 階層構造を構築
+  const buildHierarchy = (orgs: OrganizationHierarchy[]) => {
+    const orgMap = new Map<number, OrganizationHierarchy & { children: (OrganizationHierarchy & { children: any[] })[] }>();
+    
+    // まず全ての組織をマップに追加
+    orgs.forEach(org => {
+      orgMap.set(org.id, { ...org, children: [] });
+    });
+    
+    // 階層構造を構築
+    const roots: (OrganizationHierarchy & { children: any[] })[] = [];
+    orgs.forEach(org => {
+      const orgWithChildren = orgMap.get(org.id)!;
+      if (org.parentId && orgMap.has(org.parentId)) {
+        orgMap.get(org.parentId)!.children.push(orgWithChildren);
+      } else {
+        roots.push(orgWithChildren);
+      }
+    });
+    
+    return roots;
+  };
+
+  const hierarchyTree = useMemo(() => buildHierarchy(organizationHierarchy), [organizationHierarchy]);
+
+  // 部署リストを取得（従来の文字列部署名も含む）
   const departments = useMemo(() => {
     const deptSet = new Set<string>();
     users.forEach(user => {
@@ -47,6 +174,46 @@ export function UserAutocomplete({
     });
     return Array.from(deptSet).sort();
   }, [users]);
+
+  // 選択された組織配下の全ユーザーを取得
+  const getUsersInOrganization = (orgId: number): UserType[] => {
+    const findDescendantOrgs = (org: OrganizationHierarchy & { children: any[] }): number[] => {
+      const ids = [org.id];
+      org.children.forEach(child => {
+        ids.push(...findDescendantOrgs(child));
+      });
+      return ids;
+    };
+
+    const findOrgInTree = (tree: any[], targetId: number): any => {
+      for (const org of tree) {
+        if (org.id === targetId) return org;
+        const found = findOrgInTree(org.children, targetId);
+        if (found) return found;
+      }
+      return null;
+    };
+
+    const targetOrg = findOrgInTree(hierarchyTree, orgId);
+    if (!targetOrg) return [];
+
+    const descendantIds = findDescendantOrgs(targetOrg);
+    
+    // 組織階層に属するユーザーを検索（部署名でマッチング）
+    return users.filter(user => {
+      if (!user.department) return false;
+      
+      // 完全一致または部分一致で組織名と部署名をマッチング
+      return descendantIds.some(id => {
+        const org = organizationHierarchy.find(o => o.id === id);
+        return org && user.department && (
+          user.department === org.name ||
+          user.department.includes(org.name) ||
+          org.name.includes(user.department)
+        );
+      });
+    });
+  };
 
   // 検索可能な形式に変換されたユーザーデータ
   const searchableUsers = useMemo(() => {
@@ -67,9 +234,18 @@ export function UserAutocomplete({
     // 部署フィルタリング
     let usersToFilter = searchableUsers;
     if (selectedDepartment !== "all") {
-      usersToFilter = searchableUsers.filter(user => 
-        user.department === selectedDepartment
-      );
+      if (selectedDepartment.startsWith("org_")) {
+        // 組織階層での選択
+        const orgId = parseInt(selectedDepartment.replace("org_", ""));
+        const orgUsers = getUsersInOrganization(orgId);
+        const orgUserIds = new Set(orgUsers.map(u => u.id));
+        usersToFilter = searchableUsers.filter(user => orgUserIds.has(user.id));
+      } else {
+        // 従来の部署名での選択
+        usersToFilter = searchableUsers.filter(user => 
+          user.department === selectedDepartment
+        );
+      }
     }
 
     if (!inputValue.trim()) return usersToFilter.slice(0, 10); // 初期状態では10人まで表示
@@ -83,7 +259,7 @@ export function UserAutocomplete({
         user.department?.toLowerCase().includes(searchTerm)
       )
       .slice(0, 10); // 最大10件まで表示
-  }, [searchableUsers, inputValue, selectedDepartment]);
+  }, [searchableUsers, inputValue, selectedDepartment, hierarchyTree, organizationHierarchy, users]);
 
   const handleUserSelect = (user: UserType) => {
     if (selectedUsers.length >= maxSelections) return;
@@ -150,22 +326,107 @@ export function UserAutocomplete({
           </DialogHeader>
           
           <div className="space-y-4">
-            {/* 部署選択 */}
+            {/* 部署・組織選択 */}
             <div className="flex items-center gap-2">
               <Building2 className="h-4 w-4 text-gray-400" />
-              <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="すべての部署" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">すべての部署</SelectItem>
-                  {departments.map((dept) => (
-                    <SelectItem key={dept} value={dept}>
-                      {dept}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Popover open={isDepartmentOpen} onOpenChange={setIsDepartmentOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={isDepartmentOpen}
+                    className="w-full justify-between"
+                  >
+                    {selectedDepartment === "all" 
+                      ? "すべての部署・組織" 
+                      : selectedDepartment.startsWith("org_")
+                        ? (() => {
+                            const orgId = parseInt(selectedDepartment.replace("org_", ""));
+                            const org = organizationHierarchy.find(o => o.id === orgId);
+                            return org ? `${org.name}（全体）` : "組織選択";
+                          })()
+                        : selectedDepartment
+                    }
+                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px] p-0">
+                  <Command>
+                    <div className="max-h-[300px] overflow-auto p-2">
+                      {/* 全体選択 */}
+                      <div
+                        className={cn(
+                          "flex items-center px-2 py-1.5 text-sm cursor-pointer rounded hover:bg-gray-100",
+                          selectedDepartment === "all" && "bg-blue-50"
+                        )}
+                        onClick={() => {
+                          setSelectedDepartment("all");
+                          setIsDepartmentOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            selectedDepartment === "all" ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        すべての部署・組織
+                      </div>
+
+                      {/* 階層組織 */}
+                      {hierarchyTree.length > 0 && (
+                        <>
+                          <div className="px-2 py-1 text-xs font-medium text-gray-500 border-t mt-2 pt-2">
+                            組織階層
+                          </div>
+                          {hierarchyTree.map(org => (
+                            <OrganizationTreeItem 
+                              key={org.id}
+                              org={org}
+                              selectedDepartment={selectedDepartment}
+                              onSelect={(value: string) => {
+                                setSelectedDepartment(value);
+                                setIsDepartmentOpen(false);
+                              }}
+                              level={0}
+                            />
+                          ))}
+                        </>
+                      )}
+
+                      {/* 従来の部署名 */}
+                      {departments.length > 0 && (
+                        <>
+                          <div className="px-2 py-1 text-xs font-medium text-gray-500 border-t mt-2 pt-2">
+                            その他の部署
+                          </div>
+                          {departments.map((dept) => (
+                            <div
+                              key={dept}
+                              className={cn(
+                                "flex items-center px-2 py-1.5 text-sm cursor-pointer rounded hover:bg-gray-100",
+                                selectedDepartment === dept && "bg-blue-50"
+                              )}
+                              onClick={() => {
+                                setSelectedDepartment(dept);
+                                setIsDepartmentOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  selectedDepartment === dept ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {dept}
+                            </div>
+                          ))}
+                        </>
+                      )}
+                    </div>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
 
             {/* 検索入力 */}
