@@ -46,16 +46,17 @@ function OrganizationTreeItem({ org, selectedDepartment, onSelect, level }: Orga
     <div>
       <div
         className={cn(
-          "flex items-center px-2 py-1.5 text-sm cursor-pointer rounded hover:bg-gray-100",
-          isSelected && "bg-blue-50"
+          "flex items-center px-3 py-2.5 text-sm cursor-pointer rounded-md transition-colors",
+          "hover:bg-blue-50 active:bg-blue-100",
+          isSelected ? "bg-blue-100 text-blue-900" : "text-gray-700"
         )}
-        style={{ paddingLeft: `${8 + level * 16}px` }}
+        style={{ paddingLeft: `${12 + level * 20}px` }}
         onClick={() => onSelect(`org_${org.id}`)}
       >
         <Check
           className={cn(
-            "mr-2 h-4 w-4",
-            isSelected ? "opacity-100" : "opacity-0"
+            "mr-3 h-4 w-4 transition-opacity",
+            isSelected ? "opacity-100 text-blue-600" : "opacity-0"
           )}
         />
         {hasChildren && (
@@ -64,20 +65,22 @@ function OrganizationTreeItem({ org, selectedDepartment, onSelect, level }: Orga
               e.stopPropagation();
               setIsExpanded(!isExpanded);
             }}
-            className="mr-1 p-0.5 rounded hover:bg-gray-200"
+            className="mr-2 p-1 rounded-md hover:bg-white/50 transition-colors"
           >
             {isExpanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
           </button>
         )}
-        <span className="mr-2">{getLevelIcon(level)}</span>
-        <span className={cn("font-medium", getLevelColor(level))}>
-          {org.name}
-        </span>
-        <span className="ml-2 text-xs text-gray-400">（全体）</span>
+        <span className="mr-2 text-base">{getLevelIcon(level)}</span>
+        <div className="flex-1 min-w-0">
+          <span className={cn("font-medium truncate", getLevelColor(level))}>
+            {org.name.replace("ANALYSIS", "NALYSIS")}
+          </span>
+          <span className="ml-2 text-xs text-gray-500">（配下全員）</span>
+        </div>
       </div>
       
       {hasChildren && isExpanded && (
-        <div>
+        <div className="space-y-0.5 mt-0.5">
           {org.children.map(child => (
             <OrganizationTreeItem
               key={child.id}
@@ -320,22 +323,22 @@ export function UserAutocomplete({
 
       {/* 検索モーダル */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[80vh]">
-          <DialogHeader>
-            <DialogTitle>名前で検索</DialogTitle>
+        <DialogContent className="sm:max-w-[600px] max-h-[85vh] flex flex-col">
+          <DialogHeader className="flex-shrink-0">
+            <DialogTitle className="text-lg font-semibold">名前で検索</DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4 flex-1 min-h-0">
             {/* 部署・組織選択 */}
-            <div className="flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-gray-400" />
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <Building2 className="h-4 w-4 text-gray-500" />
               <Popover open={isDepartmentOpen} onOpenChange={setIsDepartmentOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     role="combobox"
                     aria-expanded={isDepartmentOpen}
-                    className="w-full justify-between"
+                    className="w-full justify-between h-10 px-3 text-sm"
                   >
                     {selectedDepartment === "all" 
                       ? "すべての部署・組織" 
@@ -343,139 +346,158 @@ export function UserAutocomplete({
                         ? (() => {
                             const orgId = parseInt(selectedDepartment.replace("org_", ""));
                             const org = organizationHierarchy.find(o => o.id === orgId);
-                            return org ? `${org.name}（全体）` : "組織選択";
+                            return org ? `${org.name.replace("ANALYSIS", "NALYSIS")}（全体）` : "組織選択";
                           })()
-                        : selectedDepartment
+                        : selectedDepartment.replace("ANALYSIS", "NALYSIS")
                     }
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[400px] p-0">
-                  <Command>
-                    <div className="max-h-[300px] overflow-auto p-2">
-                      {/* 全体選択 */}
-                      <div
-                        className={cn(
-                          "flex items-center px-2 py-1.5 text-sm cursor-pointer rounded hover:bg-gray-100",
-                          selectedDepartment === "all" && "bg-blue-50"
-                        )}
-                        onClick={() => {
-                          setSelectedDepartment("all");
-                          setIsDepartmentOpen(false);
-                        }}
-                      >
-                        <Check
+                <PopoverContent className="w-[480px] p-0 shadow-lg border">
+                  <div className="bg-white rounded-md">
+                    <div 
+                      className="max-h-[350px] overflow-y-scroll overscroll-contain"
+                      style={{ scrollbarWidth: 'thin' }}
+                    >
+                      <div className="p-3 space-y-1">
+                        {/* 全体選択 */}
+                        <div
                           className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedDepartment === "all" ? "opacity-100" : "opacity-0"
+                            "flex items-center px-3 py-2.5 text-sm cursor-pointer rounded-md transition-colors",
+                            "hover:bg-blue-50 active:bg-blue-100",
+                            selectedDepartment === "all" ? "bg-blue-100 text-blue-900" : "text-gray-700"
                           )}
-                        />
-                        すべての部署・組織
-                      </div>
+                          onClick={() => {
+                            setSelectedDepartment("all");
+                            setIsDepartmentOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-3 h-4 w-4 transition-opacity",
+                              selectedDepartment === "all" ? "opacity-100 text-blue-600" : "opacity-0"
+                            )}
+                          />
+                          <span className="font-medium">すべての部署・組織</span>
+                        </div>
 
-                      {/* 階層組織 */}
-                      {hierarchyTree.length > 0 && (
-                        <>
-                          <div className="px-2 py-1 text-xs font-medium text-gray-500 border-t mt-2 pt-2">
-                            組織階層
-                          </div>
-                          {hierarchyTree.map(org => (
-                            <OrganizationTreeItem 
-                              key={org.id}
-                              org={org}
-                              selectedDepartment={selectedDepartment}
-                              onSelect={(value: string) => {
-                                setSelectedDepartment(value);
-                                setIsDepartmentOpen(false);
-                              }}
-                              level={0}
-                            />
-                          ))}
-                        </>
-                      )}
-
-                      {/* 従来の部署名 */}
-                      {departments.length > 0 && (
-                        <>
-                          <div className="px-2 py-1 text-xs font-medium text-gray-500 border-t mt-2 pt-2">
-                            その他の部署
-                          </div>
-                          {departments.map((dept) => (
-                            <div
-                              key={dept}
-                              className={cn(
-                                "flex items-center px-2 py-1.5 text-sm cursor-pointer rounded hover:bg-gray-100",
-                                selectedDepartment === dept && "bg-blue-50"
-                              )}
-                              onClick={() => {
-                                setSelectedDepartment(dept);
-                                setIsDepartmentOpen(false);
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  selectedDepartment === dept ? "opacity-100" : "opacity-0"
-                                )}
-                              />
-                              {dept}
+                        {/* 階層組織 */}
+                        {hierarchyTree.length > 0 && (
+                          <>
+                            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-t mt-3 pt-3">
+                              組織階層
                             </div>
-                          ))}
-                        </>
-                      )}
+                            <div className="space-y-0.5">
+                              {hierarchyTree.map(org => (
+                                <OrganizationTreeItem 
+                                  key={org.id}
+                                  org={org}
+                                  selectedDepartment={selectedDepartment}
+                                  onSelect={(value: string) => {
+                                    setSelectedDepartment(value);
+                                    setIsDepartmentOpen(false);
+                                  }}
+                                  level={0}
+                                />
+                              ))}
+                            </div>
+                          </>
+                        )}
+
+                        {/* 従来の部署名 */}
+                        {departments.length > 0 && (
+                          <>
+                            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-t mt-3 pt-3">
+                              その他の部署
+                            </div>
+                            <div className="space-y-0.5">
+                              {departments.map((dept) => (
+                                <div
+                                  key={dept}
+                                  className={cn(
+                                    "flex items-center px-3 py-2.5 text-sm cursor-pointer rounded-md transition-colors",
+                                    "hover:bg-blue-50 active:bg-blue-100",
+                                    selectedDepartment === dept ? "bg-blue-100 text-blue-900" : "text-gray-700"
+                                  )}
+                                  onClick={() => {
+                                    setSelectedDepartment(dept);
+                                    setIsDepartmentOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-3 h-4 w-4 transition-opacity",
+                                      selectedDepartment === dept ? "opacity-100 text-blue-600" : "opacity-0"
+                                    )}
+                                  />
+                                  <span>{dept.replace("ANALYSIS", "NALYSIS")}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  </Command>
+                  </div>
                 </PopoverContent>
               </Popover>
             </div>
 
             {/* 検索入力 */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 value={inputValue}
                 onChange={(e) => handleInputChange(e.target.value)}
                 placeholder="名前（漢字・ひらがな・カタカナ・ローマ字）で検索..."
-                className="pl-10"
+                className="pl-10 h-10 text-sm border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 autoFocus
               />
             </div>
 
             {/* 検索結果 */}
-            <div className="border rounded-md">
-              <Command>
-                <CommandList className="max-h-[300px] overflow-auto">
+            <div className="flex-1 min-h-0 border rounded-lg bg-gray-50">
+              <div 
+                className="h-full overflow-y-scroll overscroll-contain"
+                style={{ scrollbarWidth: 'thin' }}
+              >
+                <div className="p-2">
                   {filteredUsers.length === 0 ? (
-                    <CommandEmpty className="py-6">該当するユーザーが見つかりません</CommandEmpty>
+                    <div className="flex items-center justify-center h-32 text-gray-500">
+                      <div className="text-center">
+                        <User className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                        <p className="text-sm">該当するユーザーが見つかりません</p>
+                      </div>
+                    </div>
                   ) : (
-                    <CommandGroup>
+                    <div className="space-y-1">
                       {filteredUsers.map((user) => (
-                        <CommandItem
+                        <div
                           key={user.id}
-                          onSelect={() => handleUserSelect(user)}
-                          className="flex items-center gap-3 cursor-pointer p-3 hover:bg-gray-50"
+                          onClick={() => handleUserSelect(user)}
+                          className="flex items-center gap-3 p-3 cursor-pointer rounded-lg bg-white hover:bg-blue-50 active:bg-blue-100 transition-colors border border-transparent hover:border-blue-200"
                         >
-                          <Avatar className="h-8 w-8">
-                            <AvatarFallback className="bg-blue-100 text-blue-700">
+                          <Avatar className="h-10 w-10 flex-shrink-0">
+                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-sm font-medium">
                               {(user.displayName || user.name).charAt(0)}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex-1">
-                            <span className="text-sm font-medium">
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium text-gray-900 truncate">
                               {user.displayName || user.name}
-                            </span>
+                            </div>
                             {user.department && (
-                              <div className="text-xs text-gray-500">
-                                {user.department}
+                              <div className="text-xs text-gray-500 truncate mt-0.5">
+                                {user.department.replace("ANALYSIS", "NALYSIS")}
                               </div>
                             )}
                           </div>
-                        </CommandItem>
+                        </div>
                       ))}
-                    </CommandGroup>
+                    </div>
                   )}
-                </CommandList>
-              </Command>
+                </div>
+              </div>
             </div>
           </div>
         </DialogContent>
