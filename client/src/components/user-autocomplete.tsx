@@ -31,7 +31,7 @@ interface OrganizationHierarchy {
 }
 
 interface OrganizationTreeItemProps {
-  org: OrganizationHierarchy & { children: any[] };
+  org: OrganizationHierarchy & { children?: any[] };
   selectedDepartment: string;
   onSelect: (value: string) => void;
   level: number;
@@ -140,6 +140,10 @@ export function UserAutocomplete({
 
   // 組織階層ツリーを構築
   const hierarchyTree = useMemo(() => {
+    if (!organizationHierarchy || !Array.isArray(organizationHierarchy)) {
+      return [];
+    }
+    
     const buildTree = (orgs: OrganizationHierarchy[], parentId: number | null = null): any[] => {
       return orgs
         .filter(org => org.parentId === parentId)

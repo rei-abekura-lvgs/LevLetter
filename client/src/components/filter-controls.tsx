@@ -164,12 +164,16 @@ export function FilterControls({
             {users.length > 0 && onUserSelect && onUserRemove && (
               <div className="flex-1">
                 <UserAutocomplete
-                  users={users}
+                  users={users.map(user => ({
+                    ...user,
+                    searchKeywords: `${user.name} ${user.displayName || ''} ${user.email}`.toLowerCase()
+                  }))}
                   selectedUsers={selectedUsers}
                   onUserSelect={onUserSelect}
                   onUserRemove={onUserRemove}
                   placeholder="名前（漢字・ひらがな・カタカナ・ローマ字）で検索..."
                   maxSelections={5}
+                  organizationHierarchy={[]}
                 />
               </div>
             )}
