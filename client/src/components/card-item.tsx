@@ -8,6 +8,7 @@ import { BearLogo } from "@/components/bear-logo";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { toast } from "@/hooks/use-toast";
+import { CardReactions } from "@/components/card-reactions";
 
 interface CardItemProps {
   card: CardWithRelations;
@@ -284,6 +285,14 @@ export default function CardItem({ card, currentUser, isUnread = false, reaction
           </Button>
         )}
       </div>
+
+      {/* リアクション機能 */}
+      <CardReactions
+        cardId={card.id}
+        currentUserId={currentUser.id}
+        isRecipient={card.recipientId === currentUser.id || (card.additionalRecipients && card.additionalRecipients.some(r => r.id === currentUser.id))}
+        reactions={reactions}
+      />
     </div>
   );
 }
