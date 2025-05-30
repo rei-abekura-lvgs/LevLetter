@@ -359,13 +359,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const hashedPassword = hashPassword(data.password);
         console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
         
-        // ユーザー情報を更新
+        // ユーザー情報を更新（パスワードは既にハッシュ化済み）
         const updatedUser = await storage.updateUser(existingUser.id, {
           password: hashedPassword,
           passwordInitialized: true,
         });
         
-        console.log(`✅ パスワード更新完了 - ユーザー: ${existingUser.email}`);
+        // 登録後の検証
+        const verifyUser = await storage.authenticateUser(existingUser.email, data.password);
+        if (!verifyUser) {
+          console.error(`❌ パスワード検証失敗 - ${existingUser.email}`);
+          return res.status(500).json({ message: "登録処理でエラーが発生しました" });
+        }
+        
+        console.log(`✅ パスワード更新・検証完了 - ユーザー: ${existingUser.email}`);
         
         // セッションを設定
         req.session.userId = updatedUser.id;
@@ -387,13 +394,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // ハッシュ化したパスワードを設定
-      const hashedPassword = hashPassword(data.password);
+      console.log(`🔐 新規登録処理開始 - ユーザー: ${data.email}`);
+      console.log(`📝 入力パスワード: "${data.password}"`);
       
-      // ユーザー情報を更新
+      const hashedPassword = hashPassword(data.password);
+      console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
+      
+      // ユーザー情報を更新（パスワードは既にハッシュ化済み）
       const updatedUser = await storage.updateUser(preregisteredUser.id, {
         password: hashedPassword,
         passwordInitialized: true,
       });
+      
+      // 登録後の検証
+      const verifyUser = await storage.authenticateUser(data.email, data.password);
+      if (!verifyUser) {
+        console.error(`❌ パスワード検証失敗 - ${data.email}`);
+        return res.status(500).json({ message: "登録処理でエラーが発生しました" });
+      }
+      
+      console.log(`✅ パスワード更新・検証完了 - ユーザー: ${data.email}`);
       
       // セッションを設定
       req.session.userId = updatedUser.id;
@@ -527,17 +547,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hashedPassword = hashPassword(newPassword);
       console.log(`🔒 生成されたハッシュ: "${hashedPassword}"`);
       
-      console.log(`🔐 パスワードリセット詳細:`, {
-        userId: user.id,
-        email: user.email,
-        newPassword: newPassword,
-        hashedPassword: hashedPassword
-      });
-      
+      // パスワードを更新（既にハッシュ化済み）
       await storage.updateUser(user.id, {
         password: hashedPassword,
         passwordInitialized: true
       });
+      
+      // リセット後の検証
+      const verifyUser = await storage.authenticateUser(user.email, newPassword);
+      if (!verifyUser) {
+        console.error(`❌ パスワードリセット後の検証失敗 - ${user.email}`);
+        return res.status(500).json({ message: "パスワードリセット処理でエラーが発生しました" });
+      }
       
       console.log(`✅ パスワードリセット完了: ${user.email}`);
       
