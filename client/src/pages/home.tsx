@@ -846,8 +846,21 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     const recipients = [card.recipient, ...additionalRecipients].filter(Boolean);
     const recipientIds = recipients.map(r => typeof r === 'object' && r && 'id' in r ? r.id : null).filter(Boolean);
     
-    // タブフィルター
-    if (activeTab === "received" && !recipientIds.includes(user.id)) return false;
+    // タブフィルター - 受信タブのデバッグログ追加
+    if (activeTab === "received") {
+      const isRecipient = recipientIds.includes(user.id);
+      if (card.id === 347 || card.id === 352) {
+        console.log(`カード${card.id}の受信者チェック:`, {
+          cardId: card.id,
+          recipientIds,
+          userId: user.id,
+          isRecipient,
+          recipient: card.recipient,
+          additionalRecipients: card.additionalRecipients
+        });
+      }
+      if (!isRecipient) return false;
+    }
     if (activeTab === "sent" && card.senderId !== user.id) return false;
     if (activeTab === "liked" && !(card.likes?.some(like => like.userId === user.id) || false)) return false;
     
