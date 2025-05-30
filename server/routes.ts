@@ -353,13 +353,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         // CSVインポートで登録済みの場合はパスワードをセットする
+        console.log(`🔐 新規登録処理開始 - ユーザー: ${existingUser.email}`);
+        console.log(`📝 入力パスワード: "${data.password}"`);
+        
         const hashedPassword = hashPassword(data.password);
+        console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
         
         // ユーザー情報を更新
         const updatedUser = await storage.updateUser(existingUser.id, {
           password: hashedPassword,
           passwordInitialized: true,
         });
+        
+        console.log(`✅ パスワード更新完了 - ユーザー: ${existingUser.email}`);
         
         // セッションを設定
         req.session.userId = updatedUser.id;
