@@ -3,30 +3,21 @@ import { apiRequest } from "./queryClient";
 
 interface AuthResponse {
   user: User;
-  token: string;
 }
-
-export const TOKEN_KEY = "levletter-auth-token";
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
   try {
-    console.log("🚀 ログインリクエスト開始:", { email });
-    console.log("📤 送信データ:", { email, password: "***" });
+    console.log("ログイン試行:", email);
     
     const data = await apiRequest<{message: string, user: User}>("POST", "/api/auth/login", { email, password });
     
-    console.log("📥 ログインレスポンス受信:", data);
-    console.log("👤 受信ユーザー情報:", data.user);
+    console.log("ログイン成功:", data.user.name);
     
-    // セッション方式なのでトークンは不要
     return {
-      user: data.user,
-      token: "" // セッション方式のため空文字
+      user: data.user
     };
   } catch (error: any) {
-    console.error("❌ ログインエラー詳細:", error);
-    console.error("❌ エラーメッセージ:", error.message);
-    console.error("❌ エラー全体:", JSON.stringify(error, null, 2));
+    console.error("ログインエラー:", error);
     throw new Error(error.message || "ログインに失敗しました");
   }
 }
@@ -36,9 +27,10 @@ export async function register(formData: {
   password: string;
 }): Promise<AuthResponse> {
   try {
-    const data = await apiRequest<AuthResponse>("POST", "/api/auth/register", formData);
-    localStorage.setItem(TOKEN_KEY, data.token);
-    return data;
+    const data = await apiRequest<{message: string, user: User}>("POST", "/api/auth/register", formData);
+    return {
+      user: data.user
+    };
   } catch (error: any) {
     console.error("登録エラー:", error);
     throw new Error(error.message || "登録に失敗しました");
@@ -78,14 +70,10 @@ export async function logout(): Promise<void> {
     console.error("ログアウトAPIエラー:", error);
     // APIエラーがあってもローカルの処理は続行
   }
-  // ローカルストレージからトークンを削除（念のため）
-  localStorage.removeItem(TOKEN_KEY);
-}
-
-export function getAuthToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
 }
 
 export function isAuthenticated(): boolean {
-  return !!getAuthToken();
+  // セッション方式では、サーバーに問い合わせが必要
+  // この関数は廃止予定
+  return false;
 }
