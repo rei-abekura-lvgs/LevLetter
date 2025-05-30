@@ -195,11 +195,23 @@ export class DatabaseStorage implements IStorage {
       insertUser.displayName = insertUser.name;
     }
 
+    console.log(`💾 DB挿入直前の値:`, {
+      email: insertUser.email,
+      password: insertUser.password,
+      name: insertUser.name
+    });
+
     // 挿入
     const [user] = await db
       .insert(users)
       .values(insertUser)
       .returning();
+    
+    console.log(`✅ DB挿入後の結果:`, {
+      email: user.email,
+      password: user.password,
+      name: user.name
+    });
     
     return user;
   }
