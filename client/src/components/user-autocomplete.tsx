@@ -284,42 +284,7 @@ export function UserAutocomplete({
   };
 
   return (
-    <div className="space-y-3">
-      {/* 選択済みユーザー表示エリア */}
-      {selectedUsers.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {selectedUsers.map(user => (
-            <Badge 
-              key={user.id} 
-              variant="secondary" 
-              className={cn(
-                "flex items-center gap-1.5",
-                compact ? "px-2 py-0.5 text-xs" : "px-3 py-1.5 text-sm"
-              )}
-            >
-              <Avatar className={compact ? "h-4 w-4" : "h-5 w-5"}>
-                <AvatarFallback className={cn(
-                  "bg-blue-100 text-blue-700",
-                  compact ? "text-xs" : "text-xs"
-                )}>
-                  {(user.displayName || user.name).charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <span className="truncate max-w-[80px]">
-                {user.displayName || user.name}
-              </span>
-              <button 
-                type="button" 
-                onClick={() => onUserRemove(user.id)}
-                className="rounded-full hover:bg-gray-200 p-0.5 transition-colors"
-              >
-                <X size={compact ? 10 : 12} />
-              </button>
-            </Badge>
-          ))}
-        </div>
-      )}
-
+    <div>
       {/* 検索ボタン */}
       <Button 
         variant="outline" 
@@ -527,15 +492,6 @@ export function UserAutocomplete({
         </DialogContent>
       </Dialog>
 
-      {/* 状態表示 */}
-      <div className="flex justify-between items-center text-xs text-gray-500">
-        <span>
-          {selectedUsers.length > 0 && `${selectedUsers.length}人選択中`}
-        </span>
-        <span>
-          {selectedUsers.length >= maxSelections && `最大${maxSelections}人まで`}
-        </span>
-      </div>
     </div>
   );
 }
