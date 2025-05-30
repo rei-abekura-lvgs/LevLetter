@@ -1,0 +1,41 @@
+buntu@ip-172-31-1-79:~$ cd ~/levletter
+pm2 logs levletter-dev --lines 20
+[TAILING] Tailing last 20 lines for [levletter-dev] process (change the value with --lines option)
+/home/ubuntu/.pm2/logs/levletter-dev-out.log last 20 lines:
+1|levlette | 
+1|levlette | > rest-express@1.0.0 dev
+1|levlette | > NODE_ENV=development tsx server/index.ts
+1|levlette | 
+1|levlette | 10:28:44 AM [express] serving on port 5000
+
+/home/ubuntu/.pm2/logs/levletter-dev-error.log last 20 lines:
+1|levlette |     at /home/ubuntu/levletter/node_modules/express/lib/router/index.js:286:9
+1|levlette |     at param (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:365:14)
+1|levlette |     at param (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:376:14)
+1|levlette |     at Function.process_params (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:421:3)
+1|levlette |     at Immediate.next [as _onImmediate] (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:280:10)
+1|levlette |     at process.processImmediate (node:internal/timers:478:21)
+1|levlette | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+1|levlette |     at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+1|levlette |     at new NodeError (node:internal/errors:405:5)
+1|levlette |     at validateString (node:internal/validators:162:11)
+1|levlette |     at Object.resolve (node:path:1115:7)
+1|levlette |     at <anonymous> (/home/ubuntu/levletter/server/vite.ts:48:35)
+1|levlette |     at Layer.handle [as handle_request] (/home/ubuntu/levletter/node_modules/express/lib/router/layer.js:95:5)
+1|levlette |     at trim_prefix (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:328:13)
+1|levlette |     at /home/ubuntu/levletter/node_modules/express/lib/router/index.js:286:9
+1|levlette |     at param (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:365:14)
+1|levlette |     at param (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:376:14)
+1|levlette |     at Function.process_params (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:421:3)
+1|levlette |     at Immediate.next [as _onImmediate] (/home/ubuntu/levletter/node_modules/express/lib/router/index.js:280:10)
+1|levlette |     at process.processImmediate (node:internal/timers:478:21)
+
+
+
+
+
+
+
+
+
+

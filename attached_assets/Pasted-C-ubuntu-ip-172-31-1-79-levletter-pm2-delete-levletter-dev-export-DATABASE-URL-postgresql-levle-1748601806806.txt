@@ -1,0 +1,24 @@
+C
+ubuntu@ip-172-31-1-79:~/levletter$ pm2 delete levletter-dev
+export DATABASE_URL=postgresql://levletter_user:secure_password_123@localhost:5432/levletter
+export NODE_ENV=development
+export PORT=5000
+export HOST=0.0.0.0
+export SESSION_SECRET=your-secret-key-here
+pm2 start "npm run dev" --name levletter-dev
+[PM2] Applying action deleteProcessId on app [levletter-dev](ids: [ 2 ])
+[PM2] [levletter-dev](2) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ levletter    │ default     │ N/A     │ fork    │ 0        │ 0      │ 15   │ errored   │ 0%       │ 0b       │ ubuntu   │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Starting /usr/bin/bash in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ levletter        │ default     │ N/A     │ fork    │ 0        │ 0      │ 15   │ errored   │ 0%       │ 0b       │ ubuntu   │ disabled │
+│ 3  │ levletter-dev    │ default     │ N/A     │ fork    │ 32640    │ 0s     │ 0    │ online    │ 0%       │ 11.4mb   │ ubuntu   │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+ubuntu@ip-172-31-1-79:~/levletter$ 

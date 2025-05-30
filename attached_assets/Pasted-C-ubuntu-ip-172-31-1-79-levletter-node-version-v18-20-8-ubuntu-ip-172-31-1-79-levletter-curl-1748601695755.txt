@@ -1,0 +1,94 @@
+C
+ubuntu@ip-172-31-1-79:~/levletter$ node --version
+v18.20.8
+ubuntu@ip-172-31-1-79:~/levletter$ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+2025-05-30 10:41:10 - Installing pre-requisites
+Hit:1 http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
+Hit:2 http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease                                              
+Hit:3 http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease                                            
+Hit:4 https://deb.nodesource.com/node_18.x nodistro InRelease                                                                  
+Hit:5 http://security.ubuntu.com/ubuntu noble-security InRelease                                         
+Reading package lists... Done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+apt-transport-https is already the newest version (2.8.3).
+ca-certificates is already the newest version (20240203).
+curl is already the newest version (8.5.0-2ubuntu10.6).
+gnupg is already the newest version (2.4.4-2ubuntu17.2).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+Hit:1 http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu noble InRelease
+Hit:2 http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease                      
+Hit:3 http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease                    
+Get:4 https://deb.nodesource.com/node_20.x nodistro InRelease [12.1 kB]                                
+Get:5 https://deb.nodesource.com/node_20.x nodistro/main amd64 Packages [11.5 kB]                      
+Hit:6 http://security.ubuntu.com/ubuntu noble-security InRelease
+Fetched 23.7 kB in 1s (43.7 kB/s)
+Reading package lists... Done
+2025-05-30 10:41:15 - Repository configured successfully.
+2025-05-30 10:41:15 - To install Node.js, run: apt-get install nodejs -y
+2025-05-30 10:41:15 - You can use N|solid Runtime as a node.js alternative
+2025-05-30 10:41:15 - To install N|solid Runtime, run: apt-get install nsolid -y 
+
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following packages will be upgraded:
+  nodejs
+1 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+Need to get 32.0 MB of archives.
+After this operation, 11.6 MB of additional disk space will be used.
+Get:1 https://deb.nodesource.com/node_20.x nodistro/main amd64 nodejs amd64 20.19.2-1nodesource1 [32.0 MB]
+Fetched 32.0 MB in 0s (71.7 MB/s)
+(Reading database ... 108614 files and directories currently installed.)
+Preparing to unpack .../nodejs_20.19.2-1nodesource1_amd64.deb ...
+Detected old npm client, removing...
+Unpacking nodejs (20.19.2-1nodesource1) over (18.20.8-1nodesource1) ...
+Setting up nodejs (20.19.2-1nodesource1) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Scanning processes...                                                                                                                          
+Scanning candidates...                                                                                                                         
+Scanning linux images...                                                                                                                       
+
+Pending kernel upgrade!
+Running kernel version:
+  6.8.0-1024-aws
+Diagnostics:
+  The currently running kernel version is not the expected kernel version 6.8.0-1029-aws.
+
+Restarting the system to load the new kernel will not be handled automatically, so you should consider rebooting.
+
+Restarting services...
+
+Service restarts being deferred:
+ /etc/needrestart/restart.d/dbus.service
+ systemctl restart networkd-dispatcher.service
+ systemctl restart systemd-logind.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+User sessions running outdated binaries:
+ ubuntu @ session #4: node[29634], PM2 v6.0.6: God[24057], sh[29633]
+ ubuntu @ user manager service: systemd[1429]
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+ubuntu@ip-172-31-1-79:~/levletter$ pm2 delete levletter-dev
+pm2 start "npm run dev" --name levletter-dev
+[PM2] Applying action deleteProcessId on app [levletter-dev](ids: [ 1 ])
+[PM2] [levletter-dev](1) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ levletter    │ default     │ N/A     │ fork    │ 0        │ 0      │ 15   │ errored   │ 0%       │ 0b       │ ubuntu   │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Starting /usr/bin/bash in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name             │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ levletter        │ default     │ N/A     │ fork    │ 0        │ 0      │ 15   │ errored   │ 0%       │ 0b       │ ubuntu   │ disabled │
+│ 2  │ levletter-dev    │ default     │ N/A     │ fork    │ 30988    │ 0s     │ 0    │ online    │ 0%       │ 0b       │ ubuntu   │ disabled │
+└────┴──────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+ubuntu@ip-172-31-1-79:~/levletter$ 
