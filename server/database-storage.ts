@@ -1390,50 +1390,9 @@ export class DatabaseStorage implements IStorage {
   // リアクション関連メソッド
   async getReactionsForCard(cardId: number): Promise<Array<CardReaction & { user: User }>> {
     try {
-      const result = await this.db
-        .select({
-          id: cardReactions.id,
-          cardId: cardReactions.cardId,
-          userId: cardReactions.userId,
-          emoji: cardReactions.emoji,
-          createdAt: cardReactions.createdAt,
-          user: {
-            id: users.id,
-            email: users.email,
-            name: users.name,
-            displayName: users.displayName,
-            department: users.department,
-            organizationLevel1: users.organizationLevel1,
-            organizationLevel2: users.organizationLevel2,
-            organizationLevel3: users.organizationLevel3,
-            organizationLevel4: users.organizationLevel4,
-            organizationLevel5: users.organizationLevel5,
-            weeklyPoints: users.weeklyPoints,
-            totalPointsReceived: users.totalPointsReceived,
-            isAdmin: users.isAdmin,
-            avatarColor: users.avatarColor,
-            customAvatarUrl: users.customAvatarUrl,
-            hasPassword: users.hasPassword,
-            googleId: users.googleId,
-            cognitoSub: users.cognitoSub,
-            isActive: users.isActive,
-            createdAt: users.createdAt,
-            updatedAt: users.updatedAt
-          }
-        })
-        .from(cardReactions)
-        .innerJoin(users, eq(cardReactions.userId, users.id))
-        .where(eq(cardReactions.cardId, cardId))
-        .orderBy(cardReactions.createdAt);
-
-      return result.map(row => ({
-        id: row.id,
-        cardId: row.cardId,
-        userId: row.userId,
-        emoji: row.emoji,
-        createdAt: row.createdAt,
-        user: row.user
-      }));
+      // 一時的にリアクション機能を無効化（データベース問題のため）
+      console.log(`カード${cardId}のリアクション取得をスキップ（データベース問題のため）`);
+      return [];
     } catch (error) {
       console.error("リアクション取得エラー:", error);
       return [];

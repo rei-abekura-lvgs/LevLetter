@@ -21,7 +21,19 @@ export function CardReactions({ cardId, currentUserId, isRecipient }: CardReacti
 
   const { data: reactions = [], isLoading } = useQuery({
     queryKey: ["/api/cards", cardId, "reactions"],
-    queryFn: () => fetch(`/api/cards/${cardId}/reactions`).then(res => res.json()) as Promise<Array<CardReaction & { user: User }>>
+    queryFn: async () => {
+      try {
+        const res = await fetch(`/api/cards/${cardId}/reactions`);
+        if (!res.ok) {
+          console.log('リアクション取得失敗:', res.status);
+          return [];
+        }
+        return res.json() as Promise<Array<CardReaction & { user: User }>>;
+      } catch (error) {
+        console.log('リアクション取得エラー:', error);
+        return [];
+      }
+    }
   });
 
   const addReactionMutation = useMutation({
