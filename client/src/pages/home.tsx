@@ -1034,6 +1034,13 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
 
   // カードリスト表示関数
   const renderCardList = () => {
+    console.log(`renderCardList呼び出し:`, {
+      activeTab,
+      isLoading,
+      sortedCardsLength: sortedCards.length,
+      sortedCardIds: sortedCards.map(c => c.id)
+    });
+    
     if (isLoading) {
       return (
         <div className="flex items-center justify-center py-8">
