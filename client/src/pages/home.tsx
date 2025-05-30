@@ -225,7 +225,12 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                     )}
                     {/* スタンプ機能 - 受信者名の右隣 */}
                     <div className="ml-2">
-                      <CardReactions cardId={card.id} currentUserId={currentUser.id} />
+                      <CardReactions 
+                        cardId={card.id} 
+                        currentUserId={currentUser.id} 
+                        isRecipient={card.recipients.some(r => r.id === currentUser.id) || 
+                                   (card.additionalRecipients && card.additionalRecipients.some(r => r.id === currentUser.id))}
+                      />
                     </div>
                   </div>
                 </div>

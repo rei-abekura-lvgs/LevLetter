@@ -9,11 +9,12 @@ import type { CardReaction, User } from "@shared/schema";
 interface CardReactionsProps {
   cardId: number;
   currentUserId: number;
+  isRecipient: boolean; // 現在のユーザーがこのカードの受信者かどうか
 }
 
 const REACTION_EMOJIS = ["👍", "❤️", "🎉", "😊", "🔥", "👏", "💯", "🚀"];
 
-export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
+export function CardReactions({ cardId, currentUserId, isRecipient }: CardReactionsProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -100,49 +101,51 @@ export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
         </div>
       )}
 
-      {/* Add reaction button */}
-      <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-7 px-2 text-xs border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800"
-            disabled={addReactionMutation.isPending}
-          >
-            <span className="mr-1">😊</span>
-            リアクション
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-2" align="start">
-          <div className="grid grid-cols-4 gap-1">
-            {REACTION_EMOJIS.map(emoji => (
-              <Button
-                key={emoji}
-                variant="ghost"
-                size="sm"
-                className="h-8 w-8 p-0 hover:bg-gray-100"
-                onClick={() => handleEmojiClick(emoji)}
-                disabled={addReactionMutation.isPending}
-              >
-                {emoji}
-              </Button>
-            ))}
-          </div>
-          {userReaction && (
-            <div className="border-t pt-2 mt-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleRemoveReaction}
-                disabled={removeReactionMutation.isPending}
-                className="w-full text-xs text-gray-500 hover:text-red-500"
-              >
-                リアクションを削除
-              </Button>
+      {/* Add reaction button - only show for recipients */}
+      {isRecipient && (
+        <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-7 px-2 text-xs border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800"
+              disabled={addReactionMutation.isPending}
+            >
+              <span className="mr-1">😊</span>
+              リアクション
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-2" align="start">
+            <div className="grid grid-cols-4 gap-1">
+              {REACTION_EMOJIS.map(emoji => (
+                <Button
+                  key={emoji}
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                  onClick={() => handleEmojiClick(emoji)}
+                  disabled={addReactionMutation.isPending}
+                >
+                  {emoji}
+                </Button>
+              ))}
             </div>
-          )}
-        </PopoverContent>
-      </Popover>
+            {userReaction && (
+              <div className="border-t pt-2 mt-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleRemoveReaction}
+                  disabled={removeReactionMutation.isPending}
+                  className="w-full text-xs text-gray-500 hover:text-red-500"
+                >
+                  リアクションを削除
+                </Button>
+              </div>
+            )}
+          </PopoverContent>
+        </Popover>
+      )}
     </div>
   );
 }
