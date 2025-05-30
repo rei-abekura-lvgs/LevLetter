@@ -22,6 +22,12 @@ interface CardItemProps {
 export default function CardItem({ card, currentUser, isUnread = false, reactions, onRefresh, onMarkAsRead }: CardItemProps) {
   const queryClient = useQueryClient();
   
+  console.log(`🃏 CardItem[${card.id}] reactions:`, {
+    cardId: card.id,
+    reactionsFromProps: reactions,
+    reactionsCount: reactions?.length || 0
+  });
+  
   // 自分がいいねしたか
   const userLike = card.likes.find(like => like.user.id === currentUser.id);
 
