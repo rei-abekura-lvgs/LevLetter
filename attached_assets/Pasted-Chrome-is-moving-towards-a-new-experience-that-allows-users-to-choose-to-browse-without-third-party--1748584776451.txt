@@ -1,0 +1,93 @@
+Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.Understand this warning
+index-BijL6vyZ.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-BijL6vyZ.js:408 🚀 認証初期化開始
+index-BijL6vyZ.js:408 🔍 セッションからユーザー情報を取得中...
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+index-BijL6vyZ.js:408 🚀 認証初期化開始
+index-BijL6vyZ.js:408 🔍 セッションからユーザー情報を取得中...
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+index-BijL6vyZ.js:408 
+            
+            
+           GET https://levletter.replit.app/api/auth/me 401 (Unauthorized)
+c @ index-BijL6vyZ.js:408
+(anonymous) @ index-BijL6vyZ.js:408
+(anonymous) @ index-BijL6vyZ.js:408
+fp @ index-BijL6vyZ.js:40
+Ic @ index-BijL6vyZ.js:40
+W_ @ index-BijL6vyZ.js:40
+Io @ index-BijL6vyZ.js:38
+p9 @ index-BijL6vyZ.js:40
+Qo @ index-BijL6vyZ.js:40
+Bj @ index-BijL6vyZ.js:40
+E @ index-BijL6vyZ.js:25
+A @ index-BijL6vyZ.js:25Understand this error
+index-BijL6vyZ.js:408 🔒 未認証状態
+index-BijL6vyZ.js:408 🎯 認証初期化完了: 未ログイン
+index-BijL6vyZ.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+index-BijL6vyZ.js:408 
+            
+            
+           GET https://levletter.replit.app/api/auth/me 401 (Unauthorized)
+c @ index-BijL6vyZ.js:408
+(anonymous) @ index-BijL6vyZ.js:408
+(anonymous) @ index-BijL6vyZ.js:408
+fp @ index-BijL6vyZ.js:40
+Ic @ index-BijL6vyZ.js:40
+W_ @ index-BijL6vyZ.js:40
+Io @ index-BijL6vyZ.js:38
+p9 @ index-BijL6vyZ.js:40
+Qo @ index-BijL6vyZ.js:40
+Bj @ index-BijL6vyZ.js:40
+E @ index-BijL6vyZ.js:25
+A @ index-BijL6vyZ.js:25Understand this error
+index-BijL6vyZ.js:408 🔒 未認証状態
+index-BijL6vyZ.js:408 🎯 認証初期化完了: 未ログイン
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+index-BijL6vyZ.js:452 ログイン試行: yusuke.uchigaki@leverages.jp
+index-BijL6vyZ.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+index-BijL6vyZ.js:408 
+            
+            
+           POST https://levletter.replit.app/api/auth/login 401 (Unauthorized)
+u @ index-BijL6vyZ.js:408
+h @ index-BijL6vyZ.js:452
+(anonymous) @ index-BijL6vyZ.js:452
+await in (anonymous)
+DM @ index-BijL6vyZ.js:37
+OM @ index-BijL6vyZ.js:37
+MM @ index-BijL6vyZ.js:37
+m_ @ index-BijL6vyZ.js:37
+HC @ index-BijL6vyZ.js:37
+(anonymous) @ index-BijL6vyZ.js:37
+yy @ index-BijL6vyZ.js:40
+pC @ index-BijL6vyZ.js:37
+Ax @ index-BijL6vyZ.js:37
+X1 @ index-BijL6vyZ.js:37
+JM @ index-BijL6vyZ.js:37Understand this error
+index-BijL6vyZ.js:452 ログインエラー: Error: ログインに失敗しました
+    at h (index-BijL6vyZ.js:452:271282)
+    at async index-BijL6vyZ.js:452:87433
+h @ index-BijL6vyZ.js:452
+await in h
+(anonymous) @ index-BijL6vyZ.js:452
+await in (anonymous)
+DM @ index-BijL6vyZ.js:37
+OM @ index-BijL6vyZ.js:37
+MM @ index-BijL6vyZ.js:37
+m_ @ index-BijL6vyZ.js:37
+HC @ index-BijL6vyZ.js:37
+(anonymous) @ index-BijL6vyZ.js:37
+yy @ index-BijL6vyZ.js:40
+pC @ index-BijL6vyZ.js:37
+Ax @ index-BijL6vyZ.js:37
+X1 @ index-BijL6vyZ.js:37
+JM @ index-BijL6vyZ.js:37Understand this error
+index-BijL6vyZ.js:600 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: 'メールアドレスまたはパスワードが正しくありません'}

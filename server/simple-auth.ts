@@ -7,13 +7,21 @@ export class SimpleAuth {
   // ログイン処理（開発用：パスワードをプレーンテキストで比較）
   static async login(email: string, password: string): Promise<User | null> {
     try {
+      console.log(`🔐 SimpleAuth.login開始 - メール: ${email}`);
       const user = await storage.getUserByEmail(email);
       if (!user || !user.password) {
+        console.log(`❌ ユーザーまたはパスワードが見つかりません: ${email}`);
         return null;
       }
 
+      console.log(`📝 入力パスワード: "${password}"`);
+      console.log(`💾 DB保存パスワード: "${user.password}"`);
+
       // 開発中：プレーンテキストで比較
-      if (user.password === password) {
+      const isMatch = user.password === password;
+      console.log(`🔑 パスワード比較結果: ${isMatch ? '成功' : '失敗'}`);
+      
+      if (isMatch) {
         return user;
       }
       
