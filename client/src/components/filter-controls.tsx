@@ -66,7 +66,7 @@ export function FilterControls({
   const [departmentOpen, setDepartmentOpen] = useState(false);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5">
       <Select value={sortOrder} onValueChange={(value: "newest" | "popular") => onSortChange(value)}>
         <SelectTrigger className="w-[110px] h-7 text-xs whitespace-nowrap">
           <SelectValue />
@@ -89,81 +89,100 @@ export function FilterControls({
 
       {/* 部署フィルター */}
       {organizationHierarchy.length > 0 && (
-        <div className="w-[140px]">
-          <Popover open={departmentOpen} onOpenChange={setDepartmentOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={departmentOpen}
-                className="w-full h-7 justify-between text-xs"
-              >
-                <Building2 className="h-3 w-3 mr-1" />
-                {departmentFilter && departmentFilter !== "all"
-                  ? organizationHierarchy.find((org) => org.id === departmentFilter)?.name || departmentFilter
-                  : "部署"}
-                <ChevronDown className="ml-1 h-3 w-3 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[300px] p-0">
-              <Command>
-                <CommandInput placeholder="部署を検索..." className="h-9" />
-                <CommandEmpty>該当する部署が見つかりません</CommandEmpty>
-                <CommandList className="max-h-[200px] overflow-auto">
-                  <CommandGroup>
+        <Popover open={departmentOpen} onOpenChange={setDepartmentOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={departmentOpen}
+              className="h-7 px-2 text-xs whitespace-nowrap"
+            >
+              <Building2 className="h-3 w-3 mr-1" />
+              {departmentFilter && departmentFilter !== "all"
+                ? organizationHierarchy.find((org) => org.id === departmentFilter)?.name || departmentFilter
+                : "部署"}
+              <ChevronDown className="ml-1 h-3 w-3 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[300px] p-0">
+            <Command>
+              <CommandInput placeholder="部署を検索..." className="h-9" />
+              <CommandEmpty>該当する部署が見つかりません</CommandEmpty>
+              <CommandList className="max-h-[200px] overflow-auto">
+                <CommandGroup>
+                  <CommandItem
+                    value="all"
+                    onSelect={() => {
+                      onDepartmentChange?.("all");
+                      setDepartmentOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        departmentFilter === "all" ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    全部署
+                  </CommandItem>
+                  {organizationHierarchy.map((org) => (
                     <CommandItem
-                      value="all"
+                      key={org.id}
+                      value={org.fullPath}
                       onSelect={() => {
-                        onDepartmentChange?.("all");
+                        onDepartmentChange?.(org.id);
                         setDepartmentOpen(false);
                       }}
                     >
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          departmentFilter === "all" ? "opacity-100" : "opacity-0"
+                          departmentFilter === org.id ? "opacity-100" : "opacity-0"
                         )}
                       />
-                      全部署
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">{org.name}</span>
+                        <span className="text-xs text-muted-foreground">{org.fullPath}</span>
+                      </div>
                     </CommandItem>
-                    {organizationHierarchy.map((org) => (
-                      <CommandItem
-                        key={org.id}
-                        value={org.fullPath}
-                        onSelect={() => {
-                          onDepartmentChange?.(org.id);
-                          setDepartmentOpen(false);
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            departmentFilter === org.id ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        <div className="flex flex-col">
-                          <span className="text-sm font-medium">{org.name}</span>
-                          <span className="text-xs text-muted-foreground">{org.fullPath}</span>
-                        </div>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </div>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
       )}
 
-      {/* 名前検索オートコンプリート */}
+      {/* 名前検索と選択されたユーザー */}
       {users.length > 0 && onUserSelect && onUserRemove && (
-        <div className="w-[200px]">
+        <div className="flex items-center gap-1">
+          {/* 選択されたユーザー（横並び） */}
+          {selectedUsers.length > 0 && (
+            <div className="flex items-center gap-1">
+              {selectedUsers.map((user) => (
+                <div
+                  key={user.id}
+                  className="flex items-center gap-1 px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded text-xs"
+                >
+                  <span className="max-w-[60px] truncate">{user.displayName || user.name}</span>
+                  <button
+                    onClick={() => onUserRemove(user.id)}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {/* 検索ボタン */}
           <UserAutocomplete
             users={users}
             selectedUsers={selectedUsers}
             onUserSelect={onUserSelect}
             onUserRemove={onUserRemove}
-            placeholder="名前で検索..."
+            placeholder="検索"
             maxSelections={3}
             compact={true}
           />
