@@ -250,9 +250,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "現在のパスワードと新しいパスワードが必要です" });
       }
       
-      if (newPassword.length < 8) {
+      if (newPassword.length < 6) {
         console.log("❌ パスワード変更失敗 - 新しいパスワードが短すぎる");
-        return res.status(400).json({ message: "新しいパスワードは8文字以上である必要があります" });
+        return res.status(400).json({ message: "新しいパスワードは6文字以上である必要があります" });
       }
       
       // 現在のユーザー情報を取得
@@ -435,8 +435,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`🔐 パスワードリセット処理開始`);
       console.log(`📝 新パスワード: "${newPassword}"`);
       
-      if (newPassword.length < 8) {
-        return res.status(400).json({ message: "新しいパスワードは8文字以上である必要があります" });
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: "新しいパスワードは6文字以上である必要があります" });
       }
       
       // bcryptでパスワードをハッシュ化
