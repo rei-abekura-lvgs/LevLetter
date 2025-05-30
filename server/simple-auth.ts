@@ -4,7 +4,7 @@ import { User } from "@shared/schema";
 
 // シンプルな認証システム - セッション管理
 export class SimpleAuth {
-  // ログイン処理
+  // ログイン処理（開発用：パスワードをプレーンテキストで比較）
   static async login(email: string, password: string): Promise<User | null> {
     try {
       const user = await storage.getUserByEmail(email);
@@ -12,8 +12,8 @@ export class SimpleAuth {
         return null;
       }
 
-      const hashedPassword = await hashPassword(password);
-      if (user.password === hashedPassword) {
+      // 開発中：プレーンテキストで比較
+      if (user.password === password) {
         return user;
       }
       
@@ -36,9 +36,9 @@ export class SimpleAuth {
         return null; // 既に登録済み
       }
 
-      const hashedPassword = await hashPassword(password);
+      // 開発中：パスワードをプレーンテキストで保存
       const updatedUser = await storage.updateUser(existingUser.id, {
-        password: hashedPassword,
+        password: password,
         passwordInitialized: true,
       });
 
