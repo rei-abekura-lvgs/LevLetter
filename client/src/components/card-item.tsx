@@ -1,4 +1,4 @@
-import { CardWithRelations, User } from "@shared/schema";
+import { CardWithRelations, User, CardReaction } from "@shared/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
@@ -13,9 +13,10 @@ interface CardItemProps {
   card: CardWithRelations;
   currentUser: User;
   isUnread?: boolean;
+  reactions?: Array<CardReaction & { user: User }>;
 }
 
-export default function CardItem({ card, currentUser, isUnread = false }: CardItemProps) {
+export default function CardItem({ card, currentUser, isUnread = false, reactions }: CardItemProps) {
   const queryClient = useQueryClient();
   
   // 自分がいいねしたか

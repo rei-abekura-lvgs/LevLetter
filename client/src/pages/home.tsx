@@ -701,6 +701,12 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     refetchInterval: 30000,
   });
 
+  // カードIDの配列を作成（一括リアクション取得用）
+  const cardIds = cards.map(card => card.id);
+  
+  // 一括リアクション取得
+  const { data: batchReactions } = useBatchReactions(cardIds);
+
   // 全ユーザーデータを取得
   const { data: allUsers = [] } = useQuery<User[]>({
     queryKey: ['/api/users'],
@@ -1091,6 +1097,9 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
           
           console.log(`CardItem をレンダリング中: カード${card.id}`);
           
+          // 一括取得したリアクションデータから該当カードのリアクションを取得
+          const cardReactions = batchReactions?.[card.id] || [];
+          
           return (
             <CardItem 
               key={card.id} 
@@ -1098,6 +1107,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               currentUser={user}
               onRefresh={refetch}
               onMarkAsRead={markCardAsRead}
+              reactions={cardReactions}
             />
           );
         })}

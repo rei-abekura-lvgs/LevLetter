@@ -1450,7 +1450,7 @@ export class DatabaseStorage implements IStorage {
         return {};
       }
 
-      const placeholders = cardIds.map(() => '?').join(',');
+      const placeholders = cardIds.map((_, index) => `$${index + 1}`).join(',');
       const reactionsQuery = `
         SELECT 
           cr.id, cr.card_id, cr.user_id, cr.emoji, cr.created_at,
