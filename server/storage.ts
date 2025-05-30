@@ -84,6 +84,17 @@ export interface IStorage {
   createLike(like: InsertLike): Promise<Like>;
   deleteLike(id: number): Promise<void>;
 
+  // リアクション
+  getReactionsForCard(cardId: number): Promise<Array<CardReaction & { user: User }>>;
+  createReaction(reaction: InsertCardReaction): Promise<CardReaction>;
+  deleteReaction(cardId: number, userId: number): Promise<void>;
+
+  // コメント
+  getCommentsForCard(cardId: number): Promise<Array<CardComment & { user: User }>>;
+  createComment(comment: InsertCardComment): Promise<CardComment>;
+  updateComment(id: number, comment: Partial<CardComment>): Promise<CardComment>;
+  deleteComment(id: number): Promise<void>;
+
   // 組織階層管理
   getAllOrganizations(): Promise<OrganizationHierarchy[]>;
   createOrganization(data: InsertOrganization): Promise<OrganizationHierarchy>;
@@ -107,6 +118,8 @@ export class MemStorage implements IStorage {
   private departments: Map<number, Department>;
   private cards: Map<number, Card>;
   private likes: Map<number, Like>;
+  private reactions: Map<number, CardReaction>;
+  private comments: Map<number, CardComment>;
   
   private userIdCounter: number;
   private teamIdCounter: number;
@@ -114,6 +127,8 @@ export class MemStorage implements IStorage {
   private departmentIdCounter: number;
   private cardIdCounter: number;
   private likeIdCounter: number;
+  private reactionIdCounter: number;
+  private commentIdCounter: number;
 
   constructor() {
     this.users = new Map();
@@ -122,6 +137,8 @@ export class MemStorage implements IStorage {
     this.departments = new Map();
     this.cards = new Map();
     this.likes = new Map();
+    this.reactions = new Map();
+    this.comments = new Map();
 
     this.userIdCounter = 1;
     this.teamIdCounter = 1;
@@ -129,6 +146,8 @@ export class MemStorage implements IStorage {
     this.departmentIdCounter = 1;
     this.cardIdCounter = 1;
     this.likeIdCounter = 1;
+    this.reactionIdCounter = 1;
+    this.commentIdCounter = 1;
 
     // サンプルデータを追加
     this.initSampleData();
@@ -826,6 +845,108 @@ export class MemStorage implements IStorage {
     this.users.delete(id);
     
     console.log(`ユーザーID ${id} の削除が完了しました`);
+  }
+
+  // リアクション関連
+  async getReactionsForCard(cardId: number): Promise<Array<CardReaction & { user: User }>> {
+    const reactions = Array.from(this.reactions.values())
+      .filter(reaction => reaction.cardId === cardId);
+    
+    const result = await Promise.all(
+      reactions.map(async reaction => {
+        const user = await this.getUser(reaction.userId);
+        return {
+          ...reaction,
+          user: user!
+        };
+      })
+    );
+
+    return result;
+  }
+
+  async createReaction(insertReaction: InsertCardReaction): Promise<CardReaction> {
+    const id = this.reactionIdCounter++;
+    const now = new Date();
+
+    const reaction: CardReaction = {
+      id,
+      cardId: insertReaction.cardId,
+      userId: insertReaction.userId,
+      emoji: insertReaction.emoji,
+      createdAt: now
+    };
+
+    this.reactions.set(id, reaction);
+    return reaction;
+  }
+
+  async deleteReaction(cardId: number, userId: number): Promise<void> {
+    for (const [id, reaction] of this.reactions.entries()) {
+      if (reaction.cardId === cardId && reaction.userId === userId) {
+        this.reactions.delete(id);
+        return;
+      }
+    }
+
+    throw new Error(`Reaction not found for cardId ${cardId} and userId ${userId}`);
+  }
+
+  // コメント関連
+  async getCommentsForCard(cardId: number): Promise<Array<CardComment & { user: User }>> {
+    const comments = Array.from(this.comments.values())
+      .filter(comment => comment.cardId === cardId)
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    
+    const result = await Promise.all(
+      comments.map(async comment => {
+        const user = await this.getUser(comment.userId);
+        return {
+          ...comment,
+          user: user!
+        };
+      })
+    );
+
+    return result;
+  }
+
+  async createComment(insertComment: InsertCardComment): Promise<CardComment> {
+    const id = this.commentIdCounter++;
+    const now = new Date();
+
+    const comment: CardComment = {
+      id,
+      cardId: insertComment.cardId,
+      userId: insertComment.userId,
+      message: insertComment.message,
+      createdAt: now,
+      updatedAt: now
+    };
+
+    this.comments.set(id, comment);
+    return comment;
+  }
+
+  async updateComment(id: number, updates: Partial<CardComment>): Promise<CardComment> {
+    const comment = this.comments.get(id);
+    if (!comment) {
+      throw new Error(`Comment with ID ${id} not found`);
+    }
+
+    const updatedComment = { 
+      ...comment, 
+      ...updates, 
+      updatedAt: new Date() 
+    };
+    this.comments.set(id, updatedComment);
+    return updatedComment;
+  }
+
+  async deleteComment(id: number): Promise<void> {
+    if (!this.comments.delete(id)) {
+      throw new Error(`Comment with ID ${id} not found`);
+    }
   }
 }
 

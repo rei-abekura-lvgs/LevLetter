@@ -20,7 +20,9 @@ import {
   loginSchema, 
   cardFormSchema, 
   profileUpdateSchema, 
-  likeFormSchema
+  likeFormSchema,
+  reactionFormSchema,
+  commentFormSchema
 } from "@shared/schema";
 
 // 週次ポイントリセットミドルウェア
@@ -1778,6 +1780,212 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("❌ 通知削除エラー:", error);
       res.status(500).json({ message: "通知削除中にエラーが発生しました" });
+    }
+  });
+
+  // リアクション関連API
+  app.get("/api/cards/:id/reactions", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.id);
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+
+      const reactions = await storage.getReactionsForCard(cardId);
+      return res.json(reactions);
+    } catch (error) {
+      console.error("リアクション取得エラー:", error);
+      return res.status(500).json({ message: "リアクションの取得に失敗しました" });
+    }
+  });
+
+  app.post("/api/cards/:id/reactions", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.id);
+      const user = (req as any).user;
+
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+
+      const validationResult = reactionFormSchema.safeParse({
+        cardId,
+        emoji: req.body.emoji
+      });
+
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "入力データが無効です",
+          errors: validationResult.error.issues
+        });
+      }
+
+      const { emoji } = validationResult.data;
+
+      // カードの存在確認
+      const card = await storage.getCard(cardId);
+      if (!card) {
+        return res.status(404).json({ message: "カードが見つかりません" });
+      }
+
+      // 同じユーザーが同じカードに同じリアクションを既に付けているかチェック
+      const existingReactions = await storage.getReactionsForCard(cardId);
+      const duplicateReaction = existingReactions.find(r => 
+        r.userId === user.id && r.emoji === emoji
+      );
+
+      if (duplicateReaction) {
+        return res.status(400).json({ message: "既にこのリアクションを追加済みです" });
+      }
+
+      const reaction = await storage.createReaction({
+        cardId,
+        userId: user.id,
+        emoji
+      });
+
+      return res.status(201).json({ message: "リアクションを追加しました", reaction });
+    } catch (error) {
+      console.error("リアクション作成エラー:", error);
+      return res.status(500).json({ message: "リアクションの追加に失敗しました" });
+    }
+  });
+
+  app.delete("/api/cards/:id/reactions", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.id);
+      const user = (req as any).user;
+
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+
+      await storage.deleteReaction(cardId, user.id);
+      return res.json({ message: "リアクションを削除しました" });
+    } catch (error) {
+      console.error("リアクション削除エラー:", error);
+      return res.status(500).json({ message: "リアクションの削除に失敗しました" });
+    }
+  });
+
+  // コメント関連API
+  app.get("/api/cards/:id/comments", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.id);
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+
+      const comments = await storage.getCommentsForCard(cardId);
+      return res.json(comments);
+    } catch (error) {
+      console.error("コメント取得エラー:", error);
+      return res.status(500).json({ message: "コメントの取得に失敗しました" });
+    }
+  });
+
+  app.post("/api/cards/:id/comments", authenticate, async (req, res) => {
+    try {
+      const cardId = parseInt(req.params.id);
+      const user = (req as any).user;
+
+      if (isNaN(cardId)) {
+        return res.status(400).json({ message: "無効なカードIDです" });
+      }
+
+      const validationResult = commentFormSchema.safeParse({
+        cardId,
+        message: req.body.message
+      });
+
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "入力データが無効です",
+          errors: validationResult.error.issues
+        });
+      }
+
+      const { message } = validationResult.data;
+
+      // カードの存在確認
+      const card = await storage.getCard(cardId);
+      if (!card) {
+        return res.status(404).json({ message: "カードが見つかりません" });
+      }
+
+      const comment = await storage.createComment({
+        cardId,
+        userId: user.id,
+        message
+      });
+
+      return res.status(201).json({ message: "コメントを追加しました", comment });
+    } catch (error) {
+      console.error("コメント作成エラー:", error);
+      return res.status(500).json({ message: "コメントの追加に失敗しました" });
+    }
+  });
+
+  app.put("/api/comments/:id", authenticate, async (req, res) => {
+    try {
+      const commentId = parseInt(req.params.id);
+      const user = (req as any).user;
+      const { message } = req.body;
+
+      if (isNaN(commentId)) {
+        return res.status(400).json({ message: "無効なコメントIDです" });
+      }
+
+      if (!message || typeof message !== 'string' || message.trim().length === 0) {
+        return res.status(400).json({ message: "コメントメッセージが必要です" });
+      }
+
+      // コメントの存在確認とユーザー権限チェック
+      const comments = await storage.getCommentsForCard(0); // 全コメントから該当するものを探す
+      const comment = comments.find(c => c.id === commentId);
+
+      if (!comment) {
+        return res.status(404).json({ message: "コメントが見つかりません" });
+      }
+
+      if (comment.userId !== user.id && !user.isAdmin) {
+        return res.status(403).json({ message: "このコメントを編集する権限がありません" });
+      }
+
+      const updatedComment = await storage.updateComment(commentId, { message: message.trim() });
+      return res.json({ message: "コメントを更新しました", comment: updatedComment });
+    } catch (error) {
+      console.error("コメント更新エラー:", error);
+      return res.status(500).json({ message: "コメントの更新に失敗しました" });
+    }
+  });
+
+  app.delete("/api/comments/:id", authenticate, async (req, res) => {
+    try {
+      const commentId = parseInt(req.params.id);
+      const user = (req as any).user;
+
+      if (isNaN(commentId)) {
+        return res.status(400).json({ message: "無効なコメントIDです" });
+      }
+
+      // コメントの存在確認とユーザー権限チェック
+      const comments = await storage.getCommentsForCard(0); // 全コメントから該当するものを探す
+      const comment = comments.find(c => c.id === commentId);
+
+      if (!comment) {
+        return res.status(404).json({ message: "コメントが見つかりません" });
+      }
+
+      if (comment.userId !== user.id && !user.isAdmin) {
+        return res.status(403).json({ message: "このコメントを削除する権限がありません" });
+      }
+
+      await storage.deleteComment(commentId);
+      return res.json({ message: "コメントを削除しました" });
+    } catch (error) {
+      console.error("コメント削除エラー:", error);
+      return res.status(500).json({ message: "コメントの削除に失敗しました" });
     }
   });
 
