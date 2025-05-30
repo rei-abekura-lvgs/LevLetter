@@ -146,7 +146,7 @@ export function CardReactions({ cardId, currentUserId, isRecipient }: CardReacti
               {userReaction ? (
                 <>
                   <span className="mr-1">{userReaction.emoji}</span>
-                  変更
+                  リアクション
                 </>
               ) : (
                 <>
