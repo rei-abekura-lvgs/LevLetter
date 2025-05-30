@@ -1,0 +1,65 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+auth-context.tsx:124 🚀 認証初期化開始
+auth-context.tsx:36 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:124 🚀 認証初期化開始
+auth-context.tsx:36 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:39 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/me 401 (Unauthorized)
+fetchUserFromSession @ auth-context.tsx:39
+initializeAuth @ auth-context.tsx:127
+(anonymous) @ auth-context.tsx:160
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=28fac212:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=28fac212:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=28fac212:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=28fac212:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=28fac212:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=28fac212:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=28fac212:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=28fac212:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=28fac212:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=28fac212:19432
+commitRoot @ chunk-RPCDYKBN.js?v=28fac212:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=28fac212:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=28fac212:18718
+workLoop @ chunk-RPCDYKBN.js?v=28fac212:197
+flushWork @ chunk-RPCDYKBN.js?v=28fac212:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=28fac212:384Understand this error
+auth-context.tsx:52 🔒 未認証状態
+auth-context.tsx:131 🎯 認証初期化完了: 未ログイン
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+auth-context.tsx:39 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/me 401 (Unauthorized)
+fetchUserFromSession @ auth-context.tsx:39
+initializeAuth @ auth-context.tsx:127
+(anonymous) @ auth-context.tsx:160
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=28fac212:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=28fac212:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=28fac212:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=28fac212:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=28fac212:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=28fac212:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=28fac212:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=28fac212:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=28fac212:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=28fac212:19432
+commitRoot @ chunk-RPCDYKBN.js?v=28fac212:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=28fac212:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=28fac212:18718
+workLoop @ chunk-RPCDYKBN.js?v=28fac212:197
+flushWork @ chunk-RPCDYKBN.js?v=28fac212:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=28fac212:384Understand this error
+auth-context.tsx:52 🔒 未認証状態
+auth-context.tsx:131 🎯 認証初期化完了: 未ログイン
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
