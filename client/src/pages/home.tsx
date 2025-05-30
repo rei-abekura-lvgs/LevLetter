@@ -240,7 +240,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                               typeof r === 'object' && r && 'id' in r ? r.id === currentUser.id : false
                             );
                           
-                          return isMainRecipient || isAdditionalRecipient;
+                          return Boolean(isMainRecipient || isAdditionalRecipient);
                         })()}
                       />
                     </div>
