@@ -14,7 +14,7 @@ interface CardItemProps {
   currentUser: User;
   isUnread?: boolean;
   reactions?: Array<CardReaction & { user: User }>;
-  onRefresh?: () => void;
+  onRefresh?: () => void | Promise<any>;
   onMarkAsRead?: (cardId: number) => void;
 }
 

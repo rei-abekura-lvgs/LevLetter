@@ -236,7 +236,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                           
                           const isAdditionalRecipient = card.additionalRecipients && 
                             Array.isArray(card.additionalRecipients) &&
-                            card.additionalRecipients.some(r => 
+                            card.additionalRecipients.some((r: any) => 
                               typeof r === 'object' && r && 'id' in r ? r.id === currentUser.id : false
                             );
                           
@@ -705,7 +705,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
   const cardIds = cards.map(card => card.id);
   
   // 一括リアクション取得
-  const { data: batchReactions } = useBatchReactions(cardIds);
+  const { batchReactions } = useBatchReactions(cardIds);
 
   // 全ユーザーデータを取得
   const { data: allUsers = [] } = useQuery<User[]>({
@@ -1107,7 +1107,6 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               currentUser={user}
               onRefresh={refetch}
               onMarkAsRead={markCardAsRead}
-              reactions={cardReactions}
             />
           );
         })}

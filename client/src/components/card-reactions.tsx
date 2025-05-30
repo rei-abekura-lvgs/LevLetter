@@ -20,24 +20,12 @@ export function CardReactions({ cardId, currentUserId, isRecipient, reactions: p
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // プロップスでリアクションが渡された場合はそれを使用、そうでなければ個別取得
-  const { data: fetchedReactions = [], isLoading } = useQuery({
-    queryKey: ["/api/cards", cardId, "reactions"],
-    queryFn: async () => {
-      try {
-        const res = await fetch(`/api/cards/${cardId}/reactions`);
-        if (!res.ok) {
-          console.log('リアクション取得失敗:', res.status);
-          return [];
-        }
-        return res.json() as Promise<Array<CardReaction & { user: User }>>;
-      } catch (error) {
-        console.log('リアクション取得エラー:', error);
-        return [];
-      }
-    },
-    enabled: !propReactions // プロップスでデータが渡されていない場合のみ実行
-  });
+  // バッチリアクション機能を使用
+  const { getReactionsForCard, hasUserReacted, getUserReaction } = useBatchReactions([cardId]);
+  
+  // プロップスでリアクションが渡された場合はそれを使用、そうでなければバッチ取得
+  const fetchedReactions = propReactions || getReactionsForCard(cardId);
+  const isLoading = false; // バッチ取得では常にfalse
 
   const reactions = propReactions || fetchedReactions;
 
