@@ -1,26 +1,31 @@
 import { Request, Response, NextFunction } from "express";
 import { storage } from "./storage";
 import { User } from "@shared/schema";
-import crypto from "crypto";
+import bcrypt from "bcrypt";
 
-// シンプルなメール・パスワード認証システム
+// bcryptベースのメール・パスワード認証システム
 export class SimpleEmailAuth {
   
-  // パスワードをハッシュ化（開発中は一時的に無効化）
-  private static hashPassword(password: string): string {
-    console.log(`🔐 パスワードハッシュ化: "${password}"`);
-    // 開発中はプレーンテキストで保存
-    const result = password;
-    console.log(`🔐 ハッシュ結果: "${result}"`);
-    return result;
+  // パスワードをbcryptでハッシュ化
+  private static async hashPassword(password: string): Promise<string> {
+    console.log(`🔐 パスワードハッシュ化開始`);
+    const saltRounds = 12; // セキュリティレベル
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    console.log(`🔐 ハッシュ化完了`);
+    return hashedPassword;
   }
 
-  // パスワード検証（開発中は一時的にプレーンテキスト比較）
-  private static verifyPassword(inputPassword: string, storedPassword: string): boolean {
-    console.log(`🔑 パスワード検証: 入力="${inputPassword}" 保存="${storedPassword}"`);
-    const isMatch = inputPassword === storedPassword;
-    console.log(`🔑 検証結果: ${isMatch ? '成功' : '失敗'}`);
-    return isMatch;
+  // bcryptでパスワード検証
+  private static async verifyPassword(inputPassword: string, storedPassword: string): Promise<boolean> {
+    console.log(`🔑 パスワード検証開始`);
+    try {
+      const isMatch = await bcrypt.compare(inputPassword, storedPassword);
+      console.log(`🔑 検証結果: ${isMatch ? '成功' : '失敗'}`);
+      return isMatch;
+    } catch (error) {
+      console.error(`🔑 パスワード検証エラー:`, error);
+      return false;
+    }
   }
 
   // ユーザー登録
@@ -36,7 +41,7 @@ export class SimpleEmailAuth {
       }
 
       // パスワードハッシュ化
-      const hashedPassword = this.hashPassword(password);
+      const hashedPassword = await this.hashPassword(password);
 
       // ユーザー作成
       const newUser = await storage.createUser({
@@ -73,7 +78,7 @@ export class SimpleEmailAuth {
       }
 
       // パスワード検証
-      const isValid = this.verifyPassword(password, user.password);
+      const isValid = await this.verifyPassword(password, user.password);
       if (!isValid) {
         console.log(`❌ パスワードが間違っています: ${email}`);
         return null;
