@@ -11,16 +11,7 @@ import { storage } from "./storage";
 import { serveStatic, log } from "./vite";
 import { hashPassword } from "./storage";
 import { generateGoogleAuthUrl, exchangeCodeForTokens, decodeIdToken, getRedirectUri } from "./cognito-auth";
-import { 
-  logAuth, 
-  logSession, 
-  setUserSession, 
-  getUserIdFromSession, 
-  verifyPassword, 
-  registerUserPassword,
-  sendAuthError,
-  sendUserResponse 
-} from "./auth-utils";
+import { SimpleAuth } from "./simple-auth";
 
 import { 
   registerSchema, 
@@ -235,43 +226,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ログイン
   app.post("/api/auth/login", async (req: Request, res: Response) => {
     try {
-      logAuth("ログイン試行開始", req.body);
+      console.log("Login attempt:", req.body.email);
       
       const data = loginSchema.parse(req.body);
-      logAuth(`バリデーション成功 - メール: ${data.email}`);
+      const user = await SimpleAuth.login(data.email, data.password);
       
-      const user = await verifyPassword(data.email, data.password);
       if (!user) {
-        return sendAuthError(res, "メールアドレスまたはパスワードが正しくありません");
+        console.log("Login failed for:", data.email);
+        return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       
-      setUserSession(req, user.id);
+      SimpleAuth.setSession(req, user.id);
+      console.log("Login successful for:", user.email);
       
-      // セッション保存を明示的に実行
-      await new Promise<void>((resolve, reject) => {
-        req.session.save((err) => {
-          if (err) {
-            logAuth("セッション保存エラー", err);
-            reject(err);
-          } else {
-            logAuth("セッション保存成功");
-            resolve();
-          }
-        });
+      return res.json({ 
+        message: "ログインに成功しました", 
+        user: SimpleAuth.sanitizeUser(user) 
       });
-      
-      return sendUserResponse(res, user, "ログインに成功しました");
     } catch (error) {
       if (error instanceof z.ZodError) {
         return handleZodError(error, res);
       }
-      logAuth("ログインエラー", error);
+      console.error("Login error:", error);
       return res.status(500).json({ message: "ログイン処理中にエラーが発生しました" });
     }
   });
 
   // 認証状態確認エンドポイント
-  app.get("/api/auth/me", authenticate, async (req: Request, res: Response) => {
+  app.get("/api/auth/me", SimpleAuth.authenticate, async (req: Request, res: Response) => {
     try {
       const user = (req as any).user;
       console.log("✅ 認証ユーザー情報返送:", user.name, "(ID:", user.id, ")");
