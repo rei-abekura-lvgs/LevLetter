@@ -45,12 +45,7 @@ function AppRoutes() {
       
       // 認証済みユーザーのリダイレクト処理
       if (isAuthenticated) {
-        // パスワード未設定の場合はパスワード設定ページへ
-        if (user && !user.passwordInitialized && location !== '/password-setup') {
-          setLocation('/password-setup');
-          return;
-        }
-        // パスワード設定済みでログイン関連ページにいる場合はホームへ
+        // ログイン関連ページにいる場合はホームへリダイレクト
         if (publicRoutes.includes(location)) {
           setLocation('/');
         }
