@@ -349,9 +349,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("✅ バリデーション成功 - メール:", data.email);
       
       // メールアドレスの重複チェック
+      console.log(`🔍 ユーザー検索開始: ${data.email}`);
       const existingUser = await storage.getUserByEmail(data.email);
+      
       if (existingUser) {
+        console.log(`📋 既存ユーザー発見 - ID: ${existingUser.id}, パスワード設定済み: ${!!existingUser.password}`);
+        
         if (existingUser.password) {
+          console.log(`❌ 既に登録済み: ${data.email}`);
           return res.status(400).json({ message: "このメールアドレスは既に登録されています" });
         }
         
@@ -359,7 +364,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log(`🔐 新規登録処理開始 - ユーザー: ${existingUser.email}`);
         console.log(`📝 入力パスワード: "${data.password}"`);
         
-        const hashedPassword = hashPassword(data.password);
+        const hashedPassword = await hashPassword(data.password);
         console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
         
         // ユーザー情報を更新（パスワードは既にハッシュ化済み）
