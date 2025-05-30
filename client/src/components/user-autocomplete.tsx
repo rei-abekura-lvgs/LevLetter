@@ -327,11 +327,11 @@ export function UserAutocomplete({
         disabled={selectedUsers.length >= maxSelections}
         className={cn(
           "justify-start text-gray-500 font-normal",
-          compact ? "h-7 text-xs px-2" : "w-full"
+          compact ? "h-7 text-xs px-2 whitespace-nowrap" : "w-full"
         )}
       >
         <Search className={cn("mr-1", compact ? "h-3 w-3" : "h-4 w-4")} />
-        {selectedUsers.length >= maxSelections ? `最大${maxSelections}人` : placeholder}
+        {selectedUsers.length >= maxSelections ? `最大${maxSelections}人` : "検索"}
       </Button>
 
       {/* 検索モーダル */}
