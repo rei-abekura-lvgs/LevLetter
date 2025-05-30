@@ -342,8 +342,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/auth/register", async (req, res) => {
     try {
-      console.log("リクエストボディ:", req.body);
+      console.log("🔐 新規登録リクエスト受信");
+      console.log("📝 リクエストボディ:", req.body);
+      
       const data = registerSchema.parse(req.body);
+      console.log("✅ バリデーション成功 - メール:", data.email);
       
       // メールアドレスの重複チェック
       const existingUser = await storage.getUserByEmail(data.email);
