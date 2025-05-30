@@ -1391,8 +1391,8 @@ export class DatabaseStorage implements IStorage {
   async getReactionsForCard(cardId: number): Promise<Array<CardReaction & { user: User }>> {
     try {
       // シンプルなクエリで既存のリアクションデータを取得
-      const reactionsData = await this.db.execute(`
-        SELECT 
+      const reactionsData = await this.db.execute(
+        `SELECT 
           cr.id, cr.card_id, cr.user_id, cr.emoji, cr.created_at,
           u.id as user_id, u.email, u.name, u.display_name, u.department,
           u.organization_level1, u.organization_level2, u.organization_level3,
@@ -1402,9 +1402,9 @@ export class DatabaseStorage implements IStorage {
           u.is_active, u.created_at as user_created_at, u.updated_at as user_updated_at
         FROM card_reactions cr
         JOIN users u ON cr.user_id = u.id
-        WHERE cr.card_id = $1
-        ORDER BY cr.created_at
-      `, [cardId]);
+        WHERE cr.card_id = ${cardId}
+        ORDER BY cr.created_at`
+      );
 
       return reactionsData.rows.map((row: any) => ({
         id: row.id,
