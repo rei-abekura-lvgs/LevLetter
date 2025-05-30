@@ -1,0 +1,78 @@
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+2:50:38 AM [express] serving on port 5000
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+warn - The class `duration-[3000ms]` is ambiguous and matches multiple utilities.
+warn - If this is content and not a class, replace it with `duration-&lsqb;3000ms&rsqb;` to silence this warning.
+
+warn - The class `duration-[60ms]` is ambiguous and matches multiple utilities.
+warn - If this is content and not a class, replace it with `duration-&lsqb;60ms&rsqb;` to silence this warning.
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: RFC1URM-t2E7K0m56TdjOVlHNkITADZs
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T02:50:46.840Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+2:50:46 AM [express] GET /api/auth/me 401 in 4ms :: {"message":"認証が必要です"}
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: Gba2U1K-Myoq3HB8Rkn7vnwaxHmCrYd4
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T02:50:46.851Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+2:50:46 AM [express] GET /api/auth/me 401 in 1ms :: {"message":"認証が必要です"}
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: EeiAVK6F7BPxDABxPhaHOsT-GjjuAx2L
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T02:50:52.478Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+2:50:52 AM [express] GET /api/auth/me 401 in 2ms :: {"message":"認証が必要です"}
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/auth/me
+🔑 セッションID: BnKWgGMpUbJSyHYwILjdDG_Q6Hur_m4Q
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T02:50:52.636Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  }
+}
+👤 セッションから取得したユーザーID: undefined
+❌ 認証失敗 - ユーザーIDがセッションに存在しません
+2:50:52 AM [express] GET /api/auth/me 401 in 2ms :: {"message":"認証が必要です"}
