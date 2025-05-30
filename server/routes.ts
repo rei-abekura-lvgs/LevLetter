@@ -480,11 +480,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (user) {
         // ユーザーが存在する場合
+        // bcryptハッシュかどうかを確認（60文字で$2b$で始まる）
+        const hasValidPassword = user.password && user.password.length === 60 && user.password.startsWith('$2b$');
+        
         return res.json({
           exists: true,
           userExists: true,
-          hasPassword: !!user.password,
-          message: user.password 
+          hasPassword: hasValidPassword,
+          message: hasValidPassword
             ? "このメールアドレスは既に登録されています。ログインしてください。" 
             : "このメールアドレスは事前登録されています。続けてパスワードを設定してください。"
         });
