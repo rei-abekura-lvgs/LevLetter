@@ -1,0 +1,51 @@
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+✅ 認証ユーザー情報返送: 阿部倉 怜 (ID: 5 )
+6:41:29 AM [express] GET /api/auth/me 304 in 27ms :: {"id":5,"email":"rei.abekura@leverages.jp","nam…
+🔒 認証チェック: GET /api/auth/me
+🔍 セッション取得: ユーザーID 5
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+🔒 認証チェック: GET /api/users
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+✅ 認証ユーザー情報返送: 阿部倉 怜 (ID: 5 )
+6:41:29 AM [express] GET /api/auth/me 200 in 26ms :: {"id":5,"email":"rei.abekura@leverages.jp","nam…
+ℹ️ 今週はすでにポイントリセット済み
+🔒 認証チェック: GET /api/dashboard/stats
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+📨 通知API呼び出し開始
+ℹ️ 今週はすでにポイントリセット済み
+🔒 認証チェック: GET /api/cards
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+🔍 getDashboardStats開始 - ユーザーID: 5
+📨 ユーザーID 5 の通知を取得中...
+📨 getReceivedCards開始 - ユーザーID: 5, 制限: 10
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+📅 今月の期間: 2025-05-01T00:00:00.000Z から 2025-06-01T00:00:00.000Z
+📨 getReceivedCards完了 - 0件取得
+📨 受信カード数: 0
+❤️ getReceivedLikes開始 - ユーザーID: 5, 制限: 10
+6:41:29 AM [express] GET /api/cards 200 in 148ms :: []
+6:41:29 AM [express] GET /api/users 200 in 151ms :: [{"id":639,"email":"masaki.harada@leverages.jp",…
+🔒 認証チェック: GET /api/organizations
+🔍 セッション取得: ユーザーID 5
+❤️ getReceivedLikes完了 - 0件取得
+❤️ 受信いいね数: 0
+📨 通知データ作成完了: 0件
+6:41:29 AM [express] GET /api/notifications 304 in 176ms :: []
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+6:41:30 AM [express] GET /api/organizations 200 in 55ms :: []
+6:41:30 AM [express] GET /api/dashboard/stats 200 in 373ms :: {"weekly":{"currentPoints":399,"maxPoi…
+🔒 認証チェック: GET /api/admin/organizations
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+6:41:30 AM [express] GET /api/admin/organizations 200 in 48ms :: []
+🔒 認証チェック: POST /api/auth/change-password
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+🔐 パスワード変更試行開始
+🆔 ユーザーID: 5
+❌ パスワード変更失敗 - 現在のパスワードが正しくない
+6:41:41 AM [express] POST /api/auth/change-password 400 in 122ms :: {"message":"現在のパスワードが正しくありません"}

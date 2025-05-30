@@ -249,9 +249,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "現在のパスワードと新しいパスワードが必要です" });
       }
       
-      if (newPassword.length < 6) {
+      if (newPassword.length < 8) {
         console.log("❌ パスワード変更失敗 - 新しいパスワードが短すぎる");
-        return res.status(400).json({ message: "新しいパスワードは6文字以上である必要があります" });
+        return res.status(400).json({ message: "新しいパスワードは8文字以上である必要があります" });
       }
       
       // 現在のユーザー情報を取得
@@ -261,15 +261,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "ユーザーが見つかりません" });
       }
       
-      // 現在のパスワードを確認
-      const currentPasswordHash = hashPassword(currentPassword);
-      if (user.password !== currentPasswordHash) {
+      // bcryptで現在のパスワードを検証
+      if (!user.password) {
+        console.log("❌ パスワード変更失敗 - パスワードが設定されていない");
+        return res.status(400).json({ message: "パスワードが設定されていません" });
+      }
+      
+      const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isCurrentPasswordValid) {
         console.log("❌ パスワード変更失敗 - 現在のパスワードが正しくない");
         return res.status(400).json({ message: "現在のパスワードが正しくありません" });
       }
       
-      // 新しいパスワードをハッシュ化
-      const newPasswordHash = hashPassword(newPassword);
+      // 新しいパスワードをbcryptでハッシュ化
+      const saltRounds = 12;
+      const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
       
       // パスワードを更新
       await storage.updateUser(user.id, {
