@@ -1828,14 +1828,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "カードが見つかりません" });
       }
 
-      // 同じユーザーが同じカードに同じリアクションを既に付けているかチェック
+      // 既存のリアクションをチェック（一人一回の制限）
       const existingReactions = await storage.getReactionsForCard(cardId);
-      const duplicateReaction = existingReactions.find(r => 
-        r.userId === user.id && r.emoji === emoji
-      );
+      const existingUserReaction = existingReactions.find(r => r.userId === user.id);
 
-      if (duplicateReaction) {
-        return res.status(400).json({ message: "既にこのリアクションを追加済みです" });
+      if (existingUserReaction) {
+        // 同じ絵文字の場合は重複エラー
+        if (existingUserReaction.emoji === emoji) {
+          return res.status(400).json({ message: "既にこのリアクションを追加済みです" });
+        }
+        // 異なる絵文字の場合は既存のリアクションを削除
+        await storage.deleteReaction(cardId, user.id);
       }
 
       const reaction = await storage.createReaction({
