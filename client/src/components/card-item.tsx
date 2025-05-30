@@ -290,7 +290,7 @@ export default function CardItem({ card, currentUser, isUnread = false, reaction
       <CardReactions
         cardId={card.id}
         currentUserId={currentUser.id}
-        isRecipient={card.recipientId === currentUser.id || (card.additionalRecipients && card.additionalRecipients.some(r => r.id === currentUser.id))}
+        isRecipient={card.recipientId === currentUser.id || (card.additionalRecipients && card.additionalRecipients.length > 0 && card.additionalRecipients.some(r => r.id === currentUser.id))}
         reactions={reactions}
       />
     </div>

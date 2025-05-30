@@ -30,8 +30,11 @@ export function CardReactions({ cardId, currentUserId, isRecipient, reactions: p
       return apiRequest("POST", `/api/cards/${cardId}/reactions`, { emoji });
     },
     onSuccess: () => {
-      // バッチリアクションAPIのキャッシュを無効化
-      queryClient.invalidateQueries({ queryKey: ["/api/reactions/batch"] });
+      // バッチリアクションAPIのキャッシュを無効化（前方一致で全てのバッチクエリを無効化）
+      queryClient.invalidateQueries({ 
+        queryKey: ["/api/reactions/batch"],
+        exact: false
+      });
       // カード一覧の再取得もトリガー
       queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
       setShowEmojiPicker(false);
@@ -53,8 +56,11 @@ export function CardReactions({ cardId, currentUserId, isRecipient, reactions: p
       return apiRequest("DELETE", `/api/cards/${cardId}/reactions`);
     },
     onSuccess: () => {
-      // バッチリアクションAPIのキャッシュを無効化
-      queryClient.invalidateQueries({ queryKey: ["/api/reactions/batch"] });
+      // バッチリアクションAPIのキャッシュを無効化（前方一致で全てのバッチクエリを無効化）
+      queryClient.invalidateQueries({ 
+        queryKey: ["/api/reactions/batch"],
+        exact: false
+      });
       // カード一覧の再取得もトリガー
       queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
       toast({
