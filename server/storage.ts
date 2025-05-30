@@ -31,7 +31,8 @@ function getInitials(name: string): string {
 }
 
 export function hashPassword(password: string): string {
-  return crypto.createHash('sha256').update(password).digest('hex');
+  // 開発中：パスワードをそのまま返す（ハッシュ化しない）
+  return password;
 }
 
 export interface IStorage {

@@ -62,12 +62,11 @@ export async function registerUserPassword(email: string, password: string): Pro
     return null;
   }
   
-  // パスワードハッシュ化と更新
-  const hashedPassword = await hashPassword(password);
-  logAuth(`パスワードハッシュ化完了`);
+  // 開発中：パスワードをそのまま保存
+  logAuth(`パスワードを平文で保存中`);
   
   const updatedUser = await storage.updateUser(existingUser.id, {
-    password: hashedPassword,
+    password: password,
     passwordInitialized: true,
   });
   
