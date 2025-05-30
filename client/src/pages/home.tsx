@@ -228,8 +228,19 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                       <CardReactions 
                         cardId={card.id} 
                         currentUserId={currentUser.id} 
-                        isRecipient={(card.recipients && card.recipients.some(r => r.id === currentUser.id)) || 
-                                   (card.additionalRecipients && card.additionalRecipients.some(r => r.id === currentUser.id))}
+                        isRecipient={(() => {
+                          // 受信者判定ロジック：メイン受信者またはadditionalRecipientsに含まれているか
+                          const isMainRecipient = card.recipient && 
+                            (typeof card.recipient === 'object' ? card.recipient.id === currentUser.id : false);
+                          
+                          const isAdditionalRecipient = card.additionalRecipients && 
+                            Array.isArray(card.additionalRecipients) &&
+                            card.additionalRecipients.some(r => 
+                              typeof r === 'object' && r && 'id' in r ? r.id === currentUser.id : false
+                            );
+                          
+                          return isMainRecipient || isAdditionalRecipient;
+                        })()}
                       />
                     </div>
                   </div>
@@ -1077,11 +1088,15 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
           // カードが未読かどうかを判定
           const isUnread = !readCardIds.has(card.id);
           
+          console.log(`CardItem をレンダリング中: カード${card.id}`);
+          
           return (
             <CardItem 
               key={card.id} 
               card={card} 
               currentUser={user}
+              onRefresh={refetch}
+              onMarkAsRead={markCardAsRead}
             />
           );
         })}
