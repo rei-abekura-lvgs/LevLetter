@@ -1,0 +1,182 @@
+アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/'}
+index-BijL6vyZ.js:408 🚀 認証初期化開始
+index-BijL6vyZ.js:408 🔍 セッションからユーザー情報を取得中...
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+index-BijL6vyZ.js:408 🚀 認証初期化開始
+index-BijL6vyZ.js:408 🔍 セッションからユーザー情報を取得中...
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+levletter.replit.app/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+levletter.replit.app/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+levletter.replit.app/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+levletter.replit.app/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+index-BijL6vyZ.js:408 ✅ セッション認証成功: 森下　研人
+index-BijL6vyZ.js:408 🎯 認証初期化完了: 森下　研人
+index-BijL6vyZ.js:600 🔔 通知ベルコンポーネントレンダリング
+index-BijL6vyZ.js:600 🔔 通知ベル状態: {isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+index-BijL6vyZ.js:600 📨 通知データ取得開始（ベルコンポーネント）
+index-BijL6vyZ.js:48 API GET リクエスト: /api/dashboard/stats?_t=1748584455355 データなし
+index-BijL6vyZ.js:48 API GET リクエスト: /api/auth/me?_t=1748584455355 データなし
+index-BijL6vyZ.js:48 API GET リクエスト: /api/cards?_t=1748584455358 データなし
+index-BijL6vyZ.js:48 API GET リクエスト: /api/users?_t=1748584455358 データなし
+index-BijL6vyZ.js:48 API GET リクエスト: /api/organizations?_t=1748584455358 データなし
+index-BijL6vyZ.js:452 🎯 URLパラメータチェック: {cardId: null, cardsLength: 0}
+index-BijL6vyZ.js:600 アプリ状態: {認証済み: true, ユーザー: '森下　研人', 読込中: false, 現在のパス: '/'}
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: true, ユーザー: '森下　研人', 読込中: false, エラー: null}
+index-BijL6vyZ.js:408 ✅ セッション認証成功: 森下　研人
+index-BijL6vyZ.js:408 🎯 認証初期化完了: 森下　研人
+index-BijL6vyZ.js:408 📊 認証状態更新: {認証済み: true, ユーザー: '森下　研人', 読込中: false, エラー: null}
+index-BijL6vyZ.js:48 API GET リクエスト: /api/admin/organizations?_t=1748584455697 データなし
+index-BijL6vyZ.js:452 🎯 URLパラメータチェック: {cardId: null, cardsLength: 0}
+index-BijL6vyZ.js:600 🔔 通知ベルコンポーネントレンダリング
+index-BijL6vyZ.js:600 🔔 通知ベル状態: {isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+index-BijL6vyZ.js:48 
+            
+            
+           GET https://levletter.replit.app/api/admin/organizations?_t=1748584455697 403 (Forbidden)
+hr @ index-BijL6vyZ.js:48
+(anonymous) @ index-BijL6vyZ.js:48
+queryFn @ index-BijL6vyZ.js:48
+a @ index-BijL6vyZ.js:48
+x @ index-BijL6vyZ.js:48
+start @ index-BijL6vyZ.js:48
+fetch @ index-BijL6vyZ.js:48
+gd @ index-BijL6vyZ.js:48
+onSubscribe @ index-BijL6vyZ.js:48
+subscribe @ index-BijL6vyZ.js:48
+(anonymous) @ index-BijL6vyZ.js:48
+oj @ index-BijL6vyZ.js:38
+fp @ index-BijL6vyZ.js:40
+Ic @ index-BijL6vyZ.js:40
+p9 @ index-BijL6vyZ.js:40
+Qo @ index-BijL6vyZ.js:40
+W_ @ index-BijL6vyZ.js:40
+Io @ index-BijL6vyZ.js:38
+(anonymous) @ index-BijL6vyZ.js:40
+setTimeout
+s @ index-BijL6vyZ.js:48
+i @ index-BijL6vyZ.js:48
+batch @ index-BijL6vyZ.js:48
+Za @ index-BijL6vyZ.js:48
+setData @ index-BijL6vyZ.js:48
+onSuccess @ index-BijL6vyZ.js:48
+f @ index-BijL6vyZ.js:48
+Promise.then
+x @ index-BijL6vyZ.js:48
+start @ index-BijL6vyZ.js:48
+fetch @ index-BijL6vyZ.js:48
+gd @ index-BijL6vyZ.js:48
+onSubscribe @ index-BijL6vyZ.js:48
+subscribe @ index-BijL6vyZ.js:48
+(anonymous) @ index-BijL6vyZ.js:48
+oj @ index-BijL6vyZ.js:38
+fp @ index-BijL6vyZ.js:40
+Ic @ index-BijL6vyZ.js:40
+W_ @ index-BijL6vyZ.js:40
+Io @ index-BijL6vyZ.js:38
+p9 @ index-BijL6vyZ.js:40
+Qo @ index-BijL6vyZ.js:40
+Bj @ index-BijL6vyZ.js:40
+E @ index-BijL6vyZ.js:25
+A @ index-BijL6vyZ.js:25Understand this error
+index-BijL6vyZ.js:48 API GET エラー: /api/admin/organizations Error: 管理者権限が必要です
+    at hr (index-BijL6vyZ.js:48:43854)
+    at async index-BijL6vyZ.js:48:44479
+hr @ index-BijL6vyZ.js:48
+await in hr
+(anonymous) @ index-BijL6vyZ.js:48
+queryFn @ index-BijL6vyZ.js:48
+a @ index-BijL6vyZ.js:48
+x @ index-BijL6vyZ.js:48
+start @ index-BijL6vyZ.js:48
+fetch @ index-BijL6vyZ.js:48
+gd @ index-BijL6vyZ.js:48
+onSubscribe @ index-BijL6vyZ.js:48
+subscribe @ index-BijL6vyZ.js:48
+(anonymous) @ index-BijL6vyZ.js:48
+oj @ index-BijL6vyZ.js:38
+fp @ index-BijL6vyZ.js:40
+Ic @ index-BijL6vyZ.js:40
+p9 @ index-BijL6vyZ.js:40
+Qo @ index-BijL6vyZ.js:40
+W_ @ index-BijL6vyZ.js:40
+Io @ index-BijL6vyZ.js:38
+(anonymous) @ index-BijL6vyZ.js:40
+setTimeout
+s @ index-BijL6vyZ.js:48
+i @ index-BijL6vyZ.js:48
+batch @ index-BijL6vyZ.js:48
+Za @ index-BijL6vyZ.js:48
+setData @ index-BijL6vyZ.js:48
+onSuccess @ index-BijL6vyZ.js:48
+f @ index-BijL6vyZ.js:48
+Promise.then
+x @ index-BijL6vyZ.js:48
+start @ index-BijL6vyZ.js:48
+fetch @ index-BijL6vyZ.js:48
+gd @ index-BijL6vyZ.js:48
+onSubscribe @ index-BijL6vyZ.js:48
+subscribe @ index-BijL6vyZ.js:48
+(anonymous) @ index-BijL6vyZ.js:48
+oj @ index-BijL6vyZ.js:38
+fp @ index-BijL6vyZ.js:40
+Ic @ index-BijL6vyZ.js:40
+W_ @ index-BijL6vyZ.js:40
+Io @ index-BijL6vyZ.js:38
+p9 @ index-BijL6vyZ.js:40
+Qo @ index-BijL6vyZ.js:40
+Bj @ index-BijL6vyZ.js:40
+E @ index-BijL6vyZ.js:25
+A @ index-BijL6vyZ.js:25Understand this error
+index-BijL6vyZ.js:48 Error fetching /api/admin/organizations: Error: 管理者権限が必要です
+    at hr (index-BijL6vyZ.js:48:43854)
+    at async index-BijL6vyZ.js:48:44479
+(anonymous) @ index-BijL6vyZ.js:48
+await in (anonymous)
+queryFn @ index-BijL6vyZ.js:48
+a @ index-BijL6vyZ.js:48
+x @ index-BijL6vyZ.js:48
+start @ index-BijL6vyZ.js:48
+fetch @ index-BijL6vyZ.js:48
+gd @ index-BijL6vyZ.js:48
+onSubscribe @ index-BijL6vyZ.js:48
+subscribe @ index-BijL6vyZ.js:48
+(anonymous) @ index-BijL6vyZ.js:48
+oj @ index-BijL6vyZ.js:38
+fp @ index-BijL6vyZ.js:40
+Ic @ index-BijL6vyZ.js:40
+p9 @ index-BijL6vyZ.js:40
+Qo @ index-BijL6vyZ.js:40
+W_ @ index-BijL6vyZ.js:40
+Io @ index-BijL6vyZ.js:38
+(anonymous) @ index-BijL6vyZ.js:40
+setTimeout
+s @ index-BijL6vyZ.js:48
+i @ index-BijL6vyZ.js:48
+batch @ index-BijL6vyZ.js:48
+Za @ index-BijL6vyZ.js:48
+setData @ index-BijL6vyZ.js:48
+onSuccess @ index-BijL6vyZ.js:48
+f @ index-BijL6vyZ.js:48
+Promise.then
+x @ index-BijL6vyZ.js:48
+start @ index-BijL6vyZ.js:48
+fetch @ index-BijL6vyZ.js:48
+gd @ index-BijL6vyZ.js:48
+onSubscribe @ index-BijL6vyZ.js:48
+subscribe @ index-BijL6vyZ.js:48
+(anonymous) @ index-BijL6vyZ.js:48
+oj @ index-BijL6vyZ.js:38
+fp @ index-BijL6vyZ.js:40
+Ic @ index-BijL6vyZ.js:40
+W_ @ index-BijL6vyZ.js:40
+Io @ index-BijL6vyZ.js:38
+p9 @ index-BijL6vyZ.js:40
+Qo @ index-BijL6vyZ.js:40
+Bj @ index-BijL6vyZ.js:40
+E @ index-BijL6vyZ.js:25
+A @ index-BijL6vyZ.js:25Understand this error
+index-BijL6vyZ.js:452 🎯 URLパラメータチェック: {cardId: null, cardsLength: 0}
+index-BijL6vyZ.js:452 🎯 URLパラメータチェック: {cardId: null, cardsLength: 0}
+index-BijL6vyZ.js:600 📨 通知データ取得完了（ベルコンポーネント）: []
+index-BijL6vyZ.js:600 🔔 通知ベルコンポーネントレンダリング
+index-BijL6vyZ.js:600 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 0, unreadCount: 0}

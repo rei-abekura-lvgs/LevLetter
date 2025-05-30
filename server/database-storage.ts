@@ -177,11 +177,10 @@ export class DatabaseStorage implements IStorage {
     console.log(`📝 createUser開始 - メール: ${insertUser.email}`);
     console.log(`🔑 入力パスワード: "${insertUser.password}"`);
     
-    // パスワードがある場合はハッシュ化（開発中：無効化）
+    // パスワード処理を完全に無効化（開発中）
     if (insertUser.password) {
       console.log(`🔐 パスワード処理前: "${insertUser.password}"`);
-      // 開発中：ハッシュ化しない
-      // insertUser.password = hashPassword(insertUser.password);
+      // 開発中：ハッシュ化を完全に無効化
       console.log(`🔐 パスワード処理後: "${insertUser.password}"`);
     }
 
