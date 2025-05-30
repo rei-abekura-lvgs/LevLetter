@@ -6,8 +6,9 @@ import { User } from "@shared/schema";
 export class SimpleAuth {
   // ログイン処理（開発用：パスワードをプレーンテキストで比較）
   static async login(email: string, password: string): Promise<User | null> {
+    console.log(`🔐 SimpleAuth.login開始 - メール: ${email}`);
+    console.log(`🔐 パスワード受信: "${password}"`);
     try {
-      console.log(`🔐 SimpleAuth.login開始 - メール: ${email}`);
       const user = await storage.getUserByEmail(email);
       if (!user || !user.password) {
         console.log(`❌ ユーザーまたはパスワードが見つかりません: ${email}`);
