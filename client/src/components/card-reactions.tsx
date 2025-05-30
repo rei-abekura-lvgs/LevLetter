@@ -90,29 +90,58 @@ export function CardReactions({ cardId, currentUserId, isRecipient }: CardReacti
 
   return (
     <div className="flex items-center gap-2">
-      {/* Show existing reactions */}
-      {totalReactions > 0 && (
+      {/* Show existing reactions grouped by emoji */}
+      {Object.entries(reactionGroups).length > 0 && (
         <div className="flex items-center gap-1">
-          {Object.entries(reactionGroups).slice(0, 3).map(([emoji, groupReactions]) => (
-            <span key={emoji} className="text-sm">{emoji}</span>
-          ))}
-          {totalReactions > 3 && <span className="text-xs text-gray-500">+{totalReactions - 3}</span>}
-          <span className="text-xs text-gray-500 ml-1">{totalReactions}</span>
+          {Object.entries(reactionGroups).slice(0, 3).map(([emoji, groupReactions]) => {
+            const count = groupReactions.length;
+            const hasCurrentUserReacted = groupReactions.some(r => r.userId === currentUserId);
+            
+            return (
+              <div 
+                key={emoji} 
+                className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs border ${
+                  hasCurrentUserReacted 
+                    ? 'bg-blue-50 border-blue-200 text-blue-700' 
+                    : 'bg-gray-50 border-gray-200 text-gray-600'
+                }`}
+              >
+                <span className="text-sm">{emoji}</span>
+                <span className="font-medium">{count}</span>
+              </div>
+            );
+          })}
+          {Object.entries(reactionGroups).length > 3 && (
+            <span className="text-xs text-gray-500">+{totalReactions - Object.entries(reactionGroups).slice(0, 3).reduce((sum, [, reactions]) => sum + reactions.length, 0)}</span>
+          )}
         </div>
       )}
 
-      {/* Add reaction button - only show for recipients */}
+      {/* Add/Change reaction button - only show for recipients */}
       {isRecipient && (
         <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               size="sm"
-              className="h-7 px-2 text-xs border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800"
+              className={`h-7 px-2 text-xs border-gray-200 hover:border-gray-300 ${
+                userReaction 
+                  ? 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100' 
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
               disabled={addReactionMutation.isPending}
             >
-              <span className="mr-1">😊</span>
-              リアクション
+              {userReaction ? (
+                <>
+                  <span className="mr-1">{userReaction.emoji}</span>
+                  変更
+                </>
+              ) : (
+                <>
+                  <span className="mr-1">😊</span>
+                  リアクション
+                </>
+              )}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-2" align="start">
@@ -122,7 +151,9 @@ export function CardReactions({ cardId, currentUserId, isRecipient }: CardReacti
                   key={emoji}
                   variant="ghost"
                   size="sm"
-                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                  className={`h-8 w-8 p-0 hover:bg-gray-100 ${
+                    userReaction?.emoji === emoji ? 'bg-blue-100 border border-blue-300' : ''
+                  }`}
                   onClick={() => handleEmojiClick(emoji)}
                   disabled={addReactionMutation.isPending}
                 >
