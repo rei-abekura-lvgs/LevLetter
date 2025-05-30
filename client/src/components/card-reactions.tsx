@@ -30,7 +30,10 @@ export function CardReactions({ cardId, currentUserId, isRecipient, reactions: p
       return apiRequest("POST", `/api/cards/${cardId}/reactions`, { emoji });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/cards", cardId, "reactions"] });
+      // バッチリアクションAPIのキャッシュを無効化
+      queryClient.invalidateQueries({ queryKey: ["/api/reactions/batch"] });
+      // カード一覧の再取得もトリガー
+      queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
       setShowEmojiPicker(false);
       toast({
         title: "リアクションを追加しました",
@@ -50,7 +53,10 @@ export function CardReactions({ cardId, currentUserId, isRecipient, reactions: p
       return apiRequest("DELETE", `/api/cards/${cardId}/reactions`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/cards", cardId, "reactions"] });
+      // バッチリアクションAPIのキャッシュを無効化
+      queryClient.invalidateQueries({ queryKey: ["/api/reactions/batch"] });
+      // カード一覧の再取得もトリガー
+      queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
       toast({
         title: "リアクションを削除しました",
       });
