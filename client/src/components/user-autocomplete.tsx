@@ -103,6 +103,7 @@ interface UserAutocompleteProps {
   onUserRemove: (userId: number) => void;
   placeholder?: string;
   maxSelections?: number;
+  compact?: boolean;
 }
 
 interface OrganizationHierarchy {
@@ -123,7 +124,8 @@ export function UserAutocomplete({
   onUserSelect,
   onUserRemove,
   placeholder = "名前を入力して検索...",
-  maxSelections = 10
+  maxSelections = 10,
+  compact = false
 }: UserAutocompleteProps) {
   const [inputValue, setInputValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -285,25 +287,33 @@ export function UserAutocomplete({
     <div className="space-y-3">
       {/* 選択済みユーザー表示エリア */}
       {selectedUsers.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1">
           {selectedUsers.map(user => (
             <Badge 
               key={user.id} 
               variant="secondary" 
-              className="flex items-center gap-2 px-3 py-1.5 text-sm"
+              className={cn(
+                "flex items-center gap-1.5",
+                compact ? "px-2 py-0.5 text-xs" : "px-3 py-1.5 text-sm"
+              )}
             >
-              <Avatar className="h-5 w-5">
-                <AvatarFallback className="text-xs bg-blue-100 text-blue-700">
+              <Avatar className={compact ? "h-4 w-4" : "h-5 w-5"}>
+                <AvatarFallback className={cn(
+                  "bg-blue-100 text-blue-700",
+                  compact ? "text-xs" : "text-xs"
+                )}>
                   {(user.displayName || user.name).charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              <span>{user.displayName || user.name}</span>
+              <span className="truncate max-w-[80px]">
+                {user.displayName || user.name}
+              </span>
               <button 
                 type="button" 
                 onClick={() => onUserRemove(user.id)}
                 className="rounded-full hover:bg-gray-200 p-0.5 transition-colors"
               >
-                <X size={12} />
+                <X size={compact ? 10 : 12} />
               </button>
             </Badge>
           ))}
@@ -315,10 +325,13 @@ export function UserAutocomplete({
         variant="outline" 
         onClick={openModal}
         disabled={selectedUsers.length >= maxSelections}
-        className="w-full justify-start text-gray-500 font-normal"
+        className={cn(
+          "justify-start text-gray-500 font-normal",
+          compact ? "h-7 text-xs px-2" : "w-full"
+        )}
       >
-        <Search className="h-4 w-4 mr-2" />
-        {selectedUsers.length >= maxSelections ? `最大${maxSelections}人まで選択可能` : placeholder}
+        <Search className={cn("mr-1", compact ? "h-3 w-3" : "h-4 w-4")} />
+        {selectedUsers.length >= maxSelections ? `最大${maxSelections}人` : placeholder}
       </Button>
 
       {/* 検索モーダル */}

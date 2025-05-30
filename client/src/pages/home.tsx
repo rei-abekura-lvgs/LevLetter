@@ -1132,8 +1132,8 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </div>
                 </div>
                 
-                {/* カード数、ソート、検索 */}
-                <div className="flex items-center gap-3">
+                {/* カード数、ソート、検索 - 右寄せ */}
+                <div className="flex items-center justify-end gap-3">
                   <Badge variant="outline" className="text-xs text-gray-600 bg-white/70 border-gray-300">
                     {filteredCards.length}件
                   </Badge>
