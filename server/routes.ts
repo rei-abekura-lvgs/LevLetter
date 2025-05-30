@@ -50,7 +50,7 @@ const checkAdmin = async (req: Request, res: Response, next: Function) => {
   next();
 };
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app: express.Application): Promise<Server> {
   app.use(cors({
     origin: true, // 開発環境では全オリジンを許可
     credentials: true, // Cookieを含むリクエストを許可
