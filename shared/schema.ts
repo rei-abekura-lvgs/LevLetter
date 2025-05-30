@@ -104,6 +104,25 @@ export const teamMembers = pgTable("team_members", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// カードリアクションテーブル
+export const cardReactions = pgTable("card_reactions", {
+  id: serial("id").primaryKey(),
+  cardId: integer("card_id").notNull().references(() => cards.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  emoji: text("emoji").notNull(), // 絵文字（👍, ❤️, 😊, 🎉, 👏など）
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+// カードコメントテーブル
+export const cardComments = pgTable("card_comments", {
+  id: serial("id").primaryKey(),
+  cardId: integer("card_id").notNull().references(() => cards.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
 // Zodスキーマ
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -147,6 +166,17 @@ export const insertUserDepartmentSchema = createInsertSchema(userDepartments).om
   createdAt: true
 });
 
+export const insertCardReactionSchema = createInsertSchema(cardReactions).omit({
+  id: true,
+  createdAt: true
+});
+
+export const insertCardCommentSchema = createInsertSchema(cardComments).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true
+});
+
 // カスタムスキーマ
 export const loginSchema = z.object({
   email: z.string().email({ message: "有効なメールアドレスを入力してください" }),
@@ -173,6 +203,16 @@ export const likeFormSchema = z.object({
   points: z.number().min(0).max(100)
 });
 
+export const reactionFormSchema = z.object({
+  cardId: z.number(),
+  emoji: z.string().min(1, { message: "絵文字を選択してください" })
+});
+
+export const commentFormSchema = z.object({
+  cardId: z.number(),
+  message: z.string().min(1, { message: "コメントを入力してください" }).max(500, { message: "コメントは500文字以内で入力してください" })
+});
+
 export const profileUpdateSchema = z.object({
   displayName: z.string().min(1, { message: "表示名を入力してください" }),
   department: z.string().nullable().optional(),
@@ -196,6 +236,10 @@ export type OrganizationHierarchy = typeof organizationHierarchy.$inferSelect;
 export type InsertOrganization = z.infer<typeof insertOrganizationSchema>;
 export type UserDepartment = typeof userDepartments.$inferSelect;
 export type InsertUserDepartment = z.infer<typeof insertUserDepartmentSchema>;
+export type CardReaction = typeof cardReactions.$inferSelect;
+export type InsertCardReaction = z.infer<typeof insertCardReactionSchema>;
+export type CardComment = typeof cardComments.$inferSelect;
+export type InsertCardComment = z.infer<typeof insertCardCommentSchema>;
 
 // カスタム型
 export type CardWithRelations = Card & {
@@ -203,6 +247,8 @@ export type CardWithRelations = Card & {
   recipient: User | Team;
   additionalRecipientUsers?: User[]; // 追加の受信者
   likes: Array<Like & { user: User }>;
+  reactions?: Array<CardReaction & { user: User }>; // リアクション追加
+  comments?: Array<CardComment & { user: User }>; // コメント追加
   totalPoints: number;
   tags?: string[]; // タグ配列を追加
 };

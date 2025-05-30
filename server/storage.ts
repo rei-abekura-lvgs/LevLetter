@@ -1,5 +1,5 @@
 import {
-  users, teams, cards, likes, teamMembers, departments, organizationHierarchy, userDepartments,
+  users, teams, cards, likes, teamMembers, departments, organizationHierarchy, userDepartments, cardReactions, cardComments,
   type User, type InsertUser,
   type Card, type InsertCard,
   type Like, type InsertLike,
@@ -8,6 +8,8 @@ import {
   type Department, type InsertDepartment,
   type OrganizationHierarchy, type InsertOrganization,
   type UserDepartment, type InsertUserDepartment,
+  type CardReaction, type InsertCardReaction,
+  type CardComment, type InsertCardComment,
   type CardWithRelations
 } from "@shared/schema";
 import * as crypto from "crypto";
