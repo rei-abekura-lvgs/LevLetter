@@ -10,14 +10,23 @@ export const TOKEN_KEY = "levletter-auth-token";
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
   try {
+    console.log("🚀 ログインリクエスト開始:", { email });
+    console.log("📤 送信データ:", { email, password: "***" });
+    
     const data = await apiRequest<{message: string, user: User}>("POST", "/api/auth/login", { email, password });
+    
+    console.log("📥 ログインレスポンス受信:", data);
+    console.log("👤 受信ユーザー情報:", data.user);
+    
     // セッション方式なのでトークンは不要
     return {
       user: data.user,
       token: "" // セッション方式のため空文字
     };
   } catch (error: any) {
-    console.error("ログインエラー:", error);
+    console.error("❌ ログインエラー詳細:", error);
+    console.error("❌ エラーメッセージ:", error.message);
+    console.error("❌ エラー全体:", JSON.stringify(error, null, 2));
     throw new Error(error.message || "ログインに失敗しました");
   }
 }

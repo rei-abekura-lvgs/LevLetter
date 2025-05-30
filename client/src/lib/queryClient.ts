@@ -36,7 +36,8 @@ export async function apiRequest<T>(
       'Pragma': 'no-cache',
     },
     body: data ? JSON.stringify(data) : undefined,
-    cache: 'no-store'
+    cache: 'no-store',
+    credentials: 'include' // セッションCookieを含める
   };
   
   // 認証が必要なパスへのリクエストで、トークンがない場合の早期チェック
@@ -47,10 +48,22 @@ export async function apiRequest<T>(
   // キャッシュ回避のためURLにタイムスタンプを追加
   const timestampUrl = path + (path.includes('?') ? '&' : '?') + `_t=${Date.now()}`;
   
-  console.log(`API ${method} リクエスト:`, timestampUrl, data ? "データあり" : "データなし");
+  console.log(`🌐 API ${method} リクエスト開始:`, timestampUrl);
+  console.log(`📋 リクエスト設定:`, {
+    method,
+    headers: config.headers,
+    hasBody: !!data,
+    credentials: config.credentials
+  });
   
   try {
     const response = await fetch(timestampUrl, config);
+    
+    console.log(`📡 レスポンス受信:`, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: Object.fromEntries(response.headers.entries())
+    });
     
     if (!response.ok) {
       // 401エラーを特別に処理
