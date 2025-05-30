@@ -140,7 +140,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             
             toast({
               title: "ログイン成功",
-              description: `ようこそ、${userData.name}さん！Google認証でログインしました。`,
+              description: `ようこそ、${userData.name}さん！`,
               variant: "default",
             });
           }
