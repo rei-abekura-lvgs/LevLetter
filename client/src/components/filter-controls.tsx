@@ -68,7 +68,7 @@ export function FilterControls({
   return (
     <div className="flex items-center gap-2">
       <Select value={sortOrder} onValueChange={(value: "newest" | "popular") => onSortChange(value)}>
-        <SelectTrigger className="w-[100px] h-7 text-xs">
+        <SelectTrigger className="w-[110px] h-7 text-xs whitespace-nowrap">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
