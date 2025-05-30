@@ -1450,23 +1450,16 @@ export class DatabaseStorage implements IStorage {
         return {};
       }
 
-      const placeholders = cardIds.map((_, index) => `$${index + 1}`).join(',');
-      const reactionsQuery = `
-        SELECT 
-          cr.id, cr.card_id, cr.user_id, cr.emoji, cr.created_at,
-          u.id as user_id, u.email, u.name, u.display_name, u.department,
-          u.organization_level1, u.organization_level2, u.organization_level3,
-          u.organization_level4, u.organization_level5, u.weekly_points,
-          u.total_points_received, u.is_admin, u.avatar_color, u.custom_avatar_url,
-          u.password IS NOT NULL as has_password, u.google_id, u.cognito_sub,
-          u.is_active, u.created_at as user_created_at, u.updated_at as user_updated_at
-        FROM card_reactions cr
-        JOIN users u ON cr.user_id = u.id
-        WHERE cr.card_id IN (${placeholders})
-        ORDER BY cr.card_id, cr.created_at
-      `;
-      
-      const reactionsData = await this.db.execute(reactionsQuery, cardIds);
+      // Drizzle ORMを使用した一括取得
+      const reactionsData = await db
+        .select({
+          reaction: cardReactions,
+          user: users
+        })
+        .from(cardReactions)
+        .innerJoin(users, eq(cardReactions.userId, users.id))
+        .where(inArray(cardReactions.cardId, cardIds))
+        .orderBy(cardReactions.cardId, cardReactions.createdAt);
 
       // グループ化してレスポンス形式を作成
       const result: Record<number, Array<CardReaction & { user: User }>> = {};
@@ -1476,39 +1469,12 @@ export class DatabaseStorage implements IStorage {
         result[cardId] = [];
       });
 
-      reactionsData.rows.forEach((row: any) => {
+      reactionsData.forEach((row) => {
         const reaction = {
-          id: row.id,
-          cardId: row.card_id,
-          userId: row.user_id,
-          emoji: row.emoji,
-          createdAt: new Date(row.created_at),
-          user: {
-            id: row.user_id,
-            email: row.email,
-            name: row.name,
-            displayName: row.display_name,
-            department: row.department,
-            organizationLevel1: row.organization_level1,
-            organizationLevel2: row.organization_level2,
-            organizationLevel3: row.organization_level3,
-            organizationLevel4: row.organization_level4,
-            organizationLevel5: row.organization_level5,
-            weeklyPoints: row.weekly_points,
-            totalPointsReceived: row.total_points_received,
-            isAdmin: row.is_admin,
-            avatarColor: row.avatar_color,
-            customAvatarUrl: row.custom_avatar_url,
-            hasPassword: row.has_password,
-            googleId: row.google_id,
-            cognitoSub: row.cognito_sub,
-            isActive: row.is_active,
-            createdAt: new Date(row.user_created_at),
-            updatedAt: new Date(row.user_updated_at)
-          }
+          ...row.reaction,
+          user: row.user
         };
-        
-        result[row.card_id].push(reaction);
+        result[reaction.cardId].push(reaction);
       });
 
       return result;
