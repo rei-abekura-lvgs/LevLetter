@@ -1,0 +1,85 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:67 アプリ状態: Object
+auth-context.tsx:122 🚀 認証初期化開始
+auth-context.tsx:34 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:152 📊 認証状態更新: Object
+auth-context.tsx:122 🚀 認証初期化開始
+auth-context.tsx:34 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:152 📊 認証状態更新: Object
+landing:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+landing:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+landing:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+landing:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+api/auth/me:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)Understand this error
+auth-context.tsx:50 🔒 未認証状態
+auth-context.tsx:129 🎯 認証初期化完了: 未ログイン
+App.tsx:67 アプリ状態: Object
+auth-context.tsx:152 📊 認証状態更新: Object
+api/auth/me:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)Understand this error
+auth-context.tsx:50 🔒 未認証状態
+auth-context.tsx:129 🎯 認証初期化完了: 未ログイン
+auth-context.tsx:152 📊 認証状態更新: Object
+App.tsx:67 アプリ状態: Object
+App.tsx:67 アプリ状態: Object
+App.tsx:67 アプリ状態: Object
+login.tsx:75 ログイン試行: tomoya.kato@leverages.jp
+App.tsx:67 アプリ状態: Object
+auth-context.tsx:152 📊 認証状態更新: Object
+login.tsx:81 ログイン成功
+auth-context.tsx:34 🔍 セッションからユーザー情報を取得中...
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: Object
+notification-bell.tsx:53 📨 通知データ取得開始（ベルコンポーネント）
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/dashboard/stats?_t=1748584929803
+queryClient.ts:44 📋 リクエスト設定: Object
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/auth/me?_t=1748584929803
+queryClient.ts:44 📋 リクエスト設定: Object
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/cards?_t=1748584929803
+queryClient.ts:44 📋 リクエスト設定: Object
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/users?_t=1748584929803
+queryClient.ts:44 📋 リクエスト設定: Object
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/organizations?_t=1748584929804
+queryClient.ts:44 📋 リクエスト設定: Object
+home.tsx:698 🎯 URLパラメータチェック: Object
+App.tsx:67 アプリ状態: Object
+auth-context.tsx:152 📊 認証状態更新: Object
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: Object
+App.tsx:67 アプリ状態: Object
+api/auth/me:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)Understand this error
+auth-context.tsx:50 🔒 未認証状態
+login.tsx:92 認証情報更新完了
+login.tsx:95 ホーム画面への遷移準備中...
+App.tsx:67 アプリ状態: Object
+auth-context.tsx:152 📊 認証状態更新: Object
+api/auth/me?_t=1748584929803:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)Understand this error
+queryClient.ts:54 📡 レスポンス受信: Object
+queryClient.ts:123 Error fetching /api/auth/me: Error: 認証エラー
+    at apiRequest (queryClient.ts:75:15)
+    at async queryClient.ts:121:14
+(anonymous) @ queryClient.ts:123Understand this error
+notification-bell.tsx:62 📨 通知データ取得完了（ベルコンポーネント）: Array(0)
+queryClient.ts:54 📡 レスポンス受信: Object
+App.tsx:67 アプリ状態: Object
+App.tsx:67 アプリ状態: Object
+queryClient.ts:54 📡 レスポンス受信: Object
+queryClient.ts:54 📡 レスポンス受信: Object
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.Understand this warning
+queryClient.ts:54 📡 レスポンス受信: {status: 200, statusText: 'OK', headers: {…}}

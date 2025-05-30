@@ -81,7 +81,7 @@ export class SimpleAuth {
     }
 
     try {
-      const user = await storage.getUserById(userId);
+      const user = await storage.getUser(userId);
       if (!user) {
         SimpleAuth.clearSession(req);
         return res.status(401).json({ message: "ユーザーが見つかりません" });
