@@ -1098,7 +1098,14 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
           console.log(`CardItem をレンダリング中: カード${card.id}`);
           
           // 一括取得したリアクションデータから該当カードのリアクションを取得
-          const cardReactions = batchReactions?.[card.id] || [];
+          const cardReactions = batchReactions[card.id] || [];
+          
+          console.log(`🏠 Home[${card.id}] リアクションデータ:`, {
+            cardId: card.id,
+            batchReactionsKeys: Object.keys(batchReactions),
+            cardReactions,
+            cardReactionsCount: cardReactions.length
+          });
           
           return (
             <CardItem 

@@ -1,0 +1,76 @@
+カード347の受信者チェック: {cardId: 347, recipientIds: Array(1), userId: 5, isRecipient: true, recipient: {…}, …}
+home.tsx:871 カード352の受信者チェック: {cardId: 352, recipientIds: Array(1), userId: 5, isRecipient: true, recipient: {…}, …}
+home.tsx:973 受信タブフィルタリング結果: {activeTab: 'received', totalCards: 8, filteredCardsBeforeSort: 2, userId: 5, filteredCardIds: Array(2), …}
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+card-reactions.tsx:27 🎭 CardReactions[347] render: {cardId: 347, currentUserId: 5, isRecipient: true, reactionsCount: 0, reactions: Array(0)}
+card-reactions.tsx:27 🎭 CardReactions[352] render: {cardId: 352, currentUserId: 5, isRecipient: true, reactionsCount: 0, reactions: Array(0)}
+use-batch-reactions.tsx:12 🔄 useBatchReactions called with cardIds: (8) [346, 347, 348, 349, 350, 351, 352, 353]
+use-batch-reactions.tsx:40 📊 useBatchReactions 状態: {isLoading: false, error: null, batchReactionsKeys: Array(8), batchReactionsData: {…}}
+home.tsx:871 カード347の受信者チェック: {cardId: 347, recipientIds: Array(1), userId: 5, isRecipient: true, recipient: {…}, …}
+home.tsx:871 カード352の受信者チェック: {cardId: 352, recipientIds: Array(1), userId: 5, isRecipient: true, recipient: {…}, …}
+home.tsx:973 受信タブフィルタリング結果: {activeTab: 'received', totalCards: 8, filteredCardsBeforeSort: 2, userId: 5, filteredCardIds: Array(2), …}
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+card-reactions.tsx:27 🎭 CardReactions[347] render: {cardId: 347, currentUserId: 5, isRecipient: true, reactionsCount: 0, reactions: Array(0)}
+card-reactions.tsx:27 🎭 CardReactions[352] render: {cardId: 352, currentUserId: 5, isRecipient: true, reactionsCount: 0, reactions: Array(0)}
+use-batch-reactions.tsx:12 🔄 useBatchReactions called with cardIds: (8) [346, 347, 348, 349, 350, 351, 352, 353]
+use-batch-reactions.tsx:40 📊 useBatchReactions 状態: {isLoading: false, error: null, batchReactionsKeys: Array(8), batchReactionsData: {…}}
+home.tsx:871 カード347の受信者チェック: {cardId: 347, recipientIds: Array(1), userId: 5, isRecipient: true, recipient: {…}, …}
+home.tsx:871 カード352の受信者チェック: {cardId: 352, recipientIds: Array(1), userId: 5, isRecipient: true, recipient: {…}, …}
+home.tsx:973 受信タブフィルタリング結果: {activeTab: 'received', totalCards: 8, filteredCardsBeforeSort: 2, userId: 5, filteredCardIds: Array(2), …}
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+card-reactions.tsx:27 🎭 CardReactions[347] render: {cardId: 347, currentUserId: 5, isRecipient: true, reactionsCount: 0, reactions: Array(0)}
+card-reactions.tsx:27 🎭 CardReactions[352] render: {cardId: 352, currentUserId: 5, isRecipient: true, reactionsCount: 0, reactions: Array(0)}
+use-batch-reactions.tsx:12 🔄 useBatchReactions called with cardIds: (8) [346, 347, 348, 349, 350, 351, 352, 353]
+use-batch-reactions.tsx:40 📊 useBatchReactions 状態: {isLoading: false, error: null, batchReactionsKeys: Array(8), batchReactionsData: {…}}
+home.tsx:871 カード347の受信者チェック: {cardId: 347, recipientIds: Array(1), userId: 5, isRecipient: true, recipient: {…}, …}
+home.tsx:871 カード352の受信者チェック: {cardId: 352, recipientIds: Array(1), userId: 5, isRecipient: true, recipient: {…}, …}
+home.tsx:973 受信タブフィルタリング結果: {activeTab: 'received', totalCards: 8, filteredCardsBeforeSort: 2, userId: 5, filteredCardIds: Array(2), …}
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+home.tsx:1055 renderCardList呼び出し: {activeTab: 'received', isLoading: false, sortedCardsLength: 2, sortedCardIds: Array(2)}
+home.tsx:1098 CardItem をレンダリング中: カード347
+home.tsx:1098 CardItem をレンダリング中: カード352
+card-reactions.tsx:27 🎭 CardReactions[347] render: {cardId: 347, currentUserId: 5, isRecipient: true, reactionsCount: 0, reactions: Array(0)}
+card-reactions.tsx:27 🎭 CardReactions[352] render: {cardId: 352, currentUserId: 5, isRecipient: true, reactionsCount: 0, reactions: Array(0)}
+use-batch-reactions.tsx:12 🔄 useBatchReactions called with cardIds: (8) [346, 347, 348, 349, 350, 351, 352, 353]
+use-batch-reactions.tsx:40 📊 useBatchReactions 状態: {isLoading: false, error: null, batchReactionsKeys: Array(8), batchReactions
