@@ -21,14 +21,9 @@ export function CardReactions({ cardId, currentUserId, isRecipient, reactions: p
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // バッチリアクション機能を使用
-  const { getReactionsForCard, hasUserReacted, getUserReaction } = useBatchReactions([cardId]);
-  
-  // プロップスでリアクションが渡された場合はそれを使用、そうでなければバッチ取得
-  const fetchedReactions = propReactions || getReactionsForCard(cardId);
-  const isLoading = false; // バッチ取得では常にfalse
-
-  const reactions = propReactions || fetchedReactions;
+  // プロップスでリアクションが渡された場合はそれを使用、そうでなければ空配列
+  const reactions = propReactions || [];
+  const isLoading = false;
 
   const addReactionMutation = useMutation({
     mutationFn: async (emoji: string) => {

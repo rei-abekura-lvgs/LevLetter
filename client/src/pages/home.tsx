@@ -1107,6 +1107,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               currentUser={user}
               onRefresh={refetch}
               onMarkAsRead={markCardAsRead}
+              reactions={cardReactions}
             />
           );
         })}
