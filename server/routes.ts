@@ -497,10 +497,18 @@ export async function registerRoutes(app: express.Application): Promise<Server> 
         return res.status(400).json({ message: "有効なメールアドレスを指定してください" });
       }
       
-      console.log(`メールアドレス検証リクエスト: ${email}`);
+      console.log(`🔍 メールアドレス検証リクエスト: ${email}`);
       
       // メールアドレスが事前登録されているか確認
       const user = await storage.getUserByEmail(email);
+      console.log(`📊 検索結果詳細:`, {
+        email,
+        userFound: !!user,
+        userId: user?.id,
+        hasPassword: !!user?.password,
+        passwordLength: user?.password?.length,
+        passwordPrefix: user?.password?.substring(0, 4)
+      });
       
       // 特定のメールアドレスを許可リストに追加（テスト用）
       // 実運用では、このような直接的なハードコーディングではなく、

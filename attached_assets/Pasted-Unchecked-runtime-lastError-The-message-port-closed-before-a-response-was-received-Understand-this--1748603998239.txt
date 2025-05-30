@@ -1,0 +1,57 @@
+Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+register:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+register:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/register'}
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+login.tsx:76 ログイン試行: rei.abekura@leverages.jp
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:67 
+            
+            
+           POST http://43.207.209.243:5000/api/auth/login 401 (Unauthorized)
+login @ auth-context.tsx:67
+onSubmit @ login.tsx:79
+(anonymous) @ chunk-4BFJKWC4.js?v=28fac212:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+login.tsx:106 ログインエラー: Error: ログインに失敗しました
+    at onSubmit (login.tsx:103:15)
+    at async chunk-4BFJKWC4.js?v=28fac212:1465:9
+onSubmit @ login.tsx:106
+await in onSubmit
+(anonymous) @ chunk-4BFJKWC4.js?v=28fac212:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: 'メールアドレスまたはパスワードが正しくありません'}エラー: "メールアドレスまたはパスワードが正しくありません"ユーザー: "未ログイン"認証済み: false読込中: false[[Prototype]]: Object

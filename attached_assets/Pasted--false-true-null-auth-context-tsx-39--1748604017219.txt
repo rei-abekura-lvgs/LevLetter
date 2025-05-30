@@ -1,0 +1,1007 @@
+状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:39 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/me 401 (Unauthorized)
+fetchUserFromSession @ auth-context.tsx:39
+initializeAuth @ auth-context.tsx:127
+(anonymous) @ auth-context.tsx:160
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=28fac212:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=28fac212:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=28fac212:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=28fac212:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=28fac212:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=28fac212:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=28fac212:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=28fac212:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=28fac212:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=28fac212:19432
+commitRoot @ chunk-RPCDYKBN.js?v=28fac212:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=28fac212:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=28fac212:18718
+workLoop @ chunk-RPCDYKBN.js?v=28fac212:197
+flushWork @ chunk-RPCDYKBN.js?v=28fac212:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=28fac212:384Understand this error
+auth-context.tsx:52 🔒 未認証状態
+auth-context.tsx:131 🎯 認証初期化完了: 未ログイン
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/register'}
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+auth-context.tsx:39 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/me 401 (Unauthorized)
+fetchUserFromSession @ auth-context.tsx:39
+initializeAuth @ auth-context.tsx:127
+(anonymous) @ auth-context.tsx:160
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=28fac212:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=28fac212:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=28fac212:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=28fac212:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=28fac212:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=28fac212:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=28fac212:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=28fac212:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=28fac212:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=28fac212:19432
+commitRoot @ chunk-RPCDYKBN.js?v=28fac212:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=28fac212:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=28fac212:18718
+workLoop @ chunk-RPCDYKBN.js?v=28fac212:197
+flushWork @ chunk-RPCDYKBN.js?v=28fac212:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=28fac212:384Understand this error
+auth-context.tsx:52 🔒 未認証状態
+auth-context.tsx:131 🎯 認証初期化完了: 未ログイン
+register:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+register:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+register:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+register:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/register'}
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+login.tsx:76 ログイン試行: rei.abekura@leverages.jp
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:67 
+            
+            
+           POST http://43.207.209.243:5000/api/auth/login 401 (Unauthorized)
+login @ auth-context.tsx:67
+onSubmit @ login.tsx:79
+(anonymous) @ chunk-4BFJKWC4.js?v=28fac212:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+login.tsx:106 ログインエラー: Error: ログインに失敗しました
+    at onSubmit (login.tsx:103:15)
+    at async chunk-4BFJKWC4.js?v=28fac212:1465:9
+onSubmit @ login.tsx:106
+await in onSubmit
+(anonymous) @ chunk-4BFJKWC4.js?v=28fac212:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+auth-context.tsx:169 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: 'メールアドレスまたはパスワードが正しくありません'}エラー: "メールアドレスまたはパスワードが正しくありません"ユーザー: "未ログイン"認証済み: false読込中: false[[Prototype]]: Object
+App.tsx:62 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/register'}
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=Unchecked%20runtime.lastError%3A%20The%20message%20port%20closed%20before%20a%20response%20was%20received.Understand%20this%20error%20register%3A1%20Unchecked%20runtime.lastError%3A%20The%20message%20port%20closed%20before%20a%20response%20was%20received.Understand%20this%20error%20auth-context.tsx%3A169%20%F0%9F%93%8A%20%E8%AA%8D%E8%A8%BC%E7%8A%B6%E6%85%8B%E6%9B%B4%E6%96%B0%3A%20%7B%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%2C%20%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%27%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%27%2C%20%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20false%2C%20%E3%82%A8%E3%83%A9%E3%83%BC%3A%20null%7D%20register%3A1%20Unchecked%20runtime.lastError%3A%20The%20message%20port%20closed%20before%20a%20response%20was%20received.Understand%20this%20error%20App.tsx%3A62%20%E3%82%A2%E3%83%97%E3%83%AA%E7%8A%B6%E6%85%8B%3A%20%7B%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%2C%20%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%27%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%27%2C%20%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20false%2C%20%E7%8F%BE%E5%9C%A8%E3%81%AE%E3%83%91%E3%82%B9%3A%20%27%2Flogin%27%7D%20App.tsx%3A62%20%E3%82%A2%E3%83%97%E3%83%AA%E7%8A%B6%E6%85%8B%3A%20%7B%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%2C%20%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%27%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%27%2C%20%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20false%2C%20%E7%8F%BE%E5%9C%A8%E3%81%AE%E3%83%91%E3%82%B9%3A%20%27%2Fregister%27%7D%20App.tsx%3A62%20%E3%82%A2%E3%83%97%E3%83%AA%E7%8A%B6%E6%85%8B%3A%20%7B%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%2C%20%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%27%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%27%2C%20%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20false%2C%20%E7%8F%BE%E5%9C%A8%E3%81%AE%E3%83%91%E3%82%B9%3A%20%27%2Flogin%27%7D%20login.tsx%3A76%20%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E8%A9%A6%E8%A1%8C%3A%20rei.abekura%40leverages.jp%20App.tsx%3A62%20%E3%82%A2%E3%83%97%E3%83%AA%E7%8A%B6%E6%85%8B%3A%20%7B%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%2C%20%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%27%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%27%2C%20%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20true%2C%20%E7%8F%BE%E5%9C%A8%E3%81%AE%E3%83%91%E3%82%B9%3A%20%27%2Flogin%27%7D%20auth-context.tsx%3A169%20%F0%9F%93%8A%20%E8%AA%8D%E8%A8%BC%E7%8A%B6%E6%85%8B%E6%9B%B4%E6%96%B0%3A%20%7B%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%2C%20%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%27%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%27%2C%20%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20true%2C%20%E3%82%A8%E3%83%A9%E3%83%BC%3A%20null%7D%20auth-context.tsx%3A67%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20POST%20http%3A%2F%2F43.207.209.243%3A5000%2Fapi%2Fauth%2Flogin%20401%20(Unauthorized)%20login%20%40%20auth-context.tsx%3A67%20onSubmit%20%40%20login.tsx%3A79%20(anonymous)%20%40%20chunk-4BFJKWC4.js%3Fv%3D28fac212%3A1465%20await%20in%20(anonymous)%20callCallback2%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3674%20invokeGuardedCallbackDev%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3699%20invokeGuardedCallback%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3733%20invokeGuardedCallbackAndCatchFirstError%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3736%20executeDispatch%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7014%20processDispatchQueueItemsInOrder%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7034%20processDispatchQueue%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7043%20dispatchEventsForPlugins%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7051%20(anonymous)%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7174%20batchedUpdates%241%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A18913%20batchedUpdates%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3579%20dispatchEventForPluginEventSystem%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7173%20dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A5478%20dispatchEvent%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A5472%20dispatchDiscreteEvent%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A5449Understand%20this%20error%20login.tsx%3A106%20%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%A8%E3%83%A9%E3%83%BC%3A%20Error%3A%20%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%20%20%20%20%20at%20onSubmit%20(login.tsx%3A103%3A15)%20%20%20%20%20at%20async%20chunk-4BFJKWC4.js%3Fv%3D28fac212%3A1465%3A9%20onSubmit%20%40%20login.tsx%3A106%20await%20in%20onSubmit%20(anonymous)%20%40%20chunk-4BFJKWC4.js%3Fv%3D28fac212%3A1465%20await%20in%20(anonymous)%20callCallback2%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3674%20invokeGuardedCallbackDev%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3699%20invokeGuardedCallback%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3733%20invokeGuardedCallbackAndCatchFirstError%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3736%20executeDispatch%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7014%20processDispatchQueueItemsInOrder%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7034%20processDispatchQueue%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7043%20dispatchEventsForPlugins%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7051%20(anonymous)%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7174%20batchedUpdates%241%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A18913%20batchedUpdates%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A3579%20dispatchEventForPluginEventSystem%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A7173%20dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A5478%20dispatchEvent%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A5472%20dispatchDiscreteEvent%20%40%20chunk-RPCDYKBN.js%3Fv%3D28fac212%3A5449Understand%20this%20error%20App.tsx%3A62%20%E3%82%A2%E3%83%97%E3%83%AA%E7%8A%B6%E6%85%8B%3A%20%7B%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%2C%20%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%27%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%27%2C%20%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20false%2C%20%E7%8F%BE%E5%9C%A8%E3%81%AE%E3%83%91%E3%82%B9%3A%20%27%2Flogin%27%7D%20auth-context.tsx%3A169%20%F0%9F%93%8A%20%E8%AA%8D%E8%A8%BC%E7%8A%B6%E6%85%8B%E6%9B%B4%E6%96%B0%3A%20%7B%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%2C%20%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%27%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%27%2C%20%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20false%2C%20%E3%82%A8%E3%83%A9%E3%83%BC%3A%20%27%E3%83%A1%E3%83%BC%E3%83%AB%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%BE%E3%81%9F%E3%81%AF%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89%E3%81%8C%E6%AD%A3%E3%81%97%E3%81%8F%E3%81%82%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%27%7D%E3%82%A8%E3%83%A9%E3%83%BC%3A%20%22%E3%83%A1%E3%83%BC%E3%83%AB%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%BE%E3%81%9F%E3%81%AF%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89%E3%81%8C%E6%AD%A3%E3%81%97%E3%81%8F%E3%81%82%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%22%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%3A%20%22%E6%9C%AA%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%22%E8%AA%8D%E8%A8%BC%E6%B8%88%E3%81%BF%3A%20false%E8%AA%AD%E8%BE%BC%E4%B8%AD%3A%20false%5B%5BPrototype%5D%5D%3A%20Object 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
+verifyEmail @ register.tsx:127
+await in verifyEmail
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:105 
+            
+            
+           GET http://43.207.209.243:5000/api/auth/verify-email?email=rei.abekura%40leverages.jp 500 (Internal Server Error)
+verifyEmail @ register.tsx:105
+(anonymous) @ register.tsx:144
+setTimeout
+(anonymous) @ register.tsx:143
+next @ chunk-4BFJKWC4.js?v=28fac212:1300
+next @ chunk-4BFJKWC4.js?v=28fac212:396
+onChange @ chunk-4BFJKWC4.js?v=28fac212:1185
+callCallback2 @ chunk-RPCDYKBN.js?v=28fac212:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=28fac212:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=28fac212:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=28fac212:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=28fac212:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=28fac212:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=28fac212:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=28fac212:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=28fac212:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=28fac212:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=28fac212:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=28fac212:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=28fac212:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=28fac212:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=28fac212:5449Understand this error
+register.tsx:127 メール検証エラー: Error: 検証エラー: 500
+    at verifyEmail (register.tsx:108:15)
