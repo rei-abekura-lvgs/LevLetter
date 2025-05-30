@@ -1,0 +1,62 @@
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+✅ 認証ユーザー情報返送: 阿部倉 怜 (ID: 5 )
+9:22:02 AM [express] GET /api/auth/me 304 in 26ms :: {"id":5,"email":"rei.abekura@leverages.jp","nam…
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+ℹ️ 今週はすでにポイントリセット済み
+🔒 認証チェック: GET /api/dashboard/stats
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+📨 通知API呼び出し開始
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+✅ 認証ユーザー情報返送: 阿部倉 怜 (ID: 5 )
+9:22:02 AM [express] GET /api/auth/me 200 in 28ms :: {"id":5,"email":"rei.abekura@leverages.jp","nam…
+ℹ️ 今週はすでにポイントリセット済み
+🔒 認証チェック: GET /api/cards
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+🔍 getDashboardStats開始 - ユーザーID: 5
+📨 ユーザーID 5 の通知を取得中...
+📨 getReceivedCards開始 - ユーザーID: 5, 制限: 10
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+📨 getReceivedCards完了 - 2件取得
+📨 受信カード数: 2
+❤️ getReceivedLikes開始 - ユーザーID: 5, 制限: 10
+📅 今月の期間: 2025-05-01T00:00:00.000Z から 2025-06-01T00:00:00.000Z
+❤️ getReceivedLikes完了 - 10件取得
+❤️ 受信いいね数: 10
+📨 通知データ作成完了: 12件
+9:22:02 AM [express] GET /api/notifications 304 in 93ms :: [{"id":"like_1357","userId":5,"type":"car…
+🔒 認証チェック: GET /api/users
+🔍 セッション取得: ユーザーID 5
+🔒 認証チェック: GET /api/organizations
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+9:22:03 AM [express] GET /api/organizations 200 in 67ms :: []
+9:22:03 AM [express] GET /api/users 200 in 69ms :: [{"id":638,"email":"keishu.otaki@leverages.jp","n…
+9:22:03 AM [express] GET /api/cards 200 in 274ms :: [{"id":346,"senderId":5,"recipientId":639,"recip…
+9:22:03 AM [express] GET /api/dashboard/stats 200 in 407ms :: {"weekly":{"currentPoints":295,"maxPoi…
+🔒 認証チェック: GET /api/admin/organizations
+🔍 セッション取得: ユーザーID 5
+🔒 認証チェック: GET /api/reactions/batch
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+9:22:03 AM [express] GET /api/admin/organizations 200 in 79ms :: []
+9:22:03 AM [express] GET /api/reactions/batch 304 in 46ms :: {"346":[{"id":36,"cardId":346,"userId":…
+🔒 認証チェック: POST /api/cards/347/reactions
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+9:22:06 AM [express] POST /api/cards/347/reactions 400 in 144ms :: {"message":"既にこのリアクションを追加済みです"}
+🔒 認証チェック: POST /api/cards/352/reactions
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+9:22:08 AM [express] POST /api/cards/352/reactions 201 in 205ms :: {"message":"リアクションを追加しました","react…
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+🔒 認証チェック: GET /api/reactions/batch
+🔍 セッション取得: ユーザーID 5
+ℹ️ 今週はすでにポイントリセット済み
+🔒 認証チェック: GET /api/cards
+🔍 セッション取得: ユーザーID 5
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
+✅ 認証成功: rei.abekura@leverages.jp (ID: 5)
