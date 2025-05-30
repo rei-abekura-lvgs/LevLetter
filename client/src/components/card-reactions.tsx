@@ -88,8 +88,8 @@ export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
   const totalReactions = reactions.length;
 
   return (
-    <div className="flex items-center gap-1">
-      {/* Show reaction count if there are reactions */}
+    <div className="flex items-center gap-2">
+      {/* Show existing reactions */}
       {totalReactions > 0 && (
         <div className="flex items-center gap-1">
           {Object.entries(reactionGroups).slice(0, 3).map(([emoji, groupReactions]) => (
@@ -104,16 +104,13 @@ export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
       <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
         <PopoverTrigger asChild>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className={`h-6 w-6 p-0 rounded-full ${
-              totalReactions > 0 
-                ? 'text-gray-400 hover:text-gray-600' 
-                : 'text-gray-300 hover:text-gray-500'
-            }`}
+            className="h-7 px-2 text-xs border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-800"
             disabled={addReactionMutation.isPending}
           >
-            👍
+            <span className="mr-1">😊</span>
+            リアクション
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-2" align="start">
@@ -123,7 +120,7 @@ export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
                 key={emoji}
                 variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0"
+                className="h-8 w-8 p-0 hover:bg-gray-100"
                 onClick={() => handleEmojiClick(emoji)}
                 disabled={addReactionMutation.isPending}
               >
