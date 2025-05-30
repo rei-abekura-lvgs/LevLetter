@@ -228,7 +228,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                       <CardReactions 
                         cardId={card.id} 
                         currentUserId={currentUser.id} 
-                        isRecipient={card.recipients.some(r => r.id === currentUser.id) || 
+                        isRecipient={(card.recipients && card.recipients.some(r => r.id === currentUser.id)) || 
                                    (card.additionalRecipients && card.additionalRecipients.some(r => r.id === currentUser.id))}
                       />
                     </div>
