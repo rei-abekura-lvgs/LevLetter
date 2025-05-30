@@ -1132,27 +1132,33 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </div>
                 </div>
                 
-                {/* カード数、ソート、検索 - 右寄せ */}
-                <div className="flex items-center justify-end gap-3">
-                  <Badge variant="outline" className="text-xs text-gray-600 bg-white/70 border-gray-300">
-                    {filteredCards.length}件
-                  </Badge>
+                {/* 右端フィルタエリア */}
+                <div className="flex items-center gap-3 ml-auto">
+                  {/* カード数 */}
+                  <div className="flex items-center justify-center min-w-[60px] h-8 px-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 rounded-full">
+                    <span className="text-xs font-medium text-blue-700">{filteredCards.length}件</span>
+                  </div>
                   
-                  {/* 実際の5階層部署管理システムを活用した検索可能フィルタ */}
-                  <FilterControls
-                    sortOrder={sortOrder}
-                    onSortChange={(order: SortOrder) => setSortOrder(order)}
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    departmentFilter={departmentFilter}
-                    onDepartmentChange={setDepartmentFilter}
-                    departments={departmentOptions}
-                    organizationHierarchy={organizationHierarchy}
-                    users={allUsers}
-                    selectedUsers={selectedUsers}
-                    onUserSelect={(user) => setSelectedUsers(prev => [...prev, user])}
-                    onUserRemove={(userId) => setSelectedUsers(prev => prev.filter(u => u.id !== userId))}
-                  />
+                  {/* セパレーター */}
+                  <div className="w-px h-6 bg-gray-300"></div>
+                  
+                  {/* 洗練されたフィルタコントロール */}
+                  <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200/80 rounded-xl px-3 py-1.5 shadow-sm hover:shadow-md transition-all duration-200">
+                    <FilterControls
+                      sortOrder={sortOrder}
+                      onSortChange={(order: SortOrder) => setSortOrder(order)}
+                      searchQuery={searchQuery}
+                      onSearchChange={setSearchQuery}
+                      departmentFilter={departmentFilter}
+                      onDepartmentChange={setDepartmentFilter}
+                      departments={departmentOptions}
+                      organizationHierarchy={organizationHierarchy}
+                      users={allUsers}
+                      selectedUsers={selectedUsers}
+                      onUserSelect={(user) => setSelectedUsers(prev => [...prev, user])}
+                      onUserRemove={(userId) => setSelectedUsers(prev => prev.filter(u => u.id !== userId))}
+                    />
+                  </div>
                 </div>
               </div>
               </div>
