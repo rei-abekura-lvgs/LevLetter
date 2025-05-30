@@ -1381,4 +1381,199 @@ export class DatabaseStorage implements IStorage {
       return [];
     }
   }
+
+  // リアクション関連メソッド
+  async getReactionsForCard(cardId: number): Promise<Array<CardReaction & { user: User }>> {
+    try {
+      const result = await this.db
+        .select({
+          id: cardReactions.id,
+          cardId: cardReactions.cardId,
+          userId: cardReactions.userId,
+          emoji: cardReactions.emoji,
+          createdAt: cardReactions.createdAt,
+          user: {
+            id: users.id,
+            email: users.email,
+            name: users.name,
+            displayName: users.displayName,
+            department: users.department,
+            organizationLevel1: users.organizationLevel1,
+            organizationLevel2: users.organizationLevel2,
+            organizationLevel3: users.organizationLevel3,
+            organizationLevel4: users.organizationLevel4,
+            organizationLevel5: users.organizationLevel5,
+            weeklyPoints: users.weeklyPoints,
+            totalPointsReceived: users.totalPointsReceived,
+            isAdmin: users.isAdmin,
+            avatarColor: users.avatarColor,
+            customAvatarUrl: users.customAvatarUrl,
+            hasPassword: users.hasPassword,
+            googleId: users.googleId,
+            cognitoSub: users.cognitoSub,
+            isActive: users.isActive,
+            createdAt: users.createdAt,
+            updatedAt: users.updatedAt
+          }
+        })
+        .from(cardReactions)
+        .innerJoin(users, eq(cardReactions.userId, users.id))
+        .where(eq(cardReactions.cardId, cardId))
+        .orderBy(cardReactions.createdAt);
+
+      return result.map(row => ({
+        id: row.id,
+        cardId: row.cardId,
+        userId: row.userId,
+        emoji: row.emoji,
+        createdAt: row.createdAt,
+        user: row.user
+      }));
+    } catch (error) {
+      console.error("リアクション取得エラー:", error);
+      return [];
+    }
+  }
+
+  async createReaction(reaction: InsertCardReaction): Promise<CardReaction> {
+    try {
+      const [newReaction] = await this.db
+        .insert(cardReactions)
+        .values({
+          cardId: reaction.cardId,
+          userId: reaction.userId,
+          emoji: reaction.emoji,
+          createdAt: new Date()
+        })
+        .returning();
+
+      return newReaction;
+    } catch (error) {
+      console.error("リアクション作成エラー:", error);
+      throw new Error("リアクションの作成に失敗しました");
+    }
+  }
+
+  async deleteReaction(cardId: number, userId: number): Promise<void> {
+    try {
+      await this.db
+        .delete(cardReactions)
+        .where(and(
+          eq(cardReactions.cardId, cardId),
+          eq(cardReactions.userId, userId)
+        ));
+    } catch (error) {
+      console.error("リアクション削除エラー:", error);
+      throw new Error("リアクションの削除に失敗しました");
+    }
+  }
+
+  // コメント関連メソッド
+  async getCommentsForCard(cardId: number): Promise<Array<CardComment & { user: User }>> {
+    try {
+      const result = await this.db
+        .select({
+          id: cardComments.id,
+          cardId: cardComments.cardId,
+          userId: cardComments.userId,
+          message: cardComments.message,
+          createdAt: cardComments.createdAt,
+          updatedAt: cardComments.updatedAt,
+          user: {
+            id: users.id,
+            email: users.email,
+            name: users.name,
+            displayName: users.displayName,
+            department: users.department,
+            organizationLevel1: users.organizationLevel1,
+            organizationLevel2: users.organizationLevel2,
+            organizationLevel3: users.organizationLevel3,
+            organizationLevel4: users.organizationLevel4,
+            organizationLevel5: users.organizationLevel5,
+            weeklyPoints: users.weeklyPoints,
+            totalPointsReceived: users.totalPointsReceived,
+            isAdmin: users.isAdmin,
+            avatarColor: users.avatarColor,
+            customAvatarUrl: users.customAvatarUrl,
+            hasPassword: users.hasPassword,
+            googleId: users.googleId,
+            cognitoSub: users.cognitoSub,
+            isActive: users.isActive,
+            createdAt: users.createdAt,
+            updatedAt: users.updatedAt
+          }
+        })
+        .from(cardComments)
+        .innerJoin(users, eq(cardComments.userId, users.id))
+        .where(eq(cardComments.cardId, cardId))
+        .orderBy(cardComments.createdAt);
+
+      return result.map(row => ({
+        id: row.id,
+        cardId: row.cardId,
+        userId: row.userId,
+        message: row.message,
+        createdAt: row.createdAt,
+        updatedAt: row.updatedAt,
+        user: row.user
+      }));
+    } catch (error) {
+      console.error("コメント取得エラー:", error);
+      return [];
+    }
+  }
+
+  async createComment(comment: InsertCardComment): Promise<CardComment> {
+    try {
+      const now = new Date();
+      const [newComment] = await this.db
+        .insert(cardComments)
+        .values({
+          cardId: comment.cardId,
+          userId: comment.userId,
+          message: comment.message,
+          createdAt: now,
+          updatedAt: now
+        })
+        .returning();
+
+      return newComment;
+    } catch (error) {
+      console.error("コメント作成エラー:", error);
+      throw new Error("コメントの作成に失敗しました");
+    }
+  }
+
+  async updateComment(id: number, updates: Partial<CardComment>): Promise<CardComment> {
+    try {
+      const [updatedComment] = await this.db
+        .update(cardComments)
+        .set({
+          ...updates,
+          updatedAt: new Date()
+        })
+        .where(eq(cardComments.id, id))
+        .returning();
+
+      if (!updatedComment) {
+        throw new Error("コメントが見つかりません");
+      }
+
+      return updatedComment;
+    } catch (error) {
+      console.error("コメント更新エラー:", error);
+      throw new Error("コメントの更新に失敗しました");
+    }
+  }
+
+  async deleteComment(id: number): Promise<void> {
+    try {
+      await this.db
+        .delete(cardComments)
+        .where(eq(cardComments.id, id));
+    } catch (error) {
+      console.error("コメント削除エラー:", error);
+      throw new Error("コメントの削除に失敗しました");
+    }
+  }
 }
