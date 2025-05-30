@@ -1784,6 +1784,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // リアクション関連API
+  // 複数カードのリアクションを一括取得
+  app.get("/api/reactions/batch", authenticate, async (req, res) => {
+    try {
+      const cardIds = req.query.cardIds as string;
+      if (!cardIds) {
+        return res.status(400).json({ message: "cardIdsパラメータが必要です" });
+      }
+
+      const cardIdList = cardIds.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+      if (cardIdList.length === 0) {
+        return res.status(400).json({ message: "有効なカードIDが指定されていません" });
+      }
+
+      const reactions = await storage.getReactionsForCards(cardIdList);
+      return res.json(reactions);
+    } catch (error) {
+      console.error("リアクション一括取得エラー:", error);
+      return res.status(500).json({ message: "リアクションの取得に失敗しました" });
+    }
+  });
+
+  // 単一カードのリアクション取得（後方互換性のため残す）
   app.get("/api/cards/:id/reactions", authenticate, async (req, res) => {
     try {
       const cardId = parseInt(req.params.id);

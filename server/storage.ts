@@ -86,6 +86,7 @@ export interface IStorage {
 
   // リアクション
   getReactionsForCard(cardId: number): Promise<Array<CardReaction & { user: User }>>;
+  getReactionsForCards(cardIds: number[]): Promise<Record<number, Array<CardReaction & { user: User }>>>;
   createReaction(reaction: InsertCardReaction): Promise<CardReaction>;
   deleteReaction(cardId: number, userId: number): Promise<void>;
 
@@ -879,6 +880,34 @@ export class MemStorage implements IStorage {
 
     this.reactions.set(id, reaction);
     return reaction;
+  }
+
+  async getReactionsForCards(cardIds: number[]): Promise<Record<number, Array<CardReaction & { user: User }>>> {
+    const result: Record<number, Array<CardReaction & { user: User }>> = {};
+    
+    // 全てのカードIDを初期化
+    cardIds.forEach(cardId => {
+      result[cardId] = [];
+    });
+
+    const reactions = Array.from(this.reactions.values())
+      .filter(reaction => cardIds.includes(reaction.cardId));
+    
+    const reactionsWithUsers = await Promise.all(
+      reactions.map(async reaction => {
+        const user = await this.getUser(reaction.userId);
+        return {
+          ...reaction,
+          user: user!
+        };
+      })
+    );
+
+    reactionsWithUsers.forEach(reaction => {
+      result[reaction.cardId].push(reaction);
+    });
+
+    return result;
   }
 
   async deleteReaction(cardId: number, userId: number): Promise<void> {
