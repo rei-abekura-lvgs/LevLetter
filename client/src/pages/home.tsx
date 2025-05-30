@@ -948,7 +948,23 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
     }
     
     return true;
-  }).sort((a, b) => {
+  });
+
+  // デバッグ: フィルタリング結果をログ出力
+  if (activeTab === "received") {
+    console.log(`受信タブフィルタリング結果:`, {
+      activeTab,
+      totalCards: cards.length,
+      filteredCardsBeforeSort: filteredCards.length,
+      userId: user.id,
+      filteredCardIds: filteredCards.map(c => c.id),
+      searchQuery,
+      departmentFilter,
+      selectedUsers: selectedUsers.map(u => u.id)
+    });
+  }
+
+  const sortedCards = filteredCards.sort((a, b) => {
     if (sortOrder === "newest") {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     } else {
@@ -1026,7 +1042,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
       );
     }
 
-    if (filteredCards.length === 0) {
+    if (sortedCards.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -1050,7 +1066,7 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
 
     return (
       <div className="space-y-4 pb-6">
-        {filteredCards.map((card) => {
+        {sortedCards.map((card) => {
           // カードが未読かどうかを判定
           const isUnread = !readCardIds.has(card.id);
           
