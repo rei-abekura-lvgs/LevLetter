@@ -170,9 +170,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       (req.session as any).userId = user.id;
       console.log("💾 セッション保存:", { userId: user.id, sessionId: req.sessionID });
       
-      // ログイン成功メッセージと共にメインページにリダイレクト
-      const successMessage = encodeURIComponent("ログインに成功しました");
-      res.redirect(`/?success=${successMessage}`);
+      // ログイン成功後、from=googleパラメータを付けてリダイレクト
+      res.redirect(`/?from=google`);
     } catch (error) {
       console.error("❌ Google認証コールバックエラー:", error);
       res.redirect('/login?error=auth_failed');

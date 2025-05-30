@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useLocation } from "wouter";
 import { User } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 
 // 認証コンテキストの型定義
 interface AuthContextType {
@@ -28,6 +29,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
 
   // セッションからユーザー情報を取得
   const fetchUserFromSession = async (): Promise<User | null> => {
@@ -127,6 +129,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (isMounted) {
           setUser(userData);
           console.log("🎯 認証初期化完了:", userData ? userData.name : "未ログイン");
+          
+          // Google認証からのリダイレクトかチェック
+          const urlParams = new URLSearchParams(window.location.search);
+          const fromGoogle = urlParams.get('from') === 'google';
+          
+          if (userData && fromGoogle) {
+            // URLパラメータをクリア
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            toast({
+              title: "ログイン成功",
+              description: `ようこそ、${userData.name}さん！Google認証でログインしました。`,
+              variant: "default",
+            });
+          }
         }
       } catch (error) {
         console.error("❌ 認証初期化エラー:", error);
