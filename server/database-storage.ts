@@ -232,7 +232,7 @@ export class DatabaseStorage implements IStorage {
     console.log(`📝 入力パスワード: "${password}"`);
     console.log(`💾 DB保存ハッシュ: "${user.password}"`);
     
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = await hashPassword(password);
     console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
     
     const isPasswordCorrect = user.password === hashedPassword;
