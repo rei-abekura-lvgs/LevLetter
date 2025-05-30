@@ -4,6 +4,7 @@ import { CardWithRelations, User } from "@shared/schema";
 import { useAuth } from "@/context/auth-context";
 import { useSearch } from "@/hooks/useSearch";
 import { useOptimisticUpdates } from "@/hooks/use-optimistic-updates";
+import { useBatchReactions } from "@/hooks/use-batch-reactions";
 import { CardList } from "@/components/card-list";
 import { TabNavigation } from "@/components/tab-navigation";
 import { FilterControls } from "@/components/filter-controls";

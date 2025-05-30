@@ -10,16 +10,18 @@ interface CardReactionsProps {
   cardId: number;
   currentUserId: number;
   isRecipient: boolean; // 現在のユーザーがこのカードの受信者かどうか
+  reactions?: Array<CardReaction & { user: User }>; // 一括取得されたリアクションデータ
 }
 
 const REACTION_EMOJIS = ["👍", "❤️", "🎉", "😊", "🔥", "👏", "💯", "🚀"];
 
-export function CardReactions({ cardId, currentUserId, isRecipient }: CardReactionsProps) {
+export function CardReactions({ cardId, currentUserId, isRecipient, reactions: propReactions }: CardReactionsProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: reactions = [], isLoading } = useQuery({
+  // プロップスでリアクションが渡された場合はそれを使用、そうでなければ個別取得
+  const { data: fetchedReactions = [], isLoading } = useQuery({
     queryKey: ["/api/cards", cardId, "reactions"],
     queryFn: async () => {
       try {
@@ -33,8 +35,11 @@ export function CardReactions({ cardId, currentUserId, isRecipient }: CardReacti
         console.log('リアクション取得エラー:', error);
         return [];
       }
-    }
+    },
+    enabled: !propReactions // プロップスでデータが渡されていない場合のみ実行
   });
+
+  const reactions = propReactions || fetchedReactions;
 
   const addReactionMutation = useMutation({
     mutationFn: async (emoji: string) => {
