@@ -435,18 +435,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`🔐 パスワードリセット処理開始`);
       console.log(`📝 新パスワード: "${newPassword}"`);
       
-      const hashedPassword = hashPassword(newPassword);
-      console.log(`🔒 生成されたハッシュ: "${hashedPassword}"`);
+      if (newPassword.length < 8) {
+        return res.status(400).json({ message: "新しいパスワードは8文字以上である必要があります" });
+      }
       
-      // パスワードを更新（既にハッシュ化済み）
+      // bcryptでパスワードをハッシュ化
+      const saltRounds = 12;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      console.log(`🔒 bcryptハッシュ生成完了`);
+      
+      // パスワードを更新
       await storage.updateUser(user.id, {
         password: hashedPassword,
         passwordInitialized: true
       });
       
-      // リセット後の検証
-      const verifyUser = await storage.authenticateUser(user.email, newPassword);
-      if (!verifyUser) {
+      // リセット後の検証（bcryptで）
+      const updatedUser = await storage.getUser(user.id);
+      if (!updatedUser || !updatedUser.password) {
+        console.error(`❌ パスワードリセット後のユーザー取得失敗`);
+        return res.status(500).json({ message: "パスワードリセット処理でエラーが発生しました" });
+      }
+      
+      const isPasswordValid = await bcrypt.compare(newPassword, updatedUser.password);
+      if (!isPasswordValid) {
         console.error(`❌ パスワードリセット後の検証失敗 - ${user.email}`);
         return res.status(500).json({ message: "パスワードリセット処理でエラーが発生しました" });
       }
