@@ -1110,51 +1110,60 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
               </TabsTrigger>
             </TabsList>
 
-            {/* テキストボックス風の投稿エリア */}
-            <div className="p-4 bg-gradient-to-br from-slate-50 via-white to-gray-50/80 border-b border-gray-200/60 flex-shrink-0 backdrop-blur-sm relative overflow-hidden">
-              {/* 背景装飾 */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/20 to-indigo-100/20 rounded-full -translate-y-16 translate-x-16"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-50/30 to-indigo-50/30 rounded-full translate-y-12 -translate-x-12"></div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-4">
-                {/* テキストボックス風の投稿ボタン */}
-                <div 
-                  onClick={() => setIsCardFormOpen(true)}
-                  className="flex-1 max-w-lg bg-white border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-[#3990EA] hover:bg-blue-50/50 transition-all duration-200 shadow-sm hover:shadow-md"
-                >
-                  <div className="flex items-center gap-3 text-gray-500">
-                    <div className="w-6 h-6 bg-[#3990EA] rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                      </svg>
-                    </div>
-                    <span className="text-sm">感謝の手紙を作成する...</span>
-                  </div>
-                </div>
-                
-                {/* カード数、ソート、検索 */}
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="text-xs text-gray-600 bg-white/70 border-gray-300">
-                    {filteredCards.length}件
-                  </Badge>
-                  
-                  {/* 実際の5階層部署管理システムを活用した検索可能フィルタ */}
-                  <FilterControls
-                    sortOrder={sortOrder}
-                    onSortChange={(order: SortOrder) => setSortOrder(order)}
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    departmentFilter={departmentFilter}
-                    onDepartmentChange={setDepartmentFilter}
-                    departments={departmentOptions}
-                    organizationHierarchy={organizationHierarchy}
-                    users={allUsers}
-                    selectedUsers={selectedUsers}
-                    onUserSelect={(user) => setSelectedUsers(prev => [...prev, user])}
-                    onUserRemove={(userId) => setSelectedUsers(prev => prev.filter(u => u.id !== userId))}
+            {/* コンパクトなヘッダーエリア */}
+            <div className="px-4 py-3 bg-white border-b border-gray-200 flex-shrink-0">
+              {/* 上段: 検索バー + 作成ボタン */}
+              <div className="flex items-center gap-3 mb-3">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="名前やメッセージで検索..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3990EA] focus:border-transparent"
                   />
                 </div>
+                <Button 
+                  onClick={() => setIsCardFormOpen(true)}
+                  className="bg-[#3990EA] hover:bg-[#1e6bd9] text-white px-4 py-2 rounded-lg text-sm font-medium"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  作成
+                </Button>
               </div>
+              
+              {/* 下段: フィルタとソート */}
+              <div className="flex items-center gap-3">
+                <Badge variant="outline" className="text-xs text-gray-600">
+                  {filteredCards.length}件
+                </Badge>
+                
+                <Select value={sortOrder} onValueChange={handleSortChange}>
+                  <SelectTrigger className="w-24 h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">最新順</SelectItem>
+                    <SelectItem value="popular">人気順</SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                {departmentOptions.length > 0 && (
+                  <Select value={departmentFilter || "all"} onValueChange={setDepartmentFilter}>
+                    <SelectTrigger className="w-20 h-8 text-xs">
+                      <SelectValue placeholder="部署" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">全部署</SelectItem>
+                      {departmentOptions.map((dept) => (
+                        <SelectItem key={dept.id} value={dept.id}>
+                          {dept.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
             </div>
 
