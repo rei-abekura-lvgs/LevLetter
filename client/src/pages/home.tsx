@@ -1132,18 +1132,15 @@ export default function Home({ user, isCardFormOpen: propIsCardFormOpen, setIsCa
                   </div>
                 </div>
                 
-                {/* 右端フィルタエリア */}
-                <div className="flex items-center gap-3 ml-auto">
+                {/* 洗練されたフィルタエリア */}
+                <div className="flex items-center gap-1.5 ml-auto">
                   {/* カード数 */}
-                  <div className="flex items-center justify-center min-w-[60px] h-8 px-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 rounded-full">
-                    <span className="text-xs font-medium text-blue-700">{filteredCards.length}件</span>
+                  <div className="px-2.5 py-1 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200/60 rounded-full">
+                    <span className="text-xs font-semibold text-blue-700">{filteredCards.length}件</span>
                   </div>
                   
-                  {/* セパレーター */}
-                  <div className="w-px h-6 bg-gray-300"></div>
-                  
-                  {/* 洗練されたフィルタコントロール */}
-                  <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200/80 rounded-xl px-3 py-1.5 shadow-sm hover:shadow-md transition-all duration-200">
+                  {/* フィルタコントロール */}
+                  <div className="bg-white/90 backdrop-blur-sm border border-gray-200/80 rounded-lg p-1 shadow-sm">
                     <FilterControls
                       sortOrder={sortOrder}
                       onSortChange={(order: SortOrder) => setSortOrder(order)}
