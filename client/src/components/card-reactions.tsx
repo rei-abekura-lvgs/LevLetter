@@ -23,20 +23,35 @@ export function CardReactions({ cardId, currentUserId, isRecipient, reactions: p
 
   // プロップスでリアクションが渡された場合はそれを使用、そうでなければ空配列
   const reactions = propReactions || [];
+  
+  console.log(`🎭 CardReactions[${cardId}] render:`, {
+    cardId,
+    currentUserId,
+    isRecipient,
+    reactionsCount: reactions.length,
+    reactions: reactions.map(r => ({ id: r.id, emoji: r.emoji, userId: r.user.id }))
+  });
   const isLoading = false;
 
   const addReactionMutation = useMutation({
     mutationFn: async (emoji: string) => {
       return apiRequest("POST", `/api/cards/${cardId}/reactions`, { emoji });
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      console.log("🎉 リアクション追加成功:", response);
+      console.log("🔄 キャッシュ無効化開始");
+      
       // バッチリアクションAPIのキャッシュを無効化（前方一致で全てのバッチクエリを無効化）
       queryClient.invalidateQueries({ 
         queryKey: ["/api/reactions/batch"],
         exact: false
       });
+      console.log("✅ バッチリアクションキャッシュ無効化完了");
+      
       // カード一覧の再取得もトリガー
       queryClient.invalidateQueries({ queryKey: ["/api/cards"] });
+      console.log("✅ カード一覧キャッシュ無効化完了");
+      
       setShowEmojiPicker(false);
       toast({
         title: "リアクションを追加しました",
