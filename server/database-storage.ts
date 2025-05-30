@@ -174,10 +174,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    console.log(`📝 createUser開始 - メール: ${insertUser.email}`);
+    console.log(`🔑 入力パスワード: "${insertUser.password}"`);
+    
     // パスワードがある場合はハッシュ化（開発中：無効化）
     if (insertUser.password) {
+      console.log(`🔐 パスワード処理前: "${insertUser.password}"`);
       // 開発中：ハッシュ化しない
       // insertUser.password = hashPassword(insertUser.password);
+      console.log(`🔐 パスワード処理後: "${insertUser.password}"`);
     }
 
     // アバターカラーがない場合はランダムに設定
