@@ -11,6 +11,16 @@ import { storage } from "./storage";
 import { serveStatic, log } from "./vite";
 import { hashPassword } from "./storage";
 import { generateGoogleAuthUrl, exchangeCodeForTokens, decodeIdToken, getRedirectUri } from "./cognito-auth";
+import { 
+  logAuth, 
+  logSession, 
+  setUserSession, 
+  getUserIdFromSession, 
+  verifyPassword, 
+  registerUserPassword,
+  sendAuthError,
+  sendUserResponse 
+} from "./auth-utils";
 
 import { 
   registerSchema, 
@@ -77,7 +87,12 @@ const checkAdmin = async (req: Request, res: Response, next: Function) => {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  app.use(cors());
+  app.use(cors({
+    origin: true, // 開発環境では全オリジンを許可
+    credentials: true, // Cookieを含むリクエストを許可
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
   app.use(bodyParser.json({ limit: '10mb' }));
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -217,60 +232,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 認証関連API
-  app.post("/api/auth/login", async (req: any, res: any) => {
+  // ログイン
+  app.post("/api/auth/login", async (req: Request, res: Response) => {
     try {
-      console.log("🔐 ログイン試行開始");
-      console.log("📝 リクエストボディ:", JSON.stringify(req.body, null, 2));
+      logAuth("ログイン試行開始", req.body);
       
       const data = loginSchema.parse(req.body);
-      console.log("✅ バリデーション成功 - メール:", data.email);
+      logAuth(`バリデーション成功 - メール: ${data.email}`);
       
-      // 正常なパスワード認証を実行
-      console.log("🔍 メール検索:", data.email);
-      const user = await storage.authenticateUser(data.email, data.password);
-      console.log("📋 認証結果:", user ? `ユーザー発見 ID:${user.id}` : 'ユーザーが見つからない');
-      
+      const user = await verifyPassword(data.email, data.password);
       if (!user) {
-        console.log("❌ 認証失敗 - ユーザーが見つからない:", data.email);
-        return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
+        return sendAuthError(res, "メールアドレスまたはパスワードが正しくありません");
       }
       
-      console.log("👤 認証成功 - ユーザー:", user.name, "(ID:", user.id, ")");
-      
-      // ユーザーIDをセッションに保存
-      console.log("📊 セッション保存前:");
-      console.log("  - セッションID:", req.sessionID);
-      console.log("  - セッション内容:", JSON.stringify(req.session, null, 2));
-      
-      req.session.userId = user.id;
-      console.log("💾 セッションにユーザーID設定:", user.id);
+      setUserSession(req, user.id);
       
       // セッション保存を明示的に実行
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         req.session.save((err) => {
           if (err) {
-            console.error("💥 セッション保存エラー:", err);
+            logAuth("セッション保存エラー", err);
             reject(err);
           } else {
-            console.log("✅ セッション保存成功!");
-            console.log("📊 セッション保存後:");
-            console.log("  - セッションID:", req.sessionID);
-            console.log("  - セッション内容:", JSON.stringify(req.session, null, 2));
-            resolve(null);
+            logAuth("セッション保存成功");
+            resolve();
           }
         });
       });
       
-      const { password, ...userWithoutPassword } = user;
-      console.log("🎉 ログイン処理完了 - レスポンス送信");
-      
-      return res.json({ message: "ログインに成功しました", user: userWithoutPassword });
+      return sendUserResponse(res, user, "ログインに成功しました");
     } catch (error) {
       if (error instanceof z.ZodError) {
         return handleZodError(error, res);
       }
-      console.error("💥 ログインエラー:", error);
+      logAuth("ログインエラー", error);
       return res.status(500).json({ message: "ログイン処理中にエラーが発生しました" });
     }
   });
