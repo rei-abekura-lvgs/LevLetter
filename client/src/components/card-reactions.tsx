@@ -71,7 +71,7 @@ export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
   };
 
   if (isLoading) {
-    return <div className="text-sm text-muted-foreground">読み込み中...</div>;
+    return null;
   }
 
   // Group reactions by emoji
@@ -85,59 +85,67 @@ export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
 
   // Check if current user has reacted
   const userReaction = reactions.find(r => r.userId === currentUserId);
+  const totalReactions = reactions.length;
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
-      {/* Display existing reactions */}
-      {Object.entries(reactionGroups).map(([emoji, groupReactions]) => (
-        <Button
-          key={emoji}
-          variant={groupReactions.some(r => r.userId === currentUserId) ? "default" : "outline"}
-          size="sm"
-          className="h-8 px-2 text-sm"
-          onClick={() => {
-            if (groupReactions.some(r => r.userId === currentUserId)) {
-              handleRemoveReaction();
-            }
-          }}
-          title={groupReactions.map(r => r.user.displayName || r.user.name).join(", ")}
-        >
-          <span className="mr-1">{emoji}</span>
-          <span className="text-xs">{groupReactions.length}</span>
-        </Button>
-      ))}
-
-      {/* Add reaction button - only show if user hasn't reacted */}
-      {!userReaction && (
-        <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 px-2 text-muted-foreground hover:text-foreground"
-              disabled={addReactionMutation.isPending}
-            >
-              😊
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-2" align="start">
-            <div className="grid grid-cols-4 gap-1">
-              {REACTION_EMOJIS.map(emoji => (
-                <Button
-                  key={emoji}
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0"
-                  onClick={() => handleEmojiClick(emoji)}
-                  disabled={addReactionMutation.isPending}
-                >
-                  {emoji}
-                </Button>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
+    <div className="flex items-center gap-1">
+      {/* Show reaction count if there are reactions */}
+      {totalReactions > 0 && (
+        <div className="flex items-center gap-1">
+          {Object.entries(reactionGroups).slice(0, 3).map(([emoji, groupReactions]) => (
+            <span key={emoji} className="text-sm">{emoji}</span>
+          ))}
+          {totalReactions > 3 && <span className="text-xs text-gray-500">+{totalReactions - 3}</span>}
+          <span className="text-xs text-gray-500 ml-1">{totalReactions}</span>
+        </div>
       )}
+
+      {/* Add reaction button */}
+      <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={`h-6 w-6 p-0 rounded-full ${
+              totalReactions > 0 
+                ? 'text-gray-400 hover:text-gray-600' 
+                : 'text-gray-300 hover:text-gray-500'
+            }`}
+            disabled={addReactionMutation.isPending}
+          >
+            👍
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-2" align="start">
+          <div className="grid grid-cols-4 gap-1">
+            {REACTION_EMOJIS.map(emoji => (
+              <Button
+                key={emoji}
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0"
+                onClick={() => handleEmojiClick(emoji)}
+                disabled={addReactionMutation.isPending}
+              >
+                {emoji}
+              </Button>
+            ))}
+          </div>
+          {userReaction && (
+            <div className="border-t pt-2 mt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleRemoveReaction}
+                disabled={removeReactionMutation.isPending}
+                className="w-full text-xs text-gray-500 hover:text-red-500"
+              >
+                リアクションを削除
+              </Button>
+            </div>
+          )}
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

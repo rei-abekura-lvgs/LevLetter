@@ -223,6 +223,10 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                         +{remainingCount}人
                       </span>
                     )}
+                    {/* スタンプ機能 - 受信者名の右隣 */}
+                    <div className="ml-2">
+                      <CardReactions cardId={card.id} currentUserId={currentUser.id} />
+                    </div>
                   </div>
                 </div>
                 <div className="text-right">
@@ -387,9 +391,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
                 )}
               </Button>
             </div>
-            
-            {/* Reactions - ハートアイコンの右隣に配置 */}
-            <CardReactions cardId={card.id} currentUserId={currentUser.id} />
+
           </div>
           
           <div className="flex items-center gap-2">
@@ -405,11 +407,7 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
             </Button>
           </div>
         </div>
-        
-        {/* Comments Section */}
-        <div className="pt-3 border-t border-gray-100">
-          <CardComments cardId={card.id} currentUserId={currentUser.id} />
-        </div>
+
       </CardFooter>
 
 
