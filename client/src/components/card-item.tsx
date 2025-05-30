@@ -14,9 +14,11 @@ interface CardItemProps {
   currentUser: User;
   isUnread?: boolean;
   reactions?: Array<CardReaction & { user: User }>;
+  onRefresh?: () => void;
+  onMarkAsRead?: (cardId: number) => void;
 }
 
-export default function CardItem({ card, currentUser, isUnread = false, reactions }: CardItemProps) {
+export default function CardItem({ card, currentUser, isUnread = false, reactions, onRefresh, onMarkAsRead }: CardItemProps) {
   const queryClient = useQueryClient();
   
   // 自分がいいねしたか

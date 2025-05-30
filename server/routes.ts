@@ -163,7 +163,11 @@ export async function registerRoutes(app: express.Application): Promise<Server> 
           cognitoSub: cognitoUser.id,
           customAvatarUrl: cognitoUser.picture || user.customAvatarUrl
         });
-        user = await storage.getUser(user.id); // 更新後のユーザー情報を再取得
+        const updatedUser = await storage.getUser(user.id); // 更新後のユーザー情報を再取得
+        if (!updatedUser) {
+          throw new Error("ユーザー情報の更新に失敗しました");
+        }
+        user = updatedUser;
       } else {
         console.log("👤 既存Google認証ユーザーでログイン:", user.email);
       }
@@ -326,8 +330,8 @@ export async function registerRoutes(app: express.Application): Promise<Server> 
   });
 
 
-  app.post("/api/auth/logout", (req, res) => {
-    req.session.destroy(err => {
+  app.post("/api/auth/logout", (req: Request, res: Response) => {
+    req.session.destroy((err: any) => {
       if (err) {
         console.error("ログアウトエラー:", err);
         return res.status(500).json({ message: "ログアウト処理中にエラーが発生しました" });
@@ -337,7 +341,7 @@ export async function registerRoutes(app: express.Application): Promise<Server> 
   });
 
   // パスワードリセット機能
-  app.post("/api/auth/password-reset-request", async (req, res) => {
+  app.post("/api/auth/password-reset-request", async (req: Request, res: Response) => {
     try {
       const { email } = req.body;
       
