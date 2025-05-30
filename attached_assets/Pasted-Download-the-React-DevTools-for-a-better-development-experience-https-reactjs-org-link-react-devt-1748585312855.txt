@@ -1,0 +1,241 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:67 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+auth-context.tsx:122 🚀 認証初期化開始
+auth-context.tsx:34 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:152 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+auth-context.tsx:122 🚀 認証初期化開始
+auth-context.tsx:34 🔍 セッションからユーザー情報を取得中...
+auth-context.tsx:152 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+login:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this error
+auth-context.tsx:37 
+            
+            
+           GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+fetchUserFromSession @ auth-context.tsx:37
+initializeAuth @ auth-context.tsx:125
+(anonymous) @ auth-context.tsx:143
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=2e9ada92:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=2e9ada92:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=2e9ada92:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=2e9ada92:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=2e9ada92:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=2e9ada92:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=2e9ada92:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19432
+commitRoot @ chunk-RPCDYKBN.js?v=2e9ada92:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=2e9ada92:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18718
+workLoop @ chunk-RPCDYKBN.js?v=2e9ada92:197
+flushWork @ chunk-RPCDYKBN.js?v=2e9ada92:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=2e9ada92:384Understand this error
+auth-context.tsx:50 🔒 未認証状態
+auth-context.tsx:129 🎯 認証初期化完了: 未ログイン
+App.tsx:67 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: false, 現在のパス: '/login'}
+auth-context.tsx:152 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+auth-context.tsx:37 
+            
+            
+           GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/auth/me 401 (Unauthorized)
+fetchUserFromSession @ auth-context.tsx:37
+initializeAuth @ auth-context.tsx:125
+(anonymous) @ auth-context.tsx:143
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=2e9ada92:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=2e9ada92:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=2e9ada92:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=2e9ada92:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=2e9ada92:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=2e9ada92:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=2e9ada92:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19432
+commitRoot @ chunk-RPCDYKBN.js?v=2e9ada92:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=2e9ada92:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18718
+workLoop @ chunk-RPCDYKBN.js?v=2e9ada92:197
+flushWork @ chunk-RPCDYKBN.js?v=2e9ada92:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=2e9ada92:384Understand this error
+auth-context.tsx:50 🔒 未認証状態
+auth-context.tsx:129 🎯 認証初期化完了: 未ログイン
+auth-context.tsx:152 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: false, エラー: null}
+login.tsx:75 ログイン試行: keishu.otaki@leverages.jp
+App.tsx:67 アプリ状態: {認証済み: false, ユーザー: '未ログイン', 読込中: true, 現在のパス: '/login'}
+auth-context.tsx:152 📊 認証状態更新: {認証済み: false, ユーザー: '未ログイン', 読込中: true, エラー: null}
+login.tsx:81 ログイン成功
+auth-context.tsx:34 🔍 セッションからユーザー情報を取得中...
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+notification-bell.tsx:53 📨 通知データ取得開始（ベルコンポーネント）
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/dashboard/stats?_t=1748585304091
+queryClient.ts:44 📋 リクエスト設定: {method: 'GET', headers: {…}, hasBody: false, credentials: 'include'}
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/auth/me?_t=1748585304091
+queryClient.ts:44 📋 リクエスト設定: {method: 'GET', headers: {…}, hasBody: false, credentials: 'include'}
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/cards?_t=1748585304092
+queryClient.ts:44 📋 リクエスト設定: {method: 'GET', headers: {…}, hasBody: false, credentials: 'include'}
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/users?_t=1748585304092
+queryClient.ts:44 📋 リクエスト設定: {method: 'GET', headers: {…}, hasBody: false, credentials: 'include'}
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/organizations?_t=1748585304092
+queryClient.ts:44 📋 リクエスト設定: {method: 'GET', headers: {…}, hasBody: false, credentials: 'include'}
+home.tsx:698 🎯 URLパラメータチェック: {cardId: null, cardsLength: 0}
+App.tsx:67 アプリ状態: {認証済み: true, ユーザー: undefined, 読込中: false, 現在のパス: '/login'}
+auth-context.tsx:152 📊 認証状態更新: {認証済み: true, ユーザー: '未ログイン', 読込中: false, エラー: null}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+App.tsx:67 アプリ状態: {認証済み: true, ユーザー: undefined, 読込中: false, 現在のパス: '/password-setup'}
+auth-context.tsx:47 ✅ セッション認証成功: 大滝　圭修
+login.tsx:92 認証情報更新完了
+login.tsx:95 ホーム画面への遷移準備中...
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: true, error: undefined, totalNotifications: 0, unreadCount: 0}
+App.tsx:67 アプリ状態: {認証済み: true, ユーザー: '大滝　圭修', 読込中: false, 現在のパス: '/password-setup'}
+auth-context.tsx:152 📊 認証状態更新: {認証済み: true, ユーザー: '大滝　圭修', 読込中: false, エラー: null}
+queryClient.ts:54 📡 レスポンス受信: {status: 200, statusText: 'OK', headers: {…}}
+notification-bell.tsx:62 📨 通知データ取得完了（ベルコンポーネント）: []
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 0, unreadCount: 0}
+queryClient.ts:54 📡 レスポンス受信: {status: 200, statusText: 'OK', headers: {…}}
+queryClient.ts:54 📡 レスポンス受信: {status: 200, statusText: 'OK', headers: {…}}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 0, unreadCount: 0}
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/cards?_t=1748585304492
+queryClient.ts:44 📋 リクエスト設定: {method: 'GET', headers: {…}, hasBody: false, credentials: 'include'}
+home.tsx:698 🎯 URLパラメータチェック: {cardId: null, cardsLength: 0}
+App.tsx:67 アプリ状態: {認証済み: true, ユーザー: '大滝　圭修', 読込中: false, 現在のパス: '/'}
+queryClient.ts:54 📡 レスポンス受信: {status: 200, statusText: 'OK', headers: {…}}
+queryClient.ts:54 📡 レスポンス受信: {status: 200, statusText: 'OK', headers: {…}}
+notification-bell.tsx:35 🔔 通知ベルコンポーネントレンダリング
+notification-bell.tsx:75 🔔 通知ベル状態: {isLoading: false, error: undefined, totalNotifications: 0, unreadCount: 0}
+queryClient.ts:54 📡 レスポンス受信: {status: 200, statusText: 'OK', headers: {…}}
+queryClient.ts:43 🌐 API GET リクエスト開始: /api/admin/organizations?_t=1748585304777
+queryClient.ts:44 📋 リクエスト設定: {method: 'GET', headers: {…}, hasBody: false, credentials: 'include'}
+queryClient.ts:52 
+            
+            
+           GET https://39d5973c-7a1f-41b4-be1d-15a49ae7ea28-00-18x0vdse26as0.picard.replit.dev/api/admin/organizations?_t=1748585304777 403 (Forbidden)
+apiRequest @ queryClient.ts:52
+(anonymous) @ queryClient.ts:121
+queryFn @ queryClient.ts:143
+fetchFn @ @tanstack_react-query.js?v=2e9ada92:840
+run @ @tanstack_react-query.js?v=2e9ada92:494
+start @ @tanstack_react-query.js?v=2e9ada92:536
+fetch @ @tanstack_react-query.js?v=2e9ada92:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e9ada92:2211
+onSubscribe @ @tanstack_react-query.js?v=2e9ada92:1898
+subscribe @ @tanstack_react-query.js?v=2e9ada92:24
+(anonymous) @ @tanstack_react-query.js?v=2e9ada92:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=2e9ada92:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=2e9ada92:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=2e9ada92:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=2e9ada92:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=2e9ada92:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=2e9ada92:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=2e9ada92:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19416
+commitRoot @ chunk-RPCDYKBN.js?v=2e9ada92:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=2e9ada92:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=2e9ada92:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e9ada92:555
+flush @ @tanstack_react-query.js?v=2e9ada92:569
+batch @ @tanstack_react-query.js?v=2e9ada92:587
+dispatch_fn @ @tanstack_react-query.js?v=2e9ada92:996
+setData @ @tanstack_react-query.js?v=2e9ada92:696
+onSuccess @ @tanstack_react-query.js?v=2e9ada92:897
+resolve @ @tanstack_react-query.js?v=2e9ada92:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e9ada92:498
+start @ @tanstack_react-query.js?v=2e9ada92:536
+fetch @ @tanstack_react-query.js?v=2e9ada92:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e9ada92:2211
+onSubscribe @ @tanstack_react-query.js?v=2e9ada92:1898
+subscribe @ @tanstack_react-query.js?v=2e9ada92:24
+(anonymous) @ @tanstack_react-query.js?v=2e9ada92:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=2e9ada92:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=2e9ada92:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=2e9ada92:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=2e9ada92:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=2e9ada92:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=2e9ada92:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=2e9ada92:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=2e9ada92:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19432
+commitRoot @ chunk-RPCDYKBN.js?v=2e9ada92:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=2e9ada92:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18718
+workLoop @ chunk-RPCDYKBN.js?v=2e9ada92:197
+flushWork @ chunk-RPCDYKBN.js?v=2e9ada92:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=2e9ada92:384Understand this error
+queryClient.ts:54 📡 レスポンス受信: {status: 403, statusText: 'Forbidden', headers: {…}}
+queryClient.ts:109 API GET エラー: /api/admin/organizations Error: 管理者権限が必要です
+    at apiRequest (queryClient.ts:75:15)
+    at async queryClient.ts:121:14
+apiRequest @ queryClient.ts:109
+await in apiRequest
+(anonymous) @ queryClient.ts:121
+queryFn @ queryClient.ts:143
+fetchFn @ @tanstack_react-query.js?v=2e9ada92:840
+run @ @tanstack_react-query.js?v=2e9ada92:494
+start @ @tanstack_react-query.js?v=2e9ada92:536
+fetch @ @tanstack_react-query.js?v=2e9ada92:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e9ada92:2211
+onSubscribe @ @tanstack_react-query.js?v=2e9ada92:1898
+subscribe @ @tanstack_react-query.js?v=2e9ada92:24
+(anonymous) @ @tanstack_react-query.js?v=2e9ada92:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=2e9ada92:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=2e9ada92:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=2e9ada92:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=2e9ada92:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=2e9ada92:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=2e9ada92:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=2e9ada92:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19416
+commitRoot @ chunk-RPCDYKBN.js?v=2e9ada92:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=2e9ada92:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=2e9ada92:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2e9ada92:555
+flush @ @tanstack_react-query.js?v=2e9ada92:569
+batch @ @tanstack_react-query.js?v=2e9ada92:587
+dispatch_fn @ @tanstack_react-query.js?v=2e9ada92:996
+setData @ @tanstack_react-query.js?v=2e9ada92:696
+onSuccess @ @tanstack_react-query.js?v=2e9ada92:897
+resolve @ @tanstack_react-query.js?v=2e9ada92:456
+Promise.then
+run @ @tanstack_react-query.js?v=2e9ada92:498
+start @ @tanstack_react-query.js?v=2e9ada92:536
+fetch @ @tanstack_react-query.js?v=2e9ada92:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e9ada92:2211
+onSubscribe @ @tanstack_react-query.js?v=2e9ada92:1898
+subscribe @ @tanstack_react-query.js?v=2e9ada92:24
+(anonymous) @ @tanstack_react-query.js?v=2e9ada92:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=2e9ada92:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=2e9ada92:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=2e9ada92:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=2e9ada92:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=2e9ada92:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=2e9ada92:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=2e9ada92:19447
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18868
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=2e9ada92:9119
+commitRootImpl @ chunk-RPCDYKBN.js?v=2e9ada92:19432
+commitRoot @ chunk-RPCDYKBN.js?v=2e9ada92:19277
+finishConcurrentRender @ chunk-RPCDYKBN.js?v=2e9ada92:18805
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=2e9ada92:18718
+workLoop @ chunk-RPCDYKBN.js?v=2e9ada92:197
+flushWork @ chunk-RPCDYKBN.js?v=2e9ada92:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=2e9ada92:384Understand this error
+queryClient.ts:123 Error fetching /api/admin/organizations: Error: 管理者権限が必要です
+    at apiRequest (queryClient.ts:75:15)
+    at async queryClient.ts:121:14

@@ -1,0 +1,213 @@
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+✅ 週次ポイントリセット完了: 50人
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: xqDDxVZ8-HtUKeVpCb4JTGtiVSMtHDPr
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:11.767Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+✅ 週次ポイントリセット完了: 50人
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/dashboard/stats
+🔑 セッションID: xqDDxVZ8-HtUKeVpCb4JTGtiVSMtHDPr
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:11.717Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+6:08:12 AM [express] GET /api/cards 200 in 193ms :: []
+🔍 getDashboardStats開始 - ユーザーID: 588
+6:08:12 AM [express] GET /api/organizations 200 in 93ms :: []
+📅 今月の期間: 2025-05-01T00:00:00.000Z から 2025-06-01T00:00:00.000Z
+6:08:12 AM [express] GET /api/users 200 in 240ms :: [{"id":5,"email":"rei.abekura@leverages.jp","nam…
+6:08:12 AM [express] GET /api/dashboard/stats 200 in 605ms :: {"weekly":{"currentPoints":500,"maxPoi…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/admin/organizations
+🔑 セッションID: xqDDxVZ8-HtUKeVpCb4JTGtiVSMtHDPr
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:12.340Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+6:08:12 AM [express] GET /api/admin/organizations 403 in 26ms :: {"message":"管理者権限が必要です"}
+6:08:15 AM [express] POST /api/auth/logout 200 in 1ms :: {"message":"ログアウトに成功しました"}
+6:08:19 AM [express] GET /api/auth/me 401 in 1ms :: {"message":"認証が必要です"}
+6:08:19 AM [express] GET /api/auth/me 401 in 1ms :: {"message":"認証が必要です"}
+Login attempt: keishu.otaki@leverages.jp
+🔐 SimpleAuth.login開始 - メール: keishu.otaki@leverages.jp
+🔐 パスワード受信: "00000000"
+🔍 メール検索: keishu.otaki@leverages.jp
+📋 検索結果: ユーザー発見 ID:588
+📝 入力パスワード: "00000000"
+💾 DB保存パスワード: "00000000"
+🔑 パスワード比較結果: 成功
+Login successful for: keishu.otaki@leverages.jp
+6:08:23 AM [express] POST /api/auth/login 200 in 321ms :: {"message":"ログインに成功しました","user":{"id":588,…
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+✅ 認証ユーザー情報返送: 大滝　圭修 (ID: 588 )
+6:08:24 AM [express] GET /api/auth/me 200 in 42ms :: {"id":588,"email":"keishu.otaki@leverages.jp","…
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/notifications
+🔑 セッションID: nrwugiP8Lew5khwzdTw26PYGMRsvV2hG
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:24.204Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/users
+🔑 セッションID: nrwugiP8Lew5khwzdTw26PYGMRsvV2hG
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:24.204Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+📨 通知API呼び出し開始
+📨 ユーザーID 588 の通知を取得中...
+📨 getReceivedCards開始 - ユーザーID: 588, 制限: 10
+📨 getReceivedCards完了 - 0件取得
+📨 受信カード数: 0
+❤️ getReceivedLikes開始 - ユーザーID: 588, 制限: 10
+ℹ️ 今週はすでにポイントリセット済み
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/dashboard/stats
+🔑 セッションID: nrwugiP8Lew5khwzdTw26PYGMRsvV2hG
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:23.983Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+✅ 認証ユーザー情報返送: 大滝　圭修 (ID: 588 )
+6:08:24 AM [express] GET /api/auth/me 200 in 115ms :: {"id":588,"email":"keishu.otaki@leverages.jp",…
+❤️ getReceivedLikes完了 - 0件取得
+❤️ 受信いいね数: 0
+📨 通知データ作成完了: 0件
+🔍 getDashboardStats開始 - ユーザーID: 588
+6:08:24 AM [express] GET /api/notifications 304 in 133ms :: []
+ℹ️ 今週はすでにポイントリセット済み
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: nrwugiP8Lew5khwzdTw26PYGMRsvV2hG
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:24.204Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+📅 今月の期間: 2025-05-01T00:00:00.000Z から 2025-06-01T00:00:00.000Z
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/organizations
+🔑 セッションID: nrwugiP8Lew5khwzdTw26PYGMRsvV2hG
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:24.339Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+6:08:24 AM [express] GET /api/users 200 in 164ms :: [{"id":5,"email":"rei.abekura@leverages.jp","nam…
+6:08:24 AM [express] GET /api/cards 200 in 170ms :: []
+6:08:24 AM [express] GET /api/organizations 200 in 45ms :: []
+📅 週次ポイントリセット確認: 今週の月曜日 = 2025-05-26T00:00:00.000Z
+6:08:24 AM [express] GET /api/dashboard/stats 200 in 413ms :: {"weekly":{"currentPoints":500,"maxPoi…
+ℹ️ 今週はすでにポイントリセット済み
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/cards
+🔑 セッションID: nrwugiP8Lew5khwzdTw26PYGMRsvV2hG
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:24.495Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
+6:08:24 AM [express] GET /api/cards 200 in 72ms :: []
+🔐 認証チェック開始
+🆔 リクエストURL: GET /api/admin/organizations
+🔑 セッションID: nrwugiP8Lew5khwzdTw26PYGMRsvV2hG
+📋 セッション全体: {
+  "cookie": {
+    "originalMaxAge": 604800000,
+    "expires": "2025-06-06T06:08:24.672Z",
+    "secure": false,
+    "httpOnly": true,
+    "path": "/",
+    "sameSite": "lax"
+  },
+  "userId": 588
+}
+👤 セッションから取得したユーザーID: 588
+🔍 ユーザー情報取得試行 - ユーザーID: 588
