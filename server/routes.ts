@@ -317,58 +317,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/auth/register", async (req, res) => {
+  // 新規登録
+  app.post("/api/auth/register", async (req: Request, res: Response) => {
     try {
-      console.log("🔐 新規登録リクエスト受信");
-      console.log("📝 リクエストボディ:", req.body);
+      console.log("Register attempt:", req.body.email);
       
       const data = registerSchema.parse(req.body);
-      console.log("✅ バリデーション成功 - メール:", data.email);
+      const user = await SimpleAuth.register(data.email, data.password);
       
-      // メールアドレスの重複チェック
-      console.log(`🔍 ユーザー検索開始: ${data.email}`);
-      const existingUser = await storage.getUserByEmail(data.email);
-      
-      if (existingUser) {
-        console.log(`📋 既存ユーザー発見 - ID: ${existingUser.id}, パスワード設定済み: ${!!existingUser.password}`);
-        
-        if (existingUser.password) {
-          console.log(`❌ 既に登録済み: ${data.email}`);
-          return res.status(400).json({ message: "このメールアドレスは既に登録されています" });
-        }
-        
-        // CSVインポートで登録済みの場合はパスワードをセットする
-        console.log(`🔐 新規登録処理開始 - ユーザー: ${existingUser.email}`);
-        console.log(`📝 入力パスワード: "${data.password}"`);
-        
-        const hashedPassword = await hashPassword(data.password);
-        console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
-        
-        // ユーザー情報を更新（パスワードは既にハッシュ化済み）
-        const updatedUser = await storage.updateUser(existingUser.id, {
-          password: hashedPassword,
-          passwordInitialized: true,
-        });
-        
-        // 登録後の検証
-        const verifyUser = await storage.authenticateUser(existingUser.email, data.password);
-        if (!verifyUser) {
-          console.error(`❌ パスワード検証失敗 - ${existingUser.email}`);
-          return res.status(500).json({ message: "登録処理でエラーが発生しました" });
-        }
-        
-        console.log(`✅ パスワード更新・検証完了 - ユーザー: ${existingUser.email}`);
-        
-        // セッションを設定
-        req.session.userId = updatedUser.id;
-        
-        // パスワードを除いたユーザー情報を返す
-        const { password, ...userWithoutPassword } = updatedUser;
-        return res.status(200).json({ 
-          message: "アカウント登録が完了しました", 
-          user: userWithoutPassword 
+      if (!user) {
+        return res.status(400).json({ 
+          message: "このメールアドレスは既に登録済みか、事前登録されていません" 
         });
       }
+      
+      SimpleAuth.setSession(req, user.id);
+      console.log("Registration successful for:", user.email);
+      
+      return res.json({ 
+        message: "アカウント登録が完了しました", 
+        user: SimpleAuth.sanitizeUser(user) 
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return handleZodError(error, res);
+      }
+      console.error("Registration error:", error);
+      return res.status(500).json({ message: "新規登録処理中にエラーが発生しました" });
+    }
+  });
       
       // メールアドレスがCSVインポートされた内容と一致するか確認
       const preregisteredUser = await storage.getUserByEmail(data.email);
