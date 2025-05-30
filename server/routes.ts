@@ -12,6 +12,7 @@ import { serveStatic, log } from "./vite";
 import { hashPassword } from "./storage";
 import { generateGoogleAuthUrl, exchangeCodeForTokens, decodeIdToken, getRedirectUri } from "./cognito-auth";
 import { SimpleAuth } from "./simple-auth";
+import { SimpleEmailAuth } from "./auth-simple";
 
 import { 
   registerSchema, 
@@ -34,39 +35,8 @@ const weeklyPointsResetMiddleware = async (req: Request, res: Response, next: Fu
   }
 };
 
-// 認証ミドルウェア
-const authenticate = async (req: Request, res: Response, next: Function) => {
-  console.log("🔐 認証チェック開始");
-  console.log("🆔 リクエストURL:", req.method, req.path);
-  console.log("🔑 セッションID:", req.sessionID);
-  console.log("📋 セッション全体:", JSON.stringify(req.session, null, 2));
-  
-  // セッションからユーザーIDを取得
-  const userId = (req.session as any).userId;
-  console.log("👤 セッションから取得したユーザーID:", userId);
-  
-  if (!userId) {
-    console.log("❌ 認証失敗 - ユーザーIDがセッションに存在しません");
-    return res.status(401).json({ message: "認証が必要です" });
-  }
-
-  try {
-    console.log("🔍 ユーザー情報取得試行 - ユーザーID:", userId);
-    // ユーザー情報を取得
-    const user = await storage.getUser(userId);
-    if (!user) {
-      req.session.destroy(() => {});
-      return res.status(401).json({ message: "無効なセッションです" });
-    }
-
-    // リクエストオブジェクトにユーザー情報を付与
-    (req as any).user = user;
-    next();
-  } catch (error) {
-    console.error("認証エラー:", error);
-    return res.status(500).json({ message: "認証処理中にエラーが発生しました" });
-  }
-};
+// 認証ミドルウェア（bcrypt認証システムを使用）
+const authenticate = SimpleEmailAuth.authenticate;
 
 // 管理者権限チェックミドルウェア
 const checkAdmin = async (req: Request, res: Response, next: Function) => {
@@ -229,19 +199,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Login attempt:", req.body.email);
       
       const data = loginSchema.parse(req.body);
-      const user = await SimpleAuth.login(data.email, data.password);
+      const user = await SimpleEmailAuth.login(data.email, data.password);
       
       if (!user) {
         console.log("Login failed for:", data.email);
         return res.status(401).json({ message: "メールアドレスまたはパスワードが正しくありません" });
       }
       
-      SimpleAuth.setSession(req, user.id);
+      SimpleEmailAuth.setSession(req, user.id);
       console.log("Login successful for:", user.email);
       
       return res.json({ 
         message: "ログインに成功しました", 
-        user: SimpleAuth.sanitizeUser(user) 
+        user: SimpleEmailAuth.sanitizeUser(user) 
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -253,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // 認証状態確認エンドポイント
-  app.get("/api/auth/me", SimpleAuth.authenticate, async (req: Request, res: Response) => {
+  app.get("/api/auth/me", SimpleEmailAuth.authenticate, async (req: Request, res: Response) => {
     try {
       const user = (req as any).user;
       console.log("✅ 認証ユーザー情報返送:", user.name, "(ID:", user.id, ")");
@@ -323,7 +293,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Register attempt:", req.body.email);
       
       const data = registerSchema.parse(req.body);
-      const user = await SimpleAuth.register(data.email, data.password);
+      const user = await SimpleEmailAuth.register(data.email, data.password);
       
       if (!user) {
         return res.status(400).json({ 
@@ -331,12 +301,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      SimpleAuth.setSession(req, user.id);
+      SimpleEmailAuth.setSession(req, user.id);
       console.log("Registration successful for:", user.email);
       
       return res.json({ 
         message: "アカウント登録が完了しました", 
-        user: SimpleAuth.sanitizeUser(user) 
+        user: SimpleEmailAuth.sanitizeUser(user) 
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
