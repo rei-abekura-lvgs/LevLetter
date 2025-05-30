@@ -346,55 +346,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "新規登録処理中にエラーが発生しました" });
     }
   });
-      
-      // メールアドレスがCSVインポートされた内容と一致するか確認
-      const preregisteredUser = await storage.getUserByEmail(data.email);
-      if (!preregisteredUser) {
-        return res.status(400).json({ 
-          message: "このメールアドレスは事前登録されていません。管理者に連絡してください。" 
-        });
-      }
-      
-      // ハッシュ化したパスワードを設定
-      console.log(`🔐 新規登録処理開始 - ユーザー: ${data.email}`);
-      console.log(`📝 入力パスワード: "${data.password}"`);
-      
-      const hashedPassword = hashPassword(data.password);
-      console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
-      
-      // ユーザー情報を更新（パスワードは既にハッシュ化済み）
-      const updatedUser = await storage.updateUser(preregisteredUser.id, {
-        password: hashedPassword,
-        passwordInitialized: true,
-      });
-      
-      // 登録後の検証
-      const verifyUser = await storage.authenticateUser(data.email, data.password);
-      if (!verifyUser) {
-        console.error(`❌ パスワード検証失敗 - ${data.email}`);
-        return res.status(500).json({ message: "登録処理でエラーが発生しました" });
-      }
-      
-      console.log(`✅ パスワード更新・検証完了 - ユーザー: ${data.email}`);
-      
-      // セッションを設定
-      req.session.userId = updatedUser.id;
-      
-      // パスワードを除いたユーザー情報を返す
-      const { password, ...userWithoutPassword } = updatedUser;
-      return res.status(200).json({ 
-        message: "アカウント登録が完了しました", 
-        user: userWithoutPassword 
-      });
-      
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return handleZodError(error, res);
-      }
-      console.error("登録エラー:", error);
-      return res.status(500).json({ message: "登録処理中にエラーが発生しました" });
-    }
-  });
+
 
   app.post("/api/auth/logout", (req, res) => {
     req.session.destroy(err => {
