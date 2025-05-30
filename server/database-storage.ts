@@ -844,7 +844,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteCard(id: number): Promise<void> {
-    // まず関連するいいねを削除
+    // まず関連するリアクションを削除
+    await db
+      .delete(cardReactions)
+      .where(eq(cardReactions.cardId, id));
+    
+    // 関連するコメントを削除
+    await db
+      .delete(cardComments)
+      .where(eq(cardComments.cardId, id));
+    
+    // 関連するいいねを削除
     await db
       .delete(likes)
       .where(eq(likes.cardId, id));

@@ -1,6 +1,14 @@
 import express, { Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
+
+// セッション型定義を拡張
+declare module 'express-session' {
+  interface SessionData {
+    userId?: number;
+    googleAuthInfo?: any;
+  }
+}
 import { randomUUID } from "crypto";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -1330,11 +1338,11 @@ export async function registerRoutes(app: express.Application): Promise<Server> 
       });
 
       return res.status(201).json({ message: "いいねしました", like });
-    } catch (error) {
+    } catch (error: any) {
       console.error("いいね作成エラー:", error);
       
       // エラーメッセージを詳細に分類
-      if (error.message === "ポイントが不足しています") {
+      if (error?.message === "ポイントが不足しています") {
         return res.status(400).json({ message: "ポイントが不足しています（2pt必要）" });
       }
       if (error.message === "このカードは最大いいね数に達しています") {
