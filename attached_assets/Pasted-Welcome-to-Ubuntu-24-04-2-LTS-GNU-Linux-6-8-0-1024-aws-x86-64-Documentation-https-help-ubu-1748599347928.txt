@@ -1,0 +1,49 @@
+Welcome to Ubuntu 24.04.2 LTS (GNU/Linux 6.8.0-1024-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri May 30 09:59:32 UTC 2025
+
+  System load:  0.08              Temperature:           -273.1 C
+  Usage of /:   25.0% of 6.71GB   Processes:             108
+  Memory usage: 22%               Users logged in:       0
+  Swap usage:   0%                IPv4 address for ens5: 172.31.1.79
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+Last login: Fri May 30 09:59:32 2025 from 3.112.23.5
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+ubuntu@ip-172-31-1-79:~$ # アプリケーションデプロイスクリプト
+wget https://raw.githubusercontent.com/rei-abekura-lvgs/LevLetter/main/scripts/deploy-app.sh
+nano deploy-app.sh  # リポジトリURLを設定
+chmod +x deploy-app.sh
+./deploy-app.sh
+--2025-05-30 10:00:27--  https://raw.githubusercontent.com/rei-abekura-lvgs/LevLetter/main/scripts/deploy-app.sh
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.110.133, 185.199.109.133, 185.199.108.133, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.110.133|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2025-05-30 10:00:27 ERROR 404: Not Found.
+
+--2025-05-30 10:02:18--  https://raw.githubusercontent.com/rei-abekura-lvgs/LevLetter/main/scripts/ec2-setup.sh
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.109.133, 185.199.110.133, 185.199.108.133, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.109.133|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2025-05-30 10:02:18 ERROR 404: Not Found.
+
+chmod: cannot access 'ec2-setup.sh': No such file or directory
+sudo: ./ec2-setup.sh: command not found
+ubuntu@ip-172-31-1-79:~$ 

@@ -1,0 +1,76 @@
+GRANT
+ALTER ROLE
+PM2をインストール中...
+
+added 135 packages in 9s
+
+13 packages are looking for funding
+  run `npm fund` for details
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.4.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.1
+npm notice To update run: npm install -g npm@11.4.1
+npm notice
+Nginxをインストール中...
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  nginx-common
+Suggested packages:
+  fcgiwrap nginx-doc
+The following NEW packages will be installed:
+  nginx nginx-common
+0 upgraded, 2 newly installed, 0 to remove and 2 not upgraded.
+Need to get 551 kB of archives.
+After this operation, 1596 kB of additional disk space will be used.
+Get:1 http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx-common all 1.24.0-2ubuntu7.3 [31.2 kB]
+Get:2 http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx amd64 1.24.0-2ubuntu7.3 [520 kB]
+Fetched 551 kB in 0s (11.3 MB/s)
+Preconfiguring packages ...
+Selecting previously unselected package nginx-common.
+(Reading database ... 108566 files and directories currently installed.)
+Preparing to unpack .../nginx-common_1.24.0-2ubuntu7.3_all.deb ...
+Unpacking nginx-common (1.24.0-2ubuntu7.3) ...
+Selecting previously unselected package nginx.
+Preparing to unpack .../nginx_1.24.0-2ubuntu7.3_amd64.deb ...
+Unpacking nginx (1.24.0-2ubuntu7.3) ...
+Setting up nginx (1.24.0-2ubuntu7.3) ...
+Setting up nginx-common (1.24.0-2ubuntu7.3) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.
+Processing triggers for ufw (0.36.2-6) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Scanning processes...                                                                                                                             
+Scanning candidates...                                                                                                                            
+Scanning linux images...                                                                                                                          
+
+Pending kernel upgrade!
+Running kernel version:
+  6.8.0-1024-aws
+Diagnostics:
+  The currently running kernel version is not the expected kernel version 6.8.0-1029-aws.
+
+Restarting the system to load the new kernel will not be handled automatically, so you should consider rebooting.
+
+Restarting services...
+
+Service restarts being deferred:
+ /etc/needrestart/restart.d/dbus.service
+ systemctl restart networkd-dispatcher.service
+ systemctl restart systemd-logind.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+User sessions running outdated binaries:
+ ubuntu @ session #4: sshd[1589]
+ ubuntu @ user manager service: systemd[1429]
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
+=== 基本セットアップ完了 ===
+
+データベース接続URL:
+postgresql://levletter_user:secure_password_123@localhost:5432/levletter
+ubuntu@ip-172-31-1-79:~$ 

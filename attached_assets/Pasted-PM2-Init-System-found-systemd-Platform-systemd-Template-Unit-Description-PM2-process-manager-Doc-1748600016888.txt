@@ -1,0 +1,333 @@
+PM2] Init System found: systemd
+Platform systemd
+Template
+[Unit]
+Description=PM2 process manager
+Documentation=https://pm2.keymetrics.io/
+After=network.target
+
+[Service]
+Type=forking
+User=ubuntu
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=PM2_HOME=/home/ubuntu/.pm2
+PIDFile=/home/ubuntu/.pm2/pm2.pid
+Restart=on-failure
+
+ExecStart=/usr/lib/node_modules/pm2/bin/pm2 resurrect
+ExecReload=/usr/lib/node_modules/pm2/bin/pm2 reload all
+ExecStop=/usr/lib/node_modules/pm2/bin/pm2 kill
+
+[Install]
+WantedBy=multi-user.target
+
+Target path
+/etc/systemd/system/pm2-ubuntu.service
+Command list
+[ 'systemctl enable pm2-ubuntu' ]
+[PM2] Writing init configuration in /etc/systemd/system/pm2-ubuntu.service
+[PM2] Making script booting at startup...
+[PM2] [-] Executing: systemctl enable pm2-ubuntu...
+Created symlink /etc/systemd/system/multi-user.target.wants/pm2-ubuntu.service → /etc/systemd/system/pm2-ubuntu.service.
+[PM2] [v] Command successfully executed.
++---------------------------------------+
+[PM2] Freeze a process list on reboot via:
+$ pm2 save
+
+[PM2] Remove init script via:
+$ pm2 unstartup systemd
+
+=== デプロイ完了! ===
+アクセスURL: http://43.207.209.243:5000
+ubuntu@ip-172-31-1-79:~$ pm2 status
+pm2 logs levletter
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ levletter    │ default     │ N/A     │ fork    │ 0        │ 0      │ 16   │ errored   │ 0%       │ 0b       │ ubuntu   │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[TAILING] Tailing last 15 lines for [levletter] process (change the value with --lines option)
+/home/ubuntu/.pm2/logs/levletter-out.log last 15 lines:
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+
+/home/ubuntu/.pm2/logs/levletter-error.log last 15 lines:
+0|levlette |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levlette | 
+0|levlette | Node.js v18.20.8
+0|levlette | file:///home/ubuntu/levletter/dist/index.js:485
+0|levlette |   throw new Error(
+0|levlette |         ^
+0|levlette | 
+0|levlette | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levlette |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levlette |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levlette |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levlette |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levlette |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levlette | 
+0|levlette | Node.js v18.20.8
+
+^C
+ubuntu@ip-172-31-1-79:~$ cd /home/ubuntu/levletter
+cat > .env << 'EOF'
+NODE_ENV=production
+PORT=5000
+HOST=0.0.0.0
+DATABASE_URL=postgresql://levletter_user:secure_password_123@localhost:5432/levletter
+SESSION_SECRET=your-secret-key-here
+CORS_ORIGIN=*
+EOF
+ubuntu@ip-172-31-1-79:~/levletter$ pm2 restart levletter
+pm2 logs levletter
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [levletter](ids: [ 0 ])
+[PM2] [levletter](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ levletter    │ default     │ N/A     │ fork    │ 24582    │ 0s     │ 16   │ online    │ 0%       │ 22.3mb   │ ubuntu   │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[TAILING] Tailing last 15 lines for [levletter] process (change the value with --lines option)
+/home/ubuntu/.pm2/logs/levletter-out.log last 15 lines:
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+
+/home/ubuntu/.pm2/logs/levletter-error.log last 15 lines:
+0|levlette |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levlette | 
+0|levlette | Node.js v18.20.8
+0|levlette | file:///home/ubuntu/levletter/dist/index.js:485
+0|levlette |   throw new Error(
+0|levlette |         ^
+0|levlette | 
+0|levlette | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levlette |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levlette |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levlette |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levlette |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levlette |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levlette | 
+0|levlette | Node.js v18.20.8
+
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | file:///home/ubuntu/levletter/dist/index.js:485
+0|levletter  |   throw new Error(
+0|levletter  |         ^
+0|levletter  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:485:9
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12)
+0|levletter  | Node.js v18.20.8

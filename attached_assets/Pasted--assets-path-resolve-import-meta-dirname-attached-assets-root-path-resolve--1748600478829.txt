@@ -1,0 +1,80 @@
+    "@assets": path.resolve(import.meta.dirname, "attached_assets")
+    }
+  },
+  root: path.resolve(import.meta.dirname, "client"),
+  build: {
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    emptyOutDir: true
+  }
+});
+
+ubuntu@ip-172-31-1-79:~/levletter$ npm run dev
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+node:internal/errors:496
+    ErrorCaptureStackTrace(err);
+    ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+    at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+    at new NodeError (node:internal/errors:405:5)
+    at validateString (node:internal/validators:162:11)
+    at Object.resolve (node:path:1115:7)
+    at <anonymous> (/home/ubuntu/levletter/vite.config.ts:21:17)
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+    at async loadESM (node:internal/process/esm_loader:34:7)
+    at async handleMainPromise (node:internal/modules/run_main:106:12) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v18.20.8
+ubuntu@ip-172-31-1-79:~/levletter$ cat > vite.config.ts << 'EOF'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export default defineConfig({
+  plugins: [
+    react(),
+    ...process.env.NODE_ENV !== "production" && process.env.REPL_ID !== undefined ? [
+      await import("@replit/vite-plugin-cartographer").then(
+        (m) => m.cartographer()
+      )
+    ] : []
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "client", "src"),
+      "@shared": path.resolve(__dirname, "shared"),
+      "@assets": path.resolve(__dirname, "attached_assets")
+    }
+  },
+  root: path.resolve(__dirname, "client"),
+  build: {
+    outDir: path.resolve(__dirname, "dist/public"),
+    emptyOutDir: true
+  }
+});
+EOF
+ubuntu@ip-172-31-1-79:~/levletter$ npm run build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v5.4.14 building for production...
+transforming (1) index.htmlBrowserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+transforming (4) src/App.tsx
+warn - The class `duration-[3000ms]` is ambiguous and matches multiple utilities.
+warn - If this is content and not a class, replace it with `duration-&lsqb;3000ms&rsqb;` to silence this warning.
+
+warn - The class `duration-[60ms]` is ambiguous and matches multiple utilities.
+warn - If this is content and not a class, replace it with `duration-&lsqb;60ms&rsqb;` to silence this warning.
+✓ 2719 modules transformed.

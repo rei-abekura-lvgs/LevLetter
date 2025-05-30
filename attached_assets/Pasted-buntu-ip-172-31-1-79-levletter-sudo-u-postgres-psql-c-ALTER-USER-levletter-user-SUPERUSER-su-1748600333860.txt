@@ -1,0 +1,78 @@
+buntu@ip-172-31-1-79:~/levletter$ sudo -u postgres psql -c "ALTER USER levletter_user SUPERUSER;"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON SCHEMA public TO levletter_user;"
+sudo -u postgres psql -c "GRANT CREATE ON SCHEMA public TO levletter_user;"
+ALTER ROLE
+GRANT
+GRANT
+ubuntu@ip-172-31-1-79:~/levletter$ npm run db:push
+
+> rest-express@1.0.0 db:push
+> drizzle-kit push
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/home/ubuntu/levletter/drizzle.config.ts'
+Using 'pg' driver for database querying
+[✓] Pulling schema from database...
+[✓] Changes applied
+ubuntu@ip-172-31-1-79:~/levletter$ pm2 restart levletter
+pm2 logs levletter
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [levletter](ids: [ 0 ])
+[PM2] [levletter](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ levletter    │ default     │ N/A     │ fork    │ 28039    │ 0s     │ 16   │ online    │ 0%       │ 21.8mb   │ ubuntu   │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[TAILING] Tailing last 15 lines for [levletter] process (change the value with --lines option)
+/home/ubuntu/.pm2/logs/levletter-out.log last 15 lines:
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+0|levlette | 
+0|levlette | > rest-express@1.0.0 start
+0|levlette | > NODE_ENV=production node dist/index.js
+0|levlette | 
+
+/home/ubuntu/.pm2/logs/levletter-error.log last 15 lines:
+0|levlette |     ^
+0|levlette | 
+0|levlette | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+0|levlette |     at new NodeError (node:internal/errors:405:5)
+0|levlette |     at validateString (node:internal/validators:162:11)
+0|levlette |     at Object.resolve (node:path:1115:7)
+0|levlette |     at file:///home/ubuntu/levletter/dist/index.js:1579:17
+0|levlette |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levlette |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levlette |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levlette |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+0|levlette |   code: 'ERR_INVALID_ARG_TYPE'
+0|levlette | }
+0|levlette | 
+0|levlette | Node.js v18.20.8
+
+0|levletter  | > rest-express@1.0.0 start
+0|levletter  | > NODE_ENV=production node dist/index.js
+0|levletter  | node:internal/errors:496
+0|levletter  |     ErrorCaptureStackTrace(err);
+0|levletter  |     ^
+0|levletter  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+0|levletter  |     at new NodeError (node:internal/errors:405:5)
+0|levletter  |     at validateString (node:internal/validators:162:11)
+0|levletter  |     at Object.resolve (node:path:1115:7)
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:1579:17
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+0|levletter  |   code: 'ERR_INVALID_ARG_TYPE'
+0|levletter  | }
+0|levletter  | Node.js v18.20.8

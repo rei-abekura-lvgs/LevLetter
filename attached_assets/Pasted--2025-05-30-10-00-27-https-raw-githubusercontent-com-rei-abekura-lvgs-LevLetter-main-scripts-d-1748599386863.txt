@@ -1,0 +1,66 @@
+--2025-05-30 10:00:27--  https://raw.githubusercontent.com/rei-abekura-lvgs/LevLetter/main/scripts/deploy-app.sh
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.110.133, 185.199.109.133, 185.199.108.133, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.110.133|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2025-05-30 10:00:27 ERROR 404: Not Found.
+
+--2025-05-30 10:02:18--  https://raw.githubusercontent.com/rei-abekura-lvgs/LevLetter/main/scripts/ec2-setup.sh
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.109.133, 185.199.110.133, 185.199.108.133, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.109.133|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2025-05-30 10:02:18 ERROR 404: Not Found.
+
+chmod: cannot access 'ec2-setup.sh': No such file or directory
+sudo: ./ec2-setup.sh: command not found
+ubuntu@ip-172-31-1-79:~$ # セットアップスクリプトを直接作成
+cat > ec2-setup.sh << 'EOF'
+#!/bin/bash
+
+# EC2での一括セットアップスクリプト
+# Ubuntu 22.04/24.04 LTS用
+
+set -e  # エラーで停止
+
+echo "=== LevLetter EC2セットアップ開始 ==="
+
+# システム更新
+echo "システムを更新中..."
+sudo apt update && sudo apt upgrade -y
+
+# Node.js 18インストール
+echo "Node.js 18をインストール中..."
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# PostgreSQL インストール
+echo "PostgreSQLをインストール中..."
+sudo apt install postgresql postgresql-contrib -y
+
+# PostgreSQL設定
+echo "PostgreSQLを設定中..."
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+# データベースとユーザー作成
+echo "データベースを作成中..."
+sudo -u postgres psql -c "CREATE DATABASE levletter;"
+sudo -u postgres psql -c "CREATE USER levletter_user WITH PASSWORD 'secure_password_123';"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE levletter TO levletter_user;"
+sudo -u postgres psql -c "ALTER USER levletter_user CREATEDB;"
+
+# PM2インストール（プロセス管理）
+echo "PM2をインストール中..."
+sudo npm install -g pm2
+
+# Nginxインストール（リバースプロキシ用）
+echo "Nginxをインストール中..."
+sudo apt install nginx -y
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+echo "=== 基本セットアップ完了 ==="
+echo ""
+echo "データベース接続URL:"
+echo "postgresql://levletter_user:secure_password_123@localhost:5432/levletter"
+EOF
+ubuntu@ip-172-31-1-79:~$ 

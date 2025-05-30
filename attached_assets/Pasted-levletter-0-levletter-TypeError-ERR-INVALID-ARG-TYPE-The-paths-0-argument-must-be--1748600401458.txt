@@ -1,0 +1,65 @@
+levletter  |     ^
+0|levletter  | TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+0|levletter  |     at new NodeError (node:internal/errors:405:5)
+0|levletter  |     at validateString (node:internal/validators:162:11)
+0|levletter  |     at Object.resolve (node:path:1115:7)
+0|levletter  |     at file:///home/ubuntu/levletter/dist/index.js:1579:17
+0|levletter  |     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+0|levletter  |     at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+0|levletter  |     at async loadESM (node:internal/process/esm_loader:34:7)
+0|levletter  |     at async handleMainPromise (node:internal/modules/run_main:106:12) {
+0|levletter  |   code: 'ERR_INVALID_ARG_TYPE'
+0|levletter  | }
+0|levletter  | Node.js v18.20.8
+^C
+ubuntu@ip-172-31-1-79:~/levletter$ pm2 delete levletter
+[PM2] Applying action deleteProcessId on app [levletter](ids: [ 0 ])
+[PM2] [levletter](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+ubuntu@ip-172-31-1-79:~/levletter$ head -n 1590 dist/index.js | tail -n 20
+    ...process.env.NODE_ENV !== "production" && process.env.REPL_ID !== void 0 ? [
+      await import("@replit/vite-plugin-cartographer").then(
+        (m) => m.cartographer()
+      )
+    ] : []
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@shared": path.resolve(import.meta.dirname, "shared"),
+      "@assets": path.resolve(import.meta.dirname, "attached_assets")
+    }
+  },
+  root: path.resolve(import.meta.dirname, "client"),
+  build: {
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    emptyOutDir: true
+  }
+});
+
+ubuntu@ip-172-31-1-79:~/levletter$ npm run dev
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+node:internal/errors:496
+    ErrorCaptureStackTrace(err);
+    ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "paths[0]" argument must be of type string. Received undefined
+    at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+    at new NodeError (node:internal/errors:405:5)
+    at validateString (node:internal/validators:162:11)
+    at Object.resolve (node:path:1115:7)
+    at <anonymous> (/home/ubuntu/levletter/vite.config.ts:21:17)
+    at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:337:24)
+    at async loadESM (node:internal/process/esm_loader:34:7)
+    at async handleMainPromise (node:internal/modules/run_main:106:12) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v18.20.8
+ubuntu@ip-172-31-1-79:~/levletter$ 
