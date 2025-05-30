@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useBatchReactions } from "@/hooks/use-batch-reactions";
 import type { CardReaction, User } from "@shared/schema";
 
 interface CardReactionsProps {
