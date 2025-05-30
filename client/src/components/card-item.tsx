@@ -24,6 +24,13 @@ export default function CardItem({ card, currentUser, isUnread = false, reaction
   
   console.log(`🃏 CardItem[${card.id}] reactions:`, {
     cardId: card.id,
+    reactionsProvided: reactions,
+    reactionsCount: reactions?.length || 0,
+    reactionsType: typeof reactions
+  });
+  
+  console.log(`🃏 CardItem[${card.id}] additional debug:`, {
+    cardId: card.id,
     reactionsFromProps: reactions,
     reactionsCount: reactions?.length || 0
   });
@@ -296,7 +303,7 @@ export default function CardItem({ card, currentUser, isUnread = false, reaction
       <CardReactions
         cardId={card.id}
         currentUserId={currentUser.id}
-        isRecipient={card.recipientId === currentUser.id || (card.additionalRecipients && card.additionalRecipients.length > 0 && card.additionalRecipients.some(r => r.id === currentUser.id))}
+        isRecipient={card.recipientId === currentUser.id || (card.additionalRecipients && card.additionalRecipients.length > 0 && card.additionalRecipients.some(r => r && r.id === currentUser.id))}
         reactions={reactions}
       />
     </div>
