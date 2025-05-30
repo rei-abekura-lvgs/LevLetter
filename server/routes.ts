@@ -4,6 +4,7 @@ import session from "express-session";
 import { randomUUID } from "crypto";
 import bodyParser from "body-parser";
 import cors from "cors";
+import bcrypt from "bcrypt";
 import { z } from "zod";
 import { type PgTable } from "drizzle-orm/pg-core";
 import { and, eq, desc, count, sql, isNotNull, isNull, inArray, like, not } from "drizzle-orm";
