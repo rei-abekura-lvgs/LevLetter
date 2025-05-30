@@ -8,6 +8,8 @@ import { CardList } from "@/components/card-list";
 import { TabNavigation } from "@/components/tab-navigation";
 import { FilterControls } from "@/components/filter-controls";
 import { UserAutocomplete } from "@/components/user-autocomplete";
+import { CardReactions } from "@/components/card-reactions";
+import { CardComments } from "@/components/card-comments";
 import { TabType, SortOrder, TabCounts } from "@/types/common";
 import { Button } from "@/components/ui/button";
 import {
@@ -400,9 +402,13 @@ const CardItem = ({ card, currentUser, onRefresh, onMarkAsRead }: { card: CardWi
               <Info className="h-3 w-3 mr-1" />
               詳細
             </Button>
-            
-
           </div>
+        </div>
+        
+        {/* Reactions and Comments Section */}
+        <div className="pt-3 space-y-3 border-t border-gray-100">
+          <CardReactions cardId={card.id} currentUserId={currentUser.id} />
+          <CardComments cardId={card.id} currentUserId={currentUser.id} />
         </div>
       </CardFooter>
 
