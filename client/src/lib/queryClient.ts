@@ -21,11 +21,8 @@ export async function apiRequest<T>(
   path: string,
   data?: any
 ): Promise<T> {
-  const token = getAuthToken();
-  
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    "Authorization": token ? `Bearer ${token}` : ""
+    "Content-Type": "application/json"
   };
   
   const config: RequestInit = {
@@ -39,11 +36,6 @@ export async function apiRequest<T>(
     cache: 'no-store',
     credentials: 'include' // セッションCookieを含める
   };
-  
-  // 認証が必要なパスへのリクエストで、トークンがない場合の早期チェック
-  if (path.includes('/api/auth/me') && !token) {
-    throw new Error('認証が必要です');
-  }
   
   // キャッシュ回避のためURLにタイムスタンプを追加
   const timestampUrl = path + (path.includes('?') ? '&' : '?') + `_t=${Date.now()}`;
