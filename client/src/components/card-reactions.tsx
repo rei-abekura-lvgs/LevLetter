@@ -25,10 +25,7 @@ export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
 
   const addReactionMutation = useMutation({
     mutationFn: async (emoji: string) => {
-      return apiRequest(`/api/cards/${cardId}/reactions`, {
-        method: "POST",
-        body: { emoji }
-      });
+      return apiRequest("POST", `/api/cards/${cardId}/reactions`, { emoji });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/cards", cardId, "reactions"] });
@@ -48,9 +45,7 @@ export function CardReactions({ cardId, currentUserId }: CardReactionsProps) {
 
   const removeReactionMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest(`/api/cards/${cardId}/reactions`, {
-        method: "DELETE"
-      });
+      return apiRequest("DELETE", `/api/cards/${cardId}/reactions`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/cards", cardId, "reactions"] });

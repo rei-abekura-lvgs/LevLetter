@@ -1,5 +1,6 @@
 import {
   users, teams, cards, likes, teamMembers, departments, organizationHierarchy, userDepartments,
+  cardReactions, cardComments,
   type User, type InsertUser,
   type Card, type InsertCard,
   type Like, type InsertLike,
@@ -8,7 +9,9 @@ import {
   type Department, type InsertDepartment,
   type OrganizationHierarchy, type InsertOrganization,
   type UserDepartment, type InsertUserDepartment,
-  type CardWithRelations
+  type CardWithRelations,
+  type CardReaction, type InsertCardReaction,
+  type CardComment, type InsertCardComment
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, asc, sql, gte, lt, ne, or, not, inArray } from "drizzle-orm";
@@ -27,6 +30,8 @@ function getRandomAvatarColor(): string {
 import { IStorage, hashPassword } from "./storage";
 
 export class DatabaseStorage implements IStorage {
+  private db = db;
+  
   // ユーザー物理削除（開発用）
   async deleteUser(id: number): Promise<void> {
     try {

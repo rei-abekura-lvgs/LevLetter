@@ -33,10 +33,7 @@ export function CardComments({ cardId, currentUserId }: CardCommentsProps) {
 
   const addCommentMutation = useMutation({
     mutationFn: async (message: string) => {
-      return apiRequest(`/api/cards/${cardId}/comments`, {
-        method: "POST",
-        body: { message }
-      });
+      return apiRequest("POST", `/api/cards/${cardId}/comments`, { message });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/cards", cardId, "comments"] });
