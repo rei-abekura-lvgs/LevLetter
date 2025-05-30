@@ -174,9 +174,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    // パスワードがある場合はハッシュ化
+    // パスワードがある場合はハッシュ化（開発中：無効化）
     if (insertUser.password) {
-      insertUser.password = hashPassword(insertUser.password);
+      // 開発中：ハッシュ化しない
+      // insertUser.password = hashPassword(insertUser.password);
     }
 
     // アバターカラーがない場合はランダムに設定
@@ -230,12 +231,10 @@ export class DatabaseStorage implements IStorage {
     
     console.log(`🔐 パスワード検証中...`);
     console.log(`📝 入力パスワード: "${password}"`);
-    console.log(`💾 DB保存ハッシュ: "${user.password}"`);
+    console.log(`💾 DB保存パスワード: "${user.password}"`);
     
-    const hashedPassword = await hashPassword(password);
-    console.log(`🔒 生成ハッシュ: "${hashedPassword}"`);
-    
-    const isPasswordCorrect = user.password === hashedPassword;
+    // 開発中：プレーンテキストで比較
+    const isPasswordCorrect = user.password === password;
     
     console.log(`🔑 パスワード検証結果: ${isPasswordCorrect ? '成功' : '失敗'}`);
     
