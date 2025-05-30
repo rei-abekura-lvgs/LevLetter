@@ -71,15 +71,16 @@ export async function registerRoutes(app: express.Application): Promise<Server> 
   // セッション設定
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || randomUUID(),
+      secret: process.env.SESSION_SECRET || 'dev-secret-key-12345',
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: false, // 本番環境でも一時的にfalseに設定
-        httpOnly: true,
+        secure: false, // HTTPでも動作するように設定
+        httpOnly: false, // デバッグのためfalseに設定
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1週間
-        sameSite: 'lax', // クロスサイトリクエストでの互換性向上
+        sameSite: 'none', // クロスオリジンアクセスを許可
       },
+      proxy: true, // プロキシ環境での動作を改善
     })
   );
 
