@@ -36,8 +36,25 @@ export class SimpleEmailAuth {
       // 既存ユーザーチェック
       const existingUser = await storage.getUserByEmail(email);
       if (existingUser) {
-        console.log(`❌ 既存ユーザーが存在: ${email}`);
-        return null;
+        // パスワードがNULLの場合は新しいパスワードを設定する
+        if (!existingUser.password) {
+          console.log(`🔄 事前登録ユーザーのパスワード設定: ${email}`);
+          
+          // パスワードハッシュ化
+          const hashedPassword = await this.hashPassword(password);
+          
+          // 既存ユーザーのパスワードを更新
+          const updatedUser = await storage.updateUser(existingUser.id, {
+            password: hashedPassword,
+            passwordInitialized: true
+          });
+          
+          console.log(`✅ パスワード設定完了: ${email} (ID: ${existingUser.id})`);
+          return await storage.getUser(existingUser.id); // 更新後のユーザー情報を取得
+        } else {
+          console.log(`❌ 既存ユーザーが存在（パスワード設定済み）: ${email}`);
+          return null;
+        }
       }
 
       // パスワードハッシュ化
